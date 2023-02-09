@@ -1,17 +1,15 @@
-import { Button } from '@mui/material';
 import React from 'react';
 import './App.css';
+import InfoBox from './components/dashboard/InfoBox';
 
 function App() {
   return (
-    <div className={'App'}>
+    <><div className={'App'}>
       <h1>Hello</h1>
-    </div>
-    <div className={'App'}>
-        <Button variant="text">Text</Button>
-        <Button variant="contained">Contained</Button>
-        <Button variant="outlined">Outlined</Button>
-    </div>
+    </div><div>
+        <InfoBox />
+        <InfoBox />
+      </div></>
   );
 }
 
