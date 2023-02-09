@@ -15,7 +15,7 @@ Yarn Build:
 
 
 Eslint:
-  image: node:8.33.0
+  image: node:18.0.0
   stage: Webapp lint
   needs: [ Yarn Build ]
   script:
