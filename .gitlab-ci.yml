@@ -19,6 +19,7 @@ Eslint:
   stage: Webapp lint
   needs: [ Yarn Build ]
   script:
+    - cd license_dashboard
     - cd frontend
     - yarn install --frozen-lockfile --cache-folder .yarn
     - yarn lint
