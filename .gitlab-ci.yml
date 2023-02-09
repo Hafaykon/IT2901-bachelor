@@ -7,6 +7,7 @@ Yarn Build:
   stage: Webapp lint
   needs: []
   script:
+    - cd license_dashboard
     - cd frontend
     - yarn install --frozen-lockfile --cache-folder .yarn
     - yarn build
