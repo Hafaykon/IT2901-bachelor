@@ -67,7 +67,7 @@ def get_software_recommendations(request, format=None):
     :param request: A GET request with an optional 'organization' parameter.
     :return: A list of software that has not been used in the last 90 days and could potentially be reallocated.
     """
-    organization = request.GET.get('organization', None)
+    organization = request.GET.get('organization', 'IT-tjenesten')
     software_data = SoftwarePerComputer.objects.only('primary_user_full_name', 'primary_user_full_email',
                                                      'organization', 'application_name',
                                                      'last_used').values()
@@ -114,7 +114,7 @@ def get_org_software_users(request, format=None):
     :param request:  A GET request with an optional 'organization' parameter.
     :return:  Returns a list all the software the organization uses, and its users.
     """
-    organization = request.GET.get('organization', None)
+    organization = request.GET.get('organization', 'IT-tjenesten')
     software = SoftwarePerComputer.objects.only('organization',
                                                 'application_name', 'primary_user_full_name', 'primary_user_email',
                                                 'total_minutes', 'active_minutes')
