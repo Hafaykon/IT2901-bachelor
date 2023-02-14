@@ -1,7 +1,7 @@
 stages:
   - Webapp lint
   - Backend test
-  -
+
 Yarn Build:
   image: node:18.0.0
   stage: Webapp lint
