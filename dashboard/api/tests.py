@@ -1,4 +1,4 @@
-from django.test import RequestFactory, TestCase
+from django.test import RequestFactory, TestCase, Client
 from django.urls import include, path, reverse
 from rest_framework.test import APIRequestFactory, APITestCase
 from .views import get_organizations
@@ -121,6 +121,17 @@ class TestViews(APITestCase):
         for org in expected_organizations:
             self.assertIn(org, list(response.data))
 
+    def test_get_primary_user_full_name(self):
+        """
+        Should return the full name of all users.
+        """
+        expected_names = ['My User', 'My User']
+        url = reverse('users')
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, 200)
+        for user in expected_names:
+            self.assertIn(user, list(response.data))
+
     def test_get_software_recommendations_view(self):
         """
         Should return all recommendations the the IT-department (standard).
@@ -152,5 +163,84 @@ class TestViews(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, expected_recommendations)
 
+    '''
+    NB! As of now 'organization' is hardcoded in the get-request meaning we can't call this method without a parameter
+    def test_get_organization_software(self):
+        """
+        Should return all software used by the entire municipality.
+        """
+        url = reverse('software')
+        response = self.client.get(url)
+        expected_software = {"Hovedtillitsvalgte": ["Hovedtillitsvalgte"], "Servere": ["myapplication"]}
 
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, expected_software)
 
+    '''
+    def test_get_organization_software_param(self):
+        """
+        Should return all software used by the given organization.
+        """
+        organization = "Servere"
+        url = reverse('software') + f'?organization={organization}'
+        response = self.client.get(url)
+        expected_software = {"Servere": ["myapplication"]}
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, expected_software)
+
+    '''
+    NB! As of now 'organization' is hardcoded in the get-request meaning we can't call this method without a parameter
+    def test_get_org_software_users(self):
+        """
+        Should return a list of all the software the organization uses, and its users
+        """
+        url = reverse('get_applications_by_user')
+        response = self.client.get(url)
+        expected_return_data = [{
+            'application_name': 'Hovedtillitsvalgte', 'users': [{"full_name": "My User", "email": 'myuser@example.com',
+                                                                  "total_minutes": 1000, "active_minutes": 500}]},
+            {'application_name': 'myapplication', 'users': [{"full_name": "My User", "email": 'myuser@example.com',
+                                                            "total_minutes": 1000, "active_minutes": 500}]}
+        ]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, expected_return_data)
+    '''
+
+    def test_get_org_software_users_param(self):
+        """
+        Should return a list of all the software the organization uses, and its users
+        """
+        organization = "Servere"
+        url = reverse('get_applications_by_user') + f'?organization={organization}'
+        response = self.client.get(url)
+        expected_return_data = [{
+            'application_name': 'myapplication', 'users': [{"full_name": "My User", "email": 'myuser@example.com',
+                                                            "total_minutes": 1000, "active_minutes": 500}]}]
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, expected_return_data)
+
+    def test_get_licenses_associated_with_users(self):
+        """
+        Should return specified user with his/her licenses.
+        """
+        user = 'My User'
+        url = reverse('get_licenses_associated_with_user', args=[user])
+        response = self.client.get(url)
+        expected_softwares = ['Hovedtillitsvalgte', 'myapplication']
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, expected_softwares)
+
+    def test_get_reallocatabe_by_software_name(self):
+        """
+        Should return a string with total- and reallocatable licenses for a given software.
+        """
+        software = 'Hovedtillitsvalgte'
+        url = reverse('get_reallocatabe_by_software_name', args=[software])
+        response = self.client.get(url)
+        expected_response = "There are currently 1 licenses for Hovedtillitsvalgte, " \
+                            "where 1 have not been used the last 90 days."
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, expected_response)
