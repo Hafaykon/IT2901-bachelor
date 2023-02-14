@@ -9,6 +9,8 @@ urlpatterns = [
     path('emails/', views.GetPrimaryUserEmailView.as_view(), name='emails'),
     path('recommendations/', views.get_software_recommendations, name='recommendations'),
     path('software/', views.get_organization_software, name='software'),
-    path('applications/', views.get_org_software_users, name='get_applications_by_user')
+    path('applications/', views.get_org_software_users, name='get_applications_by_user'),
+    path('userlicenses/', views.get_licenses_associated_with_user, name='get_licenses_associated_with_user'),
+    path('softwarebyname/', views.get_reallocatabe_by_software_name, name='get_reallocatabe_by_software_name')
 
 ]

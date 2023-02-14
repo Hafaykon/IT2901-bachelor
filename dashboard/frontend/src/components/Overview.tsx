@@ -24,7 +24,10 @@ const Overview: React.FC = () => {
   //   </ul>
   // );
   return (
-    <h1>hi</h1>
+   <button onClick={() => console.log(organizations)}>
+
+   </button>
+
   );
 
 };

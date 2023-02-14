@@ -7,7 +7,6 @@ class SoftwarePerComputer(models.Model):
     Model for the csv file software_per_computer.csv
     """
     objects = models.Manager()  # default manager
-
     computer_name = models.CharField(max_length=100)
     application_name = models.CharField(max_length=100)
     category = models.CharField(max_length=100)
