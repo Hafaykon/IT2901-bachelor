@@ -1,5 +1,7 @@
 .App {
   text-align: center;
+  display: flex;
+  justify-content: center;
 }
 
 .App-logo {
@@ -26,6 +28,19 @@
 
 .App-link {
   color: #61dafb;
+}
+
+#numberOfLicenses{
+  color: #002d53;
+  text-align: center;
+  font-size: 50px;
+  font-weight: lighter;
+}
+
+#cardTitle {
+  color: #002d53;
+  text-align: center;
+  font-size: x-large;
 }
 
 @keyframes App-logo-spin {
