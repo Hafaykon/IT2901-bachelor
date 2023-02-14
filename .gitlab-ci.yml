@@ -32,3 +32,7 @@ UnitTest:
   before_script:
     - pip install -r requirements.txt
     - python manage.py runserver
+  script:
+    - cd dashboard
+    - python manage.py test
+  retry: 1
