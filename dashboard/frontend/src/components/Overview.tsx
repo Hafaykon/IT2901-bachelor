@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { fetchOrganizations, fetchSoftwareRecommendations } from '../api/calls';
+import { fetchOrganizations } from '../api/calls';
 
 
 const Overview: React.FC = () => {
-  const [organizations, setOrganizations] = useState<any>();
+  const [organizations, setOrganizations] = useState<unknown>();
 
   useEffect(() => {
     const fetchData = async () => {
