@@ -111,6 +111,10 @@ class TestViews(APITestCase):
         )
 
     def test_get_organizations_view(self):
+        """
+        Test for the get_organizations view. Should return all distinct organizations.
+        :return:
+        """
         expected_organizations = ['Servere', 'Hovedtillitsvalgte']
         response = self.client.get(self.get_org_url)
         self.assertEqual(response.status_code, 200)
@@ -118,6 +122,9 @@ class TestViews(APITestCase):
             self.assertIn(org, list(response.data))
 
     def test_get_software_recommendations_view(self):
+        """
+        Should return all recommendations the the IT-department (standard).
+        """
         url = reverse('recommendations')
         response = self.client.get(url)
         expected_recommendations = [{
@@ -131,8 +138,18 @@ class TestViews(APITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, expected_recommendations)
-    # def test_get_software_recommendations_view_param(self):
-    #     url = reverse('recommendations', kwargs={'organization': 'Servere'})
-    #     response = self.client.get(url)
-    #     print(response.data)
+
+    def test_get_software_recommendations_view_param(self):
+        """
+        Should only return recommendations for the specified organization.
+        """
+        organization = 'Hovedtillitsvalgte'
+        url = reverse('recommendations') + f'?organization={organization}'
+        response = self.client.get(url)
+        expected_recommendations = [{'application_name': 'Hovedtillitsvalgte', 'primary_user_full_name': 'My User',
+                                     'primary_user_email': 'myuser@example.com', 'organization': 'Hovedtillitsvalgte',
+                                     'last_used': 378}]
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.data, expected_recommendations)
+
 
