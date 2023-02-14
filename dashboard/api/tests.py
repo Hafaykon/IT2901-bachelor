@@ -153,3 +153,4 @@ class TestViews(APITestCase):
         self.assertEqual(response.data, expected_recommendations)
 
 
+
