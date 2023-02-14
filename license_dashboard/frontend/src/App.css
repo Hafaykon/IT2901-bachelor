@@ -43,6 +43,15 @@
   font-size: x-large;
 }
 
+#stats {
+  height: 400px;
+  width: 663px;
+  margin-top: 50px;
+  margin-left: 110px;
+
+
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
