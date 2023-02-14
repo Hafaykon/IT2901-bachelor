@@ -4,7 +4,7 @@ import InfoBox from './components/dashboard/InfoBox';
 import '@testing-library/jest-dom/extend-expect';
 
 
-describe("Testing render, infobaxes", () => {
+describe("Testing render, infoboxes", () => {
   it("should paste given text", () =>{
     render(<InfoBox title="Lisenser" numberOfLicenses = {10}/>);
     expect(
