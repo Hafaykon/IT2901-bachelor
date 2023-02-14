@@ -31,6 +31,7 @@ UnitTest:
   stage: Backend test
   before_script:
     - pip install -r requirements.txt
+    - cd dashboard
     - python manage.py runserver
   script:
     - cd dashboard
