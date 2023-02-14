@@ -17,6 +17,7 @@ def get_routes(request):
     ]
     return Response('The api is working')
 
+
 @api_view(['GET'])
 def get_organizations(request, format=None):
     """
@@ -136,6 +137,7 @@ def get_org_software_users(request, format=None):
 
     return Response(result)
 
+
 @api_view(['GET'])
 def get_licenses_associated_with_user(request, format=None):
     """
@@ -156,6 +158,7 @@ def get_licenses_associated_with_user(request, format=None):
     except KeyError as e:
         print(e)
 
+
 @api_view(['GET'])
 def get_reallocatabe_by_software_name(request, format=None):
     """
@@ -175,14 +178,15 @@ def get_reallocatabe_by_software_name(request, format=None):
         df = get_sorted_df_of_unused_licenses(software_list)
         total_allocatable = len(df)
 
-        #unused_by_software_name = df[['application_name', 'last_used']].to_dict('records')
-        #return Response(unused_by_software_name)
+        # unused_by_software_name = df[['application_name', 'last_used']].to_dict('records')
+        # return Response(unused_by_software_name)
 
         return Response(f"There are currently {total_licenses} licenses for {software}, where"
                         f" {total_allocatable} have not been used the last 90 days.")
     except KeyError as e:
         print(e)
         return Response("No software with that name")
+
 
 def get_sorted_df_of_unused_licenses(software_data):
     """

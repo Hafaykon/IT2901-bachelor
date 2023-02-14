@@ -24,8 +24,8 @@ const Overview: React.FC = () => {
   //   </ul>
   // );
   return (
-   <button onClick={() => console.log(organizations)}>
-
+   <button style={{width: 500, height: 500}} onClick={() => console.log(organizations)}>
+button
    </button>
 
   );
