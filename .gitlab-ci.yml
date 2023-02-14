@@ -1,7 +1,7 @@
 stages:
   - Webapp lint
-
-
+  - Backend test
+  -
 Yarn Build:
   image: node:18.0.0
   stage: Webapp lint
@@ -24,3 +24,11 @@ Eslint:
     - yarn install --frozen-lockfile --cache-folder .yarn
     - yarn lint
   retry: 1
+
+
+UnitTest:
+  image: python:3.9
+  stage: Backend test
+  before_script:
+    - pip install -r requirements.txt
+    - python manage.py runserver
