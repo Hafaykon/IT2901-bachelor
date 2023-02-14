@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {fetchOrganizations, fetchSoftwareRecommendations} from '../api/calls';
+import { fetchOrganizations, fetchSoftwareRecommendations } from '../api/calls';
 
 
 const Overview: React.FC = () => {
@@ -7,11 +7,12 @@ const Overview: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchSoftwareRecommendations();
+      const data = await fetchOrganizations();
       setOrganizations(data);
+      console.log(organizations);
     };
 
-    fetchData().then(() => console.log(organizations));
+    fetchData();
   }, []);
 
 
@@ -24,7 +25,7 @@ const Overview: React.FC = () => {
   // );
   return (
     <h1>hi</h1>
-  )
+  );
 
 };
 

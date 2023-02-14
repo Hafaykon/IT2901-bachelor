@@ -1,5 +1,5 @@
 """
-ASGI config for license_dashboard project.
+ASGI config for dashboard project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 

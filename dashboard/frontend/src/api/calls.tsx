@@ -25,8 +25,7 @@ export const fetchSoftwareRecommendations = async (organization?: string) => {
       url = `${url}?organization=${organization}`;
     }
     const response = await fetch(url);
-    const data = await response.json();
-    return [...data];
+    return await response.json();
   } catch (error) {
     console.log(error);
   }
