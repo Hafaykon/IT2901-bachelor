@@ -21,9 +21,10 @@ def get_routes(request):
 @api_view(['GET'])
 def get_organizations(request, format=None):
     """
-    :return: Returns a list of organizations.
+    :return: Returns a list of organizations sorted alphabetically.
     """
     organizations = SoftwarePerComputer.objects.values_list('organization', flat=True).distinct()
+    organizations = sorted(organizations)
     return Response(organizations)
 
 
@@ -90,15 +91,11 @@ def get_organization_software(request, format=None):
     :return: Returns a list of all distinct software used grouped by organization.
     """
     organization = request.GET.get('organization', 'IT-tjenesten')
-    software = SoftwarePerComputer.objects.only('organization',
-                                                'application_name')
+    software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
     if organization:
         software = software.filter(organization=organization)
 
-    software_df = pd.DataFrame.from_records(software.values())
-    grouped = software_df.groupby("organization").agg(lambda x: list(set(x)))
-
-    return Response(grouped.to_dict()['application_name'])
+    return Response(software)
 
 
 @api_view(['GET'])
@@ -139,34 +136,35 @@ def get_org_software_users(request, format=None):
 
 
 @api_view(['GET'])
-def get_licenses_associated_with_user(request, format=None, username=None):
+def get_licenses_associated_with_user(request, format=None):
     """
-    :param request:  A GET request with an 'primary_user_full_name' parameter.
     :return: Returns a list of all the licenses currently associated with a user.
+
     """
     try:
-        username = request.GET.get('primary_user_full_name', username)
+        username = request.GET.get('primary_user_full_name', 'Leendert Wienhofen')
         if username is None:
             raise KeyError("No user with that name")
 
-        software_data = SoftwarePerComputer.objects.filter(primary_user_full_name=username).values_list(
-            "application_name", flat=True).distinct()
-        sorted_software = sorted(software_data)
+        software_list = SoftwarePerComputer.objects.filter(primary_user_full_name=username).values("application_name")
 
-        return Response(sorted_software)
+        software_df = pd.DataFrame.from_records(software_list.values())
+        grouped = software_df.groupby("primary_user_full_name").agg(lambda x: list(set(x)))
+
+        return Response(grouped.to_dict()['application_name'])
     except KeyError as e:
         print(e)
-        return Response("No user with that name")
 
 
 @api_view(['GET'])
-def get_reallocatabe_by_software_name(request, format=None, software=None):
+def get_reallocatabe_by_software_name(request, format=None):
     """
     :param request:  A GET request with an 'application_name' parameter.
-    :return: Currently returns a string that with total- and allocateable licenses for a given software.
+    :return: Returns a list of all the licenses currently associated with a user.
+
     """
     try:
-        software = request.GET.get('application_name', software)
+        software = request.GET.get('application_name', 'Microsoft Office 2016 PowerPoint')
         if software is None:
             raise KeyError("No software with that name")
 
@@ -201,3 +199,30 @@ def get_sorted_df_of_unused_licenses(software_data):
     df['last_used'] = (now - df['last_used']).dt.days
     df = df.sort_values(by='last_used', ascending=False)
     return df
+
+
+@api_view(['GET'])
+def get_org_software_users_by_name(request, format=None):
+    """
+    :param request: A GET request with 'application_name' and 'organization' as parameters.
+    :return: Returns a list of all the users of the given software within the given organization.
+    """
+    application_name = request.GET.get('application_name', 'Microsoft Office 2016 PowerPoint')
+    organization = request.GET.get('organization', 'IT-tjenesten')
+
+    software = SoftwarePerComputer.objects.filter(application_name=application_name, organization=organization)
+
+    software_df = pd.DataFrame.from_records(software.values())
+    sorted_group = software_df.sort_values(by='active_minutes', ascending=True)
+
+    result = []
+    for i, row in sorted_group.iterrows():
+        result.append({
+            "full_name": row["primary_user_full_name"],
+            "email": row["primary_user_email"],
+            "total_minutes": row["total_minutes"],
+            "active_minutes": row["active_minutes"]
+        })
+
+
+    return Response(result)
