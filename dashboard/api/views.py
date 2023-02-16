@@ -139,35 +139,34 @@ def get_org_software_users(request, format=None):
 
 
 @api_view(['GET'])
-def get_licenses_associated_with_user(request, format=None):
+def get_licenses_associated_with_user(request, format=None, username=None):
     """
+    :param request:  A GET request with an 'primary_user_full_name' parameter.
     :return: Returns a list of all the licenses currently associated with a user.
-
     """
     try:
-        username = request.GET.get('primary_user_full_name', 'Leendert Wienhofen')
+        username = request.GET.get('primary_user_full_name', username)
         if username is None:
             raise KeyError("No user with that name")
 
-        software_list = SoftwarePerComputer.objects.filter(primary_user_full_name=username).values("application_name")
+        software_data = SoftwarePerComputer.objects.filter(primary_user_full_name=username).values_list(
+            "application_name", flat=True).distinct()
+        sorted_software = sorted(software_data)
 
-        software_df = pd.DataFrame.from_records(software_list.values())
-        grouped = software_df.groupby("primary_user_full_name").agg(lambda x: list(set(x)))
-
-        return Response(grouped.to_dict()['application_name'])
+        return Response(sorted_software)
     except KeyError as e:
         print(e)
+        return Response("No user with that name")
 
 
 @api_view(['GET'])
-def get_reallocatabe_by_software_name(request, format=None):
+def get_reallocatabe_by_software_name(request, format=None, software=None):
     """
     :param request:  A GET request with an 'application_name' parameter.
-    :return: Returns a list of all the licenses currently associated with a user.
-
+    :return: Currently returns a string that with total- and allocateable licenses for a given software.
     """
     try:
-        software = request.GET.get('application_name', 'Microsoft Office 2016 PowerPoint')
+        software = request.GET.get('application_name', software)
         if software is None:
             raise KeyError("No software with that name")
 
