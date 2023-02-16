@@ -39,6 +39,7 @@ const SoftwareSearchBar: React.FC = () => {
     <>
       {software &&
         <Autocomplete
+          data-testid='autocomplete-search'
           value={value}
           onChange={(event: SyntheticEvent, newValue: SoftwareData | null) => {
             setValue(newValue);
@@ -53,6 +54,10 @@ const SoftwareSearchBar: React.FC = () => {
           sx={{ width: 450 }}
           renderInput={(params: TextFieldProps) => (
             <TextField
+              inputProps={{
+                'data-testid': 'search-field'
+              }}
+
               fullWidth
               {...params}
               label='Søk'
