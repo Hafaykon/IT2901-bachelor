@@ -5,12 +5,6 @@ import { Button, Card, CardActions, CardContent, Stack, Typography } from '@mui/
 import { PieChart } from 'react-minimal-pie-chart';
 import DonutChart from './components/dashboard/DonutChart';
 
-
-const defaultLabelStyle = {
-  fontSize: '5px',
-  fontFamily: 'sans-serif',
-};
-
 function App() {
   return (
     <><div className={'App'}>
