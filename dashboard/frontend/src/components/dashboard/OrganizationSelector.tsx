@@ -41,6 +41,7 @@ const OrganizationSelector: React.FC = () => {
   return (
     <>
       {organizations && <Autocomplete
+        data-testid='autocomplete-search'
         value={value}
         onChange={(event: SyntheticEvent, newValue: Organization | null) => {
           setValue(newValue);
@@ -55,7 +56,7 @@ const OrganizationSelector: React.FC = () => {
         id='controllable-states-demo'
         options={organizations}
         sx={{ width: 350 }}
-        renderInput={(params) => <TextField {...params} label='Velg organisasjon' />}
+        renderInput={(params) => <TextField {...params} label='Velg organisasjon' data-testid='search-box' />}
       />}
       {!organizations && <div>Loading organizations...</div>}
     </>
