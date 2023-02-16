@@ -17,7 +17,7 @@ const SoftwareSearchBar: React.FC = () => {
   const storedSoftware: string | null = localStorage.getItem('software');
   const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
   const [software, setSoftware] = React.useState<SoftwareData[] | undefined>(
-    storedSoftware ? JSON.parse(storedSoftware) : []
+    storedSoftware  ? JSON.parse(storedSoftware) : null
   );
 
   const [value, setValue] = React.useState<SoftwareData | null>(null);
@@ -30,9 +30,9 @@ const SoftwareSearchBar: React.FC = () => {
   };
 
   useEffect(() => {
-    setSoftware(storedSoftware ? JSON.parse(storedSoftware) : []);
+    setSoftware(storedSoftware ? JSON.parse(storedSoftware) : null);
 
-  }, [software]);
+  }, []);
 
 
   return (
