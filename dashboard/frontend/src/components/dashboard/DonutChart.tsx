@@ -11,7 +11,7 @@ function DonutChart(){
 
   return(
   <div>
-    <Card sx={{height:400,width:663,mt: 7, ml:14}}>
+    <Card sx={{height: 465, width: 670, mt: 7}}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary">
           Overskrift
