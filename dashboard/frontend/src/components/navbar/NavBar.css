@@ -1,0 +1,27 @@
+img {
+    width: 215px;
+    height: 50px;
+  }
+  
+  #logoTrondheim {
+    margin-left: 1%;
+  
+  }
+  
+  #navBar {
+    background-color: white;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    padding: 1%;
+    justify-content: space-between;
+    display: flex;
+  }
+  
+  #menuIcon {
+      margin-right: 12%;
+      margin-top: 1.3%;
+  }
+  
+  
