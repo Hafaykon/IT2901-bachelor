@@ -3,7 +3,7 @@ stages:
   - Webapp test
   - Backend test
 
-NPM Build:
+Yarn Build:
   image: node:18.0.0
   stage: Webapp lint
   needs: []
@@ -17,7 +17,7 @@ NPM Build:
 Eslint:
   image: node:18.0.0
   stage: Webapp lint
-  needs: [ NPM Build ]
+  needs: [ Yarn Build ]
   script:
     - cd dashboard
     - cd frontend
