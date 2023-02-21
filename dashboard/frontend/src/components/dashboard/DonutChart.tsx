@@ -5,10 +5,10 @@ import { PieChart } from 'react-minimal-pie-chart';
 const defaultLabelStyle = {
   fontSize: '5px',
   fontFamily: 'sans-serif',
+  fill : 'white'
 };
 
 function DonutChart(){
-
   return(
   <div>
     <Card sx={{height: 425, width: 670, mt: 7}}>
@@ -24,10 +24,14 @@ function DonutChart(){
           labelStyle={{
             ...defaultLabelStyle,
           }}
+          paddingAngle={1}
+          lineWidth={40}
+          labelPosition={80}
+          
           data={[
-                { title: 'One', value: 20, color: '#E38627', key:"20%" },
-                { title: 'Two', value: 30, color: '#C13C37', key:"30%" },
-                { title: 'Three', value: 50, color: '#6A2135', key:"50%" },
+                { title: 'Active', value: 50, color: '#63849c', key:"50%" },
+                { title: 'Available', value: 30, color: '#3172ce', key:"30%" },
+                { title: 'Unused', value: 20, color: '#0d90ff', key:"20%" },
                 
           ]}
           

@@ -5,12 +5,6 @@ import { Grid, Stack } from '@mui/material';
 import DonutChart from './components/dashboard/DonutChart';
 import { SavingsBox } from './components/dashboard/SavingsBox';
 
-
-const defaultLabelStyle = {
-  fontSize: '5px',
-  fontFamily: 'sans-serif',
-};
-
 function App() {
   return (
     <><Grid container className='boxes'>
