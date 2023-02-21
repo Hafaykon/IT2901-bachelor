@@ -6,7 +6,7 @@ interface InfoBoxProps{
 }
 
 function InfoBox ({title, numberOfLicenses}:InfoBoxProps) {
-
+numberOfLicenses
     return (
         <Card sx={{ width: 300, height: 180}}>
             <CardActionArea sx={{paddingBottom: 4}}>
@@ -14,7 +14,7 @@ function InfoBox ({title, numberOfLicenses}:InfoBoxProps) {
                   <Typography gutterBottom component="div" id="cardTitle">
                     {title}
                   </Typography>
-                  <Typography color="text.secondary" id="numberOfLicenses">
+                  <Typography color="text.secondary" id="numbersBoxes">
                     {numberOfLicenses}
                   </Typography>
                 </CardContent>

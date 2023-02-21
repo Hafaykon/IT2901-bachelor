@@ -1,9 +1,10 @@
 import React from 'react';
-import { Card, CardContent, Typography } from '@mui/material';
+import { Card, CardContent, Grid, Stack, Typography } from '@mui/material';
 import { PieChart } from 'react-minimal-pie-chart';
 
+
 const defaultLabelStyle = {
-  fontSize: '5px',
+  fontSize: '4px',
   fontFamily: 'sans-serif',
   fill : 'white'
 };
@@ -13,9 +14,16 @@ function DonutChart(){
   <div>
     <Card sx={{height: 425, width: 670, mt: 7}}>
       <CardContent>
-        <Typography sx={{ fontSize: 14 }} color="text.secondary">
-          Overskrift
+        <Typography id="cardTitle" >
+          Total oversikt
         </Typography>
+        <Grid container spacing={2} direction="row">
+          <Stack spacing={2}>
+            <Typography>Aktiv</Typography>
+            <Typography>Ledig</Typography>
+            <Typography>Ubrukt</Typography>
+
+          </Stack>
         <PieChart
           viewBoxSize={[140,140]}
           center={[70,40]}
@@ -36,6 +44,7 @@ function DonutChart(){
           ]}
           
         />;
+      </Grid>
       </CardContent>
     </Card></div>
   );
