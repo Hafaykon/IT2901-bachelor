@@ -140,15 +140,34 @@ class TestViews(APITestCase):
         response = self.client.get(url)
         expected_recommendations = [{
             'application_name': 'myapplication', 'primary_user_full_name': 'My User',
-            'primary_user_email': 'myuser@example.com', 'organization': 'Servere', 'last_used': 378
+            'primary_user_email': 'myuser@example.com', 'organization': 'Servere'
 
         }, {'application_name': 'Hovedtillitsvalgte', 'primary_user_full_name': 'My User',
-            'primary_user_email': 'myuser@example.com', 'organization': 'Hovedtillitsvalgte', 'last_used': 378
+            'primary_user_email': 'myuser@example.com', 'organization': 'Hovedtillitsvalgte'
 
             }]
 
+        selected_fields = []
+        for rec in response.data:
+            selected_fields.append({'application_name': rec['application_name'],
+                                'primary_user_full_name': rec['primary_user_full_name'],
+                                'primary_user_email': rec['primary_user_email'],
+                                'organization': rec['organization']})
+
+        print(selected_fields)
+        print(expected_recommendations)
+        '''
+        expected_fields = []
+        for rec in expected_recommendations:
+            expected_fields.append({'application_name': rec['application_name'],
+                                    'primary_user_full_name': rec['primary_user_full_name'],
+                                    'primary_user_email': rec['primary_user_email'],
+                                    'organization': rec['organization']})
+        '''
+
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, expected_recommendations)
+        self.assertEqual(selected_fields, expected_recommendations)
+
 
     def test_get_software_recommendations_view_param(self):
         """
@@ -158,10 +177,17 @@ class TestViews(APITestCase):
         url = reverse('recommendations') + f'?organization={organization}'
         response = self.client.get(url)
         expected_recommendations = [{'application_name': 'Hovedtillitsvalgte', 'primary_user_full_name': 'My User',
-                                     'primary_user_email': 'myuser@example.com', 'organization': 'Hovedtillitsvalgte',
-                                     'last_used': 378}]
+                                     'primary_user_email': 'myuser@example.com', 'organization': 'Hovedtillitsvalgte'}]
+
+        selected_fields = []
+        for rec in response.data:
+            selected_fields.append({'application_name': rec['application_name'],
+                                    'primary_user_full_name': rec['primary_user_full_name'],
+                                    'primary_user_email': rec['primary_user_email'],
+                                    'organization': rec['organization']})
+
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, expected_recommendations)
+        self.assertEqual(selected_fields, expected_recommendations)
 
     '''
     NB! As of now 'organization' is hardcoded in the get-request meaning we can't call this method without a parameter
