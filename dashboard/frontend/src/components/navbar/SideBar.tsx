@@ -9,25 +9,25 @@ export const SidebarData = [
   },
   {
     title: 'Min side',
-    path: '/reports',
+    path: '/minside',
    
     cName: 'nav-text'
   },
   {
     title: 'Lisensportalen',
-    path: '/products',
+    path: '/lisensportal',
    
     cName: 'nav-text'
   },
   {
     title: 'FAQ',
-    path: '/team',
+    path: '/FAQ',
     
     cName: 'nav-text'
   },
   {
     title: 'Logg ut',
-    path: '/messages',
+    path: '/loggut',
     
     cName: 'nav-text'
   },
