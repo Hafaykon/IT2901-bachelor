@@ -1,6 +1,5 @@
-
 import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
-import * as React from 'react';
+import React from 'react';
 
 const InfoBox = (props: {title: string, numberOfLicenses: number}) => {
 
