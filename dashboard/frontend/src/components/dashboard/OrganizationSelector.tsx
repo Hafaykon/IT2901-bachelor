@@ -33,7 +33,6 @@ const OrganizationSelector: React.FC = () => {
   const fetchSoftwareUsed = async (org: string) => {
     const data = await fetchSoftwareUsedInOrg(org);
     localStorage.setItem('software', JSON.stringify(data));
-    console.log(data);
 
   };
 
@@ -49,7 +48,6 @@ const OrganizationSelector: React.FC = () => {
         inputValue={inputValue}
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);
-          console.log(newInputValue);
           localStorage.setItem('organization', JSON.stringify(newInputValue));
           fetchSoftwareUsed(newInputValue);
         }}
