@@ -1,7 +1,7 @@
-from django.urls import reverse
-from django.urls import reverse
-from rest_framework.test import APITestCase
-
+from django.test import RequestFactory, TestCase, Client
+from django.urls import include, path, reverse
+from rest_framework.test import APIRequestFactory, APITestCase
+from .views import get_organizations
 from .models import SoftwarePerComputer
 
 

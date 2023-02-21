@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import SoftwareSearchBar from './components/dashboard/SoftwareSeachBar';
+import SoftwareSearchBar from './components/SoftwareSeachBar';
 
 function App() {
   return (
