@@ -1,9 +1,9 @@
 import React from 'react';
 import './App.css';
 import InfoBox from './components/dashboard/InfoBox';
-import { Button, Card, CardActions, CardContent, Grid, Stack, Typography } from '@mui/material';
-import { PieChart } from 'react-minimal-pie-chart';
+import { Grid, Stack } from '@mui/material';
 import DonutChart from './components/dashboard/DonutChart';
+import { SavingsBox } from './components/dashboard/SavingsBox';
 
 
 const defaultLabelStyle = {
@@ -24,8 +24,8 @@ function App() {
       <DonutChart/>
       <Grid item sx={{ml: 8, mt: 7}}>
         <Stack direction={'column'} spacing={8}>
-          <InfoBox title="Potensiell Sparing" savings={2000}/>
-          <InfoBox title="Kroner Spart" savings={400}/>
+          <SavingsBox title="Potensiell Sparing" savings={2000}/>
+          <SavingsBox title="Kroner Spart" savings={400}/>
         </Stack>
       </Grid>
     </Grid></>

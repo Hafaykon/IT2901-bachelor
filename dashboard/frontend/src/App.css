@@ -7,14 +7,18 @@
 
 #numbersBoxes{
   color: #002d53;
+  padding-top: 5px;
   text-align: center;
-  font-size: 50px;
+  font-size: 35px;
   font-weight: lighter;
 }
 
 #cardTitle {
   color: #002d53;
+  padding-top: 20px;
   text-align: center;
-  font-size: x-large;
+  font-family: Source Sans Pro,sans-serif;
+  font-size: 1.400rem;
+  font-weight: 400;
 }
 

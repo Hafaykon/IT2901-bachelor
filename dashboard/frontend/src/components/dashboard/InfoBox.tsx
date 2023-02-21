@@ -1,12 +1,10 @@
-
 import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
-import * as React from 'react';
 
 const InfoBox = (props: {title: string, numberOfLicenses: number}) => {
 
     return (
-        <Card sx={{ width: 300, height: 200}}>
-            <CardActionArea sx={{paddingTop: 2, paddingBottom: 4}}>
+        <Card sx={{ width: 300, height: 180}}>
+            <CardActionArea sx={{paddingBottom: 4}}>
                 <CardContent>
                   <Typography gutterBottom component="div" id="cardTitle">
                     {props.title}

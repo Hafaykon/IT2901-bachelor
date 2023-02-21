@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, CardActions, CardContent, Stack, Typography } from '@mui/material';
+import { Card, CardContent, Typography } from '@mui/material';
 import { PieChart } from 'react-minimal-pie-chart';
 
 const defaultLabelStyle = {
@@ -11,7 +11,7 @@ function DonutChart(){
 
   return(
   <div>
-    <Card sx={{height: 465, width: 670, mt: 7}}>
+    <Card sx={{height: 425, width: 670, mt: 7}}>
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary">
           Overskrift
