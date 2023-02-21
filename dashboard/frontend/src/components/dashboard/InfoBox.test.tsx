@@ -1,5 +1,4 @@
-import { act, cleanup, render, screen } from '@testing-library/react';
-import App from '../../App';
+import { cleanup, render, screen } from '@testing-library/react';
 import InfoBox from './InfoBox';
 import '@testing-library/jest-dom/extend-expect';
 

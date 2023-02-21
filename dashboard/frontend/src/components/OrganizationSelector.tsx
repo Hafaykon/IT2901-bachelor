@@ -1,5 +1,5 @@
 import React, { SyntheticEvent, useEffect, useState } from 'react';
-import { fetchOrganizations, fetchSoftwareUsedInOrg } from '../../api/calls';
+import { fetchOrganizations, fetchSoftwareUsedInOrg } from '../api/calls';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
