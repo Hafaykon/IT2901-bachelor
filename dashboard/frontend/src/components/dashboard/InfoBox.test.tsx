@@ -1,10 +1,10 @@
 import { cleanup, render, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
-import React from 'react';
 import InfoBox from './InfoBox';
+import '@testing-library/jest-dom/extend-expect';
 
 
 describe('Testing render, infoboxes', () => {
+
   beforeEach(() => {
     render(<InfoBox title='Lisenser' numberOfLicenses={10} />);
   });
@@ -19,3 +19,8 @@ describe('Testing render, infoboxes', () => {
     ).toBeInTheDocument();
   });
 });
+
+
+
+
+
