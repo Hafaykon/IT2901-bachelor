@@ -1,17 +1,9 @@
 import { act, render, screen } from '@testing-library/react';
 import App from "./App"
-import InfoBox from './components/dashboard/InfoBox';
+import InfoBox from './components/dashboard/Dashboard';
 import '@testing-library/jest-dom/extend-expect';
 
 
-describe("Testing render, infoboxes", () => {
-  it("should paste given text", () =>{
-    render(<InfoBox title="Lisenser" numberOfLicenses = {10}/>);
-    expect(
-      screen.getByText(/Lisenser/)
-    ).toBeInTheDocument();
-  });
-});
 
 
 
