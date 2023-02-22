@@ -90,15 +90,12 @@ def get_organization_software(request, format=None):
     :return: Returns a list of all distinct software used grouped by organization.
     """
     organization = request.GET.get('organization', 'IT-tjenesten')
-    software = SoftwarePerComputer.objects.only('organization',
-                                                'application_name')
+    software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
     if organization:
         software = software.filter(organization=organization)
 
-    software_df = pd.DataFrame.from_records(software.values())
-    grouped = software_df.groupby("organization").agg(lambda x: list(set(x)))
+    return Response(software)
 
-    return Response(grouped.to_dict()['application_name'])
 
 
 @api_view(['GET'])
