@@ -99,7 +99,6 @@ def get_organization_software(request, format=None):
 
 
 
-
 @api_view(['GET'])
 def get_org_software_users(request, format=None):
     """
