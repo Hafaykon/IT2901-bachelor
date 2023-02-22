@@ -1,10 +1,7 @@
-.App {
-  text-align: center;
-  display: flex;
-  justify-content: center;
-}
+
 body {
   background-color: #F7F7F7;
+  padding-top: 70px;
 }
 
 .App-logo {

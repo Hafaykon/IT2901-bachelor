@@ -1,5 +1,5 @@
 import React from 'react';
-import "./MyPage.css";
+
 
 function MyPage() {
   console.log("min side")
