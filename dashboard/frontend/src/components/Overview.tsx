@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchOrganizations } from '../api/calls';
+import { Stack } from '@mui/material';
+import InfoBox from '../components/dashboard/InfoBox';
 
 
 const Overview: React.FC = () => {
@@ -24,10 +26,17 @@ const Overview: React.FC = () => {
   //   </ul>
   // );
   return (
+    <div>
+     <Stack direction="row" spacing={8}>
+        <InfoBox title="Totale Lisenser" numberOfLicenses={2100} />
+        <InfoBox title="Aktive Lisenser" numberOfLicenses={2000} />
+        <InfoBox title="Allokerbare Lisenser" numberOfLicenses={100} />
+      </Stack>
+
    <button style={{width: 500, height: 500}} onClick={() => console.log(organizations)}>
 button
    </button>
-
+  </div>
   );
 
 };

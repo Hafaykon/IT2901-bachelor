@@ -2,17 +2,21 @@ import React from 'react';
 import './App.css';
 import InfoBox from './components/dashboard/InfoBox';
 import { Stack } from '@mui/material';
+//Test
+import {Route, Routes } from 'react-router-dom';
+import LicenseInfo from './components/LicenseInfo';
+import Overview from './components/Overview';
 
 function App() {
   return (
+
     <><div className={'App'}>
-        <Stack direction="row" spacing={8}>
-        <InfoBox title="Totale Lisenser" numberOfLicenses={2100} />
-        <InfoBox title="Aktive Lisenser" numberOfLicenses={2000} />
-        <InfoBox title="Allokerbare Lisenser" numberOfLicenses={100} />
-      </Stack>
+          <Routes>
+            <Route path="/" element={<Overview />}/>
+            <Route path="/totalLicenses" element={<LicenseInfo />} />
+          </Routes>
     </div></>
-   
+
   );
 }
 

@@ -1,11 +1,12 @@
 
-import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
+import { ButtonBase, Card, CardActionArea, CardContent, Typography } from '@mui/material';
 import * as React from 'react';
 
 const InfoBox = (props: {title: string, numberOfLicenses: number}) => {
 
     return (
         <Card sx={{ width: 300}}>
+          <ButtonBase onClick={}>
             <CardActionArea sx={{paddingTop: 2, paddingBottom: 2}}>
                 <CardContent>
                   <Typography gutterBottom component="div" id="cardTitle">
@@ -16,6 +17,7 @@ const InfoBox = (props: {title: string, numberOfLicenses: number}) => {
                   </Typography>
                 </CardContent>
               </CardActionArea>
+            </ButtonBase>
             </Card>
     )
 }
