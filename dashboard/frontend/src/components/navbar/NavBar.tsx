@@ -7,13 +7,13 @@ import { NavLink } from 'react-router-dom';
 import ClearIcon from '@mui/icons-material/Clear';
 import { SidebarData } from './SideBar';
 
-function Navbar() {
+function NavBar() {
   const [sidebar, setSidebar] = useState(false);
   const showSidebar = () => setSidebar(!sidebar);
 
   return (
-    
-    <Grid id="navBar">
+    <nav data-testid="navbar">
+    <Grid id="navBar" >
       <Grid id="logoTrondheim">
         <img src={trondheimLogo} alt="logo" />
       </Grid>
@@ -33,7 +33,7 @@ function Navbar() {
               <ClearIcon sx={{ fontSize: 40 }} style={{ color: '#302d2d' }} />
             </NavLink>
           </li>
-          
+
           {SidebarData.map((item, index) => {
             return (
               <li key={index} className={item.cName}>
@@ -46,7 +46,8 @@ function Navbar() {
         </ul>
       </nav>
     </Grid>
+    </nav>
   );
 }
 
-export default Navbar;
+export default NavBar;
