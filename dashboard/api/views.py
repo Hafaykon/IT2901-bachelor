@@ -12,13 +12,6 @@ from .serializers import SoftwarePerComputerSerializer
 
 # Create your views here.
 @api_view(['GET'])
-def get_routes(request):
-    routes = [
-    ]
-    return Response('The api is working')
-
-
-@api_view(['GET'])
 def get_organizations(request, format=None):
     """
     :return: Returns a list of organizations.
@@ -70,9 +63,11 @@ def get_software_recommendations(request, format=None):
     :return: A list of software that has not been used in the last 90 days and could potentially be reallocated.
     """
     organization = request.GET.get('organization', None)
+
     software_data = SoftwarePerComputer.objects.only('primary_user_full_name', 'primary_user_full_email',
                                                      'organization', 'application_name',
                                                      'last_used').values()
+    software_data = software_data.filter(license_required=True)
     if organization:
         software_data = software_data.filter(organization=organization)
     else:
@@ -92,11 +87,11 @@ def get_organization_software(request, format=None):
     """
     organization = request.GET.get('organization', 'IT-tjenesten')
     software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
+    software = software.filter(license_required=True)
     if organization:
         software = software.filter(organization=organization)
 
     return Response(software)
-
 
 
 @api_view(['GET'])
@@ -110,6 +105,7 @@ def get_org_software_users(request, format=None):
     software = SoftwarePerComputer.objects.only('organization',
                                                 'application_name', 'primary_user_full_name', 'primary_user_email',
                                                 'total_minutes', 'active_minutes')
+    software = software.filter(license_required=True)
     if organization:
         software = software.filter(organization=organization)
 
@@ -149,6 +145,7 @@ def get_licenses_associated_with_user(request, format=None, username=None):
 
         software_data = SoftwarePerComputer.objects.filter(primary_user_full_name=username).values_list(
             "application_name", flat=True).distinct()
+        software_data = software_data.filter(license_required=True)
         sorted_software = sorted(software_data)
 
         return Response(sorted_software)
@@ -170,6 +167,7 @@ def get_reallocatabe_by_software_name(request, format=None, software=None):
 
         software_list = SoftwarePerComputer.objects.filter(application_name=software).values("application_name",
                                                                                              "last_used")
+        software_list = software_list.filter(license_required=True)
         total_licenses = len(list(software_list))
 
         df = get_sorted_df_of_unused_licenses(software_list)
@@ -210,7 +208,8 @@ def get_org_software_users_by_name(request, format=None):
     application_name = request.GET.get('application_name', 'Microsoft Office 2016 PowerPoint')
     organization = request.GET.get('organization', 'IT-tjenesten')
 
-    software = SoftwarePerComputer.objects.filter(application_name=application_name, organization=organization)
+    software = SoftwarePerComputer.objects.filter(application_name=application_name, organization=organization,
+                                                  license_required=True)
 
     software_df = pd.DataFrame.from_records(software.values())
     sorted_group = software_df.sort_values(by='active_minutes', ascending=True)
@@ -221,7 +220,7 @@ def get_org_software_users_by_name(request, format=None):
             "full_name": row["primary_user_full_name"],
             "email": row["primary_user_email"],
             "total_minutes": row["total_minutes"],
-            "active_minutes": row["active_minutes"]
+            "active_minutes": row["active_minutes"],
         })
 
     return Response(result)
