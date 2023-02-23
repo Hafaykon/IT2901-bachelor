@@ -24,6 +24,7 @@ def get_organizations(request, format=None):
     :return: Returns a list of organizations.
     """
     organizations = SoftwarePerComputer.objects.values_list('organization', flat=True).distinct()
+    organizations = sorted(organizations)
     return Response(organizations)
 
 
@@ -90,15 +91,12 @@ def get_organization_software(request, format=None):
     :return: Returns a list of all distinct software used grouped by organization.
     """
     organization = request.GET.get('organization', 'IT-tjenesten')
-    software = SoftwarePerComputer.objects.only('organization',
-                                                'application_name')
+    software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
     if organization:
         software = software.filter(organization=organization)
 
-    software_df = pd.DataFrame.from_records(software.values())
-    grouped = software_df.groupby("organization").agg(lambda x: list(set(x)))
+    return Response(software)
 
-    return Response(grouped.to_dict()['application_name'])
 
 
 @api_view(['GET'])
@@ -201,3 +199,29 @@ def get_sorted_df_of_unused_licenses(software_data):
     df['last_used'] = (now - df['last_used']).dt.days
     df = df.sort_values(by='last_used', ascending=False)
     return df
+
+
+@api_view(['GET'])
+def get_org_software_users_by_name(request, format=None):
+    """
+    :param request: A GET request with 'application_name' and 'organization' as parameters.
+    :return: Returns a list of all the users of the given software within the given organization.
+    """
+    application_name = request.GET.get('application_name', 'Microsoft Office 2016 PowerPoint')
+    organization = request.GET.get('organization', 'IT-tjenesten')
+
+    software = SoftwarePerComputer.objects.filter(application_name=application_name, organization=organization)
+
+    software_df = pd.DataFrame.from_records(software.values())
+    sorted_group = software_df.sort_values(by='active_minutes', ascending=True)
+
+    result = []
+    for i, row in sorted_group.iterrows():
+        result.append({
+            "full_name": row["primary_user_full_name"],
+            "email": row["primary_user_email"],
+            "total_minutes": row["total_minutes"],
+            "active_minutes": row["active_minutes"]
+        })
+
+    return Response(result)

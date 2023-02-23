@@ -1,12 +1,22 @@
 import React from 'react';
 import './App.css';
-import InfoBox from './components/dashboard/InfoBox';
-import { Grid, Stack } from '@mui/material';
+import OrganizationSelector from './components/OrganizationSelector';
+import SoftwareSearchBar from './components/SoftwareSeachBar';
+import { Grid, RecoilRoot } from 'recoil';
 import DonutChart from './components/dashboard/DonutChart';
 import { SavingsBox } from './components/dashboard/SavingsBox';
 
 function App() {
   return (
+    <RecoilRoot>
+      <>
+        <div className={'App'}>
+          <OrganizationSelector />
+          <SoftwareSearchBar />
+        </div>
+      </>
+    </RecoilRoot>
+
     <><Grid container className='boxes'>
       <Grid item>
         <Stack direction="row" spacing={8}>

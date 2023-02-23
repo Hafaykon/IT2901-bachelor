@@ -1,4 +1,5 @@
 import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
+import React from 'react';
 
 interface InfoBoxProps{
   title: string,

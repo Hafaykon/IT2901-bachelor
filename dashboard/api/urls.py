@@ -13,6 +13,7 @@ urlpatterns = [
     path('userlicenses/<str:username>', views.get_licenses_associated_with_user,
          name='get_licenses_associated_with_user'),
     path('softwarebyname/<str:software>', views.get_reallocatabe_by_software_name,
-         name='get_reallocatabe_by_software_name')
+         name='get_reallocatabe_by_software_name'),
+    path('softwarebyuser/', views.get_org_software_users_by_name, name='get_org_software_users_by_name'),
 
 ]
