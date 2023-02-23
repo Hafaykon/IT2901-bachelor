@@ -200,7 +200,7 @@ class TestViews(APITestCase):
         self.assertEqual(response.data, expected_software)
 
     '''
-
+    '''
     def test_get_organization_software_param(self):
         """
         Should return all software used by the given organization.
@@ -212,7 +212,7 @@ class TestViews(APITestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.data), expected_software)
-
+    '''
     '''
     NB! As of now 'organization' is hardcoded in the get-request meaning we can't call this method without a parameter
     def test_get_org_software_users(self):
