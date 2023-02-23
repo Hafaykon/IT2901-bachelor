@@ -141,10 +141,8 @@ class TestViews(APITestCase):
         expected_recommendations = [{
             'application_name': 'myapplication', 'primary_user_full_name': 'My User',
             'primary_user_email': 'myuser@example.com', 'organization': 'Servere'
-            'primary_user_email': 'myuser@example.com', 'organization': 'Servere'
 
         }, {'application_name': 'Hovedtillitsvalgte', 'primary_user_full_name': 'My User',
-            'primary_user_email': 'myuser@example.com', 'organization': 'Hovedtillitsvalgte'
             'primary_user_email': 'myuser@example.com', 'organization': 'Hovedtillitsvalgte'
 
             }]
@@ -165,24 +163,7 @@ class TestViews(APITestCase):
                                     'organization': rec['organization']})
         '''
 
-        selected_fields = []
-        for rec in response.data:
-            selected_fields.append({'application_name': rec['application_name'],
-                                    'primary_user_full_name': rec['primary_user_full_name'],
-                                    'primary_user_email': rec['primary_user_email'],
-                                    'organization': rec['organization']})
-
-        '''
-        expected_fields = []
-        for rec in expected_recommendations:
-            expected_fields.append({'application_name': rec['application_name'],
-                                    'primary_user_full_name': rec['primary_user_full_name'],
-                                    'primary_user_email': rec['primary_user_email'],
-                                    'organization': rec['organization']})
-        '''
-
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(selected_fields, expected_recommendations)
         self.assertEqual(selected_fields, expected_recommendations)
 
     def test_get_software_recommendations_view_param(self):
@@ -202,17 +183,7 @@ class TestViews(APITestCase):
                                     'primary_user_email': rec['primary_user_email'],
                                     'organization': rec['organization']})
 
-                                     'primary_user_email': 'myuser@example.com', 'organization': 'Hovedtillitsvalgte'}]
-
-        selected_fields = []
-        for rec in response.data:
-            selected_fields.append({'application_name': rec['application_name'],
-                                    'primary_user_full_name': rec['primary_user_full_name'],
-                                    'primary_user_email': rec['primary_user_email'],
-                                    'organization': rec['organization']})
-
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(selected_fields, expected_recommendations)
         self.assertEqual(selected_fields, expected_recommendations)
 
     '''
@@ -229,10 +200,6 @@ class TestViews(APITestCase):
         self.assertEqual(response.data, expected_software)
 
     '''
-    '''
-    '''
-    '''
-    '''
 
     def test_get_organization_software_param(self):
         """
@@ -242,13 +209,10 @@ class TestViews(APITestCase):
         url = reverse('software') + f'?organization={organization}'
         response = self.client.get(url)
         expected_software = ["myapplication"]
-        expected_software = ["myapplication"]
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.data), expected_software)
-    '''
-        self.assertEqual(list(response.data), expected_software)
-    '''
+
     '''
     NB! As of now 'organization' is hardcoded in the get-request meaning we can't call this method without a parameter
     def test_get_org_software_users(self):
