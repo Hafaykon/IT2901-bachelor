@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
-import { ButtonBase, Card, CardActionArea, CardContent, Typography } from '@mui/material';
 import * as React from 'react';
-
+import { ButtonBase, Card, CardActionArea, CardContent, Stack, Typography } from '@mui/material';
+import HelpIcon from '@mui/icons-material/Help';
 
 interface InfoBoxProps{
   title: string,
@@ -19,9 +19,12 @@ function InfoBox ({title, numberOfLicenses}:InfoBoxProps) {
         <Card sx={{ width: 300, height: 180}} data-testid="infoBox-test">
             <CardActionArea sx={{paddingBottom: 4}} onClick={handleCardClick}>
                 <CardContent>
-                  <Typography gutterBottom component="div" id="cardTitle">
-                    {title}
-                  </Typography>
+                  <Stack direction={'row'}>
+                    <Typography gutterBottom component="div" id="cardTitle">
+                      {title}
+                    </Typography>
+                    <HelpIcon sx={{position: 'absolute', top: 15, right:15, color:'grey'}}></HelpIcon>
+                  </Stack>
                   <Typography color="text.secondary" id="numbersBoxes">
                     {numberOfLicenses}
                   </Typography>
