@@ -16,18 +16,17 @@ test('renders navbar', () => {
 
 // Testing that the navbar contains the correct links
 test('navbar contains correct links', () => {
-    render(
-        <MemoryRouter>
-        <Navbar />
-        </MemoryRouter>
-    );
-    const dashboardLink = screen.getByText('Dashboard');
-    const myPageLink = screen.getByText('Min side');
-    const licensePoolLink = screen.getByText('Lisensportal');
-    const faqLink = screen.getByText('FAQ');
-    expect(dashboardLink).toBeInTheDocument();
-    expect(myPageLink).toBeInTheDocument();
-    expect(licensePoolLink).toBeInTheDocument();
-    expect(faqLink).toBeInTheDocument();
-    });
-
+  render(
+    <MemoryRouter>
+      <Navbar />
+    </MemoryRouter>
+  );
+  const dashboardLink = screen.getByText('Dashboard');
+  const myPageLink = screen.getByText('Min side');
+  const licensePoolLink = screen.getByText('Lisensportal');
+  const faqLink = screen.getByText('FAQ');
+  expect(dashboardLink).toBeInTheDocument();
+  expect(myPageLink).toBeInTheDocument();
+  expect(licensePoolLink).toBeInTheDocument();
+  expect(faqLink).toBeInTheDocument();
+});

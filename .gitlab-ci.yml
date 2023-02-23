@@ -14,18 +14,16 @@ Yarn Build:
     - yarn build
   retry: 1
 
-
 Eslint:
   image: node:18.0.0
   stage: Webapp lint
-  needs: [ Yarn Build ]
+  needs: [Yarn Build]
   script:
     - cd dashboard
     - cd frontend
     - yarn install --frozen-lockfile --cache-folder .yarn
     - yarn lint
   retry: 1
-
 
 UnitTest:
   image: python:3.9

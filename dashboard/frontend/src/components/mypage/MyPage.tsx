@@ -1,8 +1,7 @@
 import React from 'react';
 
-
 function MyPage() {
-  console.log("min side")
+  console.log('min side');
   return (
     <div>
       <h1>My Page</h1>

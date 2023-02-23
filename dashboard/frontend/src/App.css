@@ -1,6 +1,5 @@
-
 body {
-  background-color: #F7F7F7;
+  background-color: #f7f7f7;
   padding-top: 70px;
 }
 
@@ -30,7 +29,7 @@ body {
   color: #61dafb;
 }
 
-#numberOfLicenses{
+#numberOfLicenses {
   color: #002d53;
   text-align: center;
   font-size: 50px;

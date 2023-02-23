@@ -5,23 +5,18 @@ import FAQ from './components/faq/FAQ';
 import LicensePool from './components/licensepool/LicensePool';
 import Dashboard from './components/dashboard/Dashboard';
 import Navbar from './components/navbar/NavBar';
-import {
-  BrowserRouter as Router,
-  Route,
-  BrowserRouter,
-  Routes
-} from 'react-router-dom';
+import { Route, Routes } from 'react-router-dom';
 
 function App() {
   return (
     <>
       <div className={'App'}>
-        <Navbar/>
+        <Navbar />
         <Routes>
-          <Route path='/' element={<Dashboard />}/>
-            <Route path='/minside' element={<MyPage />} />
-            <Route path='/lisensportal' element={<LicensePool />} />
-            <Route path='/FAQ' element={<FAQ />} />
+          <Route path="/" element={<Dashboard />} />
+          <Route path="/minside" element={<MyPage />} />
+          <Route path="/lisensportal" element={<LicensePool />} />
+          <Route path="/FAQ" element={<FAQ />} />
         </Routes>
       </div>
     </>
