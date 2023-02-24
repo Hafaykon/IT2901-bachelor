@@ -1,6 +1,9 @@
+body{
+  padding-top: 70px;
+  background-color: #f7f7f7;
+}
 
-
-
+ 
 #cardTitle {
   color: #002d53;
   padding-top: 20px;
