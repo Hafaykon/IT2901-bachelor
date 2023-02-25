@@ -1,19 +1,22 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import {cleanup, render, screen} from '@testing-library/react';
 import Navbar from './Navbar';
 import '@testing-library/jest-dom/extend-expect';
-
+import React from "react";
+import {MemoryRouter} from "react-router-dom";
 
 describe('Testing render, Navbar', () => {
 
     beforeEach(() => {
-      render(<Navbar/>);
+        render(<MemoryRouter>
+            <Navbar/>
+        </MemoryRouter>)
     });
-  
+
     afterEach(() => {
-      cleanup();
+        cleanup();
     });
-  
+
     it("renders navbar without crashing", () => {
-      expect(screen.getByTestId('navbar')).toBeInTheDocument();
+        expect(screen.getByTestId('navbar')).toBeInTheDocument();
     });
-  });
+});
