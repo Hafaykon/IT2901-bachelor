@@ -1,43 +1,27 @@
 import React from 'react';
 import './App.css';
-import OrganizationSelector from './components/OrganizationSelector';
-import SoftwareSearchBar from './components/SoftwareSeachBar';
-import {RecoilRoot } from 'recoil';
-import DonutChart from './components/dashboard/DonutChart';
-import { SavingsBox } from './components/dashboard/SavingsBox';
-import InfoBox from './components/dashboard/InfoBox';
-import {Stack, Grid} from '@mui/material';
+import {RecoilRoot} from 'recoil';
+import {Route, Routes} from 'react-router-dom';
+import MyPage from './pages/Mypage';
+import FAQ from './pages/FAQ';
+import Home from './pages/Home';
+import Navbar from './components/navbar/Navbar';
+import Licenses from './pages/Licenses';
 
 function App() {
-  return (
-    <><RecoilRoot>
-      <>
-        <div className={'App'}>
-          <OrganizationSelector />
-          <SoftwareSearchBar />
-        </div>
-      </>
-    </RecoilRoot><><Grid container className='boxes'>
-      <Grid item>
-        <Stack direction="row" spacing={8}>
-          <InfoBox title="Totale Lisenser" numberOfLicenses={2100} />
-          <InfoBox title="Ubrukte Lisenser" numberOfLicenses={2000} />
-          <InfoBox title="Ledige Lisenser" numberOfLicenses={100} />
-        </Stack>
-      </Grid>
-      <DonutChart />
-      <Grid item sx={{ ml: 8, mt: 7 }}>
-        <Stack direction={'column'} spacing={8}>
-          <SavingsBox title="Potensiell Sparing" savings={2000} />
-          <SavingsBox title="Kroner Spart" savings={400} />
-        </Stack>
-      </Grid>
-    </Grid></></>
-  );
+    
+    return (
+        <RecoilRoot>
+           <Navbar/> 
+            <Routes>
+                <Route path="/" element={<Home/>}/>
+                 <Route path="/minside" element={<MyPage/>}/> 
+                <Route path="/lisensportal" element={<Licenses/>}/>
+                 <Route path="/FAQ" element={<FAQ/>}/>
+            </Routes>
+        </RecoilRoot>
+    );
 }
-
-
-
 
 
 export default App;
