@@ -42,7 +42,7 @@ export const fetchSoftwareUsedInOrg = async (organization?: string) => {
     }
     const response = await fetch(url);
     const data = await response.json();
-   return [...data];
+    return [...data];
   } catch (error) {
     console.log(error);
   }
@@ -88,11 +88,28 @@ export const fetchOrgSoftwareByName = async (software?: string, org?: string) =>
   }
 }
 
+/***
+ * Fetches software used by a specified user.
+ * @param username - Non-optional parameter to specify user.
+ */
+export const fetchLicensesAssociatedWithUser = async (username: string) => {
+  try {
+    const url = 'http://127.0.0.1:8000/api/userlicenses/'+username;
+    const response = await fetch(url);
+    const data = await response.json();
+    console.log(url);
+    return [...data];
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 export default {
   fetchOrganizations,
   fetchSoftwareRecommendations,
   fetchSoftwareUsedInOrg,
   fetchSoftwareUsers,
+  fetchLicensesAssociatedWithUser,
   fetchOrgSoftwareByName
 
 };

@@ -1,5 +1,8 @@
-import { Card, CardActionArea, CardContent, Typography } from '@mui/material';
-import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { ButtonBase, Card, CardActionArea, CardContent, Typography } from '@mui/material';
+import * as React from 'react';
+
+
 
 interface InfoBoxProps{
   title: string,
@@ -8,9 +11,15 @@ interface InfoBoxProps{
 
 function InfoBox ({title, numberOfLicenses}:InfoBoxProps) {
 numberOfLicenses
+    const navigate = useNavigate();
+
+    const handleCardClick = () => {
+      navigate(`/licenses/${title}`);
+    };
+
     return (
         <Card sx={{ width: 300, height: 180}}>
-            <CardActionArea sx={{paddingBottom: 4}}>
+            <CardActionArea sx={{paddingBottom: 4}} onClick={handleCardClick}>
                 <CardContent>
                   <Typography gutterBottom component="div" id="cardTitle">
                     {title}
@@ -20,6 +29,7 @@ numberOfLicenses
                   </Typography>
                 </CardContent>
               </CardActionArea>
+              <ButtonBase onClick={handleCardClick} />
             </Card>
     )
 }
