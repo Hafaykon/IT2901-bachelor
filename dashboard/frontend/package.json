@@ -8,7 +8,6 @@
     "@mui/icons-material": "^5.11.0",
     "@mui/material": "^5.11.8",
     "@mui/styled-engine-sc": "^5.11.0",
-    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^27.5.2",
     "@types/node": "^16.18.11",
@@ -16,6 +15,7 @@
     "@types/react-dom": "^18.0.10",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
     "styled-components": "^5.3.6",
     "typescript": "^4.9.5",
@@ -49,6 +49,7 @@
     ]
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@typescript-eslint/eslint-plugin": "^5.50.0",
     "@typescript-eslint/parser": "^5.50.0",
