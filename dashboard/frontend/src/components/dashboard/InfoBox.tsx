@@ -14,7 +14,7 @@ numberOfLicenses
     const navigate = useNavigate();
 
     const handleCardClick = () => {
-      navigate(`/licenses/${props.title}`);
+      navigate(`/licenses/${title}`);
     };
 
     return (
