@@ -65,6 +65,28 @@ export const fetchSoftwareUsers = async (organization?: string) => {
     console.log(error);
   }
 };
+/***
+ * Fetches software used within an organization and its users.
+ * @param software - Optional parameter to filter on software.
+ * @param org - Optional parameter to filter on organization.
+ */
+export const fetchOrgSoftwareByName = async (software?: string, org?: string) => {
+  try {
+    let url = 'http://127.0.0.1:8000/api/softwarebyuser/';
+    if (software && org) {
+      url = `${url}?application_name=${software}&organization=${org}`;
+    } else if (software) {
+      url = `${url}?application_name=${software}`;
+    } else if (org) {
+      url = `${url}?organization=${org}`;
+    }
+    const response = await fetch(url);
+    const data = await response.json();
+    return [...data];
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 /***
  * Fetches software used by a specified user.
@@ -87,6 +109,7 @@ export default {
   fetchSoftwareRecommendations,
   fetchSoftwareUsedInOrg,
   fetchSoftwareUsers,
-  fetchLicensesAssociatedWithUser
+  fetchLicensesAssociatedWithUser,
+  fetchOrgSoftwareByName
 
 };

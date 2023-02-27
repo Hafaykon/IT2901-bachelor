@@ -2,8 +2,15 @@ import { useNavigate } from 'react-router-dom';
 import { ButtonBase, Card, CardActionArea, CardContent, Typography } from '@mui/material';
 import * as React from 'react';
 
-const InfoBox = (props: {title: string, numberOfLicenses: number}) => {
 
+
+interface InfoBoxProps{
+  title: string,
+  numberOfLicenses: number,
+}
+
+function InfoBox ({title, numberOfLicenses}:InfoBoxProps) {
+numberOfLicenses
     const navigate = useNavigate();
 
     const handleCardClick = () => {
@@ -11,14 +18,14 @@ const InfoBox = (props: {title: string, numberOfLicenses: number}) => {
     };
 
     return (
-        <Card sx={{ width: 300}}>
-            <CardActionArea sx={{paddingTop: 2, paddingBottom: 2}} onClick={handleCardClick}>
+        <Card sx={{ width: 300, height: 180}}>
+            <CardActionArea sx={{paddingBottom: 4}} onClick={handleCardClick}>
                 <CardContent>
                   <Typography gutterBottom component="div" id="cardTitle">
-                    {props.title}
+                    {title}
                   </Typography>
-                  <Typography color="text.secondary" id="numberOfLicenses">
-                    {props.numberOfLicenses}
+                  <Typography color="text.secondary" id="numbersBoxes">
+                    {numberOfLicenses}
                   </Typography>
                 </CardContent>
               </CardActionArea>
@@ -28,3 +35,4 @@ const InfoBox = (props: {title: string, numberOfLicenses: number}) => {
 }
 
 export default InfoBox;
+
