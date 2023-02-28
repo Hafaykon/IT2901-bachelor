@@ -7,19 +7,17 @@ import LicenseTable from "./LicenseTable";
 
 function LicensePool() {
     return (
-        <div>
+        <div id={"licensepool_container"} style={{display: "flex", justifyContent: "center"}}>
             <Grid container className='license_pool'>
                 <Grid item>
                     <Stack direction="row" spacing={20}>
                         <h1>Lisensportalen</h1>
                     </Stack>
                 </Grid>
-                <Grid container className={'license_parameters'}>
+                <Grid container className={'license_parameters'} style={{display: "flex", justifyContent: "space-evenly", marginBottom: "10px"}}>
                     <Grid item>
-                        <Stack direction="row" spacing={30}>
+                        <Stack direction="row" spacing={5}>
                             <SoftwareSearchBar/>
-                            <FilterSelect/>
-                            <SortSelect/>
                         </Stack>
                     </Grid>
                 </Grid>

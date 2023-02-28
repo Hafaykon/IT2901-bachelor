@@ -2,10 +2,10 @@ import {atom} from 'recoil';
 
 interface UserData {
     id: number;
-    email: string;
-    full_name: string;
     active_minutes: number;
-
+    email: string;
+    organization: string;
+    full_name: string;
     total_minutes: number;
 
 }

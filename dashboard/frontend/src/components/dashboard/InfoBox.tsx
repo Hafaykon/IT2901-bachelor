@@ -10,7 +10,6 @@ interface InfoBoxProps{
 }
 
 function InfoBox ({title, numberOfLicenses}:InfoBoxProps) {
-numberOfLicenses
     const navigate = useNavigate();
 
     const handleCardClick = () => {

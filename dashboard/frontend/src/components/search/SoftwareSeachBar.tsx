@@ -5,13 +5,17 @@ import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-import {useRecoilState, useRecoilValue, useSetRecoilState} from 'recoil';
+import {useRecoilState, useSetRecoilState} from 'recoil';
 import {softwareAtom, softwareUserAtom} from '../../globalVariables/variables';
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+
 
 interface UserData {
     id: number;
     active_minutes: number;
     email: string;
+    organization: string;
     full_name: string;
     total_minutes: number;
 
@@ -24,6 +28,14 @@ const SoftwareSearchBar: React.FC = () => {
     const [inputValue, setInputValue] = React.useState<string>('');
     const [software, setSoftware] = useRecoilState(softwareAtom);
     const setUserData = useSetRecoilState(softwareUserAtom);
+    const [checked, setChecked] = React.useState(true);
+
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const checked = event.target.checked;
+        setChecked(checked);
+        fetchSoftwareUsed(value || '', checked ? storedOrganization as string : '');
+    };
 
 
     /**
@@ -59,38 +71,53 @@ const SoftwareSearchBar: React.FC = () => {
     return (
         <>
             {software ? (
-                <Autocomplete
-                    value={value}
-                    onChange={(event, newValue) => {
-                        setValue(newValue);
-                        fetchSoftwareUsed(newValue || '', storedOrganization || '');
-                    }}
-                    inputValue={inputValue}
-                    onInputChange={(event, newInputValue) => {
-                        setInputValue(newInputValue);
-                    }}
-                    id='controllable-states-demo'
-                    options={software}
-                    sx={{width: 450}}
-                    renderInput={(params) => (
-                        <TextField
-                            data-testid='autocomplete-search'
-                            {...params}
-                            style={{backgroundColor: 'white'}}
-                            label='Søk'
-                            InputProps={{
-                                ...params.InputProps,
-                                endAdornment: (
-                                    <InputAdornment position='end'>
-                                        <IconButton>
-                                            <SearchIcon/>
-                                        </IconButton>
-                                    </InputAdornment>
-                                )
-                            }}
-                        />
-                    )}
-                />
+                <>
+                    <Autocomplete
+                        value={value}
+                        onChange={(event, newValue) => {
+                            setValue(newValue);
+                            fetchSoftwareUsed(newValue || '', checked ? storedOrganization as string : '');
+                        }}
+                        inputValue={inputValue}
+                        onInputChange={(event, newInputValue) => {
+                            setInputValue(newInputValue);
+                        }}
+                        id='controllable-states-demo'
+                        options={software}
+                        sx={{width: 450}}
+                        renderInput={(params) => (
+                            <TextField
+                                data-testid='autocomplete-search'
+                                {...params}
+                                style={{backgroundColor: 'white'}}
+                                label='Søk'
+                                InputProps={{
+                                    ...params.InputProps,
+                                    endAdornment: (
+                                        <InputAdornment position='end'>
+                                            <IconButton>
+                                                <SearchIcon/>
+                                            </IconButton>
+                                        </InputAdornment>
+                                    )
+                                }}
+                            />
+                        )}
+                    />
+
+                    <FormControlLabel
+                        label="Søk i egen organisasjon"
+                        control={
+                            <Checkbox
+                                checked={checked}
+                                onChange={handleChange}
+                                inputProps={{'aria-label': 'controlled'}}
+                            />
+                        }
+                    />
+
+                </>
+
             ) : (
                 <div>Loading organizations...</div>
             )}

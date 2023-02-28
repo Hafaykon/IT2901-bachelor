@@ -18,8 +18,9 @@ export default function LicenseTable() {
     const rows: GridRowsProp = useRecoilValue(softwareUserAtom);
 
     const columns: GridColDef[] = [
-        {field: 'email', headerName: 'Epost', width: 300},
         {field: 'full_name', headerName: 'Navn', width: 300},
+        {field: 'email', headerName: 'Epost', width: 300},
+        {field: 'organization', headerName: 'Organisasjon', width: 300},
         {field: 'total_minutes', headerName: 'Totale minutter', width: 120},
         {field: 'active_minutes', headerName: 'Aktive minutter', width: 120},
 
@@ -80,7 +81,7 @@ export default function LicenseTable() {
     //
     // );
     return (
-        <div style={{display: "flex", width: '50vw', justifyContent: "center"}}>
+        <div style={{display: "flex", width: '65%', justifyContent: "center"}}>
             <DataGrid autoHeight={true} pageSize={30} rows={rows} columns={columns}/>
         </div>
     );

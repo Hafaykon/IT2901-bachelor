@@ -190,13 +190,19 @@ def get_org_software_users_by_name(request, format=None):
     :return: Returns a list of all the users of the given software within the given organization.
     """
     application_name = request.GET.get('application_name', 'Microsoft Office 2016 PowerPoint')
-    organization = request.GET.get('organization', 'IT-tjenesten')
+    organization = request.GET.get('organization', None)
 
-    software = SoftwarePerComputer.objects.filter(application_name=application_name, organization=organization,
+    software = SoftwarePerComputer.objects.filter(application_name=application_name,
                                                   license_required=True)
+    if organization:
+        software = software.filter(organization=organization)
+
 
     software_df = pd.DataFrame.from_records(software.values())
-    sorted_group = software_df.sort_values(by='active_minutes', ascending=True)
+    # Fill null values in the "active_minutes" and "total_minutes" columns with 0
+    software_df[['active_minutes', 'total_minutes']] = software_df[['active_minutes', 'total_minutes']].fillna(0)
+    # Sort by "active_minutes" column, moving null values to the end
+    sorted_group = software_df.sort_values(by='active_minutes', ascending=True, na_position='last')
 
     result = []
     for i, row in sorted_group.iterrows():
@@ -204,6 +210,7 @@ def get_org_software_users_by_name(request, format=None):
             "id": row["id"],
             "full_name": row["primary_user_full_name"],
             "email": row["primary_user_email"],
+            "organization": row["organization"],
             "total_minutes": row["total_minutes"],
             "active_minutes": row["active_minutes"],
         })
