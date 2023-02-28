@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from "react";
+import './Dashboard.css';
 import {Grid, Stack} from "@mui/material";
 import InfoBox from "./InfoBox";
 import DonutChart from "./DonutChart";
@@ -36,12 +37,14 @@ function Dashboard() {
     return (
         <>
             {boxData ? (
-                <div>
-                    <Grid container className='boxes'>
+                <div id="body">
+                    <Grid container id='boxes'>
                         <Grid container className={'org_info'}>
-                            <Stack direction="row" spacing={20}>
-                                <h1>{org ?? 'Velg organisasjon'}</h1>
-                                <OrganizationSelector/>
+                            <Stack direction="row">
+                                <h1 id="organization">{org ?? 'Velg organisasjon'}</h1>
+                                <div id="selector">
+                                    <OrganizationSelector/>
+                                </div>
                             </Stack>
                         </Grid>
                         <Grid item>
@@ -64,8 +67,8 @@ function Dashboard() {
                         <DonutChart/>
                         <Grid item sx={{ml: 8, mt: 7}}>
                             <Stack direction={'column'} spacing={8}>
-                                <SavingsBox title="Potensiell Sparing" savings={2000}/>
-                                <SavingsBox title="Kroner Spart" savings={400}/>
+                                <SavingsBox title="Potensiell Sparing" savings={0}/>
+                                <SavingsBox title="Kroner Spart" savings={0}/>
                             </Stack>
                         </Grid>
                     </Grid>

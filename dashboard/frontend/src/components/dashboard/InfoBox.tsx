@@ -7,7 +7,6 @@ interface InfoBoxProps{
 }
 
 function InfoBox ({title, numberOfLicenses}:InfoBoxProps) {
-numberOfLicenses
     return (
         <Card sx={{ width: 300, height: 180}}>
             <CardActionArea sx={{paddingBottom: 4}}>
