@@ -8,9 +8,11 @@ import OrganizationSelector from "../OrganizationSelector";
 import {useRecoilValue} from "recoil";
 import {orgAtom} from "../../globalVariables/variables";
 import {fetchInfoBoxData, fetchOrganizations} from "../../api/calls";
+import CircularIndeterminate from "../spinner/MuiLoadingSpinner";
 
 interface Count {
     total_licenses: number,
+    active_licenses: number,
     never_used: number,
     unused_licenses: number
 
@@ -19,18 +21,17 @@ interface Count {
 function Dashboard() {
     const storedOrganization: string | undefined = JSON.parse(localStorage.getItem('organization') ?? 'null');
     const org = useRecoilValue(orgAtom)
-    const [boxData, setBoxData] = useState<Count[]>([]);
+    const [boxData, setBoxData] = useState<Count[] | undefined>(undefined
+    );
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log(storedOrganization)
             const data: Count[] | undefined = await fetchInfoBoxData(storedOrganization);
             if (data !== undefined) {
                 setBoxData(data);
             }
         };
         fetchData();
-        console.log(boxData)
     }, [org]);
 
 
@@ -63,18 +64,21 @@ function Dashboard() {
                                 />
                             </Stack>
                         </Grid>
-
-                        <DonutChart/>
-                        <Grid item sx={{ml: 8, mt: 7}}>
-                            <Stack direction={'column'} spacing={8}>
-                                <SavingsBox title="Potensiell Sparing" savings={0}/>
-                                <SavingsBox title="Kroner Spart" savings={0}/>
-                            </Stack>
+                        <Grid container id={'donut_chart'}>
+                            <DonutChart never_used={boxData[0].never_used} total_licenses={boxData[0].total_licenses}
+                                        unused_licenses={boxData[0].unused_licenses}
+                                        active_licenses={boxData[0].active_licenses}/>
+                            <Grid item sx={{ml: 8, mt: 7}}>
+                                <Stack direction={'column'} spacing={8}>
+                                    <SavingsBox title="Potensiell Sparing" savings={0}/>
+                                    <SavingsBox title="Kroner Spart" savings={0}/>
+                                </Stack>
+                            </Grid>
                         </Grid>
                     </Grid>
                 </div>
             ) : (
-                <div> Loading............. </div>
+                <CircularIndeterminate/>
             )}
         </>
     )

@@ -1,10 +1,10 @@
 #body {
-    width:100%;
+    width: 100%;
 }
 
 #card {
-    width: 300; 
-    height: 180;
+    width: 300px;
+    height: 180px;
 }
 
 #cardTitle {
@@ -48,9 +48,15 @@
     max-width: 1030px;
 }
 
-#selector{
+#selector {
     padding-top: 40px;
     position: relative;
     display: flex;
     justify-content: flex-end;
+}
+
+#donut_chart {
+    display: flex;
+    justify-content: center;
+
 }

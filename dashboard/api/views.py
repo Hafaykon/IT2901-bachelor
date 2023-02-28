@@ -227,9 +227,12 @@ def software_counts(request):
     # Count of software that has last_used >= 90 days
     df = get_sorted_df_of_unused_licenses(software)
     unused_software = len(df)
+    # Count of active licenses
+    active_licenses = total_licenses - unused_software - never_used
 
     counts = {
         'total_licenses': total_licenses,
+        'active_licenses': active_licenses,
         'never_used': never_used,
         'unused_licenses': unused_software,
     }

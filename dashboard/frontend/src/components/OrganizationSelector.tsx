@@ -37,7 +37,7 @@ const OrganizationSelector: React.FC = () => {
             }
 
         };
-
+        setOrg(value as string);
         fetchData();
         fetchSoftwareUsed();
     }, []);
@@ -63,14 +63,14 @@ const OrganizationSelector: React.FC = () => {
                 value={value}
                 onChange={(event: SyntheticEvent, newValue: string | null) => {
                     setValue(newValue);
+                    localStorage.setItem('organization', JSON.stringify(newValue));
+                    setOrg(newValue as string);
+                    fetchSoftwareUsed(newValue as unknown as string);
 
                 }}
                 inputValue={inputValue}
                 onInputChange={(event, newInputValue) => {
                     setInputValue(newInputValue);
-                    localStorage.setItem('organization', JSON.stringify(newInputValue));
-                    setOrg(newInputValue);
-                    fetchSoftwareUsed(newInputValue as unknown as string);
 
 
                 }}
