@@ -183,22 +183,6 @@ def get_reallocatabe_by_software_name(request, format=None, software=None):
         return Response("No software with that name")
 
 
-def get_sorted_df_of_unused_licenses(software_data):
-    """
-    :param software_data: The software data object you want to work with
-    :return: A sorted dataframe of all the software that haven't been used the las 90 days
-    """
-    df = pd.DataFrame(list(software_data))
-    now = dt.datetime.now()
-    three_months_ago = now - dt.timedelta(days=90)
-    df = df[df['last_used'].notnull()]  # Filter out None values in the 'last_used' column
-    df['last_used'] = pd.to_datetime(df['last_used'], errors='coerce')
-    df = df[np.array(df['last_used'].dt.date) <= three_months_ago.date()]
-    df['last_used'] = (now - df['last_used']).dt.days
-    df = df.sort_values(by='last_used', ascending=False)
-    return df
-
-
 @api_view(['GET'])
 def get_org_software_users_by_name(request, format=None):
     """
@@ -217,6 +201,7 @@ def get_org_software_users_by_name(request, format=None):
     result = []
     for i, row in sorted_group.iterrows():
         result.append({
+            "id": row["id"],
             "full_name": row["primary_user_full_name"],
             "email": row["primary_user_email"],
             "total_minutes": row["total_minutes"],
@@ -224,3 +209,46 @@ def get_org_software_users_by_name(request, format=None):
         })
 
     return Response(result)
+
+
+@api_view(['GET'])
+def software_counts(request):
+    organization = request.GET.get('organization', '')
+    software = SoftwarePerComputer.objects.filter(
+        organization=organization
+    ).values('last_used', 'license_required')
+    software = software.filter(license_required=True)
+
+    # Count of total licenses filter by organization
+    total_licenses = software.count()
+
+    # Count of software that has last_used = null (it has never been used)
+    never_used = software.filter(last_used__isnull=True).count()
+    # Count of software that has last_used >= 90 days
+    df = get_sorted_df_of_unused_licenses(software)
+    unused_software = len(df)
+
+    counts = {
+        'total_licenses': total_licenses,
+        'never_used': never_used,
+        'unused_licenses': unused_software,
+    }
+
+    return Response(counts)
+
+
+def get_sorted_df_of_unused_licenses(software_data):
+    """
+    :param software_data: The software data object you want to work with
+    :return: A sorted dataframe of all the software that haven't been used the las 90 days
+    """
+    df = pd.DataFrame(list(software_data))
+    now = dt.datetime.now()
+    three_months_ago = now - dt.timedelta(days=90)
+    df = df[df['last_used'].notnull()]  # Filter out None values in the 'last_used' column
+    df['last_used'] = np.where(df['last_used'].isnull(), three_months_ago, df['last_used'])  # Handle null values
+    df['last_used'] = pd.to_datetime(df['last_used'], errors='coerce')
+    df = df[np.array(df['last_used'].dt.date) <= three_months_ago.date()]
+    df['last_used'] = (now - df['last_used']).dt.days
+    df = df.sort_values(by='last_used', ascending=False)
+    return df

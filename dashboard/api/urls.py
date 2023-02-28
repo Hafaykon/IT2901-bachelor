@@ -14,5 +14,6 @@ urlpatterns = [
     path('softwarebyname/<str:software>', views.get_reallocatabe_by_software_name,
          name='get_reallocatabe_by_software_name'),
     path('softwarebyuser/', views.get_org_software_users_by_name, name='get_org_software_users_by_name'),
+    path('count', views.software_counts, name='software_counts'),
 
 ]
