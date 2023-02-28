@@ -70,8 +70,8 @@ function Dashboard() {
                                         active_licenses={boxData[0].active_licenses}/>
                             <Grid item sx={{ml: 8, mt: 7}}>
                                 <Stack direction={'column'} spacing={8}>
-                                    <SavingsBox title="Potensiell Sparing" savings={0}/>
-                                    <SavingsBox title="Kroner Spart" savings={0}/>
+                                    <SavingsBox title="Potensiell Sparing" savings={2000}/>
+                                    <SavingsBox title="Kroner Spart" savings={3000}/>
                                 </Stack>
                             </Grid>
                         </Grid>

@@ -1,15 +1,8 @@
-import {softwareAtom, softwareUserAtom} from "../../globalVariables/variables";
+import {softwareUserAtom} from "../../globalVariables/variables";
 import {useRecoilValue} from "recoil";
 import * as React from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import {useEffect} from "react";
-import {DataGrid, GridRowsProp, GridColDef} from '@mui/x-data-grid';
+import {useEffect} from 'react';
+import {DataGrid, GridColDef, GridRowsProp} from '@mui/x-data-grid';
 
 
 export default function LicenseTable() {
@@ -19,7 +12,16 @@ export default function LicenseTable() {
 
     const columns: GridColDef[] = [
         {field: 'full_name', headerName: 'Navn', width: 300},
-        {field: 'email', headerName: 'Epost', width: 300},
+        {
+            field: 'email', headerName: 'Epost', width: 300, renderCell: (params) => {
+                const email = params.value;
+                return (
+                    <a href={`mailto:${email}`} target="_blank" rel="noopener noreferrer">
+                        {email}
+                    </a>
+                );
+            },
+        },
         {field: 'organization', headerName: 'Organisasjon', width: 300},
         {field: 'total_minutes', headerName: 'Totale minutter', width: 120},
         {field: 'active_minutes', headerName: 'Aktive minutter', width: 120},
@@ -81,7 +83,13 @@ export default function LicenseTable() {
     //
     // );
     return (
-        <div style={{display: "flex", width: '65%', justifyContent: "center"}}>
+        <div style={{
+            display: "flex",
+            width: '65%',
+            justifyContent: "center",
+            border: "3px solid grey",
+            borderRadius: "10px"
+        }}>
             <DataGrid autoHeight={true} pageSize={30} rows={rows} columns={columns}/>
         </div>
     );
