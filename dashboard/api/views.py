@@ -90,6 +90,7 @@ def get_organization_software(request, format=None):
     software = software.filter(license_required=True)
     if organization:
         software = software.filter(organization=organization)
+    software = sorted(software)
 
     return Response(software)
 
