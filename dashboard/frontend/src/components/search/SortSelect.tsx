@@ -22,6 +22,7 @@ export default function SelectSmall() {
                 label="Sorter"
                 autoWidth
                 onChange={handleChange}
+                value={sort}
             >
                 <MenuItem value="">
                     <em>None</em>

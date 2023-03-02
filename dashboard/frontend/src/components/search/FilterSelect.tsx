@@ -24,6 +24,7 @@ export default function SelectSmall() {
                 label="Filter"
                 onChange={handleChange}
                 autoWidth
+                value={filter}
             >
                 <MenuItem value="">
                     <em>None</em>
