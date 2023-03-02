@@ -3,6 +3,7 @@ import React from 'react';
 import OrganizationSelector from './OrganizationSelector';
 import '@testing-library/jest-dom';
 import userEvent from '@testing-library/user-event';
+import { RecoilRoot } from 'recoil';
 
 
 /**
@@ -22,7 +23,12 @@ jest.mock('../api/calls', () => ({
 describe('Organization selector', () => {
   beforeEach(async () => {
     await act(async () => {
-      render(<OrganizationSelector />);
+      render(
+        <RecoilRoot>
+          <OrganizationSelector />
+        </RecoilRoot>
+        );
+
     });
   });
 
