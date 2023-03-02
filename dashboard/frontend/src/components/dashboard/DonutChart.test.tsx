@@ -6,7 +6,7 @@ import '@testing-library/jest-dom/extend-expect';
 describe('Testing render, DonutChart', () => {
 
   beforeEach(() => {
-    render(<DonutChart/>);
+    render(<DonutChart never_used={10} total_licenses={10} unused_licenses={10} active_licenses={10}/>);
   });
 
   afterEach(() => {

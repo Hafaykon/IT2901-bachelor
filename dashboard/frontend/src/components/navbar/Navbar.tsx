@@ -38,7 +38,7 @@ function Navbar() {
               return (
                 <li key={index} className={item.cName}>
                   <NavLink to={item.path}>
-                    <span>{item.title}</span>
+                    <span id="spanning">{item.title}</span>
                   </NavLink>
                 </li>
               );

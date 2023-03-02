@@ -1,11 +1,12 @@
 import React from 'react';
+import LicensePool from '../components/licensepool/LicensePool';
 
 function Licenses() {
-  return (
-    <div>
-      <h1>Lisensportalen</h1>
-    </div>
-  );
+    return (
+        <>
+            <LicensePool/>
+        </>
+    );
 }
 
 export default Licenses;

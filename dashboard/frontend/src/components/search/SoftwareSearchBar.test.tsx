@@ -3,9 +3,6 @@ import React from 'react';
 import SoftwareSearchBar from './SoftwareSeachBar';
 import { RecoilRoot } from 'recoil';
 import '@testing-library/jest-dom';
-import { fetchOrgSoftwareByName } from '../api/calls';
-
-
 
 const mockData = {
   'full_name': 'Lise Stokken',
@@ -13,7 +10,7 @@ const mockData = {
   'total_minutes': 0,
   'active_minutes': 0
 };
-jest.mock('../api/calls', () => ({
+jest.mock('../../api/calls', () => ({
   fetchOrgSoftwareByName: () => Promise.resolve(mockData)
 }));
 
