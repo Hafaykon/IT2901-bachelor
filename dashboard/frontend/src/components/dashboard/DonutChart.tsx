@@ -1,6 +1,6 @@
 import React from 'react';
-import {Box, Card, CardContent, Stack, Typography} from '@mui/material';
-import {PieChart} from 'react-minimal-pie-chart';
+import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
+import { PieChart } from 'react-minimal-pie-chart';
 
 
 const defaultLabelStyle = {

@@ -3,7 +3,6 @@ import { ButtonBase, Card, CardActionArea, CardContent, Typography } from '@mui/
 import * as React from 'react';
 
 
-
 interface InfoBoxProps{
   title: string,
   numberOfLicenses: number,

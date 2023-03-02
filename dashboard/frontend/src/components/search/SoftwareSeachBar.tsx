@@ -1,12 +1,12 @@
-import React, {useEffect} from 'react';
-import {fetchOrgSoftwareByName, fetchSoftwareUsedInOrg} from '../../api/calls';
+import React, { useEffect } from 'react';
+import { fetchOrgSoftwareByName, fetchSoftwareUsedInOrg } from '../../api/calls';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-import {useRecoilState, useSetRecoilState} from 'recoil';
-import {softwareAtom, softwareUserAtom} from '../../globalVariables/variables';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { softwareAtom, softwareUserAtom } from '../../globalVariables/variables';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 

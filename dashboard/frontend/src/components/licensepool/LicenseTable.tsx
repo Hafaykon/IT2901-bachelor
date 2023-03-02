@@ -1,8 +1,8 @@
-import {softwareUserAtom} from "../../globalVariables/variables";
-import {useRecoilValue} from "recoil";
+import { softwareUserAtom } from '../../globalVariables/variables';
+import { useRecoilValue } from 'recoil';
 import * as React from 'react';
-import {useEffect} from 'react';
-import {DataGrid, GridColDef, GridRowsProp} from '@mui/x-data-grid';
+import { useEffect } from 'react';
+import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 
 
 export default function LicenseTable() {

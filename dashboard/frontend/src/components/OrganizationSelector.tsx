@@ -1,9 +1,9 @@
-import React, {SyntheticEvent, useEffect, useState} from 'react';
-import {fetchOrganizations, fetchSoftwareUsedInOrg} from '../api/calls';
+import React, { SyntheticEvent, useEffect, useState } from 'react';
+import { fetchOrganizations, fetchSoftwareUsedInOrg } from '../api/calls';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import {useSetRecoilState} from 'recoil';
-import {orgAtom, softwareAtom} from '../globalVariables/variables';
+import { useSetRecoilState } from 'recoil';
+import { orgAtom, softwareAtom } from '../globalVariables/variables';
 
 
 /**
