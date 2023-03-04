@@ -3,7 +3,7 @@ from django.urls import include, path, reverse
 from rest_framework.test import APIRequestFactory, APITestCase
 from .views import get_organizations
 from .models import SoftwarePerComputer
-
+import datetime
 
 # Create your tests here.
 class TestViews(APITestCase):
@@ -253,9 +253,22 @@ class TestViews(APITestCase):
         user = 'My User'
         url = reverse('get_licenses_associated_with_user', args=[user])
         response = self.client.get(url)
-        expected_softwares = ['Hovedtillitsvalgte', 'myapplication']
+        last_used = datetime.date(2022, 2, 1)
+        expected_software = [{'application_name': 'Hovedtillitsvalgte',
+                               'data': [{'Active Minutes': 500,
+                                         'Computer name': 'mycomputer',
+                                         'Last used': last_used,
+                                         'Total Minutes': 1000,
+                                         'Username': 'My User'}]},
+                              {'application_name': 'myapplication',
+                               'data': [{'Active Minutes': 500,
+                                         'Computer name': 'mycomputer',
+                                         'Last used': last_used,
+                                         'Total Minutes': 1000,
+                                         'Username': 'My User'}]}]
+
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, expected_softwares)
+        self.assertEqual(response.data, expected_software)
 
     def test_get_reallocatabe_by_software_name(self):
         """
