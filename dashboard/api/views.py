@@ -6,8 +6,8 @@ from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from .models import SoftwarePerComputer
-from .serializers import SoftwarePerComputerSerializer
+from .models import SoftwarePerComputer, PoolRequest, LicensePool
+from .serializers import SoftwarePerComputerSerializer, PoolRequestSerializer
 
 
 # Create your views here.
@@ -286,3 +286,13 @@ def get_sorted_df_of_unused_licenses(software_data):
     df['last_used'] = (now - df['last_used']).dt.days
     df = df.sort_values(by='last_used', ascending=False)
     return df
+
+@api_view(['GET'])
+def get_pool_requests(request):
+    pool_req = PoolRequest.objects.all()
+    serialize_request = PoolRequestSerializer(pool_req, many=True)
+    return Response(serialize_request.data)
+
+    """    organizations = SoftwarePerComputer.objects.values_list('organization', flat=True).distinct()
+    organizations = sorted(organizations)
+    return Response(organizations)"""
