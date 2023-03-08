@@ -1,4 +1,5 @@
 import { atom } from 'recoil';
+import SoftwareUser from "../Interfaces";
 
 interface UserData {
     id: number;
@@ -21,7 +22,7 @@ export const orgAtom = atom<string>({
     default: ''
 });
 
-export const softwareUserAtom = atom<UserData[]>({
+export const softwareUserAtom = atom<SoftwareUser[]>({
     key: 'softwareUserData',
     default: []
 })

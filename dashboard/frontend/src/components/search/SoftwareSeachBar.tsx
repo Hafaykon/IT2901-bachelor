@@ -1,28 +1,24 @@
-import React, { useEffect } from 'react';
-import { fetchOrgSoftwareByName, fetchSoftwareUsedInOrg } from '../../api/calls';
+import React, {useEffect} from 'react';
+import {fetchOrgSoftwareByName, fetchSoftwareUsedInOrg} from '../../api/calls';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { softwareAtom, softwareUserAtom } from '../../globalVariables/variables';
+import {useRecoilState, useSetRecoilState} from 'recoil';
+import {softwareAtom, softwareUserAtom} from '../../globalVariables/variables';
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import SoftwareUser from "../../Interfaces";
 
 
-interface UserData {
-    id: number;
-    active_minutes: number;
-    email: string;
-    organization: string;
-    full_name: string;
-    total_minutes: number;
+interface ShowCheckBox {
+    show: boolean;
 
 }
 
 
-const SoftwareSearchBar: React.FC = () => {
+const SoftwareSearchBar: React.FC<ShowCheckBox> = ({show}) => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
     const [value, setValue] = React.useState<string | null>(null);
     const [inputValue, setInputValue] = React.useState<string>('');
@@ -47,7 +43,7 @@ const SoftwareSearchBar: React.FC = () => {
         if (software && !software.includes(software)) {
             throw new Error(`Software "${software}" not found in the list of available software.`);
         }
-        const data: UserData[] | undefined = await fetchOrgSoftwareByName(software, organization);
+        const data: SoftwareUser[] | undefined = await fetchOrgSoftwareByName(software, organization);
         if (data !== undefined) {
             setUserData(data);
         }
@@ -70,7 +66,7 @@ const SoftwareSearchBar: React.FC = () => {
 
     return (
         <>
-            {software ? (
+            {software && show ? (
                 <>
                     <Autocomplete
                         value={value}
@@ -119,7 +115,38 @@ const SoftwareSearchBar: React.FC = () => {
                 </>
 
             ) : (
-                <div>Loading organizations...</div>
+                <>           <Autocomplete
+                    value={value}
+                    onChange={(event, newValue) => {
+                        setValue(newValue);
+                        fetchSoftwareUsed(newValue || '', checked ? storedOrganization as string : '');
+                    }}
+                    inputValue={inputValue}
+                    onInputChange={(event, newInputValue) => {
+                        setInputValue(newInputValue);
+                    }}
+                    id='controllable-states-demo'
+                    options={software}
+                    sx={{width: 450}}
+                    renderInput={(params) => (
+                        <TextField
+                            data-testid='autocomplete-search'
+                            {...params}
+                            style={{backgroundColor: 'white'}}
+                            label='Søk'
+                            InputProps={{
+                                ...params.InputProps,
+                                endAdornment: (
+                                    <InputAdornment position='end'>
+                                        <IconButton>
+                                            <SearchIcon/>
+                                        </IconButton>
+                                    </InputAdornment>
+                                )
+                            }}
+                        />
+                    )}
+                /></>
             )}
         </>
     );

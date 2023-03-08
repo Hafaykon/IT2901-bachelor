@@ -118,6 +118,24 @@ export const fetchInfoBoxData = async (org?: string) => {
     }
 }
 
+export const fetchPoolData = async (software?: string, org?: string) => {
+    try {
+        let url = 'http://127.0.0.1:8000/api/pool/';
+        if (software && org) {
+            url = `${url}?application_name=${software}&organization=${org}`;
+        } else if (software) {
+            url = `${url}?application_name=${software}`;
+        } else if (org) {
+            url = `${url}?organization=${org}`;
+        }
+        const response = await fetch(url);
+        const data = await response.json();
+        return [...data];
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
 
 
@@ -129,6 +147,7 @@ export default {
     fetchSoftwareUsers,
     fetchLicensesAssociatedWithUser,
     fetchOrgSoftwareByName,
-    fetchInfoBoxData
+    fetchInfoBoxData,
+    fetchPoolData
 
 };

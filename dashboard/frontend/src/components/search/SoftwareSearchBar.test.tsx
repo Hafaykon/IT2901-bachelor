@@ -19,7 +19,7 @@ describe('SoftwareSearchBar', () => {
     await act(async () => {
       render(
         <RecoilRoot>
-          <SoftwareSearchBar />
+          <SoftwareSearchBar show={false} />
         </RecoilRoot>);
     });
   });

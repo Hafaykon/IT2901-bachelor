@@ -217,10 +217,9 @@ def get_org_software_users_by_name(request, format=None):
     organization = request.GET.get('organization', None)
 
     software = SoftwarePerComputer.objects.filter(application_name=application_name,
-                                                  license_required=True)
+                                                  license_required=True, license_suite_names__isnull=True)
     if organization:
         software = software.filter(organization=organization)
-
 
     software_df = pd.DataFrame.from_records(software.values())
     # Fill null values in the "active_minutes" and "total_minutes" columns with 0
@@ -228,15 +227,69 @@ def get_org_software_users_by_name(request, format=None):
     # Sort by "active_minutes" column, moving null values to the end
     sorted_group = software_df.sort_values(by='active_minutes', ascending=True, na_position='last')
 
+    # Group by organization
+    groups = sorted_group.groupby('organization')
+
     result = []
-    for i, row in sorted_group.iterrows():
+    for org, group in groups:
+        details = []
+        for i, row in group.iterrows():
+            details.append({
+                "id": row["id"],
+                "full_name": row["primary_user_full_name"],
+                "computer_name": row["computer_name"],
+                "email": row["primary_user_email"],
+                "total_minutes": row["total_minutes"],
+                "active_minutes": row["active_minutes"],
+            })
         result.append({
-            "id": row["id"],
-            "full_name": row["primary_user_full_name"],
-            "email": row["primary_user_email"],
-            "organization": row["organization"],
-            "total_minutes": row["total_minutes"],
-            "active_minutes": row["active_minutes"],
+            "application_name": application_name,
+            "organization": org,
+            "details": details
+        })
+
+    return Response(result)
+
+
+@api_view(['GET'])
+def get_license_pool(request, format=None):
+    """
+    :param request: A GET request with 'application_name' and 'organization' as parameters.
+    :return: Returns a list of software within license pool.
+    """
+    # TODO: update this function to use the new license pool model when branches are merged.
+    application_name = request.GET.get('application_name', 'Microsoft Office 2016 PowerPoint')
+    organization = request.GET.get('organization', None)
+
+    software = SoftwarePerComputer.objects.filter(application_name=application_name,
+                                                  license_required=True, license_suite_names__isnull=True)
+    if organization:
+        software = software.filter(organization=organization)
+
+    software_df = pd.DataFrame.from_records(software.values())
+    # Sort by "active_minutes" column, moving null values to the end
+    sorted_group = software_df.sort_values(by='active_minutes', ascending=True, na_position='last')
+
+    # Group by organization
+    groups = sorted_group.groupby('organization')
+
+    result = []
+    for org, group in groups:
+        details = []
+        for i, row in group.iterrows():
+            details.append({
+                "id": row["id"],
+                "full_name": row["primary_user_full_name"],
+                "computer_name": row["computer_name"],
+                "email": row["primary_user_email"],
+                "family": row["family"],
+                "family_version": row["family_version"],
+                "family_edition": row["family_edition"],
+            })
+        result.append({
+            "application_name": application_name,
+            "organization": org,
+            "details": details
         })
 
     return Response(result)
@@ -248,7 +301,7 @@ def software_counts(request):
     software = SoftwarePerComputer.objects.filter(
         organization=organization
     ).values('last_used', 'license_required')
-    software = software.filter(license_required=True)
+    software = software.filter(license_required=True, license_suite_names__isnull=True)
 
     # Count of total licenses filter by organization
     total_licenses = software.count()
@@ -286,3 +339,17 @@ def get_sorted_df_of_unused_licenses(software_data):
     df['last_used'] = (now - df['last_used']).dt.days
     df = df.sort_values(by='last_used', ascending=False)
     return df
+
+
+@api_view(['GET'])
+def get_software_for_leendert(request, format=None):
+    """
+    :return: Returns a list of all the software that Leendert has used.
+    """
+    software = SoftwarePerComputer.objects.filter(
+        license_required=True,
+        last_used__isnull=True,
+        license_suite_names__isnull=True).values_list(
+        'application_name', flat=True
+    ).distinct()
+    return Response(list(software))
