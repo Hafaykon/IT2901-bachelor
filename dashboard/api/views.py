@@ -353,3 +353,37 @@ def get_software_for_leendert(request, format=None):
         'application_name', flat=True
     ).distinct()
     return Response(list(software))
+
+
+
+@api_view(['GET'])
+def get_license_info(request):
+    """
+    :param request: A GET request with 'application_name' and 'organization' as parameters.
+    :return: Returns a list of all the users of the given software within the given organization.
+    """
+    application_name = request.GET.get('application_name', 'Microsoft Office 2016 PowerPoint')
+    organization = request.GET.get('organization', None)
+
+    software = SoftwarePerComputer.objects.filter(application_name=application_name,
+                                                  license_required=True)
+    if organization:
+        software = software.filter(organization=organization)
+
+    software_df = pd.DataFrame.from_records(software.values())
+    # Fill null values in the "active_minutes" and "total_minutes" columns with 0
+    software_df[['active_minutes', 'total_minutes']] = software_df[['active_minutes', 'total_minutes']].fillna(0)
+    # Sort by "active_minutes" column, moving null values to the end
+    sorted_group = software_df.sort_values(by='active_minutes', ascending=True, na_position='last')
+
+    result = []
+    for i, row in sorted_group.iterrows():
+        result.append({
+            "id": row["id"],
+            "full_name": row["primary_user_full_name"],
+            "email": row["primary_user_email"],
+            "organization": row["organization"],
+            "total_minutes": row["total_minutes"],
+            "active_minutes": row["active_minutes"],
+        })
+    return Response(result)

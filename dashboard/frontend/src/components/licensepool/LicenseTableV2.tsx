@@ -15,7 +15,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {useRecoilValue} from "recoil";
 import {softwareUserAtom} from "../../globalVariables/variables";
-import SoftwareUser from "../../Interfaces";
+import { SoftwareUser } from '../../Interfaces';
 import ReserveButton from "./ReserveButton";
 
 

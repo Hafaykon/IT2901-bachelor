@@ -17,5 +17,6 @@ urlpatterns = [
     path('count', views.software_counts, name='software_counts'),
     path('', views.get_software_for_leendert, name='leendert'),
     path('pool/', views.get_license_pool, name='pool'),
+    path('licenseinfo/', views.get_license_info, name='licenseinfo'),
 
 ]
