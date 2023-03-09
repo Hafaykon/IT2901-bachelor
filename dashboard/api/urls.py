@@ -16,4 +16,5 @@ urlpatterns = [
     path('softwarebyuser/', views.get_org_software_users_by_name, name='get_org_software_users_by_name'),
     path('count', views.software_counts, name='software_counts'),
     path('pool_req/', views.get_pool_requests, name='pool_requests'),
+    path('pool', views.get_license_pool, name='licensepool'),
 ]

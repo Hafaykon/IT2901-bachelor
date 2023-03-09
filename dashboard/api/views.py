@@ -7,7 +7,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .models import SoftwarePerComputer, PoolRequest, LicensePool
-from .serializers import SoftwarePerComputerSerializer, PoolRequestSerializer
+from .serializers import SoftwarePerComputerSerializer, PoolRequestSerializer, PoolSerializer
 
 
 # Create your views here.
@@ -288,11 +288,34 @@ def get_sorted_df_of_unused_licenses(software_data):
     return df
 
 @api_view(['GET'])
-def get_pool_requests(request):
-    pool_req = PoolRequest.objects.all()
-    serialize_request = PoolRequestSerializer(pool_req, many=True)
+def get_license_pool(request):
+    application_name = request.GET.get('application_name', "Spotify")
+    license_pool_element = LicensePool.objects.only('organization', 'application_name', 'primary_user_email').values()
+    license_pool_data = license_pool_element.filter(application_name=application_name)
+    serialize_request = PoolSerializer(license_pool_data, many=True)
+
     return Response(serialize_request.data)
 
-    """    organizations = SoftwarePerComputer.objects.values_list('organization', flat=True).distinct()
+    """
+    organizations = LicensePool.objects.values_list('organization', flat=True).distinct()
     organizations = sorted(organizations)
-    return Response(organizations)"""
+    return Response(organizations)
+
+    """
+
+
+
+
+@api_view(['GET'])
+def get_pool_requests(request):
+    organization = request.query_params.get('organization', None)
+
+    pool_req = PoolRequest.objects.all()
+    if organization:
+        req_data = PoolRequest.objects.filter(contact_organization=organization)
+    else:
+        req_data = PoolRequest.objects.all()
+
+    serialize_request = PoolRequestSerializer(req_data, many=True)
+    return Response(serialize_request.data)
+

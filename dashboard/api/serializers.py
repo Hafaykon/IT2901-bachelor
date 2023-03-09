@@ -1,10 +1,15 @@
 from rest_framework import serializers
-from .models import SoftwarePerComputer, PoolRequest
+from .models import SoftwarePerComputer, PoolRequest, LicensePool
 
 
 class SoftwarePerComputerSerializer(serializers.ModelSerializer):
     class Meta:
         model = SoftwarePerComputer
+        fields = '__all__'
+
+class PoolSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LicensePool
         fields = '__all__'
 
 
