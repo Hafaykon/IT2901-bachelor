@@ -1,4 +1,4 @@
-import { softwareUserAtom } from '../../globalVariables/variables';
+import { softwareDataAtom, softwareUserAtom } from '../../globalVariables/variables';
 import { useRecoilValue } from 'recoil';
 import * as React from 'react';
 import { useEffect } from 'react';
@@ -8,7 +8,7 @@ import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
 export default function LicenseTable() {
     const software = useRecoilValue(softwareUserAtom);
     const [loaded, setLoaded] = React.useState(false);
-    const rows: GridRowsProp = useRecoilValue(softwareUserAtom);
+    const rows: GridRowsProp = useRecoilValue(softwareDataAtom);
 
     const columns: GridColDef[] = [
         {field: 'full_name', headerName: 'Navn', width: 300},

@@ -10,7 +10,7 @@ type ReserveButtonProps = {
 const ReserveButton: React.FC<ReserveButtonProps> = ({id, full_name}) => {
     console.log(id, full_name);
     const handleClick = () => {
-        console.log('clicked');
+        alert("Du har kjøpt lisensen til " + full_name);
 
     }
     return (
