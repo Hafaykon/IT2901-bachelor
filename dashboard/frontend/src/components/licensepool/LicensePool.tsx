@@ -49,15 +49,11 @@ function LicensePool() {
     return (
         <div id={'licensepool_container'} style={{display: 'flex', justifyContent: 'center'}}>
             <Grid container className='license_pool'>
-                <Grid item>
-                    <Stack direction='row' spacing={20}>
-                        <h1>Lisensportalen</h1>
-                    </Stack>
-                </Grid>
                 <Grid container className={'license_parameters'}
                       style={{display: 'flex', justifyContent: 'space-evenly', marginBottom: '10px'}}>
                     <Grid item>
-                        <Stack direction='row' spacing={5}>
+                        <Stack direction='column' spacing={5}>
+                             <h1 style={{textAlign: "center"}}>Lisensportalen</h1>
                             <SoftwareSearchBar setSelectedSoftware={handleChange} data={orgSoftware}/>
                         </Stack>
                     </Grid>

@@ -4,7 +4,8 @@ import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
 import LicenseTable from './licensepool/LicenseTable';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
 import {SoftwareData} from "../Interfaces";
-import {Grid} from '@mui/material';
+import {Grid, Stack} from '@mui/material';
+import LicenseTableV2 from "./licensepool/LicenseTableV2";
 
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
@@ -66,10 +67,26 @@ const LicenseInfo: React.FC = () => {
     }
 
     return (
-        <Grid container sx={{marginTop: "40px"}}>
-            <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
-            <LicenseTable data={data}/>
-        </Grid>)
+        <div id={'licensepool_container'} style={{display: 'flex', justifyContent: 'center', marginTop: "20px"}}>
+            <Grid container className='license_pool'>
+                <Grid container className={'license_parameters'}
+                      style={{display: 'flex', justifyContent: 'space-evenly', marginBottom: '10px'}}>
+                    <Grid item>
+                        <Stack direction='column' spacing={5}>
+                            <h1 style={{textAlign: "center"}}>{title}</h1>
+                            <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
+                        </Stack>
+                    </Grid>
+                </Grid>
+                <br/>
+                <Grid container style={{display: 'flex', justifyContent: 'center', alignItems: "center", width: "100%"}}
+                      className={'license_table'}>
+                    <LicenseTable data={data}/>
+                </Grid>
+
+
+            </Grid>
+        </div>)
 };
 
 export default LicenseInfo;

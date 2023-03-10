@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useEffect} from 'react';
 import {DataGrid, GridColDef, GridRowsProp} from '@mui/x-data-grid';
 import {SoftwareData} from "../../Interfaces";
+import ReserveButton from "./ReserveButton";
 
 interface LicenseTableProps {
     data: SoftwareData[];
@@ -12,9 +13,26 @@ export default function LicenseTable({data}: LicenseTableProps) {
     const rows: GridRowsProp = data;
 
     const columns: GridColDef[] = [
-        {field: 'primary_user_full_name', headerName: 'Navn', width: 300},
+        {
+            field: 'primary_user_full_name',
+            headerName: 'Navn',
+            width: 300,
+            renderCell: (params) => {
+                const value = params.value;
+                return value ? value : 'Ukjent';
+            },
+        },
         {field: 'computer_name', headerName: 'Datamaskin', width: 300},
-        {field: 'last_used', headerName: 'Sist brukt', width: 300},
+        {
+            field: 'last_used',
+            headerName: 'Sist brukt',
+            width: 300,
+            renderCell: (params) => {
+                const value = params.value;
+                return value ? value : 'Aldri brukt';
+            },
+        },
+
         {
             field: 'primary_user_email', headerName: 'Epost', width: 300, renderCell: (params) => {
                 const email = params.value;
@@ -39,7 +57,10 @@ export default function LicenseTable({data}: LicenseTableProps) {
 
     return (
         <> {loaded ? (
-            <DataGrid autoHeight={true} pageSize={30} rows={rows} columns={columns}/>
+            <div style={{width: "75%"}}>
+                <DataGrid autoHeight={true} pageSize={30} rows={rows} columns={columns}/>
+            </div>
+
         ) : (<h4>Data not loaded</h4>)}</>
     );
 
