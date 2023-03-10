@@ -73,7 +73,7 @@ const LicenseInfo: React.FC = () => {
                       style={{display: 'flex', justifyContent: 'space-evenly', marginBottom: '10px'}}>
                     <Grid item>
                         <Stack direction='column' spacing={5}>
-                            <h1 style={{textAlign: "center"}}>{title}</h1>
+                            <h1 style={{textAlign: "center"}}>{title} i {storedOrganization}</h1>
                             <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
                         </Stack>
                     </Grid>

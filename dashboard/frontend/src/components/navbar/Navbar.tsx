@@ -8,46 +8,48 @@ import ClearIcon from '@mui/icons-material/Clear';
 import {SidebarData} from './Sidebar';
 
 function Navbar() {
-  const [sidebar, setSidebar] = useState(false);
-  const showSidebar = () => setSidebar(!sidebar);
+    const [sidebar, setSidebar] = useState(false);
+    const showSidebar = () => setSidebar(!sidebar);
 
-  return (
-    <nav data-testid="navbar">
-      <Grid id="navBar">
-        <Grid id="logoTrondheim">
-          <img src={trondheimLogo} alt="logo" />
-        </Grid>
-        <Grid id="menuIcon">
-          <NavLink to="#" className="menu-bars">
-            <MenuIcon
-              sx={{ fontSize: 50 }}
-              onClick={showSidebar}
-              style={{ color: '#302d2d' }}
-            />
-          </NavLink>
-        </Grid>
-        <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
-          <ul className="nav-menu-items" onClick={showSidebar}>
-            <li className="navbar-toggle">
-              <NavLink to="#" className="menu-bars">
-                <ClearIcon sx={{ fontSize: 40 }} style={{ color: '#302d2d' }} />
-              </NavLink>
-            </li>
+    return (
+        <nav data-testid="navbar">
+            <Grid id="navBar">
+                <Grid id="logoTrondheim">
+                    <NavLink to="/" className="logo">
+                        <img src={trondheimLogo} alt="logo"/>
+                    </NavLink>
+                </Grid>
+                <Grid id="menuIcon">
+                    <NavLink to="#" className="menu-bars">
+                        <MenuIcon
+                            sx={{fontSize: 50}}
+                            onClick={showSidebar}
+                            style={{color: '#302d2d'}}
+                        />
+                    </NavLink>
+                </Grid>
+                <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
+                    <ul className="nav-menu-items" onClick={showSidebar}>
+                        <li className="navbar-toggle">
+                            <NavLink to="#" className="menu-bars">
+                                <ClearIcon sx={{fontSize: 40}} style={{color: '#302d2d'}}/>
+                            </NavLink>
+                        </li>
 
-            {SidebarData.map((item, index) => {
-              return (
-                <li key={index} className={item.cName}>
-                  <NavLink to={item.path}>
-                    <span id="spanning">{item.title}</span>
-                  </NavLink>
-                </li>
-              );
-            })}
-          </ul>
+                        {SidebarData.map((item, index) => {
+                            return (
+                                <li key={index} className={item.cName}>
+                                    <NavLink to={item.path}>
+                                        <span id="spanning">{item.title}</span>
+                                    </NavLink>
+                                </li>
+                            );
+                        })}
+                    </ul>
+                </nav>
+            </Grid>
         </nav>
-      </Grid>
-    </nav>
-  );
+    );
 }
 
 export default Navbar;
