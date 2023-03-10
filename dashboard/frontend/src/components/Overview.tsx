@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { fetchOrganizations } from '../api/calls';
-import { Stack } from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {fetchOrganizations} from '../api/calls';
+import {Stack} from '@mui/material';
 import InfoBox from '../components/dashboard/InfoBox';
 
 

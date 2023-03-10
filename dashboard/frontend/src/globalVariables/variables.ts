@@ -1,7 +1,5 @@
-import { atom } from 'recoil';
-import { SoftwareUser, UserData } from '../Interfaces';
-
-
+import {atom} from 'recoil';
+import {SoftwareUser, UserData} from '../Interfaces';
 
 
 export const softwareAtom = atom<string[]>({

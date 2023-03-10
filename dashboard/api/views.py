@@ -1,11 +1,11 @@
 import datetime as dt
-
+from datetime import datetime
 import numpy as np
 import pandas as pd
 from rest_framework import generics
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
+from datetime import date, timedelta
 from .models import SoftwarePerComputer
 from .serializers import SoftwarePerComputerSerializer
 
@@ -77,22 +77,6 @@ def get_software_recommendations(request, format=None):
     recommendations = df[['application_name', 'primary_user_full_name', 'primary_user_email', 'organization',
                           'last_used']].to_dict('records')
     return Response(recommendations)
-
-
-@api_view(['GET'])
-def get_organization_software(request, format=None):
-    """
-    :param request: A GET request with an optional 'organization' parameter.
-    :return: Returns a list of all distinct software used grouped by organization.
-    """
-    organization = request.GET.get('organization', 'IT-tjenesten')
-    software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
-    software = software.filter(license_required=True)
-    if organization:
-        software = software.filter(organization=organization)
-    software = sorted(software)
-
-    return Response(software)
 
 
 @api_view(['GET'])
@@ -263,8 +247,8 @@ def get_license_pool(request, format=None):
 
     software = SoftwarePerComputer.objects.filter(application_name=application_name,
                                                   license_required=True, license_suite_names__isnull=True)
-    if organization:
-        software = software.filter(organization=organization)
+    #if organization:
+     #   software = software.filter(organization=organization)
 
     software_df = pd.DataFrame.from_records(software.values())
     # Sort by "active_minutes" column, moving null values to the end
@@ -342,48 +326,63 @@ def get_sorted_df_of_unused_licenses(software_data):
 
 
 @api_view(['GET'])
-def get_software_for_leendert(request, format=None):
-    """
-    :return: Returns a list of all the software that Leendert has used.
-    """
-    software = SoftwarePerComputer.objects.filter(
-        license_required=True,
-        last_used__isnull=True,
-        license_suite_names__isnull=True).values_list(
-        'application_name', flat=True
-    ).distinct()
-    return Response(list(software))
+def get_license_info(request):
+    # Calculate the date 90 days ago
+    application_name = request.GET.get('application_name', None)
+    organization = request.GET.get('organization', None)
+    status = request.GET.get('status', '')
 
+    # Get the date 90 days ago
+    threshold_date = datetime.now() - timedelta(days=90)
+    software = SoftwarePerComputer.objects.filter(application_name=application_name,
+                                                  license_required=True,
+                                                  license_suite_names__isnull=True,
+                                                  organization=organization)
+
+    if status == 'unused':
+        software = software.filter(last_used__isnull=True)
+    elif status == 'active':
+        software = software.filter(last_used__isnull=False, last_used__gte=threshold_date)
+
+    software_df = pd.DataFrame.from_records(software.values())
+
+    result = []
+    for i, row in software_df.iterrows():
+        result.append({
+            "id": row["id"],
+            "primary_user_full_name": row["primary_user_full_name"],
+            "computer_name": row["computer_name"],
+            "primary_user_email": row["primary_user_email"],
+            "total_minutes": row["total_minutes"],
+            "active_minutes": row["active_minutes"],
+            "last_used": row["last_used"],
+        })
+
+    return Response(result)
 
 
 @api_view(['GET'])
-def get_license_info(request):
+def get_organization_software(request, format=None):
     """
-    :param request: A GET request with 'application_name' and 'organization' as parameters.
-    :return: Returns a list of all the users of the given software within the given organization.
+    :param request: A GET request with an optional 'organization' parameter.
+    :return: Returns a list of all distinct software used.
     """
-    application_name = request.GET.get('application_name', 'Microsoft Office 2016 PowerPoint')
-    organization = request.GET.get('organization', None)
+    organization = request.GET.get('organization', 'IT-tjenesten')
+    status = request.GET.get('status', None)
 
-    software = SoftwarePerComputer.objects.filter(application_name=application_name,
-                                                  license_required=True)
+    # Get the date 90 days ago
+    threshold_date = datetime.now() - timedelta(days=90)
+
+    software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
+    software = software.filter(license_required=True, license_suite_names__isnull=True)
     if organization:
         software = software.filter(organization=organization)
 
-    software_df = pd.DataFrame.from_records(software.values())
-    # Fill null values in the "active_minutes" and "total_minutes" columns with 0
-    software_df[['active_minutes', 'total_minutes']] = software_df[['active_minutes', 'total_minutes']].fillna(0)
-    # Sort by "active_minutes" column, moving null values to the end
-    sorted_group = software_df.sort_values(by='active_minutes', ascending=True, na_position='last')
+    if status == 'unused':
+        software = software.filter(last_used__isnull=True)
+    elif status == 'active':
+        software = software.filter(last_used__isnull=False, last_used__gte=threshold_date)
 
-    result = []
-    for i, row in sorted_group.iterrows():
-        result.append({
-            "id": row["id"],
-            "full_name": row["primary_user_full_name"],
-            "email": row["primary_user_email"],
-            "organization": row["organization"],
-            "total_minutes": row["total_minutes"],
-            "active_minutes": row["active_minutes"],
-        })
-    return Response(result)
+    software = sorted(software)
+
+    return Response(software)

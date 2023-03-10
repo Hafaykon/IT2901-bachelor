@@ -1,50 +1,75 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchSoftwareUsers } from '../api/calls';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
 import LicenseTable from './licensepool/LicenseTable';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
+import {SoftwareData} from "../Interfaces";
+import {Grid} from '@mui/material';
 
 const LicenseInfo: React.FC = () => {
+    const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
+    const {title} = useParams();
+    const [data, setData] = useState<SoftwareData[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>();
+    const [orgSoftware, setOrgSoftware] = useState<string[]>([]);
+    const [status, setStatus] = useState<string | null>(null);
 
-  interface LicenseData {
-    application_name: string;
-    users: {
-      full_name: string;
-      email: string;
-      total_minutes: number;
-      active_minutes: number;
-    }[];
-  }
+    useEffect(() => {
+        switch (title) {
+            case 'Totale Lisenser':
+                setStatus('active')
+                break;
+            case 'Ubrukte Lisenser':
+                setStatus('unused')
+                break;
+            case 'Ledige Lisenser':
+                setStatus('available')
+                break;
+            default:
+                break;
+        }
+        // Fetches distinct software names.
+        const fetchSoftwareNames = async () => {
+            if (status && storedOrganization) {
+                try {
+                    const data: string[] | undefined = await fetchSoftwareUsedInOrg(status, storedOrganization);
+                    if (data !== undefined) {
+                        setOrgSoftware(data);
+                    }
+                } catch (error) {
+                    console.error('Error fetching software names:', error);
+                }
+            }
+        };
 
-  const { title } = useParams();
-  const [licenses, setLicenses] = useState<LicenseData[]>([]);
+        fetchSoftwareNames();
+    }, [status]);
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (title === 'Totale Lisenser') {
-        const data: LicenseData[] | undefined = await fetchSoftwareUsers('IT-tjenesten'); //default
-        setLicenses(data || []);
-        console.log(data);
-      } else if (title === 'Aktive Lisenser') {
-        //TO-DO: Should be changed to Available licenses and add new view when pool is ready
-        //const data = dummyArray;
-        //setLicenses(data)
-      } else if (title === 'Allokerbare Lisenser') {
-        //TO-DO: Should be changed to Unused licenses and add new view when pool is ready
-        //const data = dummyArray;
-        //setLicenses(data)
-      }
-    };
+    useEffect(() => {
+        const fetchData = async () => {
+            console.log(searchTerm)
+            try {
+                const data = await fetchInfoBoxLicense(status as string, storedOrganization as string, searchTerm);
+                data && setData(data);
+            } catch (error) {
+                console.error('Error fetching license data:', error);
+            }
+        };
+        fetchData()
 
-    fetchData();
-  }, []);
+    }, [searchTerm])
 
-  return (
-    <>
-      <SoftwareSearchBar show={true} />
-      <LicenseTable />
-    </>)
+    // Function that gets input from the searchBar component.
+    const handleChange = (term: string) => {
+        setSearchTerm(term);
+    }
+
+    return (
+        <Grid container sx={{marginTop: "40px"}}>
+            <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
+            <LicenseTable data={data}/>
+        </Grid>)
 };
 
 export default LicenseInfo;

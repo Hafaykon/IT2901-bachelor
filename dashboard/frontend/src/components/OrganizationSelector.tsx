@@ -1,9 +1,9 @@
-import React, { SyntheticEvent, useEffect, useState } from 'react';
-import { fetchOrganizations, fetchSoftwareUsedInOrg } from '../api/calls';
+import React, {SyntheticEvent, useEffect, useState} from 'react';
+import {fetchOrganizations} from '../api/calls';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { useSetRecoilState } from 'recoil';
-import { orgAtom, softwareAtom } from '../globalVariables/variables';
+import {useSetRecoilState} from 'recoil';
+import {orgAtom} from '../globalVariables/variables';
 
 
 /**
@@ -17,7 +17,6 @@ const OrganizationSelector: React.FC = () => {
         storedOrganizationString ? JSON.parse(storedOrganizationString) : null
     );
     const [inputValue, setInputValue] = React.useState<string>('');
-    const setSoftware = useSetRecoilState(softwareAtom);
     const setOrg = useSetRecoilState(orgAtom);
 
     useEffect(() => {
@@ -28,31 +27,10 @@ const OrganizationSelector: React.FC = () => {
             }
         };
 
-        const fetchSoftwareUsed = async () => {
-            if (value) {
-                const data: string[] | undefined = await fetchSoftwareUsedInOrg(value);
-                if (data !== undefined) {
-                    setSoftware(data);
-                }
-            }
 
-        };
         setOrg(value as string);
         fetchData();
-        fetchSoftwareUsed();
     }, []);
-
-    /**
-     * Called when the user has selected an organization.
-     * @param org - The organization that was selected.
-     */
-    const fetchSoftwareUsed = async (org: string) => {
-        const data: string[] | undefined = await fetchSoftwareUsedInOrg(org);
-        if (data !== undefined) {
-            setSoftware(data);
-        }
-
-    };
 
 
     return (
@@ -65,7 +43,6 @@ const OrganizationSelector: React.FC = () => {
                     setValue(newValue);
                     localStorage.setItem('organization', JSON.stringify(newValue));
                     setOrg(newValue as string);
-                    fetchSoftwareUsed(newValue as unknown as string);
 
                 }}
                 inputValue={inputValue}

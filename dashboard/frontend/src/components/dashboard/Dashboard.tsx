@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './Dashboard.css';
-import { Grid, Stack } from '@mui/material';
+import {Grid, Stack} from '@mui/material';
 import InfoBox from './InfoBox';
 import DonutChart from './DonutChart';
-import { SavingsBox } from './SavingsBox';
+import {SavingsBox} from './SavingsBox';
 import OrganizationSelector from '../OrganizationSelector';
-import { useRecoilValue } from 'recoil';
-import { orgAtom } from '../../globalVariables/variables';
-import { fetchInfoBoxData } from '../../api/calls';
+import {useRecoilValue} from 'recoil';
+import {orgAtom} from '../../globalVariables/variables';
+import {fetchInfoBoxData} from '../../api/calls';
 import CircularIndeterminate from '../spinner/MuiLoadingSpinner';
 
 interface Count {
