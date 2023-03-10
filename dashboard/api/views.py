@@ -1,4 +1,5 @@
 import datetime as dt
+import json
 
 import numpy as np
 import pandas as pd
@@ -303,6 +304,37 @@ def get_license_pool(request):
 
     """
 
+@api_view(['POST'])
+def insert_to_pool(request):
+    # Get the user object
+    #user = SoftwarePerComputer.objects.get(primary_user_full_name='Leendert Wienhofen')
+
+    # Create a new LicensePool object and set its attributes
+
+    data = json.loads(request.body)
+
+    primary_user_full_name= data['primary_user_full_name']
+    primary_user_email= data['primary_user_email']
+    organization= data['organization']
+    application_name= data['application_name']
+    family= data['family']
+    family_version= data['family_version']
+    family_edition= data['family_edition']
+    computer_name= data['computer_name']
+
+    new_pool_object = LicensePool.objects.create(
+        primary_user_full_name=primary_user_full_name,
+        primary_user_email=primary_user_email,
+        organization=organization,
+        application_name=application_name,
+        family=family,
+        family_version=family_version,
+        family_edition=family_edition,
+        computer_name=computer_name
+    )
+
+    # Return a response indicating success
+    return Response(primary_user_full_name)
 
 
 

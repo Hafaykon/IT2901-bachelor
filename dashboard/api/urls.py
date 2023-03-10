@@ -17,4 +17,6 @@ urlpatterns = [
     path('count', views.software_counts, name='software_counts'),
     path('pool_req/', views.get_pool_requests, name='pool_requests'),
     path('pool', views.get_license_pool, name='licensepool'),
+    path('insert', views.insert_to_pool, name='insert'),
+
 ]
