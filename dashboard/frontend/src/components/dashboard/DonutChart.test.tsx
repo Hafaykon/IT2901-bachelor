@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from '@testing-library/react';
+import {cleanup, render, screen} from '@testing-library/react';
 import DonutChart from './DonutChart';
 import '@testing-library/jest-dom/extend-expect';
 

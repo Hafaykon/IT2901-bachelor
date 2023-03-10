@@ -1,5 +1,5 @@
-import { useNavigate } from 'react-router-dom';
-import { ButtonBase, Card, CardActionArea, CardContent, Typography } from '@mui/material';
+import {useNavigate} from 'react-router-dom';
+import {ButtonBase, Card, CardActionArea, CardContent, Typography} from '@mui/material';
 import * as React from 'react';
 
 

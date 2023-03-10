@@ -13,9 +13,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import {useRecoilValue} from "recoil";
-import {softwareUserAtom} from "../../globalVariables/variables";
-import { SoftwareUser } from '../../Interfaces';
+import {SoftwareUser} from '../../Interfaces';
 import ReserveButton from "./ReserveButton";
 
 
@@ -60,7 +58,7 @@ function Row(props: RowProps) {
                                         <TableCell align="left">Email</TableCell>
                                         <TableCell align="left">Totale minutter</TableCell>
                                         <TableCell align="left">Aktive minutter</TableCell>
-                                        <TableCell align="left">Frigjør lisens</TableCell>
+                                        <TableCell align="left">Kjøp lisens</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -93,9 +91,12 @@ function Row(props: RowProps) {
     );
 }
 
+interface Props {
+    data: SoftwareUser[];
+}
 
-export default function LicenseTableV2() {
-    const software = useRecoilValue(softwareUserAtom);
+export default function LicenseTableV2({data}: Props) {
+    const software = data;
     const [loaded, setLoaded] = React.useState(false);
 
     useEffect(() => {
@@ -106,7 +107,7 @@ export default function LicenseTableV2() {
     }, [software]);
 
     return (
-        <> {loaded ? (<>   <TableContainer component={Paper}>
+        <> {loaded ? (<div style={{width: "75%"}}><TableContainer component={Paper}>
             <Table aria-label="collapsible table">
                 <TableHead>
                     <TableRow>
@@ -116,12 +117,12 @@ export default function LicenseTableV2() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {software.map((user) => (
-                        <Row key={user.application_name} row={user}/>
+                    {software.map((user, index) => (
+                        <Row key={index} row={user}/>
                     ))}
                 </TableBody>
             </Table>
-        </TableContainer> </>) : <h3>Velg programvare </h3>} </>
+        </TableContainer></div>) : <h3>Velg programvare </h3>} </>
 
     );
 }

@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import Grid from '@mui/material/Grid';
 import MenuIcon from '@mui/icons-material/Menu';
 import trondheimLogo from '../../assets/trondheimLogo.png';
 import './Navbar.css';
-import { NavLink } from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 import ClearIcon from '@mui/icons-material/Clear';
-import { SidebarData } from './Sidebar';
+import {SidebarData} from './Sidebar';
 
 function Navbar() {
   const [sidebar, setSidebar] = useState(false);
