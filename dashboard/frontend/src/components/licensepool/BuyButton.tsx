@@ -7,7 +7,7 @@ type ReserveButtonProps = {
     full_name: string;
 
 }
-const ReserveButton: React.FC<ReserveButtonProps> = ({id, full_name}) => {
+const BuyButton: React.FC<ReserveButtonProps> = ({id, full_name}) => {
     console.log(id, full_name);
     const handleClick = () => {
         alert("Du har kjøpt lisensen til " + full_name);
@@ -20,4 +20,4 @@ const ReserveButton: React.FC<ReserveButtonProps> = ({id, full_name}) => {
     );
 
 }
-export default ReserveButton;
+export default BuyButton;
