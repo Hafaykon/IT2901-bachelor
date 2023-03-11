@@ -35,7 +35,7 @@ function LicensePool() {
         const fetchData = async () => {
             if (searchTerm !== undefined)
                 try {
-                    const data = await fetchPoolData(searchTerm, org);
+                    const data = await fetchPoolData(searchTerm);
                     data && setData(data);
                     console.log(data)
                 } catch (error) {
