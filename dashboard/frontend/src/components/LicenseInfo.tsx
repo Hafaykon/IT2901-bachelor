@@ -1,16 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
-import LicenseTable from './licensepool/LicenseTable';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
-import {SoftwareData} from "../Interfaces";
+import {OwnOrgData} from "../Interfaces";
 import {Grid, Stack} from '@mui/material';
-import LicenseTableV2 from "./licensepool/LicenseTableV2";
+import LicenseTableOwn from "./licensepool/LicenseTableOwn";
 
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
     const {title} = useParams();
-    const [data, setData] = useState<SoftwareData[]>([]);
+    const [data, setData] = useState<OwnOrgData[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>();
     const [orgSoftware, setOrgSoftware] = useState<string[]>([]);
     const [status, setStatus] = useState<string | null>(null);
@@ -81,10 +80,8 @@ const LicenseInfo: React.FC = () => {
                 <br/>
                 <Grid container style={{display: 'flex', justifyContent: 'center', alignItems: "center", width: "100%"}}
                       className={'license_table'}>
-                    <LicenseTable data={data}/>
+                    <LicenseTableOwn data={data}/>
                 </Grid>
-
-
             </Grid>
         </div>)
 };

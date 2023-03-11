@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useEffect} from 'react';
 import {DataGrid, GridColDef, GridRowsProp} from '@mui/x-data-grid';
 import {SoftwareData} from "../../Interfaces";
-import ReserveButton from "./ReserveButton";
+import BuyButton from "./BuyButton";
 
 interface LicenseTableProps {
   data: SoftwareData[];
@@ -51,7 +51,7 @@ export default function LicenseTable({data}: LicenseTableProps) {
       width: 200,
       renderCell: (params) => {
         return (
-          <ReserveButton id={params.row.id} full_name={params.row.primary_user_full_name} />
+          <BuyButton id={params.row.id} full_name={params.row.primary_user_full_name} />
         );
       },
     },

@@ -2,14 +2,14 @@ import {Grid, Stack} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import SoftwareSearchBar from '../search/SoftwareSeachBar';
 import LicenseTableV2 from "./LicenseTableV2";
-import {SoftwareUser} from "../../Interfaces";
+import {LicensePoolData} from "../../Interfaces";
 import {fetchPoolData, fetchSoftwareUsedInOrg} from "../../api/calls";
 
 function LicensePool() {
     const org = JSON.parse(localStorage.getItem('organization') ?? 'null');
     const [searchTerm, setSearchTerm] = useState<string>();
     const [orgSoftware, setOrgSoftware] = useState<string[]>([]);
-    const [data, setData] = useState<SoftwareUser[]>([]);
+    const [data, setData] = useState<LicensePoolData[]>([]);
 
     // Function that gets input from the searchBar component.
     const handleChange = (term: string) => {
@@ -47,13 +47,14 @@ function LicensePool() {
     }, [searchTerm])
 
     return (
-        <div id={'licensepool_container'} style={{display: 'flex', justifyContent: 'center'}}>
+        <div id={'licensepool_container'} style={{display: 'flex', justifyContent: 'center', marginTop: "20px"}}>
             <Grid container className='license_pool'>
                 <Grid container className={'license_parameters'}
                       style={{display: 'flex', justifyContent: 'space-evenly', marginBottom: '10px'}}>
                     <Grid item>
-                        <Stack direction='column' spacing={5}>
-                             <h1 style={{textAlign: "center"}}>Lisensportalen</h1>
+                        <Stack direction='column' spacing={2}>
+                             <h2 style={{textAlign: "center"}}>Lisensportalen</h2>
+                            <h4 style={{textAlign: "center"}}>-Velg miljøvennlig!</h4>
                             <SoftwareSearchBar setSelectedSoftware={handleChange} data={orgSoftware}/>
                         </Stack>
                     </Grid>

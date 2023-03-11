@@ -1,5 +1,5 @@
 import {atom} from 'recoil';
-import {SoftwareUser, UserData} from '../Interfaces';
+import {LicensePoolData} from '../Interfaces';
 
 
 export const softwareAtom = atom<string[]>({
@@ -13,13 +13,8 @@ export const orgAtom = atom<string>({
     default: ''
 });
 
-export const softwareUserAtom = atom<SoftwareUser[]>({
+export const softwareUserAtom = atom<LicensePoolData[]>({
     key: 'softwareUserData',
-    default: []
-})
-
-export const softwareDataAtom = atom<UserData[]>({
-    key: 'softwareData2',
     default: []
 })
 
