@@ -2,7 +2,7 @@ from django.test import RequestFactory, TestCase, Client
 from django.urls import include, path, reverse
 from rest_framework.test import APIRequestFactory, APITestCase
 from .views import get_organizations
-from .models import SoftwarePerComputer
+from .models import SoftwarePerComputer, LicensePool
 import datetime
 
 # Create your tests here.
@@ -109,6 +109,17 @@ class TestViews(APITestCase):
             primary_user_full_name='My User',
             primary_user_email='myuser@example.com'
         )
+        LicensePool.objects.create(
+            primary_user_full_name='My User',
+            primary_user_email='myuser@example.com',
+            computer_name='mycomputer',
+            application_name='Hovedtillitsvalgte',
+            family='myfamily',
+            family_version='1.0',
+            family_edition='Standard',
+            organization='Hovedtillitsvalgte'
+        )
+
 
     def test_get_organizations_view(self):
         """
@@ -281,3 +292,8 @@ class TestViews(APITestCase):
                             "where 1 have not been used the last 90 days."
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, expected_response)
+
+    def test_post_license_pool(self):
+        response_message = self.client.post('/insert', data=self.LicensePool)
+        self.assertEqual(response_message.status_code, 200)
+        self.assertEqual(response_message.content.decode('utf-8'), 'My User')
