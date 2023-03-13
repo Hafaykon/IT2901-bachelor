@@ -58,4 +58,12 @@ django
 django-rest-framework
 django-cors-headers
 
+### Adding randomly chosen rows from software_per_computer to LicensePool:
+INSERT INTO api_licensepool (primary_user_full_name, primary_user_email, organization, application_name, family, family_edition, computer_name)
+SELECT primary_user_full_name, primary_user_email, organization, application_name, family, family_edition, computer_name
+FROM api_softwarepercomputer
+WHERE primary_user_full_name IS NOT NULL AND primary_user_email IS NOT NULL
+ORDER BY RANDOM()
+LIMIT 50
+
 
