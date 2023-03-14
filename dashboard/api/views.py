@@ -367,7 +367,6 @@ class LicenseInfoView(generics.ListAPIView):
         paginated_result = self.paginate_queryset(result)
 
         return self.get_paginated_response(paginated_result)
-        #return Response(paginated_result)
 
 
 @api_view(['GET'])
@@ -465,4 +464,3 @@ class OrganizationSoftwareView(generics.ListAPIView):
         queryset = self.get_queryset()
         data = list(queryset)
         return Response(data)
-
