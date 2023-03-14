@@ -1,25 +1,41 @@
-import {cleanup, render, screen} from '@testing-library/react';
+import { act, cleanup, render, screen } from '@testing-library/react';
 import InfoBox from './InfoBox';
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
-import {MemoryRouter} from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 
+const infoBoxData = {
+  title: 'Totale lisenser',
+  NumberOfLicenses: 40,
+}
+
+jest.mock('../../api/calls', () => ({
+fetchInfoBoxData: () => Promise.resolve(infoBoxData)
+})); 
 
 describe('Testing render, infoboxes', () => {
 
-    beforeEach(() => {
-        render(<MemoryRouter> <InfoBox title='Lisenser' numberOfLicenses={10}/> </MemoryRouter>);
-    });
+  beforeEach(async () => {
+    await act(async () => {
+      render(
+        <MemoryRouter> 
+            <InfoBox title={infoBoxData.title} numberOfLicenses={infoBoxData.NumberOfLicenses} /> 
+        </MemoryRouter>
+      );
+      });
+  });
 
-    afterEach(() => {
-        cleanup();
-    });
+  afterEach(() => {
+    localStorage.clear();
+    cleanup();
+  });
 
-    it('should paste given text', () => {
-        expect(
-            screen.getByText(/Lisenser/)
-        ).toBeInTheDocument();
-    });
+  it('renders without crashing', async () => {
+    expect(screen.getByTestId('infoBox-test')).toBeInTheDocument();
+    expect(screen.getByText(infoBoxData.title)).toBeInTheDocument();
+    expect(screen.getByText('40')).toBeInTheDocument();
+  });
+
 });
 
 

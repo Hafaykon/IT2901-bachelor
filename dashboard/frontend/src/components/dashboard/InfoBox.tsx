@@ -16,7 +16,7 @@ function InfoBox({title, numberOfLicenses}: InfoBoxProps) {
     };
 
     return (
-        <Card sx={{width: 300, height: 180}}>
+        <Card sx={{ width: 300, height: 180}} data-testid="infoBox-test">
             <CardActionArea sx={{paddingBottom: 4}} onClick={handleCardClick}>
                 <CardContent>
                     <Typography gutterBottom component="div" id="cardTitle">
