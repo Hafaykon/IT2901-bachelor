@@ -107,8 +107,8 @@ interface Props {
 }
 
 export default function PoolTable({
-                                      data
-                                  }: Props) {
+    data
+}: Props) {
     const [currentPage, setCurrentPage] = React.useState(1);
     const ITEMS_PER_PAGE = 5;
     const software = data;
@@ -120,42 +120,45 @@ export default function PoolTable({
     const endIndex = startIndex + ITEMS_PER_PAGE;
     const displayedSoftware = software.slice(startIndex, endIndex);
 
-
     useEffect(() => {
         if ((software.length) > 0) {
             setLoaded(true);
-            console.log(software);
         }
 
     }, [software]);
 
     return (
-        <> {loaded ? (<div style={{width: "75%"}}><TableContainer component={Paper}>
-            <Table aria-label="collapsible table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell/>
-                        <TableCell><b>Lisensnavn</b></TableCell>
-                        <TableCell align={"left"}><b>Enhet</b></TableCell>
-                        <TableCell align={"left"}><b>Kontaktinformasjon</b></TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {displayedSoftware.map((user, index) => (
-                        <Row key={index} row={user}/>
-                    ))}
-                </TableBody>
-                <Pagination
-                    count={Math.ceil(software.length / ITEMS_PER_PAGE)}
-                    page={currentPage}
-                    onChange={handlePageChange}
-                    variant="outlined"
-                    shape="rounded"
-                    size="small"
-                    style={{marginTop: '1rem'}}
-                />
-            </Table>
-        </TableContainer></div>) : <h3>Velg programvare </h3>} </>
-
+        <>
+            {loaded ? (
+                <div style={{ width: "75%" }}>
+                    <TableContainer component={Paper}>
+                        <Table aria-label="collapsible table">
+                            <TableHead>
+                                <TableRow>
+                                    <TableCell />
+                                    <TableCell><b>Lisensnavn</b></TableCell>
+                                    <TableCell align={"left"}><b>Enhet</b></TableCell>
+                                    <TableCell align={"left"}><b>Kontaktinformasjon</b></TableCell>
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {displayedSoftware.map((user, index) => (
+                                    <Row key={index} row={user} />
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
+                    <Pagination
+                        count={Math.ceil(software.length / ITEMS_PER_PAGE)}
+                        page={currentPage}
+                        onChange={handlePageChange}
+                        variant="outlined"
+                        shape="rounded"
+                        size="small"
+                        style={{ marginTop: '1rem' }}
+                    />
+                </div>
+            ) : <h3>Velg programvare </h3>}
+        </>
     );
 }

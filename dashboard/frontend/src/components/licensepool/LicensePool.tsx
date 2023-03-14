@@ -32,18 +32,20 @@ function LicensePool() {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (searchTerm !== undefined)
+            if (searchTerm && searchTerm !== "") {
                 try {
                     const data = await fetchPoolData(searchTerm);
                     data && setData(data);
-                    console.log(data)
                 } catch (error) {
                     console.error('Error fetching license data:', error);
                 }
+            } else {
+                setData([]); // Clear the data when searchTerm is empty or undefined
+            }
         }
         fetchData()
 
-    }, [searchTerm])
+    }, [searchTerm]);
 
     return (
         <div id={'licensepool_container'} style={{display: 'flex', justifyContent: 'center', marginTop: "20px"}}>
