@@ -3,16 +3,16 @@ import * as React from 'react';
 import { ButtonBase, Card, CardActionArea, CardContent, Stack, Tooltip, Typography } from '@mui/material';
 import HelpIcon from '@mui/icons-material/Help';
 
-interface InfoBoxProps{
-  title: string,
-  numberOfLicenses: number,
+interface InfoBoxProps {
+    title: string,
+    numberOfLicenses: number,
 }
 
-function InfoBox ({title, numberOfLicenses}:InfoBoxProps) {
+function InfoBox({title, numberOfLicenses}: InfoBoxProps) {
     const navigate = useNavigate();
 
     const handleCardClick = () => {
-      navigate(`/licenses/${title}`);
+        navigate(`/licenses/${title}`);
     };
 
   let info = "";
@@ -39,9 +39,9 @@ function InfoBox ({title, numberOfLicenses}:InfoBoxProps) {
                     {numberOfLicenses}
                   </Typography>
                 </CardContent>
-              </CardActionArea>
-              <ButtonBase onClick={handleCardClick} />
-            </Card>
+            </CardActionArea>
+            <ButtonBase onClick={handleCardClick}/>
+        </Card>
     )
 }
 

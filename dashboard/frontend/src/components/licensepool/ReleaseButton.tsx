@@ -1,6 +1,4 @@
 import React from 'react';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import IconButton from '@mui/material/IconButton';
 import {Button} from '@mui/material';
 
 type ReserveButtonProps = {
@@ -11,6 +9,7 @@ type ReserveButtonProps = {
 const ReleaseButton: React.FC<ReserveButtonProps> = ({id, full_name}) => {
     const handleClick = () => {
         alert("Du har frigjort lisensen til " + full_name);
+        console.log(id, full_name);
 
     }
     return (
