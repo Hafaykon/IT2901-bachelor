@@ -15,6 +15,11 @@ function InfoBox ({title, numberOfLicenses}:InfoBoxProps) {
       navigate(`/licenses/${title}`);
     };
 
+    const [isShown, setIsShown]= React.useState(false);
+    const [isType, setIsType] = React.useState({title});
+  
+    //setIsType({title});
+
     return (
         <Card sx={{ width: 300, height: 180}} data-testid="infoBox-test">
             <CardActionArea sx={{paddingBottom: 4}} onClick={handleCardClick}>
@@ -23,7 +28,18 @@ function InfoBox ({title, numberOfLicenses}:InfoBoxProps) {
                     <Typography gutterBottom component="div" id="cardTitle">
                       {title}
                     </Typography>
-                    <HelpIcon sx={{position: 'absolute', top: 15, right:15, color:'grey'}}></HelpIcon>
+                    <HelpIcon sx={{position: 'absolute', top: 15, right:15, color:'grey'}} 
+                    onMouseEnter={() => setIsShown(true)}
+                    onMouseLeave={() => setIsShown(false)}>
+                    </HelpIcon>
+                    {isShown && (
+                      <div>
+                        {String(isType)=="Totale Lisenser" ?  'Dette er totale lisenser':
+                        String(isType)=="Ubrukte Lisenser" ? 'Dette er ubrukte lisenser' : 
+                        'Dette er ledige lisenser'}
+
+                      </div>
+                    )}
                   </Stack>
                   <Typography color="text.secondary" id="numbersBoxes">
                     {numberOfLicenses}
