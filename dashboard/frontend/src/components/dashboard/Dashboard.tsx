@@ -4,11 +4,11 @@ import {Grid, Stack} from '@mui/material';
 import InfoBox from './InfoBox';
 import DonutChart from './DonutChart';
 import {SavingsBox} from './SavingsBox';
-import OrganizationSelector from '../OrganizationSelector';
 import {useRecoilValue} from 'recoil';
 import {orgAtom} from '../../globalVariables/variables';
 import {fetchInfoBoxData} from '../../api/calls';
 import CircularIndeterminate from '../spinner/MuiLoadingSpinner';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 interface Count {
     total_licenses: number,
@@ -40,12 +40,13 @@ function Dashboard() {
             {boxData ? (
                 <div id="body">
                     <Grid container id='boxes'>
-                        <Grid container className={'org_info'}>
+                        <Grid container className={'org_info'} justifyContent={"flex-end"} alignContent={"flex-end"}>
                             <Stack direction="row">
-                                <h1 id="organization">{org ?? 'Velg organisasjon'}</h1>
-                                <div id="selector">
-                                    <OrganizationSelector/>
-                                </div>
+                                <a href="/lisensportal" id="portal-link">
+
+                                    Til lisensportalen
+                                    <LogoutOutlinedIcon style={{alignContent: "center"}}/>
+                                </a>
                             </Stack>
                         </Grid>
                         <Grid item>
