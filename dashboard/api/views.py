@@ -3,6 +3,8 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
+from django_pandas.io import read_frame
+
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator
@@ -12,11 +14,10 @@ from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotFound, APIException
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
-from rest_framework.pagination import LimitOffsetPagination
+from rest_framework.pagination import PageNumberPagination
 
 from .models import SoftwarePerComputer
 from .serializers import SoftwarePerComputerSerializer
-from .serializers import LicenseInfoSerializer
 
 
 # Create your views here.
@@ -302,14 +303,14 @@ def get_sorted_df_of_unused_licenses(software_data):
 
 
 class LicenseInfoView(generics.ListAPIView):
+    queryset = SoftwarePerComputer.objects.all()
     serializer_class = SoftwarePerComputerSerializer
-    pagination_class = LimitOffsetPagination
-    model = SoftwarePerComputer
+    pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        application_name = self.request.GET.get('application_name', None)
-        organization = self.request.GET.get('organization', None)
-        status = self.request.GET.get('status', None)
+        application_name = self.request.query_params.get('application_name')
+        organization = self.request.query_params.get('organization')
+        status = self.request.query_params.get('status')
 
         if not application_name:
             raise ParseError("The 'application_name' parameter is required.")
@@ -320,58 +321,53 @@ class LicenseInfoView(generics.ListAPIView):
 
         threshold_date = datetime.now() - timedelta(days=120)
 
-        queryset = SoftwarePerComputer.objects.filter(application_name=application_name,
-                                                      license_required=True,
-                                                      license_suite_names__isnull=True,
-                                                      organization=organization,
-                                                      )
+        queryset = self.queryset.filter(
+            application_name=application_name,
+            license_required=True,
+            license_suite_names__isnull=True,
+            organization=organization,
+        )
 
+        status_value = None
         if status == 'active':
             queryset = queryset.filter(last_used__gte=threshold_date)
+            status_value = "Aktiv"
 
         elif status == 'unused':
             queryset = queryset.filter(last_used__isnull=True)
+            status_value = 'Ikke brukt'
 
         elif status == 'available':
             pass
             # TODO: Fetch data from license pool
+            status_value = 'Ledig'
 
         return queryset
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
-        if not queryset.exists():
-            return Response([])
 
-        grouped_data = {}
-        for item in queryset:
-            key = (item.application_name, item.primary_user_full_name, item.computer_name)
-            if key not in grouped_data:
-                grouped_data[key] = []
-            grouped_data[key].append({'id': item.id, 'last_used': item.last_used})
+        if queryset.count() == 0:
+            return self.get_paginated_response([])
 
-        # Convert the data to a list of dictionaries
-        result = [
-            {'application_name': key[0], 'primary_user_full_name': key[1], 'computer_name': key[2], 'details': value}
-            for key, value in grouped_data.items()]
+        df = read_frame(queryset)
+        grouped_df = df.groupby(['application_name', 'primary_user_full_name', 'computer_name']) \
+            .apply(lambda x: x[['id', 'last_used']].to_dict('records')) \
+            .reset_index() \
+            .rename(columns={0: 'details'})
 
-        # Add status if it was specified in the request
-        status = None
-        if 'status' in request.GET:
-            status = {'active': 'Aktiv', 'unused': 'Ikke brukt', 'available': 'Ledig'}.get(request.GET['status'])
-            if status:
-                for item in result:
-                    item['status'] = status
+        result = grouped_df.to_dict('records')
 
-        page = self.paginate_queryset(result)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            return self.get_paginated_response(serializer.data)
+        status_value = None
+        if 'status' in self.request.query_params:
+            status_value = self.request.query_params.get('status')
+            for item in result:
+                item["status"] = status_value
 
-        serializer = self.get_serializer(result, many=True)
-        return Response(serializer.data)
+        paginated_result = self.paginate_queryset(result)
 
-        #return Response(result)
+        return self.get_paginated_response(paginated_result)
+        #return Response(paginated_result)
 
 
 @api_view(['GET'])
@@ -438,8 +434,7 @@ def get_license_pool(request, format=None):
 
 class OrganizationSoftwareView(generics.ListAPIView):
     serializer_class = SoftwarePerComputerSerializer
-    pagination_class = LimitOffsetPagination
-    paginate_by = 2
+    pagination_class = PageNumberPagination
     model = SoftwarePerComputer
 
     def get_queryset(self):

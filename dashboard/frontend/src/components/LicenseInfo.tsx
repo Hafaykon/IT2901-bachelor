@@ -5,6 +5,7 @@ import SoftwareSearchBar from './search/SoftwareSeachBar';
 import {OwnOrgData} from "../Interfaces";
 import {Grid, Stack} from '@mui/material';
 import LicenseTableOwn from "./licensepool/LicenseTableOwn";
+import { Pagination } from 'antd';
 
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
@@ -13,6 +14,8 @@ const LicenseInfo: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState<string>();
     const [orgSoftware, setOrgSoftware] = useState<string[]>([]);
     const [status, setStatus] = useState<string | null>(null);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [count, setCount] = useState<number>(0);
 
     useEffect(() => {
         switch (title) {
@@ -50,8 +53,9 @@ const LicenseInfo: React.FC = () => {
         const fetchData = async () => {
             console.log(searchTerm)
             try {
-                const data = await fetchInfoBoxLicense(status as string, storedOrganization as string, searchTerm);
-                data && setData(data);
+                const data = await fetchInfoBoxLicense(currentPage, status as string, storedOrganization as string, searchTerm);
+                data?.results && setData(data.results);
+                data?.count && setCount(data.count);
             } catch (error) {
                 console.error('Error fetching license data:', error);
             }
@@ -64,6 +68,16 @@ const LicenseInfo: React.FC = () => {
     const handleChange = (term: string) => {
         setSearchTerm(term);
     }
+
+  const handlePageChange = async (page: number) => {
+  try {
+    const data = await fetchInfoBoxLicense(page, status as string, storedOrganization as string, searchTerm);
+    data?.results && setData(data.results);
+    setCurrentPage(page);
+  } catch (error) {
+    console.log(error);
+  }
+};
 
     return (
         <div id={'licensepool_container'} style={{display: 'flex', justifyContent: 'center', marginTop: "20px"}}>
@@ -82,6 +96,14 @@ const LicenseInfo: React.FC = () => {
                       className={'license_table'}>
                     <LicenseTableOwn data={data}/>
                 </Grid>
+                   <Grid container style={{display: 'flex', justifyContent: 'center', marginTop: "10px"}}>
+                    <Pagination
+                      current={currentPage}
+                      total={count}
+                      pageSize={10}
+                      onChange={handlePageChange}
+                    />
+                  </Grid>
             </Grid>
         </div>)
 };

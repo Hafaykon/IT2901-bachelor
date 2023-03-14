@@ -100,12 +100,6 @@ export default function LicenseTableOwn({
 
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
-    const [offset, setoffset] = useState(0);
-
-    function handleChange (value: number){
-      setoffset((value - 1) * 4);
-    };
-
 
     useEffect(() => {
         if ((software.length) > 0) {
@@ -132,14 +126,7 @@ export default function LicenseTableOwn({
                         <Row key={index} row={user}/>
                     ))}
                 </TableBody>
-
             </Table>
-            <Pagination
-            defaultCurrent={1}
-            defaultPageSize={4} //default size of page
-            onChange={handleChange}
-            total={3} //total number of card data available
-            />
         </TableContainer></div>) : <h3>Velg programvare </h3>} </>
 
     );
