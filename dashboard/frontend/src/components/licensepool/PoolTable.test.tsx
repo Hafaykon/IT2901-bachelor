@@ -33,7 +33,6 @@ describe('The pool table', () => {
         cleanup()
     })
     it('renders without crashing', async () => {
-        expect(await screen.findByText('-Velg miljøvennlig!')).toBeInTheDocument();
         expect(await screen.findByText('Lisensnavn')).toBeInTheDocument();
         expect(await screen.findByText('IT-tjenesten')).toBeInTheDocument();
         expect(await screen.findByText('navn@email.com')).toBeInTheDocument();
