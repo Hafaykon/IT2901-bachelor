@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Card, CardContent, Stack, Typography } from '@mui/material';
-import { PieChart } from 'react-minimal-pie-chart';
+import {Box, Card, CardContent, Stack, Typography} from '@mui/material';
+import {PieChart} from 'react-minimal-pie-chart';
 
 
 const defaultLabelStyle = {
@@ -93,19 +93,19 @@ function DonutChart(infoBoxData: Props) {
                                 {
                                     name: 'Aktiv',
                                     value: infoBoxData.active_licenses ?? 1,
-                                    color: '#63849c',
+                                    color: '#E1E98B',
                                     key: "test"
                                 },
                                 {
                                     name: 'Ledig',
                                     value: infoBoxData.unused_licenses ?? 1,
-                                    color: '#3172ce',
+                                    color: '#80ADD3',
                                     key: "test2"
                                 },
                                 {
                                     name: 'Ubrukt',
                                     value: infoBoxData.never_used ?? 1,
-                                    color: '#0d90ff',
+                                    color: '#80CC9F',
                                     key: "test3"
                                 }
                             ]}
