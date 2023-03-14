@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 from rest_framework import generics
 from rest_framework.decorators import api_view
+from rest_framework.generics import RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 
 from .models import SoftwarePerComputer, PoolRequest, LicensePool
@@ -222,7 +223,6 @@ def get_org_software_users_by_name(request, format=None):
     if organization:
         software = software.filter(organization=organization)
 
-
     software_df = pd.DataFrame.from_records(software.values())
     # Fill null values in the "active_minutes" and "total_minutes" columns with 0
     software_df[['active_minutes', 'total_minutes']] = software_df[['active_minutes', 'total_minutes']].fillna(0)
@@ -288,6 +288,7 @@ def get_sorted_df_of_unused_licenses(software_data):
     df = df.sort_values(by='last_used', ascending=False)
     return df
 
+
 @api_view(['GET'])
 def get_license_pool(request):
     application_name = request.GET.get('application_name', "Spotify")
@@ -304,23 +305,24 @@ def get_license_pool(request):
 
     """
 
+
 @api_view(['POST'])
 def insert_to_pool(request):
     # Get the user object
-    #user = SoftwarePerComputer.objects.get(primary_user_full_name='Leendert Wienhofen')
+    # user = SoftwarePerComputer.objects.get(primary_user_full_name='Leendert Wienhofen')
 
     # Create a new LicensePool object and set its attributes
 
     data = json.loads(request.body)
 
-    primary_user_full_name= data['primary_user_full_name']
-    primary_user_email= data['primary_user_email']
-    organization= data['organization']
-    application_name= data['application_name']
-    family= data['family']
-    family_version= data['family_version']
-    family_edition= data['family_edition']
-    computer_name= data['computer_name']
+    primary_user_full_name = data['primary_user_full_name']
+    primary_user_email = data['primary_user_email']
+    organization = data['organization']
+    application_name = data['application_name']
+    family = data['family']
+    family_version = data['family_version']
+    family_edition = data['family_edition']
+    computer_name = data['computer_name']
 
     new_pool_object = LicensePool.objects.create(
         primary_user_full_name=primary_user_full_name,
@@ -337,7 +339,6 @@ def insert_to_pool(request):
     return Response(primary_user_full_name)
 
 
-
 @api_view(['GET'])
 def get_pool_requests(request):
     organization = request.query_params.get('organization', None)
@@ -351,3 +352,11 @@ def get_pool_requests(request):
     serialize_request = PoolRequestSerializer(req_data, many=True)
     return Response(serialize_request.data)
 
+
+class SoftwarePerComputerDetailView(RetrieveUpdateDestroyAPIView):
+    queryset = LicensePool.objects.all()
+    serializer_class = PoolSerializer
+    lookup_field = 'id'
+
+
+SoftwarePerComputerDetailView = SoftwarePerComputerDetailView.as_view()

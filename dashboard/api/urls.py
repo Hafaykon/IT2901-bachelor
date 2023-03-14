@@ -1,6 +1,8 @@
 # Every single endpoint is defined here
 from django.urls import path
+
 from . import views
+from .views import SoftwarePerComputerDetailView
 
 urlpatterns = [
     path('users/', views.get_primary_user_full_name, name='users'),
@@ -18,5 +20,7 @@ urlpatterns = [
     path('pool_req/', views.get_pool_requests, name='pool_requests'),
     path('pool', views.get_license_pool, name='licensepool'),
     path('insert', views.insert_to_pool, name='insert'),
+    path('software-per-computer/<int:id>/', SoftwarePerComputerDetailView,
+         name='software_per_computer_detail'),
 
 ]

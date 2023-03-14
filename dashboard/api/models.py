@@ -58,6 +58,7 @@ class SoftwarePerComputer(models.Model):
 
 
 class LicensePool(models.Model):
+    objects = models.Manager()  # default manager
     primary_user_full_name = models.CharField(max_length=100)
     primary_user_email = models.EmailField()
     organization = models.CharField(max_length=100)
@@ -67,6 +68,7 @@ class LicensePool(models.Model):
     family_edition = models.CharField(max_length=100, null=True, blank=True)
     computer_name = models.CharField(max_length=100)
     # pris?
+
 
 class PoolRequest(models.Model):
     primary_user_full_name = models.CharField(max_length=100)
