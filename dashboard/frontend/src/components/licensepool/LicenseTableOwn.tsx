@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -15,8 +15,11 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {LicensePoolData, OwnOrgData} from '../../Interfaces';
 import BuyButton from "./BuyButton";
-import Pagination from '@mui/material/Pagination';
+//import Pagination from '@mui/material/Pagination';
 import ReleaseButton from "./ReleaseButton";
+import {Link} from "react-router-dom";
+import { Pagination } from 'antd';
+
 
 
 interface RowProps {
@@ -26,6 +29,8 @@ interface RowProps {
 function Row(props: RowProps) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
+
+
 
     return (
         <React.Fragment>
@@ -95,6 +100,11 @@ export default function LicenseTableOwn({
 
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
+    const [offset, setoffset] = useState(0);
+
+    function handleChange (value: number){
+      setoffset((value - 1) * 4);
+    };
 
 
     useEffect(() => {
@@ -124,6 +134,12 @@ export default function LicenseTableOwn({
                 </TableBody>
 
             </Table>
+            <Pagination
+            defaultCurrent={1}
+            defaultPageSize={4} //default size of page
+            onChange={handleChange}
+            total={3} //total number of card data available
+            />
         </TableContainer></div>) : <h3>Velg programvare </h3>} </>
 
     );

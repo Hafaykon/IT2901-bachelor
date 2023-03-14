@@ -16,6 +16,7 @@ from rest_framework.pagination import LimitOffsetPagination
 
 from .models import SoftwarePerComputer
 from .serializers import SoftwarePerComputerSerializer
+from .serializers import LicenseInfoSerializer
 
 
 # Create your views here.
@@ -300,13 +301,15 @@ def get_sorted_df_of_unused_licenses(software_data):
     return df
 
 
-@api_view(['GET'])
-def get_license_info(request):
-    try:
-        # Get parameters from the request
-        application_name = request.GET.get('application_name', None)
-        organization = request.GET.get('organization', None)
-        status = request.GET.get('status', None)
+class LicenseInfoView(generics.ListAPIView):
+    serializer_class = SoftwarePerComputerSerializer
+    pagination_class = LimitOffsetPagination
+    model = SoftwarePerComputer
+
+    def get_queryset(self):
+        application_name = self.request.GET.get('application_name', None)
+        organization = self.request.GET.get('organization', None)
+        status = self.request.GET.get('status', None)
 
         if not application_name:
             raise ParseError("The 'application_name' parameter is required.")
@@ -315,55 +318,60 @@ def get_license_info(request):
         if not status:
             raise ParseError("The 'status' parameter is required.")
 
-            # Calculate the date 90 days ago
         threshold_date = datetime.now() - timedelta(days=120)
 
-        # Filter the data using the parameters
-        software = SoftwarePerComputer.objects.filter(application_name=application_name,
+        queryset = SoftwarePerComputer.objects.filter(application_name=application_name,
                                                       license_required=True,
                                                       license_suite_names__isnull=True,
                                                       organization=organization,
                                                       )
-        status_value = None
+
         if status == 'active':
-            software = software.filter(last_used__gte=threshold_date)
-            status_value = "Aktiv"
+            queryset = queryset.filter(last_used__gte=threshold_date)
 
         elif status == 'unused':
-            software = software.filter(last_used__isnull=True)
-            status_value = 'Ikke brukt'
+            queryset = queryset.filter(last_used__isnull=True)
 
         elif status == 'available':
             pass
             # TODO: Fetch data from license pool
-            status_value = 'Ledig'
 
-        data = pd.DataFrame.from_records(software.values())
+        return queryset
 
-        # Check if there is any data
-        if data.empty:
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        if not queryset.exists():
             return Response([])
 
-        # Group the data by application name and full name
-        data = data.groupby(['application_name', 'primary_user_full_name', 'computer_name']) \
-            .apply(lambda x: x[['id', 'last_used']].to_dict('records')) \
-            .reset_index() \
-            .rename(columns={0: 'details'})
+        grouped_data = {}
+        for item in queryset:
+            key = (item.application_name, item.primary_user_full_name, item.computer_name)
+            if key not in grouped_data:
+                grouped_data[key] = []
+            grouped_data[key].append({'id': item.id, 'last_used': item.last_used})
 
         # Convert the data to a list of dictionaries
-        result = data.to_dict('records')
+        result = [
+            {'application_name': key[0], 'primary_user_full_name': key[1], 'computer_name': key[2], 'details': value}
+            for key, value in grouped_data.items()]
 
-        if status_value:
-            for item in result:
-                item["status"] = status_value
+        # Add status if it was specified in the request
+        status = None
+        if 'status' in request.GET:
+            status = {'active': 'Aktiv', 'unused': 'Ikke brukt', 'available': 'Ledig'}.get(request.GET['status'])
+            if status:
+                for item in result:
+                    item['status'] = status
 
-        return Response(result)
-    except KeyError as e:
-        raise ParseError(f'Missing required parameter: {e}')
-    except ObjectDoesNotExist as e:
-        raise ParseError('No matching objects found')
-    except Exception as e:
-        raise ParseError(str(e))
+        page = self.paginate_queryset(result)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(result, many=True)
+        return Response(serializer.data)
+
+        #return Response(result)
 
 
 @api_view(['GET'])
@@ -431,16 +439,17 @@ def get_license_pool(request, format=None):
 class OrganizationSoftwareView(generics.ListAPIView):
     serializer_class = SoftwarePerComputerSerializer
     pagination_class = LimitOffsetPagination
+    paginate_by = 2
+    model = SoftwarePerComputer
 
     def get_queryset(self):
         organization = self.request.GET.get('organization', None)
         status = self.request.GET.get('status', None)
-        '''
+
         if not organization:
             raise ParseError("organization parameter is required.")
         if not status:
             raise ParseError("status parameter is required.")
-'''
         # Get the date 90 days ago
         threshold_date = datetime.now() - timedelta(days=90)
 
@@ -461,3 +470,4 @@ class OrganizationSoftwareView(generics.ListAPIView):
         queryset = self.get_queryset()
         data = list(queryset)
         return Response(data)
+

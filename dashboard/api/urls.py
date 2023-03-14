@@ -2,13 +2,14 @@
 from django.urls import path
 from . import views
 from .views import OrganizationSoftwareView
+from .views import LicenseInfoView
 
 urlpatterns = [
     path('users/', views.get_primary_user_full_name, name='users'),
     path('organizations/', views.get_organizations, name='organizations'),
     path('emails/', views.GetPrimaryUserEmailView.as_view(), name='emails'),
     path('recommendations/', views.get_software_recommendations, name='recommendations'),
-    path('software/<str:organization>', OrganizationSoftwareView.as_view(), name='software'),
+    path('software/', OrganizationSoftwareView.as_view(), name='software'),
     path('applications/', views.get_org_software_users, name='get_applications_by_user'),
     path('userlicenses/<str:username>', views.get_licenses_associated_with_user,
          name='get_licenses_associated_with_user'),
@@ -17,6 +18,6 @@ urlpatterns = [
     path('softwarebyuser/', views.get_org_software_users_by_name, name='get_org_software_users_by_name'),
     path('count', views.software_counts, name='software_counts'),
     path('pool/', views.get_license_pool, name='pool'),
-    path('licenseinfo/', views.get_license_info, name='licenseinfo'),
+    path('licenseinfo/', LicenseInfoView.as_view(), name='licenseinfo'),
 
 ]
