@@ -4,7 +4,7 @@ import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
 import {OwnOrgData} from "../Interfaces";
 import {Grid, Stack} from '@mui/material';
-import LicenseTableOwn from "./licensepool/LicenseTableOwn";
+import OwnTable from "./licensepool/OwnTable";
 
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
@@ -48,13 +48,15 @@ const LicenseInfo: React.FC = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log(searchTerm)
-            try {
-                const data = await fetchInfoBoxLicense(status as string, storedOrganization as string, searchTerm);
-                data && setData(data);
-            } catch (error) {
-                console.error('Error fetching license data:', error);
+            if (status && storedOrganization) {
+                try {
+                    const data = await fetchInfoBoxLicense(status as string, storedOrganization as string, searchTerm);
+                    data && setData(data);
+                } catch (error) {
+                    console.error('Error fetching license data:', error);
+                }
             }
+
         };
         fetchData()
 
@@ -80,7 +82,7 @@ const LicenseInfo: React.FC = () => {
                 <br/>
                 <Grid container style={{display: 'flex', justifyContent: 'center', alignItems: "center", width: "100%"}}
                       className={'license_table'}>
-                    <LicenseTableOwn data={data}/>
+                    <OwnTable data={data}/>
                 </Grid>
             </Grid>
         </div>)

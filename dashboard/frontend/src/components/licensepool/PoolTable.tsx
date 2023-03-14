@@ -13,14 +13,13 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import {LicensePoolData, OwnOrgData} from '../../Interfaces';
+import {LicensePoolData} from '../../Interfaces';
 import BuyButton from "./BuyButton";
 import Pagination from '@mui/material/Pagination';
-import ReleaseButton from "./ReleaseButton";
 
 
 interface RowProps {
-    row: OwnOrgData;
+    row: LicensePoolData;
 }
 
 function Row(props: RowProps) {
@@ -29,6 +28,7 @@ function Row(props: RowProps) {
 
     return (
         <React.Fragment>
+
             <TableRow sx={{'& > *': {borderBottom: 'unset'}}}>
                 <TableCell>
                     <IconButton
@@ -42,10 +42,16 @@ function Row(props: RowProps) {
                 <TableCell component="th" scope="row">
                     {row.application_name}
                 </TableCell>
-                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.primary_user_full_name}</TableCell>
-                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.computer_name}</TableCell>
-                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.status}</TableCell>
+                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.organization}</TableCell>
+                <TableCell>
+                    <div>
+                        <a href={`mailto`} target="_blank"
+                           rel="noopener noreferrer">
+                            {"navn@email.com"}
+                        </a>
+                    </div>
 
+                </TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
@@ -58,20 +64,31 @@ function Row(props: RowProps) {
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
+                                        <TableCell align="left"><b>Bruker</b></TableCell>
+                                        <TableCell align="left"><b>Løpenummer</b></TableCell>
+                                        <TableCell align="left"><b>Email</b></TableCell>
                                         <TableCell align="left"><b>Sist åpnet</b></TableCell>
-                                        <TableCell align={"left"}><b>Mulig opptjeningspoeng</b></TableCell>
-                                        <TableCell align={"center"}><b>Frigjør</b></TableCell>
+                                        <TableCell align={"left"}><b>Kjøp lisens</b></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {row.details.map((detailRow) => (
                                         <TableRow key={detailRow.id}>
                                             <TableCell component="th" scope="row">
-                                                {detailRow.last_used ?? 'Ikke registrert'}
+                                                {detailRow.full_name ?? 'Ukjent'}
                                             </TableCell>
-                                            <TableCell>10 poeng</TableCell>
-                                            <TableCell align={"center"}> <ReleaseButton id={detailRow.id}
-                                                                   full_name={row.primary_user_full_name}/> </TableCell>
+                                            <TableCell>{detailRow.computer_name ?? 'Ukjent'}</TableCell>
+                                            <TableCell>
+                                                <div>
+                                                    <a href={`mailto:${detailRow.email}`} target="_blank"
+                                                       rel="noopener noreferrer">
+                                                        {detailRow.email}
+                                                    </a>
+                                                </div>
+                                            </TableCell>
+                                            <TableCell>{detailRow.last_used ?? 'Ikke registrert'}</TableCell>
+                                            <TableCell> <BuyButton id={detailRow.id}
+                                                                   full_name={detailRow.full_name}/> </TableCell>
 
                                         </TableRow>
                                     ))}
@@ -86,15 +103,22 @@ function Row(props: RowProps) {
 }
 
 interface Props {
-    data: OwnOrgData[];
+    data: LicensePoolData[];
 }
 
-export default function LicenseTableOwn({
-                                            data
-                                        }: Props) {
-
+export default function PoolTable({
+                                      data
+                                  }: Props) {
+    const [currentPage, setCurrentPage] = React.useState(1);
+    const ITEMS_PER_PAGE = 5;
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
+    const handlePageChange = (event: React.ChangeEvent<unknown>, value: React.SetStateAction<number>) => {
+        setCurrentPage(value);
+    };
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    const displayedSoftware = software.slice(startIndex, endIndex);
 
 
     useEffect(() => {
@@ -112,17 +136,24 @@ export default function LicenseTableOwn({
                     <TableRow>
                         <TableCell/>
                         <TableCell><b>Lisensnavn</b></TableCell>
-                        <TableCell align={"left"}><b>Bruker</b></TableCell>
-                        <TableCell align={"left"}><b>Løpenummer</b></TableCell>
-                        <TableCell align={"left"}><b>Status</b></TableCell>
+                        <TableCell align={"left"}><b>Enhet</b></TableCell>
+                        <TableCell align={"left"}><b>Kontaktinformasjon</b></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {software.map((user, index) => (
+                    {displayedSoftware.map((user, index) => (
                         <Row key={index} row={user}/>
                     ))}
                 </TableBody>
-
+                <Pagination
+                    count={Math.ceil(software.length / ITEMS_PER_PAGE)}
+                    page={currentPage}
+                    onChange={handlePageChange}
+                    variant="outlined"
+                    shape="rounded"
+                    size="small"
+                    style={{marginTop: '1rem'}}
+                />
             </Table>
         </TableContainer></div>) : <h3>Velg programvare </h3>} </>
 

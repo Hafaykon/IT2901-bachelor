@@ -8,13 +8,13 @@ interface SavingsPrpos {
 export const SavingsBox = ({savings, title}: SavingsPrpos) => {
 
     return (
-        <Card sx={{ width: 300, height: 180}} data-testid='savingsBox'>
+        <Card sx={{width: 300, height: 180}} data-testid='savingsBox'>
             <CardContent>
                 <Typography gutterBottom component="div" id="cardTitle">
-                {title}
-                </Typography> 
+                    {title}
+                </Typography>
                 <Typography color="text.secondary" id="numbersBoxes">
-                {savings} kr
+                    {savings} kr
                 </Typography>
             </CardContent>
         </Card>

@@ -2,13 +2,14 @@ export interface LicensePoolData {
     application_name: string;
     organization: string;
     details: Array<{
-        id: number;
-        full_name: string;
         computer_name: string;
         email: string;
+        family: string,
+        family_edition: string,
+        family_version: string,
+        full_name: string,
+        id: number;
         last_used: string;
-        total_minutes: number;
-        active_minutes: number;
     }>;
 }
 

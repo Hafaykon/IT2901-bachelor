@@ -5,17 +5,17 @@ import '@testing-library/jest-dom/extend-expect';
 
 describe('Testing render, DonutChart', () => {
 
-  beforeEach(() => {
-    render(<DonutChart never_used={10} total_licenses={10} unused_licenses={10} active_licenses={10}/>);
-  });
+    beforeEach(() => {
+        render(<DonutChart never_used={10} total_licenses={10} unused_licenses={10} active_licenses={10}/>);
+    });
 
-  afterEach(() => {
-    cleanup();
-  });
+    afterEach(() => {
+        cleanup();
+    });
 
-  it("renders donutchart without crashing", () => {
-    expect(screen.getByTestId('donutChart')).toBeInTheDocument();
-  });
+    it("renders donutchart without crashing", () => {
+        expect(screen.getByTestId('donutChart')).toBeInTheDocument();
+    });
 });
 
 

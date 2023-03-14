@@ -7,19 +7,19 @@ import {MemoryRouter} from 'react-router-dom';
 
 describe('Testing render, infoboxes', () => {
 
-  beforeEach(() => {
-    render(<MemoryRouter> <InfoBox title='Lisenser' numberOfLicenses={10} /> </MemoryRouter>);
-  });
+    beforeEach(() => {
+        render(<MemoryRouter> <InfoBox title='Lisenser' numberOfLicenses={10}/> </MemoryRouter>);
+    });
 
-  afterEach(() => {
-    cleanup();
-  });
+    afterEach(() => {
+        cleanup();
+    });
 
-  it('should paste given text', () => {
-    expect(
-      screen.getByText(/Lisenser/)
-    ).toBeInTheDocument();
-  });
+    it('should paste given text', () => {
+        expect(
+            screen.getByText(/Lisenser/)
+        ).toBeInTheDocument();
+    });
 });
 
 

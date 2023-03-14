@@ -1,7 +1,7 @@
 import {Grid, Stack} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import SoftwareSearchBar from '../search/SoftwareSeachBar';
-import LicenseTableV2 from "./LicenseTableV2";
+import PoolTable from "./PoolTable";
 import {LicensePoolData} from "../../Interfaces";
 import {fetchPoolData, fetchSoftwareUsedInOrg} from "../../api/calls";
 
@@ -18,7 +18,6 @@ function LicensePool() {
     useEffect(() => {
         // Fetches distinct software names.
         const fetchSoftwareNames = async () => {
-
             try {
                 const data: string[] | undefined = await fetchSoftwareUsedInOrg('active', org);
                 if (data !== undefined) {
@@ -53,7 +52,7 @@ function LicensePool() {
                       style={{display: 'flex', justifyContent: 'space-evenly', marginBottom: '10px'}}>
                     <Grid item>
                         <Stack direction='column' spacing={2}>
-                             <h2 style={{textAlign: "center"}}>Lisensportalen</h2>
+                            <h2 style={{textAlign: "center"}}>Lisensportalen</h2>
                             <h4 style={{textAlign: "center"}}>-Velg miljøvennlig!</h4>
                             <SoftwareSearchBar setSelectedSoftware={handleChange} data={orgSoftware}/>
                         </Stack>
@@ -63,7 +62,7 @@ function LicensePool() {
                 <Grid container style={{display: 'flex', justifyContent: 'center', alignItems: "center", width: "100%"}}
                       className={'license_table'}>
 
-                    <LicenseTableV2 data={data}/>
+                    <PoolTable data={data}/>
                 </Grid>
 
 
