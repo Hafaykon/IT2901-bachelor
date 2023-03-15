@@ -1,5 +1,4 @@
 import { Card, CardContent, Stack, Typography } from '@mui/material';
-import SavingsIcon from '@mui/icons-material/Savings';
 import CardOverflow from '@mui/joy/CardOverflow';
 
 
