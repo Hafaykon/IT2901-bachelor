@@ -7,6 +7,7 @@ class SoftwarePerComputerSerializer(serializers.ModelSerializer):
         model = SoftwarePerComputer
         fields = '__all__'
 
+
 class PoolSerializer(serializers.ModelSerializer):
     class Meta:
         model = LicensePool
