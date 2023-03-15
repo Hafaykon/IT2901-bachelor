@@ -292,8 +292,10 @@ def get_sorted_df_of_unused_licenses(software_data):
 @api_view(['GET'])
 def get_license_pool(request):
     application_name = request.GET.get('application_name', "Spotify")
+    organization = request.GET.get('organization', "IT-tjenesten")
+
     license_pool_element = LicensePool.objects.only('organization', 'application_name', 'primary_user_email').values()
-    license_pool_data = license_pool_element.filter(application_name=application_name)
+    license_pool_data = license_pool_element.filter(application_name=application_name, organization=organization)
     serialize_request = PoolSerializer(license_pool_data, many=True)
 
     return Response(serialize_request.data)
@@ -351,6 +353,13 @@ def get_pool_requests(request):
 
     serialize_request = PoolRequestSerializer(req_data, many=True)
     return Response(serialize_request.data)
+
+
+@api_view(['DELETE'])
+def delete_from_license_pool(request, id):
+    pool_obj = LicensePool.objects.get(id=id)
+    pool_obj.delete()
+    return Response(status=204)
 
 
 class SoftwarePerComputerDetailView(RetrieveUpdateDestroyAPIView):

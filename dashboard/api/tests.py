@@ -5,6 +5,7 @@ from .views import get_organizations
 from .models import SoftwarePerComputer, LicensePool
 import datetime
 
+
 # Create your tests here.
 class TestViews(APITestCase):
     def setUp(self):
@@ -119,7 +120,6 @@ class TestViews(APITestCase):
             family_edition='Standard',
             organization='Hovedtillitsvalgte'
         )
-
 
     def test_get_organizations_view(self):
         """
@@ -266,17 +266,17 @@ class TestViews(APITestCase):
         response = self.client.get(url)
         last_used = datetime.date(2022, 2, 1)
         expected_software = [{'application_name': 'Hovedtillitsvalgte',
-                               'data': [{'Active Minutes': 500,
-                                         'Computer name': 'mycomputer',
-                                         'Last used': last_used,
-                                         'Total Minutes': 1000,
-                                         'Username': 'My User'}]},
-                              {'application_name': 'myapplication',
-                               'data': [{'Active Minutes': 500,
-                                         'Computer name': 'mycomputer',
-                                         'Last used': last_used,
-                                         'Total Minutes': 1000,
-                                         'Username': 'My User'}]}]
+                              'data': [{'Active Minutes': 500,
+                                        'Computer name': 'mycomputer',
+                                        'Last used': last_used,
+                                        'Total Minutes': 1000,
+                                        'Username': 'My User'}]},
+                             {'application_name': 'myapplication',
+                              'data': [{'Active Minutes': 500,
+                                        'Computer name': 'mycomputer',
+                                        'Last used': last_used,
+                                        'Total Minutes': 1000,
+                                        'Username': 'My User'}]}]
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, expected_software)
