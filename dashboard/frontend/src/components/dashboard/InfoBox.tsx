@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import * as React from 'react';
-import { ButtonBase, Card, CardActionArea, CardContent, Stack, Typography } from '@mui/material';
+import { ButtonBase, Card, CardActionArea, CardContent, Stack, Tooltip, Typography } from '@mui/material';
 import HelpIcon from '@mui/icons-material/Help';
 
 interface InfoBoxProps{
@@ -15,10 +15,13 @@ function InfoBox ({title, numberOfLicenses}:InfoBoxProps) {
       navigate(`/licenses/${title}`);
     };
 
-    const [isShown, setIsShown]= React.useState(false);
-    const [isType, setIsType] = React.useState({title});
-  
-    //setIsType({title});
+  let info = "";
+  {
+    {title=="Totale Lisenser" ?  info = 'Totale lisenser er alle lisenser du har tilgjengelig i enheten din.':
+    title=="Uåpnede Lisenser" ? info = 'Uåpnede lisenser er lisenser for programvare som aldri har blitt åpnet.' : 
+    info = 'Ledige lisenser er lisenser for programvare som ikke har blitt åpnet på 90 dager.'}
+  }
+
 
     return (
         <Card sx={{ width: 300, height: 180}} data-testid="infoBox-test">
@@ -28,18 +31,9 @@ function InfoBox ({title, numberOfLicenses}:InfoBoxProps) {
                     <Typography gutterBottom component="div" id="cardTitle">
                       {title}
                     </Typography>
-                    <HelpIcon sx={{position: 'absolute', top: 15, right:15, color:'grey'}} 
-                    onMouseEnter={() => setIsShown(true)}
-                    onMouseLeave={() => setIsShown(false)}>
-                    </HelpIcon>
-                    {isShown && (
-                      <div>
-                        {String(isType)=="Totale Lisenser" ?  'Dette er totale lisenser':
-                        String(isType)=="Ubrukte Lisenser" ? 'Dette er ubrukte lisenser' : 
-                        'Dette er ledige lisenser'}
-
-                      </div>
-                    )}
+                    <Tooltip title={<h2 style={{fontSize: 15, fontWeight: 'lighter'}}>{info}</h2>} placement='top' arrow>
+                          <HelpIcon sx={{position: 'absolute', top: 28, right:15, color:'grey', fontSize: 25}} ></HelpIcon>
+                    </Tooltip>
                   </Stack>
                   <Typography color="text.secondary" id="numbersBoxes">
                     {numberOfLicenses}
