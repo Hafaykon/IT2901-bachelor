@@ -36,7 +36,7 @@ function DonutChart(infoBoxData: Props) {
                             <Tooltip title={<h2 style={{fontSize: 15, fontWeight: 'lighter'}}>
                                 Dette viser en oversikt over hvor mange aktive, uåpnede og ledige lisenser som eies i enheten.
                                 </h2>} placement='top' arrow>
-                            <HelpIcon sx={{position: 'absolute', top: 30, right:20, color:'grey', fontSize: 30}}></HelpIcon>
+                            <HelpIcon sx={{position: 'absolute', top: 30, right:20, color:'grey', fontSize: 30}} data-testid="donutchartHelpIcon"></HelpIcon>
                         </Tooltip>
                         </Stack>
                         <Stack direction="row" sx={{paddingLeft: 7}}>
@@ -113,7 +113,7 @@ function DonutChart(infoBoxData: Props) {
                                         key: "test2"
                                     },
                                     {
-                                        name: 'Ubrukt',
+                                        name: 'Uåpnet',
                                         value: infoBoxData.never_used ?? 1,
                                         color: '#0d90ff',
                                         key: "test3"

@@ -33,7 +33,7 @@ function InfoBox({title, numberOfLicenses}: InfoBoxProps) {
                       {title}
                     </Typography>
                     <Tooltip title={<h2 style={{fontSize: 15, fontWeight: 'lighter'}}>{info}</h2>} placement='top' arrow>
-                          <HelpIcon sx={{position: 'absolute', top: 28, right:15, color:'grey', fontSize: 25}} ></HelpIcon>
+                          <HelpIcon sx={{position: 'absolute', top: 28, right:15, color:'grey', fontSize: 25}} data-testid="helpIcon"></HelpIcon>
                     </Tooltip>
                   </Stack>
                   <Typography color="text.secondary" id="numbersBoxes">
