@@ -1,6 +1,7 @@
 import React from 'react';
-import {Box, Card, CardContent, Stack, Typography} from '@mui/material';
+import {Box, Card, ButtonBase, CardActionArea,CardContent, Stack, Typography} from '@mui/material';
 import {PieChart} from 'react-minimal-pie-chart';
+import {useNavigate} from 'react-router-dom';
 
 
 const defaultLabelStyle = {
@@ -16,9 +17,16 @@ type Props = {
 }
 
 function DonutChart(infoBoxData: Props) {
+    const navigate = useNavigate();
+
+    const handleCardClick = () => {
+        navigate(`/licenses/Totale Lisenser`);
+    };
+
     return (
         <div data-testid="donutChart">
             <Card sx={{height: 425, width: 670, mt: 7}}>
+                <CardActionArea onClick={handleCardClick}>
                 <CardContent>
                     <Typography sx={{
                         textAlign: 'left',
@@ -113,6 +121,8 @@ function DonutChart(infoBoxData: Props) {
                         />
                     </Stack>
                 </CardContent>
+                </CardActionArea>
+                <ButtonBase onClick={handleCardClick}/>
             </Card></div>
     );
 }
