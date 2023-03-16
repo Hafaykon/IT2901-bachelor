@@ -56,7 +56,7 @@ function Dashboard() {
                                     numberOfLicenses={boxData[0]?.total_licenses ?? 0}
                                 />
                                 <InfoBox
-                                    title="Ubrukte Lisenser"
+                                    title="Uåpnede Lisenser"
                                     numberOfLicenses={boxData[0]?.never_used ?? 0}
                                 />
                                 <InfoBox

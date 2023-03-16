@@ -1,4 +1,4 @@
-import { act, cleanup, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import DonutChart from './DonutChart';
 import '@testing-library/jest-dom/extend-expect';
 import { MemoryRouter } from 'react-router-dom';
@@ -36,10 +36,14 @@ describe('Testing render, DonutChart', () => {
     expect(screen.getByTestId('donutChart')).toBeInTheDocument();
     expect(screen.getByText('Aktiv')).toBeInTheDocument();
     expect(screen.getByText('Ledig')).toBeInTheDocument();
-    expect(screen.getByText('Ubrukt')).toBeInTheDocument();
+    expect(screen.getByText('Uåpnet')).toBeInTheDocument();
   });
 
-  
+  it('renders tooltip when hovering over HelpIcon',async () => {
+    fireEvent.mouseEnter(screen.getByTestId('donutchartHelpIcon'))
+    await screen.findByRole(/tooltip/);
+    expect(screen.getByRole(/tooltip/)).toBeInTheDocument();
+  }); 
 
 
 

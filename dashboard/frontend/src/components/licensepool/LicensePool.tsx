@@ -4,22 +4,56 @@ import SoftwareSearchBar from '../search/SoftwareSeachBar';
 import PoolTable from "./PoolTable";
 import {LicensePoolData} from "../../Interfaces";
 import {fetchPoolData, fetchSoftwareUsedInOrg} from "../../api/calls";
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
 
 function LicensePool() {
     const org = JSON.parse(localStorage.getItem('organization') ?? 'null');
     const [searchTerm, setSearchTerm] = useState<string>();
     const [orgSoftware, setOrgSoftware] = useState<string[]>([]);
     const [data, setData] = useState<LicensePoolData[]>([]);
+    const [checked, setChecked] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string>('');
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setChecked(event.target.checked);
+    };
 
     // Function that gets input from the searchBar component.
-    const handleChange = (term: string) => {
+    const updateSearchTerm = (term: string) => {
         setSearchTerm(term);
     }
+
     useEffect(() => {
+
+        const fetchInitialData = async () => {
+            if (searchTerm == '' || searchTerm == undefined) {
+                setData([])
+                try {
+                    const {data, error, message} = await fetchPoolData(undefined, checked ? org : '');
+                    if (error) {
+                        setErrorMessage(message);
+                        setData([])
+                    } else {
+                        setData(data);
+                    }
+                    console.log(data);
+                } catch (error) {
+                    console.error('Error fetching license data:', error);
+                }
+
+            }
+
+        };
+        fetchInitialData();
+    }, [checked, searchTerm]);
+
+    useEffect(() => {
+        setErrorMessage('')
         // Fetches distinct software names.
         const fetchSoftwareNames = async () => {
             try {
-                const data: string[] | undefined = await fetchSoftwareUsedInOrg('active', org);
+                const data: string[] | undefined = await fetchSoftwareUsedInOrg('active', '');
                 if (data !== undefined) {
                     setOrgSoftware(data);
                 }
@@ -31,11 +65,16 @@ function LicensePool() {
     }, []);
 
     useEffect(() => {
+        setErrorMessage('')
         const fetchData = async () => {
             if (searchTerm && searchTerm !== "") {
                 try {
-                    const data = await fetchPoolData(searchTerm);
-                    data && setData(data);
+                    const {data, error, message} = await fetchPoolData(searchTerm, checked ? org : '');
+                    setData(data)
+                    if (error) {
+                        setErrorMessage(message);
+                        setData([])
+                    } //else data && setData(data);
                 } catch (error) {
                     console.error('Error fetching license data:', error);
                 }
@@ -45,7 +84,7 @@ function LicensePool() {
         }
         fetchData()
 
-    }, [searchTerm]);
+    }, [searchTerm, checked]);
 
     return (
         <div id={'licensepool_container'} style={{display: 'flex', justifyContent: 'center', marginTop: "20px"}}>
@@ -53,11 +92,27 @@ function LicensePool() {
                 <Grid container className={'license_parameters'}
                       style={{display: 'flex', justifyContent: 'space-evenly', marginBottom: '10px'}}>
                     <Grid item>
-                        <Stack direction='column' spacing={2}>
+                        <>
                             <h2 style={{textAlign: "center"}}>Lisensportalen</h2>
                             <h4 style={{textAlign: "center"}}>-Velg miljøvennlig!</h4>
-                            <SoftwareSearchBar setSelectedSoftware={handleChange} data={orgSoftware}/>
+
+                        </>
+                        <Stack direction={'row'} spacing={2}>
+                            <SoftwareSearchBar setSelectedSoftware={updateSearchTerm} data={orgSoftware}/>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={checked}
+                                        onChange={handleChange}
+                                        inputProps={{'aria-label': 'controlled'}}
+                                    />
+                                }
+                                label="Bare egen organisasjon"
+                            />
+
+
                         </Stack>
+                        {errorMessage && <h3 style={{color: 'red'}}>{errorMessage}</h3>}
                     </Grid>
                 </Grid>
                 <br/>
