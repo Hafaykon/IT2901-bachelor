@@ -107,8 +107,8 @@ interface Props {
 }
 
 export default function PoolTable({
-    data
-}: Props) {
+                                      data
+                                  }: Props) {
     const [currentPage, setCurrentPage] = React.useState(1);
     const ITEMS_PER_PAGE = 5;
     const software = data;
@@ -118,7 +118,11 @@ export default function PoolTable({
     };
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
-    const displayedSoftware = software.slice(startIndex, endIndex);
+    // Inside the PoolTable component
+    const displayedSoftware = Array.isArray(software) ? software.slice(startIndex, endIndex) : [];
+
+// Rest of the component code
+
 
     useEffect(() => {
         if ((software.length) > 0) {
@@ -130,12 +134,12 @@ export default function PoolTable({
     return (
         <>
             {loaded ? (
-                <div style={{ width: "75%" }}>
+                <div style={{width: "75%"}}>
                     <TableContainer component={Paper}>
                         <Table aria-label="collapsible table">
                             <TableHead>
                                 <TableRow>
-                                    <TableCell />
+                                    <TableCell/>
                                     <TableCell><b>Lisensnavn</b></TableCell>
                                     <TableCell align={"left"}><b>Enhet</b></TableCell>
                                     <TableCell align={"left"}><b>Kontaktinformasjon</b></TableCell>
@@ -143,7 +147,7 @@ export default function PoolTable({
                             </TableHead>
                             <TableBody>
                                 {displayedSoftware.map((user, index) => (
-                                    <Row key={index} row={user} />
+                                    <Row key={index} row={user}/>
                                 ))}
                             </TableBody>
                         </Table>
@@ -155,7 +159,7 @@ export default function PoolTable({
                         variant="outlined"
                         shape="rounded"
                         size="small"
-                        style={{ marginTop: '1rem' }}
+                        style={{marginTop: '1rem'}}
                     />
                 </div>
             ) : <h3>Velg programvare </h3>}
