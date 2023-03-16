@@ -1,11 +1,11 @@
-import { act, cleanup, render, screen } from '@testing-library/react';
+import { act, cleanup, fireEvent, render, screen } from '@testing-library/react';
 import InfoBox from './InfoBox';
 import '@testing-library/jest-dom/extend-expect';
 import React from 'react';
-import { MemoryRouter } from 'react-router-dom';
+import {MemoryRouter} from 'react-router-dom';
 
 const infoBoxData = {
-  title: 'Totale lisenser',
+  title: 'Totale Lisenser',
   NumberOfLicenses: 40,
 }
 
@@ -36,9 +36,13 @@ describe('Testing render, infoboxes', () => {
     expect(screen.getByText('40')).toBeInTheDocument();
   });
 
-});
 
+  it('renders tooltip when hovering over HelpIcon',async () => {
+    fireEvent.mouseEnter(screen.getByTestId('helpIcon'))
+    await screen.findByRole(/tooltip/);
+    expect(screen.getByRole(/tooltip/)).toBeInTheDocument();
+  }); 
+     
+  }
 
-
-
-
+);
