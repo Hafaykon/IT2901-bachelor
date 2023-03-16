@@ -13,6 +13,7 @@ function InfoBox({title, numberOfLicenses}: InfoBoxProps) {
 
     const handleCardClick = () => {
         navigate(`/licenses/${title}`);
+        navigate(`/licenses/${title}`);
     };
 
   let info = "";
@@ -46,4 +47,3 @@ function InfoBox({title, numberOfLicenses}: InfoBoxProps) {
 }
 
 export default InfoBox;
-
