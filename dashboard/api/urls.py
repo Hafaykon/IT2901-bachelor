@@ -1,6 +1,7 @@
 # Every single endpoint is defined here
 from django.urls import path
 from . import views
+from .views import LicenseInfoView
 
 urlpatterns = [
     path('users/', views.get_primary_user_full_name, name='users'),
@@ -16,6 +17,6 @@ urlpatterns = [
     path('softwarebyuser/', views.get_org_software_users_by_name, name='get_org_software_users_by_name'),
     path('count', views.software_counts, name='software_counts'),
     path('pool/', views.get_license_pool, name='pool'),
-    path('licenseinfo/', views.get_license_info, name='licenseinfo'),
+    path('licenseinfo/', LicenseInfoView.as_view(), name='licenseinfo'),
 
 ]
