@@ -1,10 +1,20 @@
 import datetime as dt
+from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
-from rest_framework import generics
+from django_pandas.io import read_frame
+
+
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
+
+from rest_framework import generics, status
 from rest_framework.decorators import api_view
+from rest_framework.exceptions import NotFound, APIException
+from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 
 from .models import SoftwarePerComputer
 from .serializers import SoftwarePerComputerSerializer
@@ -14,10 +24,14 @@ from .serializers import SoftwarePerComputerSerializer
 @api_view(['GET'])
 def get_organizations(request, format=None):
     """
-    :return: Returns a list of organizations.
+    :return: Returns a list of all distinct organizations.
     """
-    organizations = SoftwarePerComputer.objects.values_list('organization', flat=True).distinct()
-    organizations = sorted(organizations)
+    try:
+        organizations = SoftwarePerComputer.objects.values_list('organization', flat=True).distinct()
+        organizations = sorted(organizations)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
     return Response(organizations)
 
 
@@ -77,22 +91,6 @@ def get_software_recommendations(request, format=None):
     recommendations = df[['application_name', 'primary_user_full_name', 'primary_user_email', 'organization',
                           'last_used']].to_dict('records')
     return Response(recommendations)
-
-
-@api_view(['GET'])
-def get_organization_software(request, format=None):
-    """
-    :param request: A GET request with an optional 'organization' parameter.
-    :return: Returns a list of all distinct software used grouped by organization.
-    """
-    organization = request.GET.get('organization', 'IT-tjenesten')
-    software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
-    software = software.filter(license_required=True)
-    if organization:
-        software = software.filter(organization=organization)
-    software = sorted(software)
-
-    return Response(software)
 
 
 @api_view(['GET'])
@@ -217,10 +215,9 @@ def get_org_software_users_by_name(request, format=None):
     organization = request.GET.get('organization', None)
 
     software = SoftwarePerComputer.objects.filter(application_name=application_name,
-                                                  license_required=True)
+                                                  license_required=True, license_suite_names__isnull=True)
     if organization:
         software = software.filter(organization=organization)
-
 
     software_df = pd.DataFrame.from_records(software.values())
     # Fill null values in the "active_minutes" and "total_minutes" columns with 0
@@ -228,15 +225,25 @@ def get_org_software_users_by_name(request, format=None):
     # Sort by "active_minutes" column, moving null values to the end
     sorted_group = software_df.sort_values(by='active_minutes', ascending=True, na_position='last')
 
+    # Group by organization
+    groups = sorted_group.groupby('organization')
+
     result = []
-    for i, row in sorted_group.iterrows():
+    for org, group in groups:
+        details = []
+        for i, row in group.iterrows():
+            details.append({
+                "id": row["id"],
+                "full_name": row["primary_user_full_name"],
+                "computer_name": row["computer_name"],
+                "email": row["primary_user_email"],
+                "total_minutes": row["total_minutes"],
+                "active_minutes": row["active_minutes"],
+            })
         result.append({
-            "id": row["id"],
-            "full_name": row["primary_user_full_name"],
-            "email": row["primary_user_email"],
-            "organization": row["organization"],
-            "total_minutes": row["total_minutes"],
-            "active_minutes": row["active_minutes"],
+            "application_name": application_name,
+            "organization": org,
+            "details": details
         })
 
     return Response(result)
@@ -244,31 +251,38 @@ def get_org_software_users_by_name(request, format=None):
 
 @api_view(['GET'])
 def software_counts(request):
-    organization = request.GET.get('organization', '')
-    software = SoftwarePerComputer.objects.filter(
-        organization=organization
-    ).values('last_used', 'license_required')
-    software = software.filter(license_required=True)
+    try:
+        organization = request.GET.get('organization', None)
+        if not organization:
+            raise ParseError("No organization provided")
+        software = SoftwarePerComputer.objects.filter(
+            organization=organization
+        ).values('last_used', 'license_required')
+        software = software.filter(license_required=True, license_suite_names__isnull=True)
 
-    # Count of total licenses filter by organization
-    total_licenses = software.count()
+        # Count of total licenses filter by organization
+        total_licenses = software.count()
 
-    # Count of software that has last_used = null (it has never been used)
-    never_used = software.filter(last_used__isnull=True).count()
-    # Count of software that has last_used >= 90 days
-    df = get_sorted_df_of_unused_licenses(software)
-    unused_software = len(df)
-    # Count of active licenses
-    active_licenses = total_licenses - unused_software - never_used
+        # Count of software that has last_used = null (Xupervisor haven't registered activity)
+        never_used = software.filter(last_used__isnull=True).count()
 
-    counts = {
-        'total_licenses': total_licenses,
-        'active_licenses': active_licenses,
-        'never_used': never_used,
-        'unused_licenses': unused_software,
-    }
+        # Count of software that has last_used >= 90 days
+        df = get_sorted_df_of_unused_licenses(software)
+        unused_software = len(df)
+        # Count of active licenses
+        active_licenses = total_licenses - unused_software - never_used
 
-    return Response(counts)
+        counts = {
+            'total_licenses': total_licenses,
+            'active_licenses': active_licenses,
+            'never_used': never_used,
+            'unused_licenses': unused_software,
+        }
+        return Response(counts)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except ParseError as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
 def get_sorted_df_of_unused_licenses(software_data):
@@ -286,3 +300,167 @@ def get_sorted_df_of_unused_licenses(software_data):
     df['last_used'] = (now - df['last_used']).dt.days
     df = df.sort_values(by='last_used', ascending=False)
     return df
+
+
+class LicenseInfoView(generics.ListAPIView):
+    queryset = SoftwarePerComputer.objects.all()
+    serializer_class = SoftwarePerComputerSerializer
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        application_name = self.request.query_params.get('application_name')
+        organization = self.request.query_params.get('organization')
+        status = self.request.query_params.get('status')
+
+        if not application_name:
+            raise ParseError("The 'application_name' parameter is required.")
+        if not organization:
+            raise ParseError("The 'organization' parameter is required.")
+        if not status:
+            raise ParseError("The 'status' parameter is required.")
+
+        threshold_date = datetime.now() - timedelta(days=120)
+
+        queryset = self.queryset.filter(
+            application_name=application_name,
+            license_required=True,
+            license_suite_names__isnull=True,
+            organization=organization,
+        )
+
+        status_value = None
+        if status == 'active':
+            queryset = queryset.filter(last_used__gte=threshold_date)
+            status_value = "Aktiv"
+
+        elif status == 'unused':
+            queryset = queryset.filter(last_used__isnull=True)
+            status_value = 'Ikke brukt'
+
+        elif status == 'available':
+            pass
+            # TODO: Fetch data from license pool
+            status_value = 'Ledig'
+
+        return queryset
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+
+        if queryset.count() == 0:
+            return self.get_paginated_response([])
+
+        df = read_frame(queryset)
+        grouped_df = df.groupby(['application_name', 'primary_user_full_name', 'computer_name']) \
+            .apply(lambda x: x[['id', 'last_used']].to_dict('records')) \
+            .reset_index() \
+            .rename(columns={0: 'details'})
+
+        result = grouped_df.to_dict('records')
+
+        status_value = None
+        if 'status' in self.request.query_params:
+            status_value = self.request.query_params.get('status')
+            for item in result:
+                item["status"] = status_value
+
+        paginated_result = self.paginate_queryset(result)
+
+        return self.get_paginated_response(paginated_result)
+
+
+@api_view(['GET'])
+def get_license_pool(request, format=None):
+    """
+    :param request: A GET request with 'application_name' and 'organization' as parameters.
+    :return: Returns a list containing software licenses from the license pool.
+    """
+    try:
+        application_name = request.GET.get('application_name', None)
+        organization = request.GET.get('organization', None)
+
+        if not application_name:
+            raise ParseError("application_name parameter is required.")
+
+        software = SoftwarePerComputer.objects.filter(application_name=application_name,
+                                                      license_required=True, license_suite_names__isnull=True)
+
+        if organization:
+            software = software.filter(organization=organization)
+
+        software_df = pd.DataFrame.from_records(software.values())
+
+        if software_df.empty:
+            raise NotFound("No software found for the given parameters.")
+
+        # Sort by "active_minutes" column, moving null values to the end
+        sorted_group = software_df.sort_values(by='active_minutes', ascending=True, na_position='last')
+
+        # Group by organization
+        groups = sorted_group.groupby('organization')
+
+        result = []
+        for org, group in groups:
+            details = []
+            for i, row in group.iterrows():
+                details.append({
+                    "id": row["id"],
+                    "full_name": row["primary_user_full_name"],
+                    "computer_name": row["computer_name"],
+                    "email": row["primary_user_email"],
+                    "last_used": row["last_used"],
+                    "family": row["family"],
+                    "family_version": row["family_version"],
+                    "family_edition": row["family_edition"],
+                })
+            result.append({
+                "application_name": application_name,
+                "organization": org,
+                "details": details
+            })
+
+        return Response(result)
+
+    except ParseError as e:
+        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+    except NotFound as e:
+        return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
+
+    except Exception as e:
+        raise APIException(str(e))
+
+
+@api_view(['GET'])
+def get_organization_software(request, format=None):
+    """
+    :param request: A GET request with an optional 'organization' parameter.
+    :return: Returns a list of all distinct software used.
+    """
+    organization = request.GET.get('organization', None)
+    status = request.GET.get('status', None)
+
+    if not organization:
+        raise ParseError("application_name parameter is required.")
+    if not status:
+        raise ParseError("status parameter is required.")
+
+    # Get the date 90 days ago
+    threshold_date = datetime.now() - timedelta(days=90)
+
+    try:
+        software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
+        software = software.filter(license_required=True, license_suite_names__isnull=True)
+        if organization:
+            software = software.filter(organization=organization)
+
+        if status == 'unused':
+            software = software.filter(last_used__isnull=True)
+        elif status == 'active':
+            software = software.filter(last_used__isnull=False, last_used__gte=threshold_date)
+
+        software = sorted(software)
+
+        return Response(software)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

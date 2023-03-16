@@ -1,40 +1,52 @@
 img {
     width: 350px;
     height: 65px;
-  }
-  
-  #logoTrondheim {
-    margin-left: 1%;
-  
-  }
-  
-  #navBar {
+   
+    
+    
+    
+}
+
+#logoTrondheim {
+   
+
+   
+   
+
+}
+
+#navBar {
     background-color: white;
     width: 100%;
     position: fixed;
     top: 0;
     left: 0;
-    padding: 1%;
-    justify-content: space-between;
+    padding-top: 1%;
+    padding-bottom: 1%;
+    text-align: center;
     display: flex;
+    justify-content: center;
+    
+    
     z-index: 9;
   }
   
   #menuIcon {
-      margin-right: 12%;
-      color: #313233 ; 
+     padding-left: 620px;
+      color: #313233 ;
+      
       
   }
 
   .menu-bars {
-    margin-left: 2rem;
-    font-size: 2rem;
-    background: none;
+    
+
+    
   }
   
-  .nav-menu {
+  .nav-menu { 
     background-color: #ffffff;
-    width: 450px;
+    width: 400px;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -42,42 +54,43 @@ img {
     top: 0;
     right: -100%;
     transition: 850ms;
-  }
+}
 
-  .nav-menu.active {
+.nav-menu.active {
     right: 0;
     transition: 350ms;
-  }
-  
-  .nav-text {
+}
+
+.nav-text {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     padding: 8px 0px 8px 16px;
     list-style: none;
     height: 60px;
-  }
-  
-  .nav-text a {
+}
+
+.nav-text a {
     text-decoration: none;
     color: black;
     font-family: 'Source Sans 3', sans-serif;
-    font-size: 18px;
+    font-size: 25px;
     width: 95%;
     height: 100%;
     display: flex;
     align-items: center;
     padding: 0 16px;
     border-radius: 4px;
-  }
+}
 
-  .nav-text a:hover {
+.nav-text a:hover {
     font-weight: bold;
     color: #005aa7
-  }
-  
-  .nav-menu-items {
+}
+
+.nav-menu-items {
     width: 100%;
+    
   }
   
   .navbar-toggle {
@@ -90,5 +103,5 @@ img {
   }
   
   #spanning {
-    margin-left: 16px;
+    margin-left: -22px;
   }

@@ -30,23 +30,6 @@ export const fetchSoftwareRecommendations = async (organization?: string) => {
         console.log(error);
     }
 };
-/***
- * Fetches all distinct software used within an organization from the backend.
- * @param organization - Optional parameter to filter on organization.
- */
-export const fetchSoftwareUsedInOrg = async (organization?: string) => {
-    try {
-        let url = 'http://127.0.0.1:8000/api/software/';
-        if (organization) {
-            url = `${url}?organization=${organization}`;
-        }
-        const response = await fetch(url);
-        const data = await response.json();
-        return [...data];
-    } catch (error) {
-        console.log(error);
-    }
-};
 
 /***
  * Fetches software used within an organization and its users.
@@ -86,7 +69,7 @@ export const fetchOrgSoftwareByName = async (software?: string, org?: string) =>
     } catch (error) {
         console.log(error);
     }
-}
+};
 
 /***
  * Fetches software used by a specified user.
@@ -116,10 +99,61 @@ export const fetchInfoBoxData = async (org?: string) => {
     } catch (error) {
         console.log(error);
     }
-}
+};
 
+export const fetchPoolData = async (software?: string, org?: string) => {
+    try {
+        let url = 'http://127.0.0.1:8000/api/pool/';
+        if (software && org) {
+            url = `${url}?application_name=${software}&organization=${org}`;
+        } else if (software) {
+            url = `${url}?application_name=${software}`;
+        } else if (org) {
+            url = `${url}?organization=${org}`;
+        }
+        const response = await fetch(url);
+        return await response.json();
+    } catch (error) {
+        console.log(error);
+    }
+};
 
+export const fetchInfoBoxLicense = async ( page: number, status: string, org?: string, software?: string) => {
+    try {
+        let url = `http://127.0.0.1:8000/api/licenseinfo/?page=${page}&status=${status}`;
+        if (software && org) {
+            url += `&application_name=${software}&organization=${org}`;
+        } else if (software) {
+            url += `&application_name=${software}`;
+        } else if (org) {
+            url += `&organization=${org}`;
+        }
+        const response = await fetch(url);
+        const data = await response.json();
+        return {results: [...data.results], count: data.count};
 
+    } catch (error) {
+        console.log(error);
+    }
+};
+/***
+ * Fetches all distinct software used within an organization from the backend.
+ * @param status - Optional parameter to filter on status.
+ * @param organization - Optional parameter to filter on organization.
+ */
+export const fetchSoftwareUsedInOrg = async (status: string, organization?: string) => {
+    try {
+        let url = `http://127.0.0.1:8000/api/software/?status=${status}`;
+        if (organization) {
+            url += `&organization=${organization}`;
+        }
+        const response = await fetch(url);
+        const data = await response.json();
+        return[...data]
+    } catch (error) {
+        console.log(error);
+    }
+};
 
 
 export default {
@@ -129,6 +163,7 @@ export default {
     fetchSoftwareUsers,
     fetchLicensesAssociatedWithUser,
     fetchOrgSoftwareByName,
-    fetchInfoBoxData
+    fetchInfoBoxData,
+    fetchPoolData
 
 };
