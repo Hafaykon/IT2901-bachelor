@@ -1,7 +1,7 @@
 import React from 'react';
 import './App.css';
-import { RecoilRoot } from 'recoil';
-import { Route, Routes } from 'react-router-dom';
+import {RecoilRoot} from 'recoil';
+import {Route, Routes} from 'react-router-dom';
 import MyPage from './pages/Mypage';
 import LicenseInfo from './components/LicenseInfo';
 import FAQ from './pages/FAQ';
@@ -13,11 +13,11 @@ function App() {
 
     return (
         <RecoilRoot>
-           <Navbar/>
+            <Navbar/>
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/minside" element={<MyPage/>}/>
-                <Route path="/licenses/:title" element={<LicenseInfo />} />
+                <Route path="/licenses/:title" element={<LicenseInfo/>}/>
                 <Route path="/lisensportal" element={<Licenses/>}/>
                 <Route path="/FAQ" element={<FAQ/>}/>
             </Routes>

@@ -5,17 +5,17 @@ img {
     
     
     
-  }
-  
-  #logoTrondheim {
+}
+
+#logoTrondheim {
    
 
    
    
-  
-  }
-  
-  #navBar {
+
+}
+
+#navBar {
     background-color: white;
     width: 100%;
     position: fixed;
@@ -54,23 +54,23 @@ img {
     top: 0;
     right: -100%;
     transition: 850ms;
-  }
+}
 
-  .nav-menu.active {
+.nav-menu.active {
     right: 0;
     transition: 350ms;
-  }
-  
-  .nav-text {
+}
+
+.nav-text {
     display: flex;
     justify-content: flex-start;
     align-items: center;
     padding: 8px 0px 8px 16px;
     list-style: none;
     height: 60px;
-  }
-  
-  .nav-text a {
+}
+
+.nav-text a {
     text-decoration: none;
     color: black;
     font-family: 'Source Sans 3', sans-serif;
@@ -81,14 +81,14 @@ img {
     align-items: center;
     padding: 0 16px;
     border-radius: 4px;
-  }
+}
 
-  .nav-text a:hover {
+.nav-text a:hover {
     font-weight: bold;
     color: #005aa7
-  }
-  
-  .nav-menu-items {
+}
+
+.nav-menu-items {
     width: 100%;
     
   }
