@@ -118,9 +118,9 @@ export const fetchPoolData = async (software?: string, org?: string) => {
     }
 };
 
-export const fetchInfoBoxLicense = async (status: string, org?: string, software?: string) => {
+export const fetchInfoBoxLicense = async ( page: number, status: string, org?: string, software?: string) => {
     try {
-        let url = `http://127.0.0.1:8000/api/licenseinfo/?status=${status}`;
+        let url = `http://127.0.0.1:8000/api/licenseinfo/?page=${page}&status=${status}`;
         if (software && org) {
             url += `&application_name=${software}&organization=${org}`;
         } else if (software) {
@@ -130,7 +130,8 @@ export const fetchInfoBoxLicense = async (status: string, org?: string, software
         }
         const response = await fetch(url);
         const data = await response.json();
-        return [...data];
+        return {results: [...data.results], count: data.count};
+
     } catch (error) {
         console.log(error);
     }
@@ -148,7 +149,7 @@ export const fetchSoftwareUsedInOrg = async (status: string, organization?: stri
         }
         const response = await fetch(url);
         const data = await response.json();
-        return [...data];
+        return[...data]
     } catch (error) {
         console.log(error);
     }
