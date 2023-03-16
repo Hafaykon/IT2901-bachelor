@@ -6,15 +6,6 @@ import '@testing-library/jest-dom';
 
 const mockfunc = jest.fn();
 
-const mockData = {
-    'full_name': 'Lise Stokken',
-    'email': 'lise.stokken@trondheim.kommune.no',
-    'total_minutes': 0,
-    'active_minutes': 0
-};
-jest.mock('../../api/calls', () => ({
-    fetchOrgSoftwareByName: () => Promise.resolve(mockData)
-}));
 
 describe('SoftwareSearchBar', () => {
     beforeEach(async () => {

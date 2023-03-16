@@ -6,20 +6,20 @@ import {MemoryRouter} from 'react-router-dom';
 
 describe('Testing render, DonutChart', () => {
 
-  beforeEach(() => {
-    render(<MemoryRouter>
-      <SavingsBox title={'Sparing'} savings={100} />
-    </MemoryRouter>);
-  });
+    beforeEach(() => {
+        render(<MemoryRouter>
+            <SavingsBox title={'Sparing'} savings={100}/>
+        </MemoryRouter>);
+    });
 
-  afterEach(() => {
-    cleanup();
-  });
+    afterEach(() => {
+        cleanup();
+    });
 
-  it('renders donutchart without crashing', () => {
-    expect(screen.getByText(/Sparing/)).toBeInTheDocument();
-    expect(screen.getByTestId('savingsBox')).toBeInTheDocument();
-  });
+    it('renders donutchart without crashing', () => {
+        expect(screen.getByText(/Sparing/)).toBeInTheDocument();
+        expect(screen.getByTestId('savingsBox')).toBeInTheDocument();
+    });
 
 
 });

@@ -10,47 +10,47 @@ import {RecoilRoot} from 'recoil';
  * Mockdata for organizations.
  */
 const organizations: string[] = [
-  'Aastahagen barnehage',
-  'Aktivitetstilbud for hjemmeboende',
-  'Arbeidsmiljøenheten'
+    'Aastahagen barnehage',
+    'Aktivitetstilbud for hjemmeboende',
+    'Arbeidsmiljøenheten'
 ];
 
 jest.mock('../api/calls', () => ({
-  fetchOrganizations: () => Promise.resolve(organizations)
+    fetchOrganizations: () => Promise.resolve(organizations)
 }));
 
 
 describe('Organization selector', () => {
-  beforeEach(async () => {
-    await act(async () => {
-      render(
-        <RecoilRoot>
-          <OrganizationSelector />
-        </RecoilRoot>
-        );
+    beforeEach(async () => {
+        await act(async () => {
+            render(
+                <RecoilRoot>
+                    <OrganizationSelector/>
+                </RecoilRoot>
+            );
 
+        });
     });
-  });
 
-  afterEach(() => {
-    localStorage.clear();
-    cleanup();
-  });
-
-
-  it('renders without crashing', async () => {
-    expect(screen.getByLabelText('Velg organisasjon')).toBeInTheDocument();
-    expect(screen.getByTestId('autocomplete-search')).toBeInTheDocument();
-  });
+    afterEach(() => {
+        localStorage.clear();
+        cleanup();
+    });
 
 
-  it('can select an organization', async () => {
-    const autocomplete = screen.getByTestId('autocomplete-search');
-    const input = within(autocomplete).getByRole('combobox') as HTMLInputElement;
-    autocomplete.focus();
-    userEvent.click(input);
-    expect(screen.getByText('Aastahagen barnehage')).toBeInTheDocument();
-    expect(screen.getByText('Aktivitetstilbud for hjemmeboende')).toBeInTheDocument();
-    expect(screen.getByText('Arbeidsmiljøenheten')).toBeInTheDocument();
-  });
+    it('renders without crashing', async () => {
+        expect(screen.getByLabelText('Velg organisasjon')).toBeInTheDocument();
+        expect(screen.getByTestId('autocomplete-search')).toBeInTheDocument();
+    });
+
+
+    it('can select an organization', async () => {
+        const autocomplete = screen.getByTestId('autocomplete-search');
+        const input = within(autocomplete).getByRole('combobox') as HTMLInputElement;
+        autocomplete.focus();
+        userEvent.click(input);
+        expect(screen.getByText('Aastahagen barnehage')).toBeInTheDocument();
+        expect(screen.getByText('Aktivitetstilbud for hjemmeboende')).toBeInTheDocument();
+        expect(screen.getByText('Arbeidsmiljøenheten')).toBeInTheDocument();
+    });
 });

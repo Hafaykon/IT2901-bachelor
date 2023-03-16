@@ -206,7 +206,7 @@ class TestViews(APITestCase):
         Should return all software used by the given organization.
         """
         organization = "Servere"
-        url = reverse('software') + '?status=active' +f'&organization={organization}' + f''
+        url = reverse('software') + f'?organization={organization}&status=active'
         response = self.client.get(url)
         expected_software = []
 

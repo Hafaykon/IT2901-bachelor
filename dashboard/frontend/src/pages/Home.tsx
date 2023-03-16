@@ -5,15 +5,15 @@ import {useRecoilValue} from 'recoil';
 import OrganizationSelector from '../components/OrganizationSelector';
 
 function Home() {
-  const org = useRecoilValue(orgAtom);
+    const org = useRecoilValue(orgAtom);
 
 
-  return (
-    <>
-      {!org ? <OrganizationSelector /> : <Dashboard />}
-    </>
+    return (
+        <>
+            {!org ? <OrganizationSelector/> : <Dashboard/>}
+        </>
 
-  );
+    );
 }
 
 export default Home;
