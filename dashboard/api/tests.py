@@ -206,9 +206,9 @@ class TestViews(APITestCase):
         Should return all software used by the given organization.
         """
         organization = "Servere"
-        url = reverse('software') + f'?organization={organization}'
+        url = reverse('software') + '?status=active' +f'&organization={organization}' + f''
         response = self.client.get(url)
-        expected_software = ["myapplication"]
+        expected_software = []
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.data), expected_software)

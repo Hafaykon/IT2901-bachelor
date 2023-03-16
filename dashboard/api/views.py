@@ -431,36 +431,36 @@ def get_license_pool(request, format=None):
         raise APIException(str(e))
 
 
-class OrganizationSoftwareView(generics.ListAPIView):
-    serializer_class = SoftwarePerComputerSerializer
-    pagination_class = PageNumberPagination
-    model = SoftwarePerComputer
+@api_view(['GET'])
+def get_organization_software(request, format=None):
+    """
+    :param request: A GET request with an optional 'organization' parameter.
+    :return: Returns a list of all distinct software used.
+    """
+    organization = request.GET.get('organization', None)
+    status = request.GET.get('status', None)
 
-    def get_queryset(self):
-        organization = self.request.GET.get('organization', None)
-        status = self.request.GET.get('status', None)
+    if not organization:
+        raise ParseError("application_name parameter is required.")
+    if not status:
+        raise ParseError("status parameter is required.")
 
-        if not organization:
-            raise ParseError("organization parameter is required.")
-        if not status:
-            raise ParseError("status parameter is required.")
-        # Get the date 90 days ago
-        threshold_date = datetime.now() - timedelta(days=90)
+    # Get the date 90 days ago
+    threshold_date = datetime.now() - timedelta(days=90)
 
-        queryset = SoftwarePerComputer.objects.filter(license_required=True, license_suite_names__isnull=True)
+    try:
+        software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
+        software = software.filter(license_required=True, license_suite_names__isnull=True)
         if organization:
-            queryset = queryset.filter(organization=organization)
+            software = software.filter(organization=organization)
 
         if status == 'unused':
-            queryset = queryset.filter(last_used__isnull=True)
+            software = software.filter(last_used__isnull=True)
         elif status == 'active':
-            queryset = queryset.filter(last_used__isnull=False, last_used__gte=threshold_date)
+            software = software.filter(last_used__isnull=False, last_used__gte=threshold_date)
 
-        queryset = queryset.values_list('application_name', flat=True).distinct().order_by('application_name')
+        software = sorted(software)
 
-        return queryset
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        data = list(queryset)
-        return Response(data)
+        return Response(software)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
