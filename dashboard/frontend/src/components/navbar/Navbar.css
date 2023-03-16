@@ -1,18 +1,6 @@
 img {
     width: 350px;
     height: 65px;
-   
-    
-    
-    
-}
-
-#logoTrondheim {
-   
-
-   
-   
-
 }
 
 #navBar {
@@ -26,8 +14,6 @@ img {
     text-align: center;
     display: flex;
     justify-content: center;
-    
-    
     z-index: 9;
   }
   
@@ -35,15 +21,8 @@ img {
      padding-left: 620px;
       color: #313233 ;
       
-      
   }
 
-  .menu-bars {
-    
-
-    
-  }
-  
   .nav-menu { 
     background-color: #ffffff;
     width: 400px;
@@ -90,7 +69,6 @@ img {
 
 .nav-menu-items {
     width: 100%;
-    
   }
   
   .navbar-toggle {
