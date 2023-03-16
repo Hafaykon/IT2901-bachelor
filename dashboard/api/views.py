@@ -3,12 +3,18 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
+from django_pandas.io import read_frame
+
+
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator
+
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotFound, APIException
 from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
+from rest_framework.pagination import PageNumberPagination
 
 from .models import SoftwarePerComputer
 from .serializers import SoftwarePerComputerSerializer
@@ -296,13 +302,15 @@ def get_sorted_df_of_unused_licenses(software_data):
     return df
 
 
-@api_view(['GET'])
-def get_license_info(request):
-    try:
-        # Get parameters from the request
-        application_name = request.GET.get('application_name', None)
-        organization = request.GET.get('organization', None)
-        status = request.GET.get('status', None)
+class LicenseInfoView(generics.ListAPIView):
+    queryset = SoftwarePerComputer.objects.all()
+    serializer_class = SoftwarePerComputerSerializer
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        application_name = self.request.query_params.get('application_name')
+        organization = self.request.query_params.get('organization')
+        status = self.request.query_params.get('status')
 
         if not application_name:
             raise ParseError("The 'application_name' parameter is required.")
@@ -311,22 +319,22 @@ def get_license_info(request):
         if not status:
             raise ParseError("The 'status' parameter is required.")
 
-            # Calculate the date 90 days ago
         threshold_date = datetime.now() - timedelta(days=120)
 
-        # Filter the data using the parameters
-        software = SoftwarePerComputer.objects.filter(application_name=application_name,
-                                                      license_required=True,
-                                                      license_suite_names__isnull=True,
-                                                      organization=organization,
-                                                      )
+        queryset = self.queryset.filter(
+            application_name=application_name,
+            license_required=True,
+            license_suite_names__isnull=True,
+            organization=organization,
+        )
+
         status_value = None
         if status == 'active':
-            software = software.filter(last_used__gte=threshold_date)
+            queryset = queryset.filter(last_used__gte=threshold_date)
             status_value = "Aktiv"
 
         elif status == 'unused':
-            software = software.filter(last_used__isnull=True)
+            queryset = queryset.filter(last_used__isnull=True)
             status_value = 'Ikke brukt'
 
         elif status == 'available':
@@ -334,32 +342,31 @@ def get_license_info(request):
             # TODO: Fetch data from license pool
             status_value = 'Ledig'
 
-        data = pd.DataFrame.from_records(software.values())
+        return queryset
 
-        # Check if there is any data
-        if data.empty:
-            return Response([])
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
 
-        # Group the data by application name and full name
-        data = data.groupby(['application_name', 'primary_user_full_name', 'computer_name']) \
+        if queryset.count() == 0:
+            return self.get_paginated_response([])
+
+        df = read_frame(queryset)
+        grouped_df = df.groupby(['application_name', 'primary_user_full_name', 'computer_name']) \
             .apply(lambda x: x[['id', 'last_used']].to_dict('records')) \
             .reset_index() \
             .rename(columns={0: 'details'})
 
-        # Convert the data to a list of dictionaries
-        result = data.to_dict('records')
+        result = grouped_df.to_dict('records')
 
-        if status_value:
+        status_value = None
+        if 'status' in self.request.query_params:
+            status_value = self.request.query_params.get('status')
             for item in result:
                 item["status"] = status_value
 
-        return Response(result)
-    except KeyError as e:
-        raise ParseError(f'Missing required parameter: {e}')
-    except ObjectDoesNotExist as e:
-        raise ParseError('No matching objects found')
-    except Exception as e:
-        raise ParseError(str(e))
+        paginated_result = self.paginate_queryset(result)
+
+        return self.get_paginated_response(paginated_result)
 
 
 @api_view(['GET'])
