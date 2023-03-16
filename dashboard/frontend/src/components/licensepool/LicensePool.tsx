@@ -25,7 +25,6 @@ function LicensePool() {
     }
 
     useEffect(() => {
-
         const fetchInitialData = async () => {
             if (searchTerm == '' || searchTerm == undefined) {
                 setData([])
@@ -87,45 +86,39 @@ function LicensePool() {
     }, [searchTerm, checked]);
 
     return (
-        <div id={'licensepool_container'} style={{display: 'flex', justifyContent: 'center', marginTop: "20px"}}>
-            <Grid container className='license_pool'>
-                <Grid container className={'license_parameters'}
-                      style={{display: 'flex', justifyContent: 'space-evenly', marginBottom: '10px'}}>
-                    <Grid item>
-                        <>
-                            <h2 style={{textAlign: "center"}}>Lisensportalen</h2>
-                            <h4 style={{textAlign: "center"}}>-Velg miljøvennlig!</h4>
-
-                        </>
-                        <Stack direction={'row'} spacing={2}>
-                            <SoftwareSearchBar setSelectedSoftware={updateSearchTerm} data={orgSoftware}/>
-                            <FormControlLabel
-                                control={
-                                    <Checkbox
-                                        checked={checked}
-                                        onChange={handleChange}
-                                        inputProps={{'aria-label': 'controlled'}}
-                                    />
-                                }
-                                label="Bare egen organisasjon"
-                            />
-
-
-                        </Stack>
+        <div id={'licensepool_container'}
+             style={{display: 'flex', justifyContent: 'center', alignContent: "center", marginTop: "20px"}}>
+            <Grid container className='license_pool' justifyContent={"center"}>
+                <Grid container justifyContent="center" alignItems="center" className={'license_table'} width={"75%"}>
+                    <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
+                        <h2 style={{fontFamily: "Source Sans 3"}}> Lisensportalen</h2>
+                        <h4 style={{
+                            fontFamily: 'Source Sans 3',
+                            fontStyle: "italic",
+                            fontWeight: 200
+                        }}>-Velg miljøvennlig!</h4>
+                    </Stack>
+                    <Stack direction={'row'} spacing={5} width={"70%"} marginBottom={"10px"} alignItems="center">
+                        <SoftwareSearchBar setSelectedSoftware={updateSearchTerm} data={orgSoftware}/>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={checked}
+                                    onChange={handleChange}
+                                    inputProps={{'aria-label': 'controlled'}}
+                                />
+                            }
+                            label="Bare egen organisasjon"
+                        />
                         {errorMessage && <h3 style={{color: 'red'}}>{errorMessage}</h3>}
-                    </Grid>
-                </Grid>
-                <br/>
-                <Grid container style={{display: 'flex', justifyContent: 'center', alignItems: "center", width: "100%"}}
-                      className={'license_table'}>
 
+                    </Stack>
                     <PoolTable data={data}/>
                 </Grid>
-
-
             </Grid>
         </div>
     );
+
 }
 
 export default LicensePool;

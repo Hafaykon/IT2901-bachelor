@@ -105,7 +105,7 @@ export default function OwnTable({
     }, [software]);
 
     return (
-        <> {loaded ? (<div style={{width: "75%"}}><TableContainer component={Paper}>
+        <> {loaded && <div style={{width: "100%"}}><TableContainer component={Paper}>
             <Table aria-label="collapsible table">
                 <TableHead>
                     <TableRow>
@@ -123,7 +123,7 @@ export default function OwnTable({
                 </TableBody>
 
             </Table>
-        </TableContainer></div>) : <h3>Velg programvare </h3>} </>
+        </TableContainer></div>} </>
 
     );
 }

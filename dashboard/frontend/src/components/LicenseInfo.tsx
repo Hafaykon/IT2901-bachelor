@@ -5,7 +5,7 @@ import SoftwareSearchBar from './search/SoftwareSeachBar';
 import {OwnOrgData} from "../Interfaces";
 import {Grid, Stack} from '@mui/material';
 import OwnTable from "./licensepool/OwnTable";
-import { Pagination } from 'antd';
+import Pagination from '@mui/material/Pagination';
 
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
@@ -22,7 +22,7 @@ const LicenseInfo: React.FC = () => {
             case 'Totale Lisenser':
                 setStatus('active')
                 break;
-            case 'Ubrukte Lisenser':
+            case 'Uåpnede Lisenser':
                 setStatus('unused')
                 break;
             case 'Ledige Lisenser':
@@ -71,41 +71,35 @@ const LicenseInfo: React.FC = () => {
         setSearchTerm(term);
     }
 
-  const handlePageChange = async (page: number) => {
-  try {
-    const data = await fetchInfoBoxLicense(page, status as string, storedOrganization as string, searchTerm);
-    data?.results && setData(data.results);
-    setCurrentPage(page);
-  } catch (error) {
-    console.log(error);
-  }
-};
+    const handlePageChange = async (page: number) => {
+        try {
+            const data = await fetchInfoBoxLicense(page, status as string, storedOrganization as string, searchTerm);
+            data?.results && setData(data.results);
+            setCurrentPage(page);
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     return (
-        <div id={'licensepool_container'} style={{display: 'flex', justifyContent: 'center', marginTop: "20px"}}>
-            <Grid container className='license_pool'>
-                <Grid container className={'license_parameters'}
-                      style={{display: 'flex', justifyContent: 'space-evenly', marginBottom: '10px'}}>
-                    <Grid item>
-                        <Stack direction='column' spacing={5}>
-                            <h1 style={{textAlign: "center"}}>{title} i {storedOrganization}</h1>
-                            <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
-                        </Stack>
-                    </Grid>
+        <div id={'licensepool_container'}
+             style={{display: 'flex', justifyContent: 'center', alignContent: "center", marginTop: "20px"}}>
+            <Grid container className='license_pool' justifyContent={"center"}>
+                <Grid container justifyContent="center" alignItems="center" className={'license_table'} width={"75%"}>
+                    <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
+                        <h2 style={{fontFamily: "Source Sans 3"}}> {title} i {storedOrganization}</h2>
+                        <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
+                        <OwnTable data={data}/>
+                        <Pagination
+                            count={Math.ceil(count / 10)}
+                            page={currentPage}
+                            onChange={(event, value) => handlePageChange(value)}
+                            color={"primary"}
+                        />
+                    </Stack>
+
+
                 </Grid>
-                <br/>
-                <Grid container style={{display: 'flex', justifyContent: 'center', alignItems: "center", width: "100%"}}
-                      className={'license_table'}>
-                    <OwnTable data={data}/>
-                </Grid>
-                   <Grid container style={{display: 'flex', justifyContent: 'center', marginTop: "10px"}}>
-                    <Pagination
-                      current={currentPage}
-                      total={count}
-                      pageSize={10}
-                      onChange={handlePageChange}
-                    />
-                  </Grid>
             </Grid>
         </div>)
 };
