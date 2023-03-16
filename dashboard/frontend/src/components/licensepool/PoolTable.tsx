@@ -130,12 +130,17 @@ export default function PoolTable({
     return (
         <>
             {loaded ? (
-                <div style={{ width: "75%" }}>
+                <div style={{ width: "70%" }}>
                     <TableContainer component={Paper}>
-                        <Table aria-label="collapsible table">
+                        <Table aria-label="collapsible table" >
+                        <colgroup>
+                        <col style={{width:'5%'}}/>
+                        <col style={{width:'25%'}}/>
+                        <col style={{width:'35%'}}/>
+                        </colgroup>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell />
+                                    <TableCell/>
                                     <TableCell><b>Lisensnavn</b></TableCell>
                                     <TableCell align={"left"}><b>Enhet</b></TableCell>
                                     <TableCell align={"left"}><b>Kontaktinformasjon</b></TableCell>
