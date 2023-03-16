@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'api.apps.ApiConfig',
     'rest_framework',
     'corsheaders',
-    'django-pandas',
+    'django_pandas',
 
 ]
 
