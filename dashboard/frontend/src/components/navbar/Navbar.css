@@ -32,7 +32,7 @@ img {
   }
   
   #menuIcon {
-     padding-left: 630px;
+     padding-left: 620px;
       color: #313233 ;
       
       
@@ -46,7 +46,7 @@ img {
   
   .nav-menu { 
     background-color: #ffffff;
-    width: 450px;
+    width: 400px;
     height: 100vh;
     display: flex;
     justify-content: center;
@@ -74,7 +74,7 @@ img {
     text-decoration: none;
     color: black;
     font-family: 'Source Sans 3', sans-serif;
-    font-size: 18px;
+    font-size: 25px;
     width: 95%;
     height: 100%;
     display: flex;
@@ -90,6 +90,7 @@ img {
   
   .nav-menu-items {
     width: 100%;
+    
   }
   
   .navbar-toggle {
@@ -102,5 +103,5 @@ img {
   }
   
   #spanning {
-    margin-left: 16px;
+    margin-left: -22px;
   }

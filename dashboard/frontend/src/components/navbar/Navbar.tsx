@@ -20,9 +20,9 @@ function Navbar() {
         <Grid id="menuIcon">
           <NavLink to="#" className="menu-bars">
             <MenuIcon
-              sx={{ fontSize: 50 }}
+              sx={{ fontSize: 65 }}
               onClick={showSidebar}
-              style={{ color: '#302d2d' }}
+              style={{ color: '#38393b' }}
             />
           </NavLink>
         </Grid>
@@ -30,7 +30,7 @@ function Navbar() {
           <ul className="nav-menu-items" onClick={showSidebar}>
             <li className="navbar-toggle">
               <NavLink to="#" className="menu-bars">
-                <ClearIcon sx={{ fontSize: 40 }} style={{ color: '#302d2d' }} />
+                <ClearIcon sx={{ fontSize: 50 }} style={{ color: '#38393b' } } />
               </NavLink>
             </li>
 
