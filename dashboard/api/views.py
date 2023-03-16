@@ -380,10 +380,12 @@ def get_license_pool(request, format=None):
         organization = request.GET.get('organization', None)
 
         if not application_name:
-            raise ParseError("application_name parameter is required.")
-
-        software = SoftwarePerComputer.objects.filter(application_name=application_name,
-                                                      license_required=True, license_suite_names__isnull=True)
+            software = SoftwarePerComputer.objects.filter(application_name__isnull=False,
+                                                          license_required=True, license_suite_names__isnull=True)
+            software = software[0:10]
+        else:
+            software = SoftwarePerComputer.objects.filter(application_name=application_name,
+                                                          license_required=True, license_suite_names__isnull=True)
 
         if organization:
             software = software.filter(organization=organization)
@@ -403,6 +405,7 @@ def get_license_pool(request, format=None):
         for org, group in groups:
             details = []
             for i, row in group.iterrows():
+                application = row["application_name"]
                 details.append({
                     "id": row["id"],
                     "full_name": row["primary_user_full_name"],
@@ -414,11 +417,10 @@ def get_license_pool(request, format=None):
                     "family_edition": row["family_edition"],
                 })
             result.append({
-                "application_name": application_name,
+                "application_name": application_name if application_name else application,
                 "organization": org,
                 "details": details
             })
-
         return Response(result)
 
     except ParseError as e:
@@ -440,8 +442,8 @@ def get_organization_software(request, format=None):
     organization = request.GET.get('organization', None)
     status = request.GET.get('status', None)
 
-    if not organization:
-        raise ParseError("application_name parameter is required.")
+    #if not organization:
+    #    raise ParseError("Organization parameter is required.")
     if not status:
         raise ParseError("status parameter is required.")
 
