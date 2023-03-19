@@ -90,15 +90,16 @@ function LicensePool() {
              style={{display: 'flex', justifyContent: 'center', alignContent: "center", marginTop: "20px"}}>
             <Grid container className='license_pool' justifyContent={"center"}>
                 <Grid container justifyContent="center" alignItems="center" className={'license_table'} width={"75%"}>
-                    <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
-                        <h2 style={{fontFamily: "Source Sans 3"}}> Lisensportalen</h2>
+                    <Stack direction={"column"} spacing={1} width={"95%"} marginBottom={"10px"}>
+                        <h2 style={{fontFamily:'Source Sans Pro, sans-serif'}}> Lisensportalen</h2>
                         <h4 style={{
-                            fontFamily: 'Source Sans 3',
+                            fontFamily: 'Source Sans Pro, sans-serif',
                             fontStyle: "italic",
-                            fontWeight: 200
+                            fontWeight: 200,
+                            marginTop: "-1%"
                         }}>-Velg miljøvennlig!</h4>
                     </Stack>
-                    <Stack direction={'row'} spacing={5} width={"70%"} marginBottom={"10px"} alignItems="center">
+                    <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"} alignItems="center" marginTop={"10px"}>
                         <SoftwareSearchBar setSelectedSoftware={updateSearchTerm} data={orgSoftware}/>
                         <FormControlLabel
                             control={
@@ -108,7 +109,7 @@ function LicensePool() {
                                     inputProps={{'aria-label': 'controlled'}}
                                 />
                             }
-                            label="Bare egen organisasjon"
+                            label="Bare egen enhet"
                         />
                         {errorMessage && <h3 style={{color: 'red'}}>{errorMessage}</h3>}
 

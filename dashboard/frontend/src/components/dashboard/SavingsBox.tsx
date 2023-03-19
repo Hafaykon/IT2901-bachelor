@@ -10,7 +10,7 @@ interface SavingsPrpos {
 export const SavingsBox = ({savings, title}: SavingsPrpos) => {
 
     return (
-        <Card sx={{ width: 300, height: 180}} data-testid='savingsBox'>
+        <Card sx={{ width: 300, height: 180, borderRadius: 5}} data-testid='savingsBox'>
             <CardOverflow>
                 <CardContent>
                     <Stack direction={'row'}>

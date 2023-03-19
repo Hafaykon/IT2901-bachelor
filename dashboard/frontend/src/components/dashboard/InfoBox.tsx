@@ -25,7 +25,7 @@ function InfoBox({title, numberOfLicenses}: InfoBoxProps) {
 
 
     return (
-        <Card sx={{ width: 300, height: 180}} data-testid="infoBox-test">
+        <Card sx={{ width: 300, height: 180, borderRadius: 5}} data-testid="infoBox-test">
             <CardActionArea sx={{paddingBottom: 4}} onClick={handleCardClick}>
                 <CardContent>
                   <Stack direction={'row'}>
@@ -36,7 +36,7 @@ function InfoBox({title, numberOfLicenses}: InfoBoxProps) {
                           <HelpIcon sx={{position: 'absolute', top: 28, right:15, color:'grey', fontSize: 25}} data-testid="helpIcon"></HelpIcon>
                     </Tooltip>
                   </Stack>
-                  <Typography color="text.secondary" id="numbersBoxes">
+                  <Typography style={{fontSize:50}}color="text.secondary" id="numbersBoxes">
                     {numberOfLicenses}
                   </Typography>
                 </CardContent>

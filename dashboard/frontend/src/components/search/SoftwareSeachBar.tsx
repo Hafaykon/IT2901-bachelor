@@ -49,7 +49,7 @@ const SoftwareSearchBar: React.FC<SoftwareSearchBarProps> = ({data, setSelectedS
                                             onClick={handleSearch}
                                             style={{
                                                 position: 'absolute',
-                                                right: 10,
+                                                right: 15,
                                             }}
                                         >
                                             <SearchIcon/>
@@ -58,6 +58,7 @@ const SoftwareSearchBar: React.FC<SoftwareSearchBarProps> = ({data, setSelectedS
                                     </>
                                 ),
                                 sx: {
+                                    
                                     height: '50px',
                                     borderRadius: '12px',
                                     backgroundColor: 'white',
