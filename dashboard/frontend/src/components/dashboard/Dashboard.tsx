@@ -41,7 +41,7 @@ function Dashboard() {
                 <div id="body">
                     <Grid container id='boxes'>
                         <Grid container className={'org_info'} justifyContent={"flex-end"} alignContent={"flex-end"}>
-                            <Stack direction="row">
+                            <Stack direction="row" id='headline'>
                                 <a href="/lisensportal" id="portal-link">
 
                                     Til lisensportalen

@@ -7,6 +7,11 @@
     height: 180px;
 }
 
+#headline{
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
 #cardTitle {
     color: #002d53;
     padding-top: 10px;
@@ -67,7 +72,7 @@
     top: 0;
     color: #002D53;
     text-decoration: none;
-    font-family: 'Source Sans 3', serif;
+    font-family: Source Sans Pro,sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 30px;

@@ -7,7 +7,7 @@ import CardOverflow from '@mui/joy/CardOverflow';
 
 const defaultLabelStyle = {
     fontSize: '4px',
-    fontFamily: 'sans-serif',
+    fontFamily: 'Source Sans Pro,sans-serif',
     fill: 'white'
 };
 type Props = {
@@ -20,7 +20,7 @@ type Props = {
 function DonutChart(infoBoxData: Props) {
     return (
         <div data-testid="donutChart">
-            <Card sx={{height: 425, width: 670, mt: 7}}>
+            <Card sx={{height: 425, width: 670, mt: 7, borderRadius: 5}}>
                 <CardOverflow>
                     <CardContent>
                         <Stack direction="row">
@@ -29,14 +29,14 @@ function DonutChart(infoBoxData: Props) {
                                 fontSize: 25,
                                 padding: 2,
                                 color: '#002d53',
-                                fontStyle: 'Source Sans Pro,sans-serif'
+                                fontFamily: 'Source Sans Pro,sans-serif'
                             }}>
                                 Total oversikt
                             </Typography>
                             <Tooltip title={<h2 style={{fontSize: 15, fontWeight: 'lighter'}}>
-                                Dette viser en oversikt over hvor mange aktive, uåpnede og ledige lisenser som eies i enheten.
+                                Diagrammet viser en oversikt over hvor mange aktive, uåpnede og ledige lisenser som eies i enheten.
                                 </h2>} placement='top' arrow>
-                            <HelpIcon sx={{position: 'absolute', top: 30, right:20, color:'grey', fontSize: 30}} data-testid="donutchartHelpIcon"></HelpIcon>
+                            <HelpIcon sx={{position: 'absolute', top: 30, right:20, color:'grey', fontSize: 25}} data-testid="donutchartHelpIcon"></HelpIcon>
                         </Tooltip>
                         </Stack>
                         <Stack direction="row" sx={{paddingLeft: 7}}>
@@ -45,7 +45,7 @@ function DonutChart(infoBoxData: Props) {
                                     sx={{
                                         width: 15,
                                         height: 15,
-                                        backgroundColor: '#63849c',
+                                        backgroundColor: '#E1E98B',
                                         '&:hover': {
                                             backgroundColor: 'primary.main',
                                             opacity: [0.9, 0.8, 0.7],
@@ -56,7 +56,7 @@ function DonutChart(infoBoxData: Props) {
                                     sx={{
                                         width: 15,
                                         height: 15,
-                                        backgroundColor: '#3172ce',
+                                        backgroundColor: '#80ADD3',
                                         '&:hover': {
                                             backgroundColor: 'primary.main',
                                             opacity: [0.9, 0.8, 0.7],
@@ -67,7 +67,7 @@ function DonutChart(infoBoxData: Props) {
                                     sx={{
                                         width: 15,
                                         height: 15,
-                                        backgroundColor: '#0d90ff',
+                                        backgroundColor: '#80CC9F',
                                         '&:hover': {
                                             backgroundColor: 'primary.main',
                                             opacity: [0.9, 0.8, 0.7],
@@ -103,19 +103,19 @@ function DonutChart(infoBoxData: Props) {
                                     {
                                         name: 'Aktiv',
                                         value: infoBoxData.active_licenses ?? 1,
-                                        color: '#63849c',
+                                        color: '#E1E98B',
                                         key: "test"
                                     },
                                     {
                                         name: 'Ledig',
                                         value: infoBoxData.unused_licenses ?? 1,
-                                        color: '#3172ce',
+                                        color: '#80ADD3',
                                         key: "test2"
                                     },
                                     {
                                         name: 'Uåpnet',
                                         value: infoBoxData.never_used ?? 1,
-                                        color: '#0d90ff',
+                                        color: '#80CC9F',
                                         key: "test3"
                                     }
                                 ]}
