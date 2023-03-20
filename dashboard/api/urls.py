@@ -2,6 +2,7 @@
 from django.urls import path
 from . import views
 from .views import SoftwarePerComputerDetailView
+from .views import LicenseInfoView
 
 urlpatterns = [
     path('users/', views.get_primary_user_full_name, name='users'),
@@ -22,5 +23,7 @@ urlpatterns = [
     path('delete_from_license_pool/<int:id>', views.delete_from_license_pool, name='delete_from_license_pool'),
     path('software-per-computer/<int:id>/', SoftwarePerComputerDetailView,
          name='software_per_computer_detail'),
+    path('pool/', views.get_license_pool, name='pool'),
+    path('licenseinfo/', LicenseInfoView.as_view(), name='licenseinfo'),
 
 ]

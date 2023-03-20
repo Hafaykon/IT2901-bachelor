@@ -1,63 +1,107 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { fetchSoftwareUsers } from '../api/calls';
+import React, {useEffect, useState} from 'react';
+import {useParams} from 'react-router-dom';
+import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
+import SoftwareSearchBar from './search/SoftwareSeachBar';
+import {OwnOrgData} from "../Interfaces";
+import {Grid, Stack} from '@mui/material';
+import OwnTable from "./licensepool/OwnTable";
+import Pagination from '@mui/material/Pagination';
 
 const LicenseInfo: React.FC = () => {
+    const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
+    const {title} = useParams();
+    const [data, setData] = useState<OwnOrgData[]>([]);
+    const [searchTerm, setSearchTerm] = useState<string>();
+    const [orgSoftware, setOrgSoftware] = useState<string[]>([]);
+    const [status, setStatus] = useState<string | null>(null);
+    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [count, setCount] = useState<number>(0);
 
-  interface LicenseData {
-    application_name: string;
-    users: {
-      full_name: string;
-      email: string;
-      total_minutes: number;
-      active_minutes: number;
-    }[];
-  }
+    useEffect(() => {
+        switch (title) {
+            case 'Totale Lisenser':
+                setStatus('active')
+                break;
+            case 'Uåpnede Lisenser':
+                setStatus('unused')
+                break;
+            case 'Ledige Lisenser':
+                setStatus('available')
+                break;
+            default:
+                break;
+        }
+        // Fetches distinct software names.
+        const fetchSoftwareNames = async () => {
+            if (status && storedOrganization) {
+                try {
+                    const data: string[] | undefined = await fetchSoftwareUsedInOrg(status, storedOrganization);
+                    if (data !== undefined) {
+                        setOrgSoftware(data);
+                    }
+                } catch (error) {
+                    console.error('Error fetching software names:', error);
+                }
+            }
+        };
 
-  const { title } = useParams();
-  const [licenses, setLicenses] = useState<LicenseData[]>([]);
+        fetchSoftwareNames();
+    }, [status]);
 
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (title === 'Totale Lisenser') {
-        const data: LicenseData[] | undefined = await fetchSoftwareUsers("IT-tjenesten"); //default
-        setLicenses(data || []);
-        console.log(data);
-      } else if (title === 'Aktive Lisenser') {
-        //TO-DO: Should be changed to Available licenses and add new view when pool is ready
-        //const data = dummyArray;
-        //setLicenses(data)
-      }else if (title === 'Allokerbare Lisenser') {
-        //TO-DO: Should be changed to Unused licenses and add new view when pool is ready
-        //const data = dummyArray;
-        //setLicenses(data)
-      }
+    useEffect(() => {
+        const fetchData = async () => {
+            if (status && storedOrganization) {
+                try {
+                    const data = await fetchInfoBoxLicense(currentPage, status as string, storedOrganization as string, searchTerm);
+                    data?.results && setData(data.results);
+                    data?.count && setCount(data.count);
+                } catch (error) {
+                    console.error('Error fetching license data:', error);
+                }
+            }
+
+        };
+        fetchData()
+
+    }, [searchTerm])
+
+    // Function that gets input from the searchBar component.
+    const handleChange = (term: string) => {
+        setSearchTerm(term);
+    }
+
+    const handlePageChange = async (page: number) => {
+        try {
+            const data = await fetchInfoBoxLicense(page, status as string, storedOrganization as string, searchTerm);
+            data?.results && setData(data.results);
+            setCurrentPage(page);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-    fetchData();
-  }, []);
+    return (
+        <div id={'licensepool_container'}
+             style={{display: 'flex', justifyContent: 'center', alignContent: "center", marginTop: "20px"}}>
+            <Grid container className='license_pool' justifyContent={"center"}>
+                <Grid container justifyContent="center" alignItems="center" className={'license_table'} width={"75%"}>
+                    <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
+                        <h2 style={{fontFamily: "Source Sans 3"}}> {title} i {storedOrganization}</h2>
+                        <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
+                        <OwnTable data={data}/>
+                        <Pagination
+                            count={Math.ceil(count / 10)}
+                            page={currentPage}
+                            onChange={(event, value) => handlePageChange(value)}
+                            color={"primary"}
+                        />
+                    </Stack>
 
-  return (
-    <div className="License-Info-Container">
-      <h1>{title}</h1>
-      {licenses.map((license, i) => (
-        <div key={i}>
-          <h2>{license.application_name}</h2>
-          <ul>
-            {license.users.map((user, j) => (
-              <li key={j}>
-                <div>{user.full_name}</div>
-                <div>{user.email}</div>
-                <div>{user.total_minutes}</div>
-                <div>{user.active_minutes}</div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
-  );
+
+                </Grid>
+            </Grid>
+        </div>)
 };
 
 export default LicenseInfo;
