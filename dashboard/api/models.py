@@ -71,6 +71,7 @@ class LicensePool(models.Model):
 
 
 class PoolRequest(models.Model):
+    objects = models.Manager()  # default manager
     primary_user_full_name = models.CharField(max_length=100)
     primary_user_email = models.EmailField()
     computer_name = models.CharField(max_length=100)

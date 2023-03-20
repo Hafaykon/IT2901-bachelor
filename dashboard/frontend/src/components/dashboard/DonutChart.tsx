@@ -14,7 +14,8 @@ type Props = {
     total_licenses: number,
     active_licenses: number,
     never_used: number,
-    unused_licenses: number
+    unused_licenses: number,
+    available_licenses: number,
 }
 
 function DonutChart(infoBoxData: Props) {
@@ -108,7 +109,7 @@ function DonutChart(infoBoxData: Props) {
                                     },
                                     {
                                         name: 'Ledig',
-                                        value: infoBoxData.unused_licenses ?? 1,
+                                        value: infoBoxData.available_licenses ?? 1,
                                         color: '#80ADD3',
                                         key: "test2"
                                     },
