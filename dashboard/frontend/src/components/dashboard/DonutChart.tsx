@@ -126,7 +126,6 @@ function DonutChart(infoBoxData: Props) {
                                         key: "test3"
                                     }
                                 ]}
-
                                 />
                             </Stack>
                         </CardContent>
