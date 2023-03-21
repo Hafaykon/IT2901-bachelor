@@ -41,9 +41,9 @@ function Dashboard() {
                 <div id="body">
                     <Grid container id='boxes'>
                         <Grid container className={'org_info'} justifyContent={"flex-end"} alignContent={"flex-end"}>
-                            <Stack direction="row">
+                            <Stack direction="row" sx={{width: "100%"}} id='headline' spacing={75}>
+                                <h2 id={"organization"}>{org}</h2>
                                 <a href="/lisensportal" id="portal-link">
-
                                     Til lisensportalen
                                     <LogoutOutlinedIcon style={{alignContent: "center"}}/>
                                 </a>
@@ -56,7 +56,7 @@ function Dashboard() {
                                     numberOfLicenses={boxData[0]?.total_licenses ?? 0}
                                 />
                                 <InfoBox
-                                    title="Ubrukte Lisenser"
+                                    title="Uåpnede Lisenser"
                                     numberOfLicenses={boxData[0]?.never_used ?? 0}
                                 />
                                 <InfoBox

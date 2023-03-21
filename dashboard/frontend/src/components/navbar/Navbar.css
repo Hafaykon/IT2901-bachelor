@@ -1,18 +1,6 @@
 img {
     width: 350px;
     height: 65px;
-   
-    
-    
-    
-}
-
-#logoTrondheim {
-   
-
-   
-   
-
 }
 
 #navBar {
@@ -26,8 +14,6 @@ img {
     text-align: center;
     display: flex;
     justify-content: center;
-    
-    
     z-index: 9;
   }
   
@@ -35,15 +21,8 @@ img {
      padding-left: 620px;
       color: #313233 ;
       
-      
   }
 
-  .menu-bars {
-    
-
-    
-  }
-  
   .nav-menu { 
     background-color: #ffffff;
     width: 400px;
@@ -73,7 +52,7 @@ img {
 .nav-text a {
     text-decoration: none;
     color: black;
-    font-family: 'Source Sans 3', sans-serif;
+    font-family: Source Sans Pro,sans-serif;
     font-size: 25px;
     width: 95%;
     height: 100%;
@@ -90,7 +69,6 @@ img {
 
 .nav-menu-items {
     width: 100%;
-    
   }
   
   .navbar-toggle {

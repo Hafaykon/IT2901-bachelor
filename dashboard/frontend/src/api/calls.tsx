@@ -112,11 +112,19 @@ export const fetchPoolData = async (software?: string, org?: string) => {
             url = `${url}?organization=${org}`;
         }
         const response = await fetch(url);
-        return await response.json();
+        if (response.ok) {
+            const data = await response.json();
+            return {data, error: false, message: ''};
+        } else {
+            const errorData = await response.json();
+            return {data: [], error: true, message: errorData.error};
+        }
     } catch (error) {
         console.log(error);
+        return {data: [], error: true, message: 'An error occurred while fetching data.'};
     }
 };
+
 
 export const fetchInfoBoxLicense = async ( page: number, status: string, org?: string, software?: string) => {
     try {
