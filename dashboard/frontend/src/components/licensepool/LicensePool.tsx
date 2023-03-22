@@ -66,6 +66,7 @@ function LicensePool() {
                 } else {
                     setData(results);
                     setCount(count);
+                    console.log(data)
                 }
             } catch (error) {
                 console.error('Error fetching license data:', error);

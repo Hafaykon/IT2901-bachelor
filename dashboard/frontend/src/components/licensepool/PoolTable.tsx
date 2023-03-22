@@ -15,15 +15,16 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {LicensePoolData} from '../../Interfaces';
 import BuyButton from "./BuyButton";
-import Pagination from '@mui/material/Pagination';
 
 
 interface RowProps {
     row: LicensePoolData;
+    appName: string;
+    organization: string;
 }
 
 function Row(props: RowProps) {
-    const {row} = props;
+    const {row, appName, organization} = props;
     const [open, setOpen] = React.useState(false);
 
     return (
@@ -87,9 +88,14 @@ function Row(props: RowProps) {
                                                 </div>
                                             </TableCell>
                                             <TableCell>{detailRow.last_used ?? 'Ikke registrert'}</TableCell>
-                                            <TableCell> <BuyButton id={detailRow.id}
-                                                                   full_name={detailRow.full_name}/> </TableCell>
-
+                                            <TableCell>
+                                                <BuyButton
+                                                    id={detailRow.id}
+                                                    full_name={detailRow.full_name}
+                                                    appName={appName}
+                                                    organization={organization}
+                                                />
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -113,15 +119,10 @@ export default function PoolTable({
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
 
-
-// Rest of the component code
-
-
     useEffect(() => {
         if ((software.length) > 0) {
             setLoaded(true);
         }
-
     }, [software]);
 
     return (
@@ -145,7 +146,12 @@ export default function PoolTable({
                             </TableHead>
                             <TableBody>
                                 {software.map((user, index) => (
-                                    <Row key={index} row={user}/>
+                                    <Row
+                                        key={index}
+                                        row={user}
+                                        appName={user.application_name}
+                                        organization={user.organization}
+                                    />
                                 ))}
                             </TableBody>
                         </Table>
@@ -155,3 +161,6 @@ export default function PoolTable({
         </>
     );
 }
+
+
+

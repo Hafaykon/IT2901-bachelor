@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useLocation, useParams} from 'react-router-dom';
 import {fetchInfoBoxLicense, fetchPoolData, fetchSoftwareUsedInOrg} from '../api/calls';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
 import {LicensePoolData, OwnOrgData} from "../Interfaces";
@@ -11,12 +11,15 @@ import PoolTable from "./licensepool/PoolTable";
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
     const {title} = useParams();
+
     const [data, setData] = useState<OwnOrgData[] & LicensePoolData[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>();
     const [orgSoftware, setOrgSoftware] = useState<string[]>([]);
     const [status, setStatus] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [count, setCount] = useState<number>(0);
+    const location = useLocation();
+
 
     useEffect(() => {
         switch (title) {
@@ -59,7 +62,7 @@ const LicenseInfo: React.FC = () => {
                         data?.results && setData(data.results);
                         data?.count && setCount(data.count);
                     } else if (status === 'available') {
-                        const data = await fetchPoolData(currentPage, searchTerm, storedOrganization as string) ;
+                        const data = await fetchPoolData(currentPage, searchTerm, storedOrganization as string);
                         data?.results && setData(data.results);
                     }
                 } catch (error) {
@@ -69,6 +72,15 @@ const LicenseInfo: React.FC = () => {
         };
         fetchData();
     }, [searchTerm, currentPage, status]);
+
+    useEffect(() => {
+        const searchParams = new URLSearchParams(location.search);
+        const appName = searchParams.get('search');
+        console.log(appName);
+        if (appName) {
+            setSearchTerm(appName);
+        }
+    }, [location.search]);
 
     // Function that gets input from the searchBar component.
     const handleChange = (term: string) => {

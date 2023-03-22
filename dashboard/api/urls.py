@@ -20,6 +20,8 @@ urlpatterns = [
     path('pool/update/<int:id>/', UpdatePoolObject.as_view(),
          name='software_per_computer_detail'),
     path('pool/create', views.CreatePoolObject.as_view(), name='create_pool_object'),
+    path('pool/check/', views.check_if_unused, name='check_unused'),
     path('licenseinfo/', LicenseInfoView.as_view(), name='licenseinfo'),
+
 
 ]

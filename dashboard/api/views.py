@@ -254,7 +254,7 @@ def get_sorted_df_of_unused_licenses(software_data):
     :param software_data: The software data object you want to work with
     :return: A sorted dataframe of all the software that haven't been used the las 90 days
     """
-    df = pd.DataFrame(list(software_data))
+    df = pd.DataFrame.from_records(software_data.values())
     now = dt.datetime.now()
     three_months_ago = now - dt.timedelta(days=90)
     df = df[df['last_used'].notnull()]  # Filter out None values in the 'last_used' column
@@ -281,7 +281,7 @@ class LicenseInfoView(generics.ListAPIView):
         if not status:
             raise ParseError("The 'status' parameter is required.")
 
-        threshold_date = datetime.now() - timedelta(days=120)
+        threshold_date = datetime.now() - timedelta(days=90)
 
         queryset = self.queryset.filter(
             license_required=True,
@@ -291,9 +291,8 @@ class LicenseInfoView(generics.ListAPIView):
         if application_name:
             queryset = queryset.filter(application_name=application_name)
 
-        elif status == 'unused':
+        if status == 'unused':
             queryset = queryset.filter(last_used__isnull=True)
-        print(len(queryset))
         return queryset
 
     def list(self, request, *args, **kwargs):
@@ -345,7 +344,7 @@ def get_organization_software(request, format=None):
         if application_status == 'unused':
             software = software.filter(last_used__isnull=True)
 
-        #elif application_status == 'active':
+        # elif application_status == 'active':
         #    software = software.filter(last_used__isnull=False, last_used__gte=threshold_date)
 
         if organization:
@@ -446,3 +445,23 @@ class CreatePoolObject(generics.CreateAPIView):
     """
     queryset = LicensePool.objects.all()
     serializer_class = PoolSerializer
+
+
+@api_view(['GET'])
+def check_if_unused(request):
+    """
+    Checks if the given application_name is unused before a potential new license is bought.
+    """
+    organization = request.GET.get('organization', None)
+    application_name = request.GET.get('application_name', None)
+    try:
+        software = SoftwarePerComputer.objects.all().filter(license_required=True, license_suite_names__isnull=True,
+                                                            organization=organization, last_used__isnull=True,
+                                                            application_name=application_name)
+
+        if software.count() == 0:
+            return Response({"unused": False, "count": 0})
+        else:
+            return Response({"unused": True, "count": software.count()})
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

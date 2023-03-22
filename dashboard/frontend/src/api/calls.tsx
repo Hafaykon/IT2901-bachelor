@@ -164,6 +164,23 @@ export const fetchSoftwareUsedInOrg = async (status: string, organization?: stri
     }
 };
 
+export const checkIfOrgHasSoftware = async (software: string, org: string) => {
+    try {
+        const url = `http://127.0.0.1:8000/api/pool/check/?application_name=${software}&organization=${org}`;
+        const response = await fetch(url);
+        if (response.ok) {
+            const data = await response.json();
+            return {unused: data.unused, count: data.count, error: false, message: ''};
+        } else {
+            const errorData = await response.json();
+            return {unused: false, count: 0, error: true, message: errorData.error};
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 
 export default {
     fetchOrganizations,
@@ -173,6 +190,7 @@ export default {
     fetchLicensesAssociatedWithUser,
     fetchOrgSoftwareByName,
     fetchInfoBoxData,
-    fetchPoolData
+    fetchPoolData,
+    checkIfOrgHasSoftware
 
 };
