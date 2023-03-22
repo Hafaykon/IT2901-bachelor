@@ -1,23 +1,19 @@
 import datetime as dt
+from collections import defaultdict
 from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
 from django_pandas.io import read_frame
-
-
-from django.core.exceptions import ObjectDoesNotExist
-from django.core.paginator import Paginator
-
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
-from rest_framework.exceptions import NotFound, APIException
+from rest_framework.exceptions import NotFound
 from rest_framework.exceptions import ParseError
-from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
 
-from .models import SoftwarePerComputer
-from .serializers import SoftwarePerComputerSerializer
+from .models import PoolRequest, LicensePool, SoftwarePerComputer
+from .serializers import PoolSerializer, SoftwarePerComputerSerializer, PoolRequestSerializer
 
 
 # Create your views here.
@@ -33,41 +29,6 @@ def get_organizations(request, format=None):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     return Response(organizations)
-
-
-@api_view(['GET'])
-def get_primary_user_full_name(request, format=None):
-    """
-    :return: Returns a list of users with their full name.
-    """
-    users = SoftwarePerComputer.objects.filter(primary_user_full_name__isnull=False).values_list(
-        'primary_user_full_name', flat=True).distinct()
-    return Response(users)
-
-
-# @api_view(['GET'])
-# def get_primary_user_email(request, format=None):
-#     """
-#     :return: Returns a list of emails.
-#     """
-#     emails = SoftwarePerComputer.objects.filter(primary_user_email__isnull=False).values_list('primary_user_email',
-#                                                                                               flat=True).distinct()
-#     return Response(emails)
-
-class GetPrimaryUserEmailView(generics.ListAPIView):
-    serializer_class = SoftwarePerComputerSerializer
-
-    def get_queryset(self):
-        emails = SoftwarePerComputer.objects.filter(
-            primary_user_email__isnull=False
-        ).values_list(
-            'primary_user_email', flat=True
-        ).distinct()
-        return emails
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        return Response(queryset)
 
 
 @api_view(['GET'])
@@ -234,9 +195,9 @@ def get_org_software_users_by_name(request, format=None):
         for i, row in group.iterrows():
             details.append({
                 "id": row["id"],
-                "full_name": row["primary_user_full_name"],
+                "primary_user_full_name": row["primary_user_full_name"],
                 "computer_name": row["computer_name"],
-                "email": row["primary_user_email"],
+                "primary_user_email": row["primary_user_email"],
                 "total_minutes": row["total_minutes"],
                 "active_minutes": row["active_minutes"],
             })
@@ -255,6 +216,7 @@ def software_counts(request):
         organization = request.GET.get('organization', None)
         if not organization:
             raise ParseError("No organization provided")
+
         software = SoftwarePerComputer.objects.filter(
             organization=organization
         ).values('last_used', 'license_required')
@@ -271,12 +233,14 @@ def software_counts(request):
         unused_software = len(df)
         # Count of active licenses
         active_licenses = total_licenses - unused_software - never_used
+        available_licenses = LicensePool.objects.filter(organization=organization).count()
 
         counts = {
             'total_licenses': total_licenses,
             'active_licenses': active_licenses,
             'never_used': never_used,
             'unused_licenses': unused_software,
+            'available_licenses': available_licenses
         }
         return Response(counts)
     except Exception as e:
@@ -312,8 +276,6 @@ class LicenseInfoView(generics.ListAPIView):
         organization = self.request.query_params.get('organization')
         status = self.request.query_params.get('status')
 
-        if not application_name:
-            raise ParseError("The 'application_name' parameter is required.")
         if not organization:
             raise ParseError("The 'organization' parameter is required.")
         if not status:
@@ -322,26 +284,16 @@ class LicenseInfoView(generics.ListAPIView):
         threshold_date = datetime.now() - timedelta(days=120)
 
         queryset = self.queryset.filter(
-            application_name=application_name,
             license_required=True,
             license_suite_names__isnull=True,
             organization=organization,
         )
-
-        status_value = None
-        if status == 'active':
-            queryset = queryset.filter(last_used__gte=threshold_date)
-            status_value = "Aktiv"
+        if application_name:
+            queryset = queryset.filter(application_name=application_name)
 
         elif status == 'unused':
             queryset = queryset.filter(last_used__isnull=True)
-            status_value = 'Ikke brukt'
-
-        elif status == 'available':
-            pass
-            # TODO: Fetch data from license pool
-            status_value = 'Ledig'
-
+        print(len(queryset))
         return queryset
 
     def list(self, request, *args, **kwargs):
@@ -358,7 +310,6 @@ class LicenseInfoView(generics.ListAPIView):
 
         result = grouped_df.to_dict('records')
 
-        status_value = None
         if 'status' in self.request.query_params:
             status_value = self.request.query_params.get('status')
             for item in result:
@@ -370,99 +321,128 @@ class LicenseInfoView(generics.ListAPIView):
 
 
 @api_view(['GET'])
-def get_license_pool(request, format=None):
-    """
-    :param request: A GET request with 'application_name' and 'organization' as parameters.
-    :return: Returns a list containing software licenses from the license pool.
-    """
-    try:
-        application_name = request.GET.get('application_name', None)
-        organization = request.GET.get('organization', None)
-
-        if not application_name:
-            software = SoftwarePerComputer.objects.filter(application_name__isnull=False,
-                                                          license_required=True, license_suite_names__isnull=True)
-            software = software[0:10]
-        else:
-            software = SoftwarePerComputer.objects.filter(application_name=application_name,
-                                                          license_required=True, license_suite_names__isnull=True)
-
-        if organization:
-            software = software.filter(organization=organization)
-
-        software_df = pd.DataFrame.from_records(software.values())
-
-        if software_df.empty:
-            raise NotFound("No software found for the given parameters.")
-
-        # Sort by "active_minutes" column, moving null values to the end
-        sorted_group = software_df.sort_values(by='active_minutes', ascending=True, na_position='last')
-
-        # Group by organization
-        groups = sorted_group.groupby('organization')
-
-        result = []
-        for org, group in groups:
-            details = []
-            for i, row in group.iterrows():
-                application = row["application_name"]
-                details.append({
-                    "id": row["id"],
-                    "full_name": row["primary_user_full_name"],
-                    "computer_name": row["computer_name"],
-                    "email": row["primary_user_email"],
-                    "last_used": row["last_used"],
-                    "family": row["family"],
-                    "family_version": row["family_version"],
-                    "family_edition": row["family_edition"],
-                })
-            result.append({
-                "application_name": application_name if application_name else application,
-                "organization": org,
-                "details": details
-            })
-        return Response(result)
-
-    except ParseError as e:
-        return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
-    except NotFound as e:
-        return Response({"error": str(e)}, status=status.HTTP_404_NOT_FOUND)
-
-    except Exception as e:
-        raise APIException(str(e))
-
-
-@api_view(['GET'])
 def get_organization_software(request, format=None):
     """
     :param request: A GET request with an optional 'organization' parameter.
     :return: Returns a list of all distinct software used.
     """
     organization = request.GET.get('organization', None)
-    status = request.GET.get('status', None)
+    application_status = request.GET.get('status', None)
 
-    #if not organization:
-    #    raise ParseError("Organization parameter is required.")
-    if not status:
+    if not application_status:
         raise ParseError("status parameter is required.")
 
     # Get the date 90 days ago
     threshold_date = datetime.now() - timedelta(days=90)
 
     try:
-        software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
-        software = software.filter(license_required=True, license_suite_names__isnull=True)
+        if application_status == 'available':
+            software = LicensePool.objects.values_list('application_name', flat=True).distinct()
+        else:
+            software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
+            software = software.filter(license_required=True, license_suite_names__isnull=True)
+
+        if application_status == 'unused':
+            software = software.filter(last_used__isnull=True)
+
+        #elif application_status == 'active':
+        #    software = software.filter(last_used__isnull=False, last_used__gte=threshold_date)
+
         if organization:
             software = software.filter(organization=organization)
-
-        if status == 'unused':
-            software = software.filter(last_used__isnull=True)
-        elif status == 'active':
-            software = software.filter(last_used__isnull=False, last_used__gte=threshold_date)
+        if len(software) == 0:
+            return Response([])
 
         software = sorted(software)
 
         return Response(software)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetLicensePool(generics.ListAPIView):
+    """
+    Returns a list of all licenses in the license pool.
+    parameters: application_name, organization
+    """
+    serializer_class = PoolSerializer
+    queryset = LicensePool.objects.all()
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        queryset = LicensePool.objects.all().order_by('application_name')
+        application_name = self.request.GET.get('application_name', None)
+        organization = self.request.GET.get('organization', None)
+
+        if application_name:
+            if application_name in LicensePool.objects.values_list('application_name', flat=True).distinct():
+                queryset = queryset.filter(application_name=application_name)
+            else:
+                raise NotFound("The given application name does not exist.")
+        if organization:
+            if organization in LicensePool.objects.values_list('organization', flat=True).distinct():
+                queryset = queryset.filter(organization=organization)
+            else:
+                raise NotFound("The given organization does not exist.")
+        return queryset
+
+    def aggregate_data(self, data):
+        aggregated_data = defaultdict(list)
+
+        for record in data:
+            key = (record['application_name'], record['organization'])
+            aggregated_data[key].append(record)
+
+        result = []
+        for (application, organization), details in aggregated_data.items():
+            result.append({
+                'application_name': application,
+                'organization': organization,
+                'details': details,
+            })
+
+        return result
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            aggregated_data = self.aggregate_data(serializer.data)
+            return self.get_paginated_response(aggregated_data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        aggregated_data = self.aggregate_data(serializer.data)
+
+        return Response(aggregated_data)
+
+
+@api_view(['GET'])
+def get_pool_requests(request):
+    organization = request.query_params.get('organization', None)
+
+    pool_req = PoolRequest.objects.all()
+    if organization:
+        req_data = PoolRequest.objects.filter(contact_organization=organization)
+    else:
+        req_data = PoolRequest.objects.all()
+
+    serialize_request = PoolRequestSerializer(req_data, many=True)
+    return Response(serialize_request.data)
+
+
+class UpdatePoolObject(generics.RetrieveUpdateDestroyAPIView):
+    """
+    Retrieve, update or delete a license pool object.
+    """
+    queryset = LicensePool.objects.all()
+    serializer_class = PoolSerializer
+    lookup_field = 'id'
+
+
+class CreatePoolObject(generics.CreateAPIView):
+    """
+    Create a new object in the license pool.
+    """
+    queryset = LicensePool.objects.all()
+    serializer_class = PoolSerializer

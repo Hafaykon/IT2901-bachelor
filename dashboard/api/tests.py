@@ -1,9 +1,13 @@
+import json
+
 from django.test import RequestFactory, TestCase, Client
 from django.urls import include, path, reverse
+from rest_framework import status
 from rest_framework.test import APIRequestFactory, APITestCase
 from .views import get_organizations
-from .models import SoftwarePerComputer
+from .models import SoftwarePerComputer, LicensePool
 import datetime
+
 
 # Create your tests here.
 class TestViews(APITestCase):
@@ -109,6 +113,28 @@ class TestViews(APITestCase):
             primary_user_full_name='My User',
             primary_user_email='myuser@example.com'
         )
+        LicensePool.objects.create(
+            id='19',
+            primary_user_full_name='My User',
+            primary_user_email='myuser@example.com',
+            computer_name='mycomputer',
+            application_name='Spotify',
+            family='myfamily',
+            family_version='1.0',
+            family_edition='Standard',
+            organization='IT-tjenesten'
+        )
+        self.LicensePool = {
+            'id': '19',
+            "primary_user_full_name": 'My User',
+            "primary_user_email": 'myuser@example.com',
+            "computer_name": 'mycomputer',
+            "application_name": 'Spotify',
+            "family": 'myfamily',
+            "family_version": '1.0',
+            "family_edition": 'Standard',
+            "organization": 'IT-tjeneste'
+        }
 
     def test_get_organizations_view(self):
         """
@@ -255,17 +281,17 @@ class TestViews(APITestCase):
         response = self.client.get(url)
         last_used = datetime.date(2022, 2, 1)
         expected_software = [{'application_name': 'Hovedtillitsvalgte',
-                               'data': [{'Active Minutes': 500,
-                                         'Computer name': 'mycomputer',
-                                         'Last used': last_used,
-                                         'Total Minutes': 1000,
-                                         'Username': 'My User'}]},
-                              {'application_name': 'myapplication',
-                               'data': [{'Active Minutes': 500,
-                                         'Computer name': 'mycomputer',
-                                         'Last used': last_used,
-                                         'Total Minutes': 1000,
-                                         'Username': 'My User'}]}]
+                              'data': [{'Active Minutes': 500,
+                                        'Computer name': 'mycomputer',
+                                        'Last used': last_used,
+                                        'Total Minutes': 1000,
+                                        'Username': 'My User'}]},
+                             {'application_name': 'myapplication',
+                              'data': [{'Active Minutes': 500,
+                                        'Computer name': 'mycomputer',
+                                        'Last used': last_used,
+                                        'Total Minutes': 1000,
+                                        'Username': 'My User'}]}]
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, expected_software)
@@ -281,3 +307,35 @@ class TestViews(APITestCase):
                             "where 1 have not been used the last 90 days."
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, expected_response)
+
+    def test_get_license_pool(self):
+        url = reverse("licensepool")
+        response_message = self.client.get(url)
+
+        response_message_data = response_message.data[0]
+        exp = {"id": '19', "primary_user_full_name": "My User", "primary_user_email": "myuser@example.com",
+               "organization": "IT-tjenesten", "application_name": "Spotify", "family": 'myfamily',
+               "family_version": '1.0',
+               "family_edition": 'Standard', "computer_name": "mycomputer"}
+        self.assertEqual(str(response_message_data['id']), exp['id'])
+        self.assertEqual(response_message_data['primary_user_full_name'], exp['primary_user_full_name'])
+        self.assertEqual(response_message_data['primary_user_email'], exp['primary_user_email'])
+        self.assertEqual(response_message_data['organization'], exp['organization'])
+        self.assertEqual(response_message_data['application_name'], exp['application_name'])
+        self.assertEqual(response_message_data['family'], exp['family'])
+        self.assertEqual(response_message_data['family_version'], exp['family_version'])
+        self.assertEqual(response_message_data['family_edition'], exp['family_edition'])
+        self.assertEqual(response_message_data['computer_name'], exp['computer_name'])
+        self.assertEqual(response_message.status_code, 200)
+
+    def test_insert_to_pool(self):
+        url = reverse("insert")
+        response_message = self.client.post(url, data=json.dumps(self.LicensePool), content_type='application/json')
+        self.assertEqual(response_message.status_code, 200)
+        self.assertEqual(response_message.content.decode('utf-8'), '"My User"')
+
+    """def test_delete_from_license_pool(self):
+        url = reverse("delete_from_license_pool", args=[self.LicensePool.id])
+        resp = self.client.delete(url)
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+"""
