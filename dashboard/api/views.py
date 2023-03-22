@@ -16,8 +16,8 @@ from rest_framework.exceptions import ParseError
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
 
-from .models import SoftwarePerComputer
-from .serializers import SoftwarePerComputerSerializer
+from .models import SoftwarePerComputer, Licenses
+from .serializers import SoftwarePerComputerSerializer, LicensesSerializer
 
 
 # Create your views here.
@@ -464,5 +464,20 @@ def get_organization_software(request, format=None):
         software = sorted(software)
 
         return Response(software)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_software_price(request, format=None):
+    try:
+        application_name = request.GET.get('application_name', None)
+        if not application_name:
+            raise ParseError("application_name is required.")
+        software = Licenses.objects.values_list('purchase_price', flat=True).distinct()
+        price = software.filter(application_name=application_name, quantity=1) #for test: 'Microsoft Office 2021 Excel'
+        price = np.median(price)
+
+        return Response(price)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

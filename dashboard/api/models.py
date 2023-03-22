@@ -55,3 +55,23 @@ class SoftwarePerComputer(models.Model):
     primary_user = models.CharField(max_length=100)
     primary_user_full_name = models.CharField(max_length=100)
     primary_user_email = models.EmailField()
+
+
+class Licenses(models.Model):
+    """
+    Model for the csv file Licenses.csv
+    """
+    objects = models.Manager()  # default manager
+    purchase_date = models.DateField()
+    invoice_number = models.IntegerField()
+    application_name = models.CharField(max_length=100)
+    organization = models.CharField(max_length=100)
+    contract_name = models.CharField(max_length=100)
+    license_type = models.CharField(max_length=100)
+    status = models.CharField(max_length=100)
+    quantity = models.IntegerField()
+    notes = models.CharField(max_length=100)
+    connector = models.BooleanField()
+    contract_number = models.CharField(max_length=100)
+    license_id = models.IntegerField(primary_key=True, serialize=True)
+    purchase_price = models.FloatField()
