@@ -163,6 +163,18 @@ export const fetchSoftwareUsedInOrg = async (status: string, organization?: stri
     }
 };
 
+export const fetchSoftwarePrice = async (application: string) => {
+    try {
+        let url = `http://127.0.0.1:8000/api/price/?application=${application}`;
+
+        const response = await fetch(url);
+        const data = await response.json();
+        return[data]
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 
 export default {
     fetchOrganizations,
@@ -172,6 +184,7 @@ export default {
     fetchLicensesAssociatedWithUser,
     fetchOrgSoftwareByName,
     fetchInfoBoxData,
-    fetchPoolData
+    fetchPoolData,
+    fetchSoftwarePrice
 
 };
