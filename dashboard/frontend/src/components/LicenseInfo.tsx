@@ -49,9 +49,10 @@ const LicenseInfo: React.FC = () => {
     }, [status]);
 
 
-    useEffect(() => {
+useEffect(() => {
         const fetchData = async () => {
             if (status && storedOrganization) {
+                console.log(status)
                 try {
                     const data = await fetchInfoBoxLicense(currentPage, status as string, storedOrganization as string, searchTerm);
                     data?.results && setData(data.results);
@@ -60,26 +61,20 @@ const LicenseInfo: React.FC = () => {
                     console.error('Error fetching license data:', error);
                 }
             }
-
         };
-        fetchData()
+        fetchData();
+    }, [searchTerm, currentPage, status]);
 
-    }, [searchTerm])
 
     // Function that gets input from the searchBar component.
     const handleChange = (term: string) => {
         setSearchTerm(term);
     }
 
-    const handlePageChange = async (page: number) => {
-        try {
-            const data = await fetchInfoBoxLicense(page, status as string, storedOrganization as string, searchTerm);
-            data?.results && setData(data.results);
-            setCurrentPage(page);
-        } catch (error) {
-            console.log(error);
-        }
+    const handlePageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
+        setCurrentPage(value);
     };
+
 
     return (
         <div id={'licensepool_container'}
@@ -93,7 +88,7 @@ const LicenseInfo: React.FC = () => {
                         <Pagination
                             count={Math.ceil(count / 10)}
                             page={currentPage}
-                            onChange={(event, value) => handlePageChange(value)}
+                            onChange={handlePageChange}
                             color={"primary"}
                         />
                     </Stack>
