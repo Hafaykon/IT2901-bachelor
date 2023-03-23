@@ -8,6 +8,7 @@ import FAQ from './pages/FAQ';
 import Home from './pages/Home';
 import Navbar from './components/navbar/Navbar';
 import Licenses from './pages/Licenses';
+import { Leaderboard } from './components/leaderboard/Leaderboard';
 
 function App() {
 
@@ -20,6 +21,7 @@ function App() {
                 <Route path="/licenses/:title" element={<LicenseInfo/>}/>
                 <Route path="/lisensportal" element={<Licenses/>}/>
                 <Route path="/FAQ" element={<FAQ/>}/>
+                <Route path='/leaderboard' element={<Leaderboard/>}/>
             </Routes>
         </RecoilRoot>
     );

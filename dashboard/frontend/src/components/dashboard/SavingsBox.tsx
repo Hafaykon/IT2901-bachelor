@@ -7,7 +7,7 @@ export function SavingsBox() {
     const navigate = useNavigate();
 
     const handleCardClick = () => {
-        navigate(`/licenses/Totale Lisenser`);
+        navigate(`/leaderboard`);
 
     };
 
