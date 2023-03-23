@@ -29,8 +29,8 @@ const rows: IRow[] = [
 
 function MyPageTable() {
   return (
-    <TableContainer component={Paper} sx={{ borderRadius: '12px' }}>
-      <Table sx={{ minWidth: 650 }} aria-label="simple table">
+    <TableContainer component={Paper} sx={{ borderRadius: '12px', width: 600}}>
+      <Table sx={{ minWidth: 400 }}  aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontWeight: 'bold' }}>Lisensnavn</TableCell>
