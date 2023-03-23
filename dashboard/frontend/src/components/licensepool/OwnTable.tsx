@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -15,7 +15,14 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {OwnOrgData} from '../../Interfaces';
 import ReleaseButton from "./ReleaseButton";
+import fetchdata from '../LicenseInfo';
 
+const handleSorting = (title: string) => {
+    //window.location.reload()
+    //fetchdata
+    //console.log(e.target.textContent)
+    return testerinooo
+}
 
 interface RowProps {
     row: OwnOrgData;
@@ -24,6 +31,7 @@ interface RowProps {
 function Row(props: RowProps) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
+
 
     return (
         <React.Fragment>
@@ -110,10 +118,13 @@ export default function OwnTable({
                 <TableHead>
                     <TableRow>
                         <TableCell/>
-                        <TableCell><b>Lisensnavn</b></TableCell>
-                        <TableCell align={"left"}><b>Bruker</b></TableCell>
-                        <TableCell align={"left"}><b>Løpenummer</b></TableCell>
-                        <TableCell align={"left"}><b>Status</b></TableCell>
+                        <TableCell onClick={handleSorting("application_name")}><b>Lisensnavn</b></TableCell>
+                        <TableCell onClick={handleSorting("primary_user_full_name")}
+                                   align={"left"}><b>Bruker</b></TableCell>
+                        <TableCell onClick={handleSorting("computer_name")}
+                                   align={"left"}><b>Løpenummer</b></TableCell>
+                        <TableCell onClick={handleSorting("satus")}
+                                   align={"left"}><b>Status</b></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

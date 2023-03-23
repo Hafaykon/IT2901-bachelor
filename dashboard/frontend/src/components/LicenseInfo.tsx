@@ -16,6 +16,7 @@ const LicenseInfo: React.FC = () => {
     const [status, setStatus] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [count, setCount] = useState<number>(0);
+    const [sortBy, setSortBy] = useState<string>('application_name')
 
     useEffect(() => {
         switch (title) {
@@ -54,7 +55,8 @@ useEffect(() => {
             if (status && storedOrganization) {
                 console.log(status)
                 try {
-                    const data = await fetchInfoBoxLicense(currentPage, status as string, storedOrganization as string, searchTerm);
+                    const data = await fetchInfoBoxLicense(currentPage, status as string,
+                        sortBy as string, storedOrganization as string, searchTerm);
                     data?.results && setData(data.results);
                     data?.count && setCount(data.count);
                 } catch (error) {
