@@ -18,5 +18,6 @@ urlpatterns = [
     path('count', views.software_counts, name='software_counts'),
     path('pool/', views.get_license_pool, name='pool'),
     path('licenseinfo/', LicenseInfoView.as_view(), name='licenseinfo'),
+    path('users/', views.get_users.as_view(), name='user'),
 
 ]
