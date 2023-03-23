@@ -17,7 +17,7 @@ function App() {
             <Routes>
                 <Route path="/" element={<Home/>}/>
                 <Route path="/minside" element={<MyPage/>}/>
-                <Route path="/licenses/:title" element={<LicenseInfo/>}/>
+                <Route path="/:title" element={<LicenseInfo/>}/>
                 <Route path="/lisensportal" element={<Licenses/>}/>
                 <Route path="/FAQ" element={<FAQ/>}/>
             </Routes>

@@ -12,17 +12,16 @@ function InfoBox({title, numberOfLicenses}: InfoBoxProps) {
     const navigate = useNavigate();
 
     const handleCardClick = () => {
-        navigate(`/licenses/${title}`);
-        navigate(`/licenses/${title}`);
+        navigate(`/${title}`);
+        navigate(`/${title}`);
     };
 
-  let info = "";
-  {
-    {title=="Totale Lisenser" ?  info = 'Totale lisenser er alle lisenser du har tilgjengelig i enheten din.':
-    title=="Uåpnede Lisenser" ? info = 'Uåpnede lisenser er lisenser for programvare som aldri har blitt åpnet.' : 
-    info = 'Ledige lisenser er lisenser for programvare som ikke har blitt åpnet på 90 dager.'}
-  }
-
+    let info = "";
+    {
+      {title=="Totale Lisenser" ?  info = 'Totale lisenser er alle lisenser du har tilgjengelig i enheten din.':
+      title=="Ubrukte Lisenser" ? info = 'Ubrukte lisenser er lisenser for programvare som aldri har blitt åpnet.' : 
+      info = 'Ledige lisenser er lisenser for programvare som ikke har blitt åpnet på 90 dager.'}
+    }
 
     return (
         <Card sx={{ width: 300, height: 180}} data-testid="infoBox-test">

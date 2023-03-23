@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import './Dashboard.css';
-import {Grid, Stack} from '@mui/material';
+import {Grid, Stack, Typography} from '@mui/material';
 import InfoBox from './InfoBox';
 import DonutChart from './DonutChart';
+import ActiveLastBreadcrumb from '../ActivateLastBreadcrumb';
 import {SavingsBox} from './SavingsBox';
 import {useRecoilValue} from 'recoil';
 import {orgAtom} from '../../globalVariables/variables';
@@ -38,17 +39,24 @@ function Dashboard() {
     return (
         <>
             {boxData ? (
-                <div id="body">
-                    <Grid container id='boxes'>
-                        <Grid container className={'org_info'} justifyContent={"flex-end"} alignContent={"flex-end"}>
-                            <Stack direction="row">
-                                <a href="/lisensportal" id="portal-link">
-
-                                    Til lisensportalen
-                                    <LogoutOutlinedIcon style={{alignContent: "center"}}/>
-                                </a>
-                            </Stack>
-                        </Grid>
+                <div className={'body'}>
+                    <Grid container id='header'>
+                        <Stack spacing={2}>
+                            <ActiveLastBreadcrumb />
+                            <Grid container>
+                                <Stack direction="row">
+                                    <Typography className={'org_name'} sx={{fontSize: 30}}>{storedOrganization}</Typography>
+                                    <Stack direction="row">
+                                        <a href="/lisensportal" id="portal-link">
+                                            Til lisensportalen
+                                            <LogoutOutlinedIcon style={{alignContent: "center"}}/>
+                                        </a>
+                                    </Stack>
+                                </Stack>
+                            </Grid>
+                        </Stack>
+                    </Grid>
+                    <Grid container id="boxes">
                         <Grid item>
                             <Stack direction="row" spacing={8}>
                                 <InfoBox
@@ -56,7 +64,7 @@ function Dashboard() {
                                     numberOfLicenses={boxData[0]?.total_licenses ?? 0}
                                 />
                                 <InfoBox
-                                    title="Uåpnede Lisenser"
+                                    title="Ubrukte Lisenser"
                                     numberOfLicenses={boxData[0]?.never_used ?? 0}
                                 />
                                 <InfoBox
@@ -65,6 +73,8 @@ function Dashboard() {
                                 />
                             </Stack>
                         </Grid>
+                    </Grid>
+                    <Grid container id="boxes">
                         <Grid container id={'donut_chart'}>
                             <DonutChart never_used={boxData[0].never_used} total_licenses={boxData[0].total_licenses}
                                         unused_licenses={boxData[0].unused_licenses}

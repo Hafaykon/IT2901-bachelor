@@ -36,7 +36,7 @@ describe('Testing render, DonutChart', () => {
     expect(screen.getByTestId('donutChart')).toBeInTheDocument();
     expect(screen.getByText('Aktiv')).toBeInTheDocument();
     expect(screen.getByText('Ledig')).toBeInTheDocument();
-    expect(screen.getByText('Uåpnet')).toBeInTheDocument();
+    expect(screen.getByText('Ubrukt')).toBeInTheDocument();
   });
 
   it('renders tooltip when hovering over HelpIcon',async () => {

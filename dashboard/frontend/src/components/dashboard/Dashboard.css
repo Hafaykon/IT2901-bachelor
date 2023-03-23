@@ -1,5 +1,18 @@
-#body {
+.body {
     width: 100%;
+}
+
+#header {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+}
+
+#boxes {
+    margin-top: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
 #card {
@@ -26,12 +39,7 @@
     font-weight: lighter;
 }
 
-#boxes {
-    margin-top: 40px;
-    text-align: center;
-    display: flex;
-    justify-content: center;
-}
+
 
 #organization {
     width: 680px;
@@ -45,8 +53,9 @@
     justify-content: flex-start;
 }
 
-.org_info {
-    max-width: 1030px;
+.org_name {
+    display: flex;
+    width: 780px;
 }
 
 #selector {
@@ -63,8 +72,6 @@
 }
 
 #portal-link {
-    right: 16px;
-    top: 0;
     color: #002D53;
     text-decoration: none;
     font-family: 'Source Sans 3', serif;
@@ -76,6 +83,11 @@
     align-items: center;
     gap: 8px;
     margin-bottom: 10px;
+}
+
+.license-portal {
+    justify-content: flex-end;
+    align-content: flex-end;
 }
 
 #portal-link:hover {

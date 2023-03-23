@@ -34,7 +34,7 @@ function DonutChart(infoBoxData: Props) {
                                 Total oversikt
                             </Typography>
                             <Tooltip title={<h2 style={{fontSize: 15, fontWeight: 'lighter'}}>
-                                Dette viser en oversikt over hvor mange aktive, uåpnede og ledige lisenser som eies i enheten.
+                                Dette viser en oversikt over hvor mange aktive, ubrukte og ledige lisenser som eies i enheten.
                                 </h2>} placement='top' arrow>
                             <HelpIcon sx={{position: 'absolute', top: 30, right:20, color:'grey', fontSize: 30}} data-testid="donutchartHelpIcon"></HelpIcon>
                         </Tooltip>
@@ -85,7 +85,7 @@ function DonutChart(infoBoxData: Props) {
                                 <Typography>
                                     Aktiv</Typography>
                                 <Typography>Ledig</Typography>
-                                <Typography>Uåpnet</Typography>
+                                <Typography>Ubrukt</Typography>
 
                             </Stack>
                             <PieChart
@@ -113,7 +113,7 @@ function DonutChart(infoBoxData: Props) {
                                         key: "test2"
                                     },
                                     {
-                                        name: 'Uåpnet',
+                                        name: 'Ubrukt',
                                         value: infoBoxData.never_used ?? 1,
                                         color: '#0d90ff',
                                         key: "test3"

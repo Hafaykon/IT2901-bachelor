@@ -3,9 +3,10 @@ import {useParams} from 'react-router-dom';
 import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
 import {OwnOrgData} from "../Interfaces";
-import {Grid, Stack} from '@mui/material';
+import {Box, Grid, Stack} from '@mui/material';
 import OwnTable from "./licensepool/OwnTable";
 import { Pagination } from 'antd';
+import ActiveLastBreadcrumb from './ActivateLastBreadcrumb';
 
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
@@ -82,7 +83,11 @@ const LicenseInfo: React.FC = () => {
 };
 
     return (
-        <div id={'licensepool_container'} style={{display: 'flex', justifyContent: 'center', marginTop: "20px"}}>
+        <div>
+            <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+                <ActiveLastBreadcrumb />
+            </Grid>
+        <Box id={'licensepool_container'} style={{display: 'flex', justifyContent: 'center', marginTop: "20px"}}>
             <Grid container className='license_pool'>
                 <Grid container className={'license_parameters'}
                       style={{display: 'flex', justifyContent: 'space-evenly', marginBottom: '10px'}}>
@@ -107,6 +112,7 @@ const LicenseInfo: React.FC = () => {
                     />
                   </Grid>
             </Grid>
+        </Box>
         </div>)
 };
 
