@@ -24,7 +24,7 @@ function InfoBox({title, numberOfLicenses}: InfoBoxProps) {
     }
 
     return (
-        <Card sx={{ width: 300, height: 180, borderRadius: 5}} data-testid="infoBox-test">
+        <Card sx={{ width: 300, height: 180, borderRadius: 5, ':hover' : {boxShadow: 20}}} data-testid="infoBox-test">
             <CardActionArea sx={{paddingBottom: 4}} onClick={handleCardClick}>
                 <CardContent>
                   <Stack direction={'row'}>

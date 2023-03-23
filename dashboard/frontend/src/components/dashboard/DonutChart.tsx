@@ -52,33 +52,21 @@ function DonutChart(infoBoxData: Props) {
                                         sx={{
                                             width: 15,
                                             height: 15,
-                                            backgroundColor: '#E1E98B',
-                                            '&:hover': {
-                                                backgroundColor: 'primary.main',
-                                                opacity: [0.9, 0.8, 0.7],
-                                            },
+                                            backgroundColor: '#80cc9f',
                                         }}
                                     />
                                     <Box
                                         sx={{
                                             width: 15,
                                             height: 15,
-                                            backgroundColor: '#80ADD3',
-                                            '&:hover': {
-                                                backgroundColor: 'primary.main',
-                                                opacity: [0.9, 0.8, 0.7],
-                                            },
+                                            backgroundColor: '#f9c680',
                                         }}
                                     />
                                     <Box
                                         sx={{
                                             width: 15,
                                             height: 15,
-                                            backgroundColor: '#80CC9F',
-                                            '&:hover': {
-                                                backgroundColor: 'primary.main',
-                                                opacity: [0.9, 0.8, 0.7],
-                                            },
+                                            backgroundColor: '#f28f8d',
                                         }}
                                     />
                                 </Stack>
@@ -110,19 +98,19 @@ function DonutChart(infoBoxData: Props) {
                                     {
                                         name: 'Aktiv',
                                         value: infoBoxData.active_licenses ?? 1,
-                                        color: '#E1E98B',
+                                        color: '#80cc9f',
                                         key: "test"
                                     },
                                     {
                                         name: 'Ledig',
                                         value: infoBoxData.unused_licenses ?? 1,
-                                        color: '#80ADD3',
+                                        color: '#f9c680',
                                         key: "test2"
                                     },
                                     {
                                         name: 'Ubrukt',
                                         value: infoBoxData.never_used ?? 1,
-                                        color: '#80CC9F',
+                                        color: '#f28f8d',
                                         key: "test3"
                                     }
                                 ]}
