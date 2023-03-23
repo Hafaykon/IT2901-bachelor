@@ -62,7 +62,7 @@ function Dashboard() {
                                 />
                                 <InfoBox
                                     title="Ledige Lisenser"
-                                    numberOfLicenses={boxData[0]?.available_licenses ?? 0}
+                                    numberOfLicenses={boxData[0]?.unused_licenses ?? 0}
                                 />
                             </Stack>
                         </Grid>

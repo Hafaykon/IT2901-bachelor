@@ -102,14 +102,14 @@ function DonutChart(infoBoxData: Props) {
 
                                 data={[
                                     {
-                                        name: 'Aktiv',
-                                        value: infoBoxData.active_licenses ?? 1,
+                                        name: 'Ubrukte',
+                                        value: infoBoxData.unused_licenses ?? 1,
                                         color: '#E1E98B',
                                         key: "test"
                                     },
                                     {
-                                        name: 'Ledig',
-                                        value: infoBoxData.available_licenses ?? 1,
+                                        name: 'Aktiv',
+                                        value: infoBoxData.active_licenses ?? 1,
                                         color: '#80ADD3',
                                         key: "test2"
                                     },

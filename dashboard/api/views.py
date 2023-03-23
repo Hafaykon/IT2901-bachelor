@@ -13,7 +13,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from .models import PoolRequest, LicensePool, SoftwarePerComputer
-from .serializers import PoolSerializer, SoftwarePerComputerSerializer, PoolRequestSerializer
+from .serializers import SoftwarePerComputerSerializer, PoolRequestSerializer, PoolSerializer
 
 
 # Create your views here.
@@ -101,7 +101,7 @@ def get_licenses_associated_with_user(request, format=None, username=None):
     try:
         username = request.GET.get('primary_user_full_name', username)
         if username is None:
-            raise KeyError("Provide a valid username or computername")
+            raise KeyError("Provide a valid username or computer name")
 
         software_data = SoftwarePerComputer.objects.filter(primary_user_full_name=username).values_list(
             "application_name", flat=True).distinct()
@@ -133,7 +133,6 @@ def get_licenses_associated_with_user(request, format=None, username=None):
         return Response(result)
 
     except KeyError as e:
-        print(e)
         return Response("No user or computer with that name")
 
 
@@ -162,7 +161,6 @@ def get_reallocatabe_by_software_name(request, format=None, software=None):
         return Response(f"There are currently {total_licenses} licenses for {software}, where"
                         f" {total_allocatable} have not been used the last 90 days.")
     except KeyError as e:
-        print(e)
         return Response("No software with that name")
 
 
@@ -274,14 +272,14 @@ class LicenseInfoView(generics.ListAPIView):
     def get_queryset(self):
         application_name = self.request.query_params.get('application_name')
         organization = self.request.query_params.get('organization')
-        status = self.request.query_params.get('status')
+        application_status = self.request.query_params.get('status')
 
         if not organization:
             raise ParseError("The 'organization' parameter is required.")
         if not status:
             raise ParseError("The 'status' parameter is required.")
 
-        threshold_date = datetime.now() - timedelta(days=120)
+        threshold_date = datetime.now() - timedelta(days=90)
 
         queryset = self.queryset.filter(
             license_required=True,
@@ -291,9 +289,11 @@ class LicenseInfoView(generics.ListAPIView):
         if application_name:
             queryset = queryset.filter(application_name=application_name)
 
-        elif status == 'unused':
+        if application_status == 'unused':
             queryset = queryset.filter(last_used__isnull=True)
-        print(len(queryset))
+
+        elif application_status == 'available':
+            queryset = queryset.filter(last_used__gte=threshold_date)
         return queryset
 
     def list(self, request, *args, **kwargs):
@@ -303,6 +303,7 @@ class LicenseInfoView(generics.ListAPIView):
             return self.get_paginated_response([])
 
         df = read_frame(queryset)
+
         grouped_df = df.groupby(['application_name', 'primary_user_full_name', 'computer_name']) \
             .apply(lambda x: x[['id', 'last_used']].to_dict('records')) \
             .reset_index() \
@@ -321,8 +322,9 @@ class LicenseInfoView(generics.ListAPIView):
 
 
 @api_view(['GET'])
-def get_organization_software(request, format=None):
+def get_org_software_names(request, format=None):
     """
+    Returns a list of all distinct software used by an organization.
     :param request: A GET request with an optional 'organization' parameter.
     :return: Returns a list of all distinct software used.
     """
@@ -336,17 +338,14 @@ def get_organization_software(request, format=None):
     threshold_date = datetime.now() - timedelta(days=90)
 
     try:
-        if application_status == 'available':
-            software = LicensePool.objects.values_list('application_name', flat=True).distinct()
-        else:
-            software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
-            software = software.filter(license_required=True, license_suite_names__isnull=True)
+        software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
+        software = software.filter(license_required=True, license_suite_names__isnull=True)
 
         if application_status == 'unused':
             software = software.filter(last_used__isnull=True)
 
-        #elif application_status == 'active':
-        #    software = software.filter(last_used__isnull=False, last_used__gte=threshold_date)
+        elif application_status == 'available':
+            software = software.filter(last_used__isnull=False, last_used__gte=threshold_date)
 
         if organization:
             software = software.filter(organization=organization)
@@ -356,6 +355,7 @@ def get_organization_software(request, format=None):
         software = sorted(software)
 
         return Response(software)
+
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 

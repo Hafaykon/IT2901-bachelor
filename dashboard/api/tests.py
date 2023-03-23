@@ -113,28 +113,6 @@ class TestViews(APITestCase):
             primary_user_full_name='My User',
             primary_user_email='myuser@example.com'
         )
-        LicensePool.objects.create(
-            id='19',
-            primary_user_full_name='My User',
-            primary_user_email='myuser@example.com',
-            computer_name='mycomputer',
-            application_name='Spotify',
-            family='myfamily',
-            family_version='1.0',
-            family_edition='Standard',
-            organization='IT-tjenesten'
-        )
-        self.LicensePool = {
-            'id': '19',
-            "primary_user_full_name": 'My User',
-            "primary_user_email": 'myuser@example.com',
-            "computer_name": 'mycomputer',
-            "application_name": 'Spotify',
-            "family": 'myfamily',
-            "family_version": '1.0',
-            "family_edition": 'Standard',
-            "organization": 'IT-tjeneste'
-        }
 
     def test_get_organizations_view(self):
         """
@@ -339,3 +317,27 @@ class TestViews(APITestCase):
         resp = self.client.delete(url)
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
 """
+
+
+class TestLicensePool(TestCase):
+    def setUp(self):
+        client = Client()
+
+        LicensePool.objects.create(
+            id='19',
+            primary_user_full_name='My User',
+            primary_user_email='myuser@example.com',
+            computer_name='mycomputer',
+            application_name='Spotify',
+            family='myfamily',
+            family_version='1.0',
+            family_edition='Standard',
+            organization='IT-tjenesten'
+        )
+    def test_get_license_pool(self):
+        url = reverse("licensepool")
+        response_message = self.client.get(url)
+
+        response_message_data = response_message.data[0]
+        print(response_message_data)
+

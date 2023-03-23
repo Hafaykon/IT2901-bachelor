@@ -1,12 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
-import {fetchInfoBoxLicense, fetchPoolData, fetchSoftwareUsedInOrg} from '../api/calls';
+import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
 import {LicensePoolData, OwnOrgData} from "../Interfaces";
 import {Grid, Stack} from '@mui/material';
-import OwnTable from "./licensepool/OwnTable";
 import Pagination from '@mui/material/Pagination';
-import PoolTable from "./licensepool/PoolTable";
+import OwnTable from "./licensepool/OwnTable";
 
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
@@ -53,15 +52,11 @@ const LicenseInfo: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (status && storedOrganization) {
+                console.log(status)
                 try {
-                    if (status !== 'available') {
-                        const data = await fetchInfoBoxLicense(currentPage, status as string, storedOrganization as string, searchTerm);
-                        data?.results && setData(data.results);
-                        data?.count && setCount(data.count);
-                    } else if (status === 'available') {
-                        const data = await fetchPoolData(currentPage, searchTerm, storedOrganization as string) ;
-                        data?.results && setData(data.results);
-                    }
+                    const data = await fetchInfoBoxLicense(currentPage, status as string, storedOrganization as string, searchTerm);
+                    data?.results && setData(data.results);
+                    data?.count && setCount(data.count);
                 } catch (error) {
                     console.error('Error fetching license data:', error);
                 }
@@ -87,7 +82,7 @@ const LicenseInfo: React.FC = () => {
                     <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
                         <h2 style={{fontFamily: "Source Sans 3"}}> {title} i {storedOrganization}</h2>
                         <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
-                        {status === 'available' ? <PoolTable data={data}/> : <OwnTable data={data}/>}
+                        <OwnTable data={data}/>
                         <Pagination
                             count={Math.ceil(count / 10)}
                             page={currentPage}
