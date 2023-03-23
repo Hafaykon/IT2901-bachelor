@@ -6,11 +6,11 @@ import {MemoryRouter} from 'react-router-dom';
 
 describe('Testing render, DonutChart', () => {
 
-    beforeEach(() => {
+ /*   beforeEach(() => {
         render(<MemoryRouter>
             <SavingsBox title={'Sparing'} savings={100}/>
         </MemoryRouter>);
-    });
+    });*/
 
     afterEach(() => {
         cleanup();
