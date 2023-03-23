@@ -20,6 +20,11 @@
     height: 180px;
 }
 
+#headline {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
 #cardTitle {
     color: #002d53;
     padding-top: 10px;
@@ -42,8 +47,6 @@
 
 
 #organization {
-    width: 680px;
-    max-width: 800px;
     text-align: left;
     font-family: Source Sans Pro, sans-serif;
     padding-top: 20px;
@@ -51,6 +54,8 @@
     padding-right: 10px;
     display: flex;
     justify-content: flex-start;
+    font-weight: 400;
+    font-size: 30px;
 }
 
 .org_name {
@@ -74,7 +79,7 @@
 #portal-link {
     color: #002D53;
     text-decoration: none;
-    font-family: 'Source Sans 3', serif;
+    font-family: Source Sans Pro, sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 30px;
@@ -92,5 +97,9 @@
 
 #portal-link:hover {
     border-bottom: 2px solid #002d53;
+}
+
+#org {
+
 }
 

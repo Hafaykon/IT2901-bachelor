@@ -134,7 +134,7 @@ export default function PoolTable({
     return (
         <>
             {loaded ? (
-                <div style={{ width: "70%" }}>
+                <div style={{ width: "95%" }}>
                     <TableContainer component={Paper}>
                         <Table aria-label="collapsible table" >
                         <colgroup>
