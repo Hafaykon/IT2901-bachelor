@@ -29,13 +29,13 @@ const rows: IRow[] = [
 
 function MyPageTable() {
   return (
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper} sx={{ borderRadius: '12px' }}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <TableCell>Lisensnavn</TableCell>
-            <TableCell align="right">Løpenummer</TableCell>
-            <TableCell align="right">Status</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Lisensnavn</TableCell>
+            <TableCell align="right" sx={{ fontWeight: 'bold' }}>Løpenummer</TableCell>
+            <TableCell align="right" sx={{ fontWeight: 'bold' }}>Status</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -45,4 +45,16 @@ function MyPageTable() {
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.lisensnavn
+                {row.lisensnavn}
+              </TableCell>
+              <TableCell align="right">{row.lopenummer}</TableCell>
+              <TableCell align="right">{row.status}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  );
+}
+
+export default MyPageTable;
