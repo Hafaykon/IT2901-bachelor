@@ -23,7 +23,7 @@ const LicenseInfo: React.FC = () => {
             case 'Totale Lisenser':
                 setStatus('active')
                 break;
-            case 'Uåpnede Lisenser':
+            case 'Ubrukte Lisenser':
                 setStatus('unused')
                 break;
             case 'Ledige Lisenser':

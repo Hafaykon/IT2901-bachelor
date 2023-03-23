@@ -45,9 +45,8 @@ function Dashboard() {
                             <ActiveLastBreadcrumb />
                             <Grid container>
                                 <Stack direction="row">
-                                    <Typography className={'org_name'} sx={{fontSize: 30}}>{storedOrganization}</Typography>
-                                    <Stack direction="row">
-                                        <h2 id={"organization"}>{org}</h2> 
+                                   <Typography className={'org_name'} sx={{fontSize: 30}}>{storedOrganization}</Typography>
+                                   <Stack direction="row">
                                         <a href="/lisensportal" id="portal-link">
                                             Til lisensportalen
                                             <LogoutOutlinedIcon style={{alignContent: "center"}}/>

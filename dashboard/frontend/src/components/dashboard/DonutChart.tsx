@@ -21,7 +21,7 @@ function DonutChart(infoBoxData: Props) {
     const navigate = useNavigate();
 
     const handleCardClick = () => {
-        navigate(`/licenses/Totale Lisenser`);
+        navigate(`/Totale Lisenser`);
     };
 
     return (
