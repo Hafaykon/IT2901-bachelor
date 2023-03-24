@@ -15,7 +15,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {LicensePoolData} from '../../Interfaces';
 import BuyButton from "./BuyButton";
-import Pagination from '@mui/material/Pagination';
 
 
 interface RowProps {

@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
-import {LicensePoolData, OwnOrgData} from "../Interfaces";
+import {OwnOrgData} from "../Interfaces";
 import {Grid, Stack} from '@mui/material';
 import Pagination from '@mui/material/Pagination';
 import OwnTable from "./licensepool/OwnTable";
