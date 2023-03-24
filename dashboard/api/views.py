@@ -308,12 +308,10 @@ class LicenseInfoView(generics.ListAPIView):
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        application_name = self.request.query_params.get('application_name')
+        application_name = self.request.query_params.get('application_name', '')
         organization = self.request.query_params.get('organization')
         status = self.request.query_params.get('status')
 
-        if not application_name:
-            raise ParseError("The 'application_name' parameter is required.")
         if not organization:
             raise ParseError("The 'organization' parameter is required.")
         if not status:
@@ -322,11 +320,12 @@ class LicenseInfoView(generics.ListAPIView):
         threshold_date = datetime.now() - timedelta(days=120)
 
         queryset = self.queryset.filter(
-            application_name=application_name,
             license_required=True,
             license_suite_names__isnull=True,
             organization=organization,
         )
+        if application_name:
+            queryset = queryset.filter(application_name=application_name)
 
         status_value = None
         if status == 'active':
