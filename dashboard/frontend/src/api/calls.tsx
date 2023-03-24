@@ -101,32 +101,32 @@ export const fetchInfoBoxData = async (org?: string) => {
     }
 };
 
-export const fetchPoolData = async (software?: string, org?: string) => {
+export const fetchPoolData = async (page: number, software?: string, org?: string) => {
     try {
-        let url = 'http://127.0.0.1:8000/api/pool/';
+        let url = `http://127.0.0.1:8000/api/pool/get/?page=${page}`;
         if (software && org) {
-            url = `${url}?application_name=${software}&organization=${org}`;
+            url = `${url}&application_name=${software}&organization=${org}`;
         } else if (software) {
-            url = `${url}?application_name=${software}`;
+            url = `${url}&application_name=${software}`;
         } else if (org) {
-            url = `${url}?organization=${org}`;
+            url = `${url}&organization=${org}`;
         }
         const response = await fetch(url);
         if (response.ok) {
             const data = await response.json();
-            return {data, error: false, message: ''};
+            return {results: [...data.results], count: data.count, error: false, message: ''};
         } else {
             const errorData = await response.json();
-            return {data: [], error: true, message: errorData.error};
+            return {results: [], error: true, message: errorData.error};
         }
     } catch (error) {
         console.log(error);
-        return {data: [], error: true, message: 'An error occurred while fetching data.'};
+        return {results: [], error: true, message: 'An error occurred while fetching data.'};
     }
 };
 
 
-export const fetchInfoBoxLicense = async ( page: number, status: string, org?: string, software?: string) => {
+export const fetchInfoBoxLicense = async (page: number, status: string, org?: string, software?: string) => {
     try {
         let url = `http://127.0.0.1:8000/api/licenseinfo/?page=${page}&status=${status}`;
         if (software && org) {
@@ -148,16 +148,17 @@ export const fetchInfoBoxLicense = async ( page: number, status: string, org?: s
  * Fetches all distinct software used within an organization from the backend.
  * @param status - Optional parameter to filter on status.
  * @param organization - Optional parameter to filter on organization.
+ * @param pool - parameter to select wether to search in pool or not.
  */
-export const fetchSoftwareUsedInOrg = async (status: string, organization?: string) => {
+export const fetchSoftwareUsedInOrg = async (status: string, pool : string,  organization?: string) => {
     try {
-        let url = `http://127.0.0.1:8000/api/software/?status=${status}`;
+        let url = `http://127.0.0.1:8000/api/software/?status=${status}&pool=${pool}`;
         if (organization) {
             url += `&organization=${organization}`;
         }
         const response = await fetch(url);
         const data = await response.json();
-        return[...data]
+        return [...data]
     } catch (error) {
         console.log(error);
     }

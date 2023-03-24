@@ -15,7 +15,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {LicensePoolData} from '../../Interfaces';
 import BuyButton from "./BuyButton";
-import Pagination from '@mui/material/Pagination';
 
 
 interface RowProps {
@@ -109,17 +108,10 @@ interface Props {
 export default function PoolTable({
                                       data
                                   }: Props) {
-    const [currentPage, setCurrentPage] = React.useState(1);
-    const ITEMS_PER_PAGE = 5;
+
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
-    const handlePageChange = (event: React.ChangeEvent<unknown>, value: React.SetStateAction<number>) => {
-        setCurrentPage(value);
-    };
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    const endIndex = startIndex + ITEMS_PER_PAGE;
-    // Inside the PoolTable component
-    const displayedSoftware = Array.isArray(software) ? software.slice(startIndex, endIndex) : [];
+
 
 // Rest of the component code
 
@@ -134,14 +126,14 @@ export default function PoolTable({
     return (
         <>
             {loaded ? (
-                <div style={{ width: "95%" }}>
+                <div style={{width: "95%"}}>
                     <TableContainer component={Paper}>
-                        <Table aria-label="collapsible table" >
-                        <colgroup>
-                        <col style={{width:'5%'}}/>
-                        <col style={{width:'25%'}}/>
-                        <col style={{width:'35%'}}/>
-                        </colgroup>
+                        <Table aria-label="collapsible table">
+                            <colgroup>
+                                <col style={{width: '5%'}}/>
+                                <col style={{width: '25%'}}/>
+                                <col style={{width: '35%'}}/>
+                            </colgroup>
                             <TableHead>
                                 <TableRow>
                                     <TableCell/>
@@ -151,21 +143,12 @@ export default function PoolTable({
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {displayedSoftware.map((user, index) => (
+                                {software.map((user, index) => (
                                     <Row key={index} row={user}/>
                                 ))}
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    <Pagination
-                        count={Math.ceil(software.length / ITEMS_PER_PAGE)}
-                        page={currentPage}
-                        onChange={handlePageChange}
-                        variant="outlined"
-                        shape="rounded"
-                        size="small"
-                        style={{marginTop: '1rem'}}
-                    />
                 </div>
             ) : <h3>Velg programvare </h3>}
         </>

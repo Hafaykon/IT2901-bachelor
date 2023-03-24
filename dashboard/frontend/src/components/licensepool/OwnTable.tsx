@@ -25,6 +25,17 @@ function Row(props: RowProps) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
 
+    function timeSince(lastUsed: string | null): string {
+        if (!lastUsed) return 'Ikke registrert';
+
+        const now = new Date();
+        const lastUsedDate = new Date(lastUsed);
+        const diffInDays = Math.floor((now.getTime() - lastUsedDate.getTime()) / (1000 * 60 * 60 * 24));
+
+        return `${lastUsedDate.toLocaleDateString()} (${diffInDays} dager siden)`;
+    }
+
+
     return (
         <React.Fragment>
             <TableRow sx={{'& > *': {borderBottom: 'unset'}}}>
@@ -65,7 +76,7 @@ function Row(props: RowProps) {
                                     {row.details.map((detailRow) => (
                                         <TableRow key={detailRow.id}>
                                             <TableCell component="th" scope="row">
-                                                {detailRow.last_used ?? 'Ikke registrert'}
+                                                {timeSince(detailRow.last_used)}
                                             </TableCell>
                                             <TableCell>10 poeng</TableCell>
                                             <TableCell align={"center"}> <ReleaseButton id={detailRow.id}
