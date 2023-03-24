@@ -119,7 +119,7 @@ class TestSoftwarePCViews(APITestCase):
         Test for the get_organizations view. Should return all distinct organizations.
         :return:
         """
-        expected_organizations = ['Servere', 'Hovedtillitsvalgte']
+        expected_organizations = ['Hovedtillitsvalgte', 'Servere']
         response = self.client.get(self.get_org_url)
         self.assertEqual(response.status_code, 200)
         for org in expected_organizations:
@@ -184,10 +184,9 @@ class TestSoftwarePCViews(APITestCase):
         Should return all software used by the given organization.
         """
         organization = "Servere"
-        url = reverse('software') + f'?organization={organization}&status=active'
+        url = reverse('software') + f'?organization={organization}&status=active&pool=false'
         response = self.client.get(url)
         expected_software = ['myapplication']
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.data), expected_software)
 

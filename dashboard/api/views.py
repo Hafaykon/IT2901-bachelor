@@ -27,7 +27,7 @@ def get_organizations(request, format=None):
         organizations = sorted(organizations)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
+    print(len(organizations))
     return Response(organizations)
 
 
