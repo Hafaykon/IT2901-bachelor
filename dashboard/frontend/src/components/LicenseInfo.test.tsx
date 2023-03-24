@@ -23,9 +23,18 @@ const mockData = [{
 jest.mock('../api/calls', () => ({
     fetchSoftwareUsedInOrg: jest.fn(() => Promise.resolve(mockOrgs)),
     fetchInfoBoxLicense: jest.fn(() => Promise.resolve(mockData)),
+
 }));
+jest.mock('@mui/material/Pagination', () => {
+    const MockPagination = () => <div data-testid="mock-pagination"/>;
+    MockPagination.displayName = 'Pagination';
+    return MockPagination;
+})
+
 
 describe('LicenseInfo page', () => {
+
+
     beforeEach(() => {
         localStorage.setItem('organization', JSON.stringify('IT-tjenesten'));
     })
@@ -45,7 +54,7 @@ describe('LicenseInfo page', () => {
     });
     it('renders the unused license page', async () => {
         render(
-            <MemoryRouter initialEntries={['/Ubrukte Lisenser']}>
+            <MemoryRouter initialEntries={['/Uåpnede Lisenser']}>
                 <Routes>
                     <Route path='/:title' element={<LicenseInfo/>}/>
                 </Routes>
@@ -53,7 +62,7 @@ describe('LicenseInfo page', () => {
         );
 
 
-        expect(await screen.findByText('Ubrukte Lisenser i IT-tjenesten')).toBeInTheDocument();
+        expect(await screen.findByText('Uåpnede Lisenser i IT-tjenesten')).toBeInTheDocument();
     });
     it('renders the correct license data', async () => {
         render(

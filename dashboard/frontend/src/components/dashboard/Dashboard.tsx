@@ -41,9 +41,9 @@ function Dashboard() {
                 <div id="body">
                     <Grid container id='boxes'>
                         <Grid container className={'org_info'} justifyContent={"flex-end"} alignContent={"flex-end"}>
-                            <Stack direction="row">
+                            <Stack direction="row" sx={{width: "100%"}} id='headline' spacing={75}>
+                                <h2 id={"organization"}>{org}</h2>
                                 <a href="/lisensportal" id="portal-link">
-
                                     Til lisensportalen
                                     <LogoutOutlinedIcon style={{alignContent: "center"}}/>
                                 </a>
