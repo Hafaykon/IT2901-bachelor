@@ -24,7 +24,8 @@ const breadcrumbNameMap: { [key: string]: string } = {
 
 
 function LinkRouter(props: LinkRouterProps) {
-  return <Link {...props} component={RouterLink as any} />;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return <Link {...props}  component={RouterLink as any}  />;
 }
 
 
