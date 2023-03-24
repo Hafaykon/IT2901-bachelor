@@ -55,3 +55,8 @@ class SoftwarePerComputer(models.Model):
     primary_user = models.CharField(max_length=100)
     primary_user_full_name = models.CharField(max_length=100)
     primary_user_email = models.EmailField()
+
+class User(models.Model):
+    primary_user_full_name = models.CharField(max_length=100)
+    primary_user_email = models.EmailField()
+    organization = models.CharField(max_length=100)
