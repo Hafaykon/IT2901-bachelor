@@ -36,7 +36,7 @@ const LicenseInfo: React.FC = () => {
         const fetchSoftwareNames = async () => {
             if (status && storedOrganization) {
                 try {
-                    const data: string[] | undefined = await fetchSoftwareUsedInOrg(status, storedOrganization);
+                    const data: string[] | undefined = await fetchSoftwareUsedInOrg(status, false, storedOrganization);
                     if (data !== undefined) {
                         setOrgSoftware(data);
                     }

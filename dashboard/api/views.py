@@ -330,7 +330,9 @@ def get_org_software_names(request, format=None):
     """
     organization = request.GET.get('organization', None)
     application_status = request.GET.get('status', None)
-
+    pool = request.GET.get('pool', None)
+    pool = bool(pool)
+    print(pool)
     if not application_status:
         raise ParseError("status parameter is required.")
 
@@ -338,14 +340,17 @@ def get_org_software_names(request, format=None):
     threshold_date = datetime.now() - timedelta(days=90)
 
     try:
-        software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
-        software = software.filter(license_required=True, license_suite_names__isnull=True)
+        if pool:
+            software = LicensePool.objects.values_list('application_name', flat=True).distinct()
+        else:
+            software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
+            software = software.filter(license_required=True, license_suite_names__isnull=True)
 
-        if application_status == 'unused':
-            software = software.filter(last_used__isnull=True)
+            if application_status == 'unused':
+                software = software.filter(last_used__isnull=True)
 
-        elif application_status == 'available':
-            software = software.filter(last_used__isnull=False, last_used__lte=threshold_date)
+            elif application_status == 'available':
+                software = software.filter(last_used__isnull=False, last_used__lte=threshold_date)
 
         if organization:
             software = software.filter(organization=organization)
