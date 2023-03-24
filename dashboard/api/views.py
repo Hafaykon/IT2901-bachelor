@@ -280,9 +280,6 @@ class LicenseInfoView(generics.ListAPIView):
             raise ParseError("The 'status' parameter is required.")
 
         threshold_date = datetime.now() - timedelta(days=90)
-
-        print(organization, application_status)
-
         queryset = self.queryset.filter(
             license_required=True,
             license_suite_names__isnull=True,
