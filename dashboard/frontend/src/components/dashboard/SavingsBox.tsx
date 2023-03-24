@@ -12,18 +12,20 @@ export function SavingsBox() {
     };
 
     return (
-        <Card sx={{ width: 300, height: 300, borderRadius: 5 }} data-testid='savingsBox'>
+        <Card sx={{ width: 300, height: 180, borderRadius: 5 }} data-testid='savingsBox'>
             <CardActionArea sx={{paddingBottom: 4}} onClick={handleCardClick}>
             <CardOverflow>
                 <CardContent>
                     <Stack direction={'row'}>
+                    <Typography color="text.secondary" id="numbersBoxes">
+                      Kroner spart
+                    </Typography>
                         {/*  <SavingsIcon fontSize='large' sx={{position: 'absolute', top:20, right:15, color:'pink'}}></SavingsIcon> */}
                     </Stack>
-                    <Typography color="text.secondary" id="numbersBoxes">
-                      <p>Kroner spart</p>
-                      <p>100 kr</p>
-
+                    <Typography id="numbersBoxes">
+                      100 kr
                     </Typography>
+
 
                 </CardContent>
             </CardOverflow>
