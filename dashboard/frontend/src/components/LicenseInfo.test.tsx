@@ -54,7 +54,7 @@ describe('LicenseInfo page', () => {
     });
     it('renders the unused license page', async () => {
         render(
-            <MemoryRouter initialEntries={['/Uåpnede Lisenser']}>
+            <MemoryRouter initialEntries={['/Ubrukte Lisenser']}>
                 <Routes>
                     <Route path='/:title' element={<LicenseInfo/>}/>
                 </Routes>
@@ -62,7 +62,7 @@ describe('LicenseInfo page', () => {
         );
 
 
-        expect(await screen.findByText('Uåpnede Lisenser i IT-tjenesten')).toBeInTheDocument();
+        expect(await screen.findByText('Ubrukte Lisenser i IT-tjenesten')).toBeInTheDocument();
     });
     it('renders the correct license data', async () => {
         render(

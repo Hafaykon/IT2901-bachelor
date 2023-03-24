@@ -3,9 +3,10 @@ import {useParams} from 'react-router-dom';
 import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
 import {OwnOrgData} from "../Interfaces";
-import {Grid, Stack} from '@mui/material';
+import {Box, Grid, Stack} from '@mui/material';
 import OwnTable from "./licensepool/OwnTable";
 import Pagination from '@mui/material/Pagination';
+import ActiveLastBreadcrumb from './ActivateLastBreadcrumb';
 
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
@@ -22,7 +23,7 @@ const LicenseInfo: React.FC = () => {
             case 'Totale Lisenser':
                 setStatus('active')
                 break;
-            case 'Uåpnede Lisenser':
+            case 'Ubrukte Lisenser':
                 setStatus('unused')
                 break;
             case 'Ledige Lisenser':
@@ -77,7 +78,11 @@ useEffect(() => {
 
 
     return (
-        <div id={'licensepool_container'}
+        <div>
+        <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+            <ActiveLastBreadcrumb />
+        </Grid>
+    <Box  id={'licensepool_container'}
              style={{display: 'flex', justifyContent: 'center', alignContent: "center", marginTop: "20px"}}>
             <Grid container className='license_pool' justifyContent={"center"}>
                 <Grid container justifyContent="center" alignItems="center" className={'license_table'} width={"75%"}>
@@ -96,6 +101,7 @@ useEffect(() => {
 
                 </Grid>
             </Grid>
+        </Box>
         </div>)
 };
 
