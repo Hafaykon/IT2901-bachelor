@@ -1,6 +1,5 @@
 import { Card, CardActionArea, CardContent, Stack, Typography } from '@mui/material';
 import CardOverflow from '@mui/joy/CardOverflow';
-import BarChartIcon from '@mui/icons-material/BarChart';
 import { useNavigate } from 'react-router-dom';
 
 export function SavingsBox() {
