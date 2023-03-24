@@ -28,7 +28,7 @@ export function Leaderboard() {
   return (
 
     <>
-      <div style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: '20px' }}>
+      <div data-testid="leaderboard" style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: '20px' }}>
         <Grid justifyContent={'center'} alignItems={'center'} width={'75%'}>
           <Stack direction={'column'} width={'75%'}>
             <h2 style={{ fontFamily: 'Source Sans Pro, sans serif' }}>Ledertavle</h2>
