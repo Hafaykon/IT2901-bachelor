@@ -4,13 +4,16 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
+from django.contrib.auth import authenticate, login
 from django_pandas.io import read_frame
-from rest_framework import generics, status
+from rest_framework import generics
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotFound
 from rest_framework.exceptions import ParseError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .models import PoolRequest, LicensePool, SoftwarePerComputer
 from .serializers import SoftwarePerComputerSerializer, PoolRequestSerializer, PoolSerializer
@@ -450,3 +453,19 @@ class CreatePoolObject(generics.CreateAPIView):
     """
     queryset = LicensePool.objects.all()
     serializer_class = PoolSerializer
+
+
+class LoginAPIView(APIView):
+    def post(self, request):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        if email and password:
+            user = authenticate(request, primary_user_email=email, password=password)
+            if user is not None:
+                login(request, user)
+                return Response({'status': 'Logged in successfully.'})
+            else:
+                return Response({'error': 'Invalid email or password.'}, status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({'error': 'Both email and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
