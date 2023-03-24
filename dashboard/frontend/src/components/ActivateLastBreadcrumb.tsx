@@ -1,15 +1,13 @@
 import * as React from 'react';
+import {forwardRef} from 'react';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
-import Link, { LinkProps } from '@mui/material/Link';
+import Link, {LinkProps} from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
-import {
-  Link as RouterLink,
-  useLocation
-} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 
 interface LinkRouterProps extends LinkProps {
-  to: string;
-  replace?: boolean;
+    to: string;
+    replace?: boolean;
 }
 
 const breadcrumbNameMap: { [key: string]: string } = {
@@ -20,38 +18,52 @@ const breadcrumbNameMap: { [key: string]: string } = {
     '/leaderboard': 'Ledertavle',
     '/FAQ': 'Ofte stilte spørsmål',
     '/minside': 'Min side'
-  };
+};
 
 
-function LinkRouter(props: LinkRouterProps) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  return <Link {...props}  component={RouterLink as any}  />;
-}
+const LinkRouter = forwardRef<HTMLAnchorElement, LinkRouterProps>((props, ref) => {
+    const {to, replace, ...rest} = props;
+    const navigate = useNavigate();
+    const location = useLocation();
+
+    const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
+        event.preventDefault();
+        if (replace) {
+            navigate(to, {replace: true});
+        } else {
+            navigate(to);
+        }
+    };
+
+    return <Link ref={ref} href={location.pathname === to ? undefined : to} onClick={handleClick} {...rest} />;
+});
+
+LinkRouter.displayName = 'LinkRouter';
 
 
 export default function ActiveLastBreadcrumb() {
-  const location = useLocation();
-  const pathnames = location.pathname.split('/').filter((x) => x);
+    const location = useLocation();
+    const pathnames = location.pathname.split('/').filter((x) => x);
 
-  return (
-    <Breadcrumbs aria-label="breadcrumb">
-      <LinkRouter underline="hover" color="inherit" to="/">
-        Dashboard
-      </LinkRouter>
-      {pathnames.map((value, index) => {
-        const last = index === pathnames.length - 1;
-        const to = `/${pathnames.slice(0, index + 1).join('/')}`;
+    return (
+        <Breadcrumbs aria-label="breadcrumb">
+            <LinkRouter underline="hover" color="inherit" to="/">
+                Dashboard
+            </LinkRouter>
+            {pathnames.map((value, index) => {
+                const last = index === pathnames.length - 1;
+                const to = `/${pathnames.slice(0, index + 1).join('/')}`;
 
-        return last ? (
-          <Typography color="text.primary" key={to}>
-            {breadcrumbNameMap[to]}
-          </Typography>
-        ) : (
-          <LinkRouter underline="hover" color="inherit" to={to} key={to}>
-            {breadcrumbNameMap[to]}
-          </LinkRouter>
-        );
-      })}
-    </Breadcrumbs>
-  );
+                return last ? (
+                    <Typography color="text.primary" key={to}>
+                        {breadcrumbNameMap[to]}
+                    </Typography>
+                ) : (
+                    <LinkRouter underline="hover" color="inherit" to={to} key={to}>
+                        {breadcrumbNameMap[to]}
+                    </LinkRouter>
+                );
+            })}
+        </Breadcrumbs>
+    );
 }
