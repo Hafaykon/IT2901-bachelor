@@ -3,12 +3,13 @@ import './Dashboard.css';
 import {Grid, Stack} from '@mui/material';
 import InfoBox from './InfoBox';
 import DonutChart from './DonutChart';
-import {SavingsBox} from './SavingsBox';
+import {LeaderboardBox} from './LeaderboardBox';
 import {useRecoilValue} from 'recoil';
 import {orgAtom} from '../../globalVariables/variables';
 import {fetchInfoBoxData} from '../../api/calls';
 import CircularIndeterminate from '../spinner/MuiLoadingSpinner';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import { SavingsBox } from './SavingsBox';
 
 interface Count {
     total_licenses: number,
@@ -71,8 +72,8 @@ function Dashboard() {
                                         active_licenses={boxData[0].active_licenses}/>
                             <Grid item sx={{ml: 8, mt: 7}}>
                                 <Stack direction={'column'} spacing={8}>
-                                    <SavingsBox title="Potensiell Sparing" savings={2000}/>
-                                    <SavingsBox title="Kroner Spart" savings={3000}/>
+                                    <SavingsBox />
+                                    <LeaderboardBox/>
                                 </Stack>
                             </Grid>
                         </Grid>
