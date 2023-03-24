@@ -10,7 +10,7 @@ import OwnTable from "./licensepool/OwnTable";
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
     const {title} = useParams();
-    const [data, setData] = useState<OwnOrgData[] & LicensePoolData[]>([]);
+    const [data, setData] = useState<OwnOrgData[]>([]);
     const [searchTerm, setSearchTerm] = useState<string>();
     const [orgSoftware, setOrgSoftware] = useState<string[]>([]);
     const [status, setStatus] = useState<string | null>(null);
@@ -92,6 +92,8 @@ const LicenseInfo: React.FC = () => {
                             color={"primary"}
                         />
                     </Stack>
+
+
                 </Grid>
             </Grid>
         </div>)
