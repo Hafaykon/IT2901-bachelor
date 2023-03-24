@@ -1,4 +1,4 @@
-import {Grid, Stack} from '@mui/material';
+import {Box, Grid, Stack} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import SoftwareSearchBar from '../search/SoftwareSeachBar';
 import PoolTable from "./PoolTable";
@@ -6,6 +6,7 @@ import {LicensePoolData} from "../../Interfaces";
 import {fetchPoolData, fetchSoftwareUsedInOrg} from "../../api/calls";
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import ActiveLastBreadcrumb from '../ActivateLastBreadcrumb';
 import Pagination from "@mui/material/Pagination";
 
 function LicensePool() {
@@ -15,10 +16,6 @@ function LicensePool() {
     const [data, setData] = useState<LicensePoolData[]>([]);
     const [checked, setChecked] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string>('');
-    const [currentPage, setCurrentPage] = React.useState(1);
-    const ITEMS_PER_PAGE = 10;
-    const [count, setCount] = useState<number>(0);
-
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
@@ -77,34 +74,42 @@ function LicensePool() {
 
 
     return (
-        <div id={'licensepool_container'}
-             style={{display: 'flex', justifyContent: 'center', alignContent: "center", marginTop: "20px"}}>
-            <Grid container className='license_pool' justifyContent={"center"}>
-                <Grid container justifyContent="center" alignItems="center" className={'license_table'} width={"75%"}>
-                    <Stack direction={"column"} spacing={1} width={"95%"} marginBottom={"10px"}>
-                        <h2 style={{fontFamily: 'Source Sans Pro, sans-serif'}}> Lisensportalen</h2>
-                        <h4 style={{
-                            fontFamily: 'Source Sans Pro, sans-serif',
-                            fontStyle: "italic",
-                            fontWeight: 200,
-                            marginTop: "-1%"
-                        }}>-Velg miljøvennlig!</h4>
-                    </Stack>
-                    <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"} alignItems="center"
-                           marginTop={"10px"}>
-                        <SoftwareSearchBar setSelectedSoftware={updateSearchTerm} data={orgSoftware}/>
-                        <FormControlLabel
-                            control={
-                                <Checkbox
-                                    checked={checked}
-                                    onChange={handleChange}
-                                    inputProps={{'aria-label': 'controlled'}}
-                                />
-                            }
-                            label="Bare egen enhet"
-                        />
-                        {errorMessage && <h3 style={{color: 'red'}}>{errorMessage}</h3>}
+        <div>
+            <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+                <ActiveLastBreadcrumb />
+            </Grid>
+            <Box id={'licensepool_container'}
+                style={{display: 'flex', justifyContent: 'center', alignContent: "center", marginTop: "20px"}}>
+                <Grid container className='license_pool' justifyContent={"center"}>
+                    <Grid container justifyContent="center" alignItems="center" className={'license_table'} width={"75%"}>
+                        <Stack direction={"column"} spacing={1} width={"95%"} marginBottom={"10px"}>
+                            <h2 style={{fontFamily:'Source Sans Pro, sans-serif'}}> Lisensportalen</h2>
+                            <h4 style={{
+                                fontFamily: 'Source Sans Pro, sans-serif',
+                                fontStyle: "italic",
+                                fontWeight: 200,
+                                marginTop: "-1%"
+                            }}>-Velg miljøvennlig!</h4>
+                        </Stack>
+                        <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"} alignItems="center" marginTop={"10px"}>
+                            <SoftwareSearchBar setSelectedSoftware={updateSearchTerm} data={orgSoftware}/>
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={checked}
+                                        onChange={handleChange}
+                                        inputProps={{'aria-label': 'controlled'}}
+                                    />
+                                }
+                                label="Bare egen enhet"
+                            />
+                            {errorMessage && <h3 style={{color: 'red'}}>{errorMessage}</h3>}
 
+                        </Stack>
+                        <PoolTable data={data}/>
+                    </Grid>
+                </Grid>
+            </Box>
                     </Stack>
                     <Stack direction={'column'} width={"100%"}>
                         <PoolTable data={data}/>

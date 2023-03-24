@@ -3,9 +3,10 @@ import {useParams} from 'react-router-dom';
 import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
 import {OwnOrgData} from "../Interfaces";
-import {Grid, Stack} from '@mui/material';
-import Pagination from '@mui/material/Pagination';
+import {Box, Grid, Stack} from '@mui/material';
 import OwnTable from "./licensepool/OwnTable";
+import Pagination from '@mui/material/Pagination';
+import ActiveLastBreadcrumb from './ActivateLastBreadcrumb';
 
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
@@ -22,7 +23,7 @@ const LicenseInfo: React.FC = () => {
             case 'Totale Lisenser':
                 setStatus('active')
                 break;
-            case 'Uåpnede Lisenser':
+            case 'Ubrukte Lisenser':
                 setStatus('unused')
                 break;
             case 'Ledige Lisenser':
@@ -65,6 +66,7 @@ const LicenseInfo: React.FC = () => {
         fetchData();
     }, [searchTerm, currentPage, status]);
 
+
     // Function that gets input from the searchBar component.
     const handleChange = (term: string) => {
         setSearchTerm(term);
@@ -74,8 +76,13 @@ const LicenseInfo: React.FC = () => {
         setCurrentPage(value);
     };
 
+
     return (
-        <div id={'licensepool_container'}
+        <div>
+        <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+            <ActiveLastBreadcrumb />
+        </Grid>
+    <Box  id={'licensepool_container'}
              style={{display: 'flex', justifyContent: 'center', alignContent: "center", marginTop: "20px"}}>
             <Grid container className='license_pool' justifyContent={"center"}>
                 <Grid container justifyContent="center" alignItems="center" className={'license_table'} width={"75%"}>
@@ -86,9 +93,7 @@ const LicenseInfo: React.FC = () => {
                         <Pagination
                             count={Math.ceil(count / 10)}
                             page={currentPage}
-                            onChange={
-                                handlePageChange
-                            }
+                            onChange={handlePageChange}
                             color={"primary"}
                         />
                     </Stack>
@@ -96,6 +101,7 @@ const LicenseInfo: React.FC = () => {
 
                 </Grid>
             </Grid>
+        </Box>
         </div>)
 };
 

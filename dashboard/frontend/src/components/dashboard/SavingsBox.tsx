@@ -11,7 +11,7 @@ export function SavingsBox() {
     };
 
     return (
-        <Card sx={{ width: 300, height: 180, borderRadius: 5 }} data-testid='savingsBox'>
+        <Card sx={{ width: 300, height: 180, borderRadius: 5, ':hover' : {boxShadow: 20}}} data-testid='savingsBox'>
             <CardActionArea sx={{paddingBottom: 4}} onClick={handleCardClick}>
             <CardOverflow>
                 <CardContent>
