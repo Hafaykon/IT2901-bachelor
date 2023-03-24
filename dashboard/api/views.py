@@ -331,8 +331,7 @@ def get_org_software_names(request, format=None):
     organization = request.GET.get('organization', None)
     application_status = request.GET.get('status', None)
     pool = request.GET.get('pool', None)
-    pool = bool(pool)
-    print(pool)
+
     if not application_status:
         raise ParseError("status parameter is required.")
 
@@ -340,9 +339,9 @@ def get_org_software_names(request, format=None):
     threshold_date = datetime.now() - timedelta(days=90)
 
     try:
-        if pool:
+        if pool == 'true':
             software = LicensePool.objects.values_list('application_name', flat=True).distinct()
-        else:
+        elif pool == 'false':
             software = SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct()
             software = software.filter(license_required=True, license_suite_names__isnull=True)
 

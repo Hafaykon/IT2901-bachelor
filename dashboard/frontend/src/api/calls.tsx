@@ -150,7 +150,7 @@ export const fetchInfoBoxLicense = async (page: number, status: string, org?: st
  * @param organization - Optional parameter to filter on organization.
  * @param pool - parameter to select wether to search in pool or not.
  */
-export const fetchSoftwareUsedInOrg = async (status: string, pool : boolean,  organization?: string) => {
+export const fetchSoftwareUsedInOrg = async (status: string, pool : string,  organization?: string) => {
     try {
         let url = `http://127.0.0.1:8000/api/software/?status=${status}&pool=${pool}`;
         if (organization) {

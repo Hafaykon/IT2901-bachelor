@@ -40,7 +40,7 @@ function LicensePool() {
         // Fetches distinct software names.
         const fetchSoftwareNames = async () => {
             try {
-                const data: string[] | undefined = await fetchSoftwareUsedInOrg('available', true,  checked ? org as string : '');
+                const data: string[] | undefined = await fetchSoftwareUsedInOrg('available', 'true',  checked ? org as string : '');
                 if (data !== undefined) {
                     setOrgSoftware(data);
                 }
