@@ -270,16 +270,18 @@ class LicenseInfoView(generics.ListAPIView):
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        application_name = self.request.query_params.get('application_name')
+        application_name = self.request.query_params.get('application_name', None)
         organization = self.request.query_params.get('organization')
         application_status = self.request.query_params.get('status')
 
         if not organization:
             raise ParseError("The 'organization' parameter is required.")
-        if not status:
+        if not application_status:
             raise ParseError("The 'status' parameter is required.")
 
         threshold_date = datetime.now() - timedelta(days=90)
+
+        print(organization, application_status)
 
         queryset = self.queryset.filter(
             license_required=True,
@@ -293,14 +295,15 @@ class LicenseInfoView(generics.ListAPIView):
             queryset = queryset.filter(last_used__isnull=True)
 
         elif application_status == 'available':
-            queryset = queryset.filter(last_used__gte=threshold_date)
+            queryset = queryset.filter(last_used__lte=threshold_date)
         return queryset
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
 
         if queryset.count() == 0:
-            return self.get_paginated_response([])
+            paginated_empty_list = self.paginate_queryset([])
+            return self.get_paginated_response(paginated_empty_list)
 
         df = read_frame(queryset)
 
@@ -345,7 +348,7 @@ def get_org_software_names(request, format=None):
             software = software.filter(last_used__isnull=True)
 
         elif application_status == 'available':
-            software = software.filter(last_used__isnull=False, last_used__gte=threshold_date)
+            software = software.filter(last_used__isnull=False, last_used__lte=threshold_date)
 
         if organization:
             software = software.filter(organization=organization)

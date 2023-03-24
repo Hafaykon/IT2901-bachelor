@@ -50,7 +50,7 @@ class SoftwarePerComputer(models.Model):
     suite_names = models.CharField(max_length=100)
     license_suite = models.BooleanField()
     part_of_license_suite = models.BooleanField()
-    license_suite_names = models.CharField(max_length=100)
+    license_suite_names = models.CharField(max_length=100, null=True, blank=True)
     block_listed = models.BooleanField()
     primary_user = models.CharField(max_length=100)
     primary_user_full_name = models.CharField(max_length=100)

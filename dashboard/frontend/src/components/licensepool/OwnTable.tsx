@@ -32,7 +32,7 @@ function Row(props: RowProps) {
         const lastUsedDate = new Date(lastUsed);
         const diffInDays = Math.floor((now.getTime() - lastUsedDate.getTime()) / (1000 * 60 * 60 * 24));
 
-        return `${lastUsedDate.toLocaleDateString()} (${diffInDays} days ago)`;
+        return `${lastUsedDate.toLocaleDateString()} (${diffInDays} dager siden)`;
     }
 
 
