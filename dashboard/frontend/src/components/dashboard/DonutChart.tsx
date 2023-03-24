@@ -6,7 +6,7 @@ import CardOverflow from '@mui/joy/CardOverflow';
 import {useNavigate} from 'react-router-dom';
 
 const defaultLabelStyle = {
-    fontSize: '4px',
+    fontSize: '5px',
     fontFamily: 'Source Sans Pro,sans-serif',
     fill: 'white'
 };
