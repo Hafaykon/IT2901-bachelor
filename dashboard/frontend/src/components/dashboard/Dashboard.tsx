@@ -16,7 +16,8 @@ interface Count {
     total_licenses: number,
     active_licenses: number,
     never_used: number,
-    unused_licenses: number
+    unused_licenses: number,
+    available_licenses: number,
 
 }
 
@@ -79,7 +80,7 @@ function Dashboard() {
                         <Grid container id={'donut_chart'}>
                             <DonutChart never_used={boxData[0].never_used} total_licenses={boxData[0].total_licenses}
                                         unused_licenses={boxData[0].unused_licenses}
-                                        active_licenses={boxData[0].active_licenses}/>
+                                        active_licenses={boxData[0].active_licenses} available_licenses={boxData[0].available_licenses}/>
                             <Grid item sx={{ml: 8, mt: 7}}>
                                 <Stack direction={'column'} spacing={8}>
                                     <SavingsBox />

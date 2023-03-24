@@ -14,7 +14,8 @@ type Props = {
     total_licenses: number,
     active_licenses: number,
     never_used: number,
-    unused_licenses: number
+    unused_licenses: number,
+    available_licenses: number,
 }
 
 function DonutChart(infoBoxData: Props) {

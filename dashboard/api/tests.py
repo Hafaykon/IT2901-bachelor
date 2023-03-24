@@ -1,12 +1,16 @@
-from django.test import RequestFactory, TestCase, Client
-from django.urls import include, path, reverse
-from rest_framework.test import APIRequestFactory, APITestCase
-from .views import get_organizations
-from .models import SoftwarePerComputer
 import datetime
+from urllib.parse import urlencode
+
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework import status
+from rest_framework.test import APITestCase
+
+from .models import SoftwarePerComputer, LicensePool
+
 
 # Create your tests here.
-class TestViews(APITestCase):
+class TestSoftwarePCViews(APITestCase):
     def setUp(self):
         self.get_org_url = reverse('organizations')
         SoftwarePerComputer.objects.create(
@@ -53,7 +57,7 @@ class TestViews(APITestCase):
             suite_names='',
             license_suite=False,
             part_of_license_suite=False,
-            license_suite_names='',
+            license_suite_names=None,
             block_listed=False,
             primary_user='myuser',
             primary_user_full_name='My User',
@@ -121,17 +125,6 @@ class TestViews(APITestCase):
         for org in expected_organizations:
             self.assertIn(org, list(response.data))
 
-    def test_get_primary_user_full_name(self):
-        """
-        Should return the full name of all users.
-        """
-        expected_names = ['My User', 'My User']
-        url = reverse('users')
-        response = self.client.get(url)
-        self.assertEqual(response.status_code, 200)
-        for user in expected_names:
-            self.assertIn(user, list(response.data))
-
     def test_get_software_recommendations_view(self):
         """
         Should return all recommendations the the IT-department (standard).
@@ -186,21 +179,6 @@ class TestViews(APITestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(selected_fields, expected_recommendations)
 
-    '''
-    NB! As of now 'organization' is hardcoded in the get-request meaning we can't call this method without a parameter
-    def test_get_organization_software(self):
-        """
-        Should return all software used by the entire municipality.
-        """
-        url = reverse('software')
-        response = self.client.get(url)
-        expected_software = {"Hovedtillitsvalgte": ["Hovedtillitsvalgte"], "Servere": ["myapplication"]}
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, expected_software)
-
-    '''
-
     def test_get_organization_software_param(self):
         """
         Should return all software used by the given organization.
@@ -208,29 +186,10 @@ class TestViews(APITestCase):
         organization = "Servere"
         url = reverse('software') + f'?organization={organization}&status=active'
         response = self.client.get(url)
-        expected_software = []
+        expected_software = ['myapplication']
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(list(response.data), expected_software)
-
-    '''
-    NB! As of now 'organization' is hardcoded in the get-request meaning we can't call this method without a parameter
-    def test_get_org_software_users(self):
-        """
-        Should return a list of all the software the organization uses, and its users
-        """
-        url = reverse('get_applications_by_user')
-        response = self.client.get(url)
-        expected_return_data = [{
-            'application_name': 'Hovedtillitsvalgte', 'users': [{"full_name": "My User", "email": 'myuser@example.com',
-                                                                  "total_minutes": 1000, "active_minutes": 500}]},
-            {'application_name': 'myapplication', 'users': [{"full_name": "My User", "email": 'myuser@example.com',
-                                                            "total_minutes": 1000, "active_minutes": 500}]}
-        ]
-
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data, expected_return_data)
-    '''
 
     def test_get_org_software_users_param(self):
         """
@@ -255,17 +214,17 @@ class TestViews(APITestCase):
         response = self.client.get(url)
         last_used = datetime.date(2022, 2, 1)
         expected_software = [{'application_name': 'Hovedtillitsvalgte',
-                               'data': [{'Active Minutes': 500,
-                                         'Computer name': 'mycomputer',
-                                         'Last used': last_used,
-                                         'Total Minutes': 1000,
-                                         'Username': 'My User'}]},
-                              {'application_name': 'myapplication',
-                               'data': [{'Active Minutes': 500,
-                                         'Computer name': 'mycomputer',
-                                         'Last used': last_used,
-                                         'Total Minutes': 1000,
-                                         'Username': 'My User'}]}]
+                              'data': [{'Active Minutes': 500,
+                                        'Computer name': 'mycomputer',
+                                        'Last used': last_used,
+                                        'Total Minutes': 1000,
+                                        'Username': 'My User'}]},
+                             {'application_name': 'myapplication',
+                              'data': [{'Active Minutes': 500,
+                                        'Computer name': 'mycomputer',
+                                        'Last used': last_used,
+                                        'Total Minutes': 1000,
+                                        'Username': 'My User'}]}]
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, expected_software)
@@ -281,3 +240,146 @@ class TestViews(APITestCase):
                             "where 1 have not been used the last 90 days."
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, expected_response)
+
+    def test_get_licenseinfo(self):
+        query_params = {
+            'organization': 'Servere',
+            'status': 'available',
+        }
+        encoded_query_params = urlencode(query_params)
+        url = reverse('licenseinfo') + '?' + encoded_query_params
+        response = self.client.get(url)
+        response_data = response.data['results']
+        expected_data = [{'application_name': 'myapplication', 'primary_user_full_name': 'My User',
+                           'computer_name': 'mycomputer',
+                           'details': [{'id': 1, 'last_used': datetime.date(2022, 2, 1)}], 'status': 'available'}]
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_data, expected_data)
+
+    def test_get_licenseinfo_invalid_parameters(self):
+        query_params = {
+            'organization': 'Servere',
+        }
+        encoded_query_params = urlencode(query_params)
+        url = reverse('licenseinfo') + '?' + encoded_query_params
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+class TestLicensePool(TestCase):
+    def setUp(self):
+        SoftwarePerComputer.objects.create(
+            computer_name='mycomputer',
+            application_name='Google Chrome 109',
+            category='mycategory',
+            family='myfamily',
+            family_version='1.0',
+            family_edition='Standard',
+            license_required=True,
+            manufacturer='mymanufacturer',
+            organization='IT-tjenesten',
+            organization_path='/my/organization/path',
+            date_added='2022-01-01',
+            last_used='2022-02-01',
+            run_times=10,
+            total_minutes=1000,
+            active_minutes=500,
+            average_usage_per_run=100.0,
+            active_usage_per_run=50.0,
+            remote_total_minutes=0,
+            remote_active_minutes=0,
+            device_total_minutes=1000,
+            device_active_minutes=500,
+            server=False,
+            cloud=False,
+            virtual=False,
+            portable=False,
+            terminal_server=False,
+            test_development=False,
+            manual_client=False,
+            manual_application=False,
+            operating_system='Windows 10',
+            total_cpus=2,
+            total_cores=4,
+            last_scanned='2022-02-14',
+            status='Active',
+            gdpr_risk=False,
+            manufacturer_gdpr_compliant=True,
+            manufacturer_ps_sh_compliant=True,
+            manufacturer_dpd_compliant=True,
+            suite=False,
+            part_of_suite=False,
+            suite_names='',
+            license_suite=False,
+            part_of_license_suite=False,
+            license_suite_names='',
+            block_listed=False,
+            primary_user='myuser',
+            primary_user_full_name='My User',
+            primary_user_email='myuser@example.com'
+        )
+        self.license_pool = LicensePool.objects.create(
+            id=19,
+            primary_user_full_name='My User',
+            primary_user_email='myuser@example.com',
+            computer_name='mycomputer',
+            application_name='Google Chrome 109',
+            family='myfamily',
+            family_version='1.0',
+            family_edition='Standard',
+            organization='IT-tjenesten'
+        )
+        self.url = reverse('software_per_computer_detail', kwargs={'id': self.license_pool.id})
+
+    def test_get_license_pool(self):
+        url = reverse("licensepool")
+        response_message = self.client.get(url)
+        expected_data = {
+            'application_name': 'Google Chrome 109',
+            'organization': 'IT-tjenesten',
+            'details': [
+                {
+                    'id': self.license_pool.id,
+                    'primary_user_full_name': 'My User',
+                    'primary_user_email': 'myuser@example.com',
+                    'organization': 'IT-tjenesten',
+                    'application_name': 'Google Chrome 109',
+                    'family': 'myfamily',
+                    'family_version': '1.0',
+                    'family_edition': 'Standard',
+                    'computer_name': 'mycomputer'
+                }
+            ]
+        }
+
+        response_message_data = response_message.data.get('results')[0]
+        assert response_message_data == expected_data
+
+    def test_update_license_pool_object(self):
+        new_organization = "IT-tjenesten"
+        data = {
+            'application_name': 'Google Chrome 109',
+            'organization': new_organization
+        }
+
+        response = self.client.patch(self.url, data, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['organization'], new_organization)
+
+    def test_create_pool_object(self):
+        url = reverse("create_pool_object")
+        data = {
+            'primary_user_full_name': 'TEST',
+            'primary_user_email': 'TEST@example.com',
+            'computer_name': 'mycomputer',
+            'application_name': 'Google Chrome 109',
+            'family': 'TEST',
+            'family_version': 'TEST',
+            'family_edition': 'TEST',
+            'organization': 'IT-tjenesten'
+        }
+        response = self.client.post(url, data, content_type='application/json')
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(LicensePool.objects.filter(primary_user_full_name='TEST').count(), 1)
+        self.assertEqual(LicensePool.objects.get(primary_user_full_name='TEST').primary_user_full_name, 'TEST')

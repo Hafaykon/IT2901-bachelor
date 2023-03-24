@@ -30,13 +30,13 @@ const LicenseInfo: React.FC = () => {
                 setStatus('available')
                 break;
             default:
-                break;
+                setStatus(null);
         }
         // Fetches distinct software names.
         const fetchSoftwareNames = async () => {
             if (status && storedOrganization) {
                 try {
-                    const data: string[] | undefined = await fetchSoftwareUsedInOrg(status, storedOrganization);
+                    const data: string[] | undefined = await fetchSoftwareUsedInOrg(status, false, storedOrganization);
                     if (data !== undefined) {
                         setOrgSoftware(data);
                     }
@@ -50,7 +50,7 @@ const LicenseInfo: React.FC = () => {
     }, [status]);
 
 
-useEffect(() => {
+    useEffect(() => {
         const fetchData = async () => {
             if (status && storedOrganization) {
                 console.log(status)

@@ -55,3 +55,30 @@ class SoftwarePerComputer(models.Model):
     primary_user = models.CharField(max_length=100)
     primary_user_full_name = models.CharField(max_length=100)
     primary_user_email = models.EmailField()
+
+
+class LicensePool(models.Model):
+    objects = models.Manager()  # default manager
+    primary_user_full_name = models.CharField(max_length=100)
+    primary_user_email = models.EmailField()
+    organization = models.CharField(max_length=100)
+    application_name = models.CharField(max_length=100)
+    family = models.CharField(max_length=100, null=True, blank=True)
+    family_version = models.CharField(max_length=100, null=True, blank=True)
+    family_edition = models.CharField(max_length=100, null=True, blank=True)
+    computer_name = models.CharField(max_length=100)
+    # pris?
+
+
+class PoolRequest(models.Model):
+    objects = models.Manager()  # default manager
+    primary_user_full_name = models.CharField(max_length=100)
+    primary_user_email = models.EmailField()
+    computer_name = models.CharField(max_length=100)
+    contact_organization = models.CharField(max_length=100)
+    application_name = models.CharField(max_length=100)
+    family = models.CharField(max_length=100, null=True, blank=True)
+    family_version = models.CharField(max_length=100, null=True, blank=True)
+    family_edition = models.CharField(max_length=100, null=True, blank=True)
+    request = models.CharField(max_length=100)
+    completed = models.BooleanField()
