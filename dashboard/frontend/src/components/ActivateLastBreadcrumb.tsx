@@ -17,6 +17,7 @@ const breadcrumbNameMap: { [key: string]: string } = {
     '/Ubrukte%20Lisenser': 'Ubrukte Lisenser',
     '/Ledige%20Lisenser': 'Ledige Lisenser',
     '/lisensportal': 'Lisensportalen',
+    '/leaderboard': 'Ledertavle',
     '/FAQ': 'Ofte stilte spørsmål',
     '/minside': 'Min side'
   };

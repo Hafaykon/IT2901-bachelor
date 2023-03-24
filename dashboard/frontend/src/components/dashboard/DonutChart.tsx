@@ -26,7 +26,7 @@ function DonutChart(infoBoxData: Props) {
 
     return (
         <div data-testid="donutChart">
-            <Card sx={{height: 425, width: 670, mt: 7, borderRadius: 5}}>
+            <Card sx={{height: 425, width: 670, mt: 7, borderRadius: 5, ':hover' : {boxShadow: 20}}}>
                 <CardOverflow>
                     <CardActionArea onClick={handleCardClick}>
                         <CardContent>
