@@ -25,12 +25,27 @@ const rows: IRow[] = [
   createData('License 1', 1, 'Active'),
   createData('License 2', 2, 'Inactive'),
   createData('License 3', 3, 'Pending'),
+  createData('License 1', 4, 'Active'),
+  createData('License 2', 5, 'Inactive'),
+  createData('License 3', 6, 'Pending'),
+  createData('License 1', 7, 'Active'),
+  createData('License 2', 8, 'Inactive'),
+  createData('License 3', 9, 'Pending'),
 ];
 
 function MyPageTable() {
   return (
-    <TableContainer component={Paper} sx={{ borderRadius: '12px', width: 600}}>
-      <Table sx={{ minWidth: 400 }}  aria-label="simple table">
+    <TableContainer component={Paper} sx={{
+      padding: '40px',
+      maxWidth: '500px',
+      margin: '40px auto',
+      boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
+      borderRadius: '10px',
+      height: '100%',
+      overflow: 'auto',
+      maxHeight: '400px',
+    }}>
+      <Table sx={{ minWidth: 400 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontWeight: 'bold' }}>Lisensnavn</TableCell>
