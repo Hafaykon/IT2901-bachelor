@@ -1,53 +1,54 @@
 # IT2901-bachelor project - Group  TRDK3
 ## Information
-This bachelor project is made as part of the subject IT2901 - 
-Informatikk Prosjektarbeid II at the Norwegian University of Science and Technology.
+This bachelor project is made as part of the subject _IT2901 - 
+Informatikk Prosjektarbeid II_ at the Norwegian University of Science and Technology. 
 
 
-The group members are:
-- Alvaro W.
+The project authors are:
 - Emma Blix
-- Håkon Hargott Wullum
-- Ida Waage Høyland
-- Sarmi Ponnuthurai
-- Solveig Myren
 - Vegard Henriksen
+- Ida Waage Høyland
+- Solveig Myren
+- Sarmi Ponnuthurai
+- Alvaro W.
+- Håkon Hargott Wullum
 
 ## Documentation
 This README provides general information about the project, and a guide on how to install and run it. 
-Most of the documentation is organised as comments in the files.
 
 ### File structure
 The project has the following (simplified) file structure:
 
+* [dashboard/](./siste-prosjekt/dashboard): The folder for the main project
+  * [api/](./siste-prosjekt/dashboard/api): Where main the Python files lie. Views, urls, models etc.
+  * [data/](./siste-prosjekt/dashboard/data): The .csv files used as data for the project.
+  * [frontend/](./siste-prosjekt/dashboard/frontend): Where the frontend Typescript files are located..
+  * [license_dashboard/](./siste-prosjekt/dashboard/license_dashboard): Django settings.
+  * [TECHNICAL_README.md](./siste-prosjekt/dashboard/TECHNICAL_README.md): The technical README for the project.
+  * [db.sqlite3](./siste-prosjekt/dashboard/db.sqlite3): The SQLite database file
+  * [manage.py](./siste-prosjekt/dashboard/manage.py): The manage.py file used to start the server etc.
+* [README.md](./siste-prosjekt/README.md): The main repository README, the one you are currently reading.
+* [requirements.txt](./siste-prosjekt/requirements.txt): The Python dependencies. 
 
-. /root \
-├── /dashboard\
-│   ├── /api\
-│   ├── /frontend \
-│   ├── /license_dashboard \
-│   ├── db.sqlite3\
-│   └── manage.py\
-├── README.md\
-├── requirements.txt
 
+### Technical documentation
+For a more technical and detailed documentation, please see the README in [dashboard/TECHNICAL_README.md](dashboard/TECHNICAL_README.md)
 
 
 ## Installation
-Installation assumes Python 3.9 or later is installed. From the root of the project:
-1. Run `pip install -r requirements.txt` to make sure all required Python libraries are installed.
+Installation assumes Python 3.11 or later is installed. From the root of the project:
+1. Run `pip install -r requirements.txt` to make sure all required Python dependencies are installed.
 2. Run `cd dashboard`
 3. Run `python manage.py runserver`
 4. Run `cd frontend`
-5. Run `npm install`, then `npm start`. The project will be accessible on the url `http://localhost:3000/`
-   1. Note: if another process is running on port 3000, run `npx kill-port 3000`, then try step 5 again.
+5. Run `npm install`, then `npm start`. The project will be accessible on the url [http://localhost:3000/](http://localhost:3000/)
 
-### Python dependencies
-See requirements.txt in the root of the project.
+Please see the troubleshooting section in the [technical README](dashboard/TECHNICAL_README.md) if you any issues with the installation appear.
 
 
 ## License
-The project is created under a GPL3 license.
+The project is created under a GNU General Public License, version 3. 
+Please [click here](https://www.gnu.org/licenses/gpl-3.0.html) for more information.
 
 
 
