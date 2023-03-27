@@ -15,14 +15,9 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {OwnOrgData} from '../../Interfaces';
 import ReleaseButton from "./ReleaseButton";
-import fetchdata from '../LicenseInfo';
+import handleSorting from '../LicenseInfo';
+import LicenseInfo from '../LicenseInfo'
 
-const handleSorting = (title: string) => {
-    //window.location.reload()
-    //fetchdata
-    //console.log(e.target.textContent)
-    return testerinooo
-}
 
 interface RowProps {
     row: OwnOrgData;
@@ -118,12 +113,12 @@ export default function OwnTable({
                 <TableHead>
                     <TableRow>
                         <TableCell/>
-                        <TableCell onClick={handleSorting("application_name")}><b>Lisensnavn</b></TableCell>
-                        <TableCell onClick={handleSorting("primary_user_full_name")}
+                        <TableCell  onClick={() => handleSorting("application_name")}><b>Lisensnavn</b></TableCell>
+                        <TableCell onClick={() => handleSorting("primary_user_full_name")}
                                    align={"left"}><b>Bruker</b></TableCell>
-                        <TableCell onClick={handleSorting("computer_name")}
+                        <TableCell onClick={() => handleSorting("computer_name")}
                                    align={"left"}><b>Løpenummer</b></TableCell>
-                        <TableCell onClick={handleSorting("satus")}
+                        <TableCell onClick={() => handleSorting("status")}
                                    align={"left"}><b>Status</b></TableCell>
                     </TableRow>
                 </TableHead>

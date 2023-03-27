@@ -77,6 +77,19 @@ useEffect(() => {
         setCurrentPage(value);
     };
 
+    const handleSorting = (sortBy: string) => {
+        return async (event: React.MouseEvent<HTMLTableCellElement>) => {
+            try {
+                const data = await fetchInfoBoxLicense(currentPage, status as string,
+                    sortBy as string, storedOrganization as string, searchTerm);
+                data?.results && setData(data.results);
+                data?.count && setCount(data.count);
+            } catch (error) {
+                console.error('Error fetching license data:', error);
+            }
+        };
+    };
+
 
     return (
         <div id={'licensepool_container'}

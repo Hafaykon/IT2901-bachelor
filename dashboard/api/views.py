@@ -311,6 +311,7 @@ class LicenseInfoView(generics.ListAPIView):
         application_name = self.request.query_params.get('application_name', '')
         organization = self.request.query_params.get('organization')
         status = self.request.query_params.get('status')
+        sort = self.request.query_params.get('sort')
 
         if not organization:
             raise ParseError("The 'organization' parameter is required.")
@@ -340,6 +341,8 @@ class LicenseInfoView(generics.ListAPIView):
             pass
             # TODO: Fetch data from license pool
             status_value = 'Ledig'
+
+        queryset = queryset.order_by(sort)
 
         return queryset
 
