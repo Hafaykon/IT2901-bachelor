@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
 from django_pandas.io import read_frame
+from django.utils.functional import cached_property
 from rest_framework import generics, status
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotFound
@@ -263,7 +264,7 @@ def get_sorted_df_of_unused_licenses(software_data):
     df = df.sort_values(by='last_used', ascending=False)
     return df
 
-
+'''
 class LicenseInfoView(generics.ListAPIView):
     queryset = SoftwarePerComputer.objects.all()
     serializer_class = SoftwarePerComputerSerializer
@@ -314,6 +315,7 @@ class LicenseInfoView(generics.ListAPIView):
 
         result = grouped_df.to_dict('records')
 
+
         if 'status' in self.request.query_params:
             status_value = self.request.query_params.get('status')
             for item in result:
@@ -322,6 +324,72 @@ class LicenseInfoView(generics.ListAPIView):
         paginated_result = self.paginate_queryset(result)
 
         return self.get_paginated_response(paginated_result)
+'''
+
+
+class LicenseInfoView(generics.ListAPIView):
+    queryset = SoftwarePerComputer.objects.all()
+    serializer_class = SoftwarePerComputerSerializer
+    pagination_class = PageNumberPagination
+
+    def get_queryset(self):
+        application_name = self.request.query_params.get('application_name', None)
+        organization = self.request.query_params.get('organization')
+        application_status = self.request.query_params.get('status')
+
+        if not organization:
+            raise ParseError("The 'organization' parameter is required.")
+        if not application_status:
+            raise ParseError("The 'status' parameter is required.")
+
+        threshold_date = datetime.now() - timedelta(days=90)
+        queryset = self.queryset.filter(
+            license_required=True,
+            license_suite_names__isnull=True,
+            organization=organization,
+        )
+        if application_name:
+            queryset = queryset.filter(application_name=application_name)
+
+        if application_status == 'unused':
+            queryset = queryset.filter(last_used__isnull=True)
+
+        elif application_status == 'available':
+            queryset = queryset.filter(last_used__lte=threshold_date)
+        return queryset
+
+    def aggregate_data(self, data):
+        aggregated_data = defaultdict(list)
+
+        for record in data:
+            key = (record['application_name'], record['primary_user_full_name'], record['computer_name'])
+            aggregated_data[key].append(record)
+
+        result = []
+        for (application, user, computer_name), details in aggregated_data.items():
+            result.append({
+                'application_name': application,
+                'primary_user_full_name': user,
+                'computer_name': computer_name,
+                'details': details
+            })
+
+        return result
+
+    def list(self, request, *args, **kwargs):
+        sort = self.request.GET.get('sort', None)
+        queryset = self.get_queryset().order_by(sort)
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            aggregated_data = self.aggregate_data(serializer.data)
+            return self.get_paginated_response(aggregated_data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        aggregated_data = self.aggregate_data(serializer.data)
+
+        return Response(aggregated_data)
 
 
 @api_view(['GET'])

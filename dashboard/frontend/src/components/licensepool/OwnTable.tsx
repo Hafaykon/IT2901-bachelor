@@ -35,6 +35,8 @@ function Row(props: RowProps) {
         return `${lastUsedDate.toLocaleDateString()} (${diffInDays} dager siden)`;
     }
 
+    const lastUsed = row.details[0]?.last_used;
+    const status = lastUsed ? 'aktiv' : 'Ikke i bruk';
 
     return (
         <React.Fragment>
@@ -53,8 +55,7 @@ function Row(props: RowProps) {
                 </TableCell>
                 <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.primary_user_full_name}</TableCell>
                 <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.computer_name}</TableCell>
-                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.status}</TableCell>
-
+                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{status}</TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
@@ -82,7 +83,6 @@ function Row(props: RowProps) {
                                             <TableCell align={"center"}> <ReleaseButton id={detailRow.id}
                                                                                         full_name={row.primary_user_full_name}/>
                                             </TableCell>
-
                                         </TableRow>
                                     ))}
                                 </TableBody>
