@@ -3,9 +3,10 @@ import {useParams} from 'react-router-dom';
 import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
 import {OwnOrgData} from "../Interfaces";
-import {Grid, Stack} from '@mui/material';
+import {Box, Grid, Stack} from '@mui/material';
 import OwnTable from "./licensepool/OwnTable";
 import Pagination from '@mui/material/Pagination';
+import ActiveLastBreadcrumb from './ActivateLastBreadcrumb';
 import CircularIndeterminate from './spinner/MuiLoadingSpinner';
 
 const LicenseInfo: React.FC = () => {
@@ -18,7 +19,6 @@ const LicenseInfo: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [count, setCount] = useState<number>(0);
     const [sortBy, setSortBy] = useState<string>('application_name')
-
     const [loaded, setLoaded] = React.useState(false);
 
 
@@ -27,20 +27,21 @@ const LicenseInfo: React.FC = () => {
             case 'Totale Lisenser':
                 setStatus('active')
                 break;
-            case 'Uåpnede Lisenser':
+            case 'Ubrukte Lisenser':
                 setStatus('unused')
                 break;
             case 'Ledige Lisenser':
                 setStatus('available')
                 break;
             default:
+                setStatus(null);
                 break;
         }
         // Fetches distinct software names.
         const fetchSoftwareNames = async () => {
             if (status && storedOrganization) {
                 try {
-                    const data: string[] | undefined = await fetchSoftwareUsedInOrg(status, storedOrganization);
+                    const data: string[] | undefined = await fetchSoftwareUsedInOrg(status, 'false', storedOrganization);
                     if (data !== undefined) {
                         setOrgSoftware(data);
                     }
@@ -91,7 +92,11 @@ const LicenseInfo: React.FC = () => {
 
 
     return (
-        <>{loaded ? (<div id={'licensepool_container'}
+        <><div>
+            <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+                <ActiveLastBreadcrumb />
+            </Grid>
+            {loaded ? (<Box id={'licensepool_container'}
              style={{display: 'flex', justifyContent: 'center', alignContent: "center", marginTop: "20px"}}>
             <Grid container className='license_pool' justifyContent={"center"}>
                 <Grid container justifyContent="center" alignItems="center" className={'license_table'} width={"75%"}>
@@ -108,7 +113,8 @@ const LicenseInfo: React.FC = () => {
                     </Stack>
                 </Grid>
             </Grid>
-        </div> ) : (<CircularIndeterminate/>) }</>)
+        </Box> ) : (<CircularIndeterminate/>) }
+        </div></>)
 };
 
 export default LicenseInfo;
