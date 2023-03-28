@@ -4,23 +4,25 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
-from django.contrib.auth import authenticate, login
 from django_pandas.io import read_frame
-from rest_framework import generics
+from rest_framework import generics, permissions
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.exceptions import NotFound
 from rest_framework.exceptions import ParseError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from .models import PoolRequest, LicensePool, SoftwarePerComputer
 from .serializers import SoftwarePerComputerSerializer, PoolRequestSerializer, PoolSerializer
 
 
-# Create your views here.
 @api_view(['GET'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([permissions.IsAuthenticated])
 def get_organizations(request, format=None):
     """
     :return: Returns a list of all distinct organizations.
@@ -370,7 +372,6 @@ def get_org_software_names(request, format=None):
 class GetLicensePool(generics.ListAPIView):
     """
     Returns a list of all licenses in the license pool.
-    parameters: application_name, organization
     """
     serializer_class = PoolSerializer
     queryset = LicensePool.objects.all()
@@ -455,17 +456,22 @@ class CreatePoolObject(generics.CreateAPIView):
     serializer_class = PoolSerializer
 
 
-class LoginAPIView(APIView):
-    def post(self, request):
-        email = request.data.get('email')
-        password = request.data.get('password')
+class LoginAPI(ObtainAuthToken):
+    """
+    API endpoint that allows users to login.
+    Returns a token and user information if the credentials are valid.
+    """
+    permission_classes = [permissions.AllowAny]
 
-        if email and password:
-            user = authenticate(request, primary_user_email=email, password=password)
-            if user is not None:
-                login(request, user)
-                return Response({'status': 'Logged in successfully.'})
-            else:
-                return Response({'error': 'Invalid email or password.'}, status=status.HTTP_401_UNAUTHORIZED)
-        else:
-            return Response({'error': 'Both email and password are required.'}, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data, context={'request': request})
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'email': user.primary_user_email,
+            'organization': user.organization,
+        })

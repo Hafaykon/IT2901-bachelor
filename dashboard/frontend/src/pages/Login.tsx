@@ -1,19 +1,36 @@
-import { useEffect, useState } from 'react';
-import { Box, TextField, Button, Container } from '@mui/material';
+import {useEffect, useState} from 'react';
+import {Box, Button, Container, TextField} from '@mui/material';
 import Typography from '@mui/joy/Typography';
 import './Login.css'
 
 interface LoginFormProps {
-  onSubmit: (username: string, password: string) => void;
+    onSubmit: (email: string, password: string) => void;
 }
 
 export default function Login() {
-    const [username, setUsername] = useState('')
+    const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
 
-    function onSubmit(e: { preventDefault: () => void; }) {
+    async function onSubmit(e: { preventDefault: () => void; }) {
         e.preventDefault()
-        //signIn({ username, password })
+        try {
+
+            const response = await fetch('http://127.0.0.1:8000/api/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: email,
+                    password: password
+                }),
+            })
+            const data = await response.json()
+            console.log(data)
+
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     // Naviger til fremside dersom allerede logget inn
@@ -31,12 +48,15 @@ export default function Login() {
                         Logg inn
                     </Typography>
                     <Box component='form'
-                        onSubmit={onSubmit}
-                        sx={{ mt: 1 }}
+                         onSubmit={onSubmit}
+                         sx={{mt: 1}}
                     >
-                        <TextField onChange={(e) => setUsername(e.target.value)} margin='normal' required fullWidth id='loginID' label='E-post' name='LoginID' autoFocus />
-                        <TextField onChange={(e) => setPassword(e.target.value)} margin='normal' required fullWidth id='password' label='Passord' name='password' type='password' />
-                        <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2, backgroundColor: '#005aa7' }}>Logg inn</Button>
+                        <TextField onChange={(e) => setEmail(e.target.value)} margin='normal' required fullWidth
+                                   id='loginID' label='E-post' name='LoginID' autoFocus/>
+                        <TextField onChange={(e) => setPassword(e.target.value)} margin='normal' required fullWidth
+                                   id='password' label='Passord' name='password' type='password'/>
+                        <Button type='submit' fullWidth variant='contained'
+                                sx={{mt: 3, mb: 2, backgroundColor: '#005aa7'}}>Logg inn</Button>
                     </Box>
                 </Box>
             </Container>
