@@ -6,7 +6,7 @@ import {OwnOrgData} from "../../Interfaces";
 import userEvent from "@testing-library/user-event";
 import handleSorting from '../LicenseInfo';
 
-let test_date = new Date('2022-12-14');
+const test_date = new Date('2022-12-14');
 const diff = Math.floor((Date.now() - test_date.getTime()) / (1000 * 3600 * 24));
 const last_opened = "14.12.2022 (" + diff + " dager siden)"
 
