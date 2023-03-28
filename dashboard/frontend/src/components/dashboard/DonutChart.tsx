@@ -34,7 +34,7 @@ function DonutChart(infoBoxData: Props) {
                             <Stack direction="row">
                             <Typography sx={{
                                 textAlign: 'left',
-                                fontSize: 25,
+                                fontSize: 27,
                                 padding: 2,
                                 color: '#002d53',
                                 fontFamily: 'Source Sans Pro,sans-serif'
