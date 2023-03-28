@@ -2,7 +2,6 @@ import './Dashboard.css';
 import { Card, CardActionArea, CardContent, Stack, Typography } from '@mui/material';
 import CardOverflow from '@mui/joy/CardOverflow';
 import { useNavigate } from 'react-router-dom';
-import { hover } from '@testing-library/user-event/dist/hover';
 
 export function SavingsBox() {
     const navigate = useNavigate();
