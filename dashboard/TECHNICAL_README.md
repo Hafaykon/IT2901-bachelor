@@ -35,6 +35,7 @@ At the moment, it contains random entries from SoftwarePerComputer in order to d
 
 ## 3. Troubleshooting
 - If another process is running on port 3000, run `npx kill-port 3000` before repeating step 5 of the installation.
+- If you get the error message `django.db.utils.OperationalError: table api_licensepool" already exists` when trying to migrate tables, run ` python manage.py migrate --fake`.
 
 
 ## 4. Other information
