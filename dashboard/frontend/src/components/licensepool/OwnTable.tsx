@@ -15,7 +15,6 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {OwnOrgData} from '../../Interfaces';
 import ReleaseButton from "./ReleaseButton";
-import handleSorting from '../LicenseInfo';
 
 
 interface RowProps {
