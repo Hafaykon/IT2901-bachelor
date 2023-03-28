@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useEffect, useState} from 'react';
+import {useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
@@ -16,7 +16,6 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {OwnOrgData} from '../../Interfaces';
 import ReleaseButton from "./ReleaseButton";
 import handleSorting from '../LicenseInfo';
-import LicenseInfo from '../LicenseInfo'
 
 
 interface RowProps {
@@ -89,11 +88,10 @@ function Row(props: RowProps) {
 
 interface Props {
     data: OwnOrgData[];
+    handleSorting: (sortBy: string) => void;
 }
 
-export default function OwnTable({
-                                     data
-                                 }: Props) {
+export default function OwnTable({data, handleSorting}: Props) {
 
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
@@ -104,7 +102,6 @@ export default function OwnTable({
             setLoaded(true);
             console.log(software);
         }
-
     }, [software]);
 
     return (
@@ -113,13 +110,14 @@ export default function OwnTable({
                 <TableHead>
                     <TableRow>
                         <TableCell/>
-                        <TableCell  onClick={() => handleSorting("application_name")}><b>Lisensnavn</b></TableCell>
+                        <TableCell  onClick={() => handleSorting("application_name")}
+                                    style={{cursor:"pointer"}}><b>Lisensnavn</b></TableCell>
                         <TableCell onClick={() => handleSorting("primary_user_full_name")}
-                                   align={"left"}><b>Bruker</b></TableCell>
+                                   align={"left"} style={{cursor:"pointer"}}><b>Bruker</b></TableCell>
                         <TableCell onClick={() => handleSorting("computer_name")}
-                                   align={"left"}><b>Løpenummer</b></TableCell>
+                                   align={"left"} style={{cursor:"pointer"}}><b>Løpenummer</b></TableCell>
                         <TableCell onClick={() => handleSorting("status")}
-                                   align={"left"}><b>Status</b></TableCell>
+                                   align={"left"} style={{cursor:"pointer"}}><b>Status</b></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -127,9 +125,7 @@ export default function OwnTable({
                         <Row key={index} row={user}/>
                     ))}
                 </TableBody>
-
             </Table>
         </TableContainer></div>} </>
-
     );
 }

@@ -311,7 +311,6 @@ class LicenseInfoView(generics.ListAPIView):
         application_name = self.request.query_params.get('application_name', '')
         organization = self.request.query_params.get('organization')
         status = self.request.query_params.get('status')
-        sort = self.request.query_params.get('sort')
 
         if not organization:
             raise ParseError("The 'organization' parameter is required.")
@@ -342,8 +341,6 @@ class LicenseInfoView(generics.ListAPIView):
             # TODO: Fetch data from license pool
             status_value = 'Ledig'
 
-        queryset = queryset.order_by(sort)
-
         return queryset
 
     def list(self, request, *args, **kwargs):
@@ -357,6 +354,9 @@ class LicenseInfoView(generics.ListAPIView):
             .apply(lambda x: x[['id', 'last_used']].to_dict('records')) \
             .reset_index() \
             .rename(columns={0: 'details'})
+
+        sort = self.request.query_params.get('sort')
+        grouped_df = grouped_df.sort_values(sort)
 
         result = grouped_df.to_dict('records')
 

@@ -4,6 +4,7 @@ import {cleanup, render, screen} from "@testing-library/react";
 import OwnTable from "./OwnTable";
 import {OwnOrgData} from "../../Interfaces";
 import userEvent from "@testing-library/user-event";
+import handleSorting from '../LicenseInfo';
 
 const mockData: OwnOrgData[] = [
     {
@@ -23,7 +24,7 @@ const mockData: OwnOrgData[] = [
 
 describe('The own table', () => {
     beforeEach(() => {
-        render(<OwnTable data={mockData}/>);
+        render(<OwnTable data={mockData} handleSorting={handleSorting}/>);
     })
     afterEach(() => {
         cleanup()

@@ -49,24 +49,24 @@ const LicenseInfo: React.FC = () => {
         fetchSoftwareNames();
     }, [status]);
 
+    useEffect(() => {
+       fetchData();
+    }, [searchTerm, currentPage, status, sortBy]);
 
-useEffect(() => {
-        const fetchData = async () => {
-            if (status && storedOrganization) {
-                console.log(status)
-                try {
-                    const data = await fetchInfoBoxLicense(currentPage, status as string,
-                        sortBy as string, storedOrganization as string, searchTerm);
-                    data?.results && setData(data.results);
-                    data?.count && setCount(data.count);
-                } catch (error) {
-                    console.error('Error fetching license data:', error);
-                }
+
+    const fetchData = async () => {
+        if (status && storedOrganization) {
+            console.log(status)
+            try {
+                const data = await fetchInfoBoxLicense(currentPage, status as string,
+                    sortBy as string, storedOrganization as string, searchTerm);
+                data?.results && setData(data.results);
+                data?.count && setCount(data.count);
+            } catch (error) {
+                console.error('Error fetching license data:', error);
             }
-        };
-        fetchData();
-    }, [searchTerm, currentPage, status]);
-
+        }
+    };
 
     // Function that gets input from the searchBar component.
     const handleChange = (term: string) => {
@@ -77,17 +77,9 @@ useEffect(() => {
         setCurrentPage(value);
     };
 
-    const handleSorting = (sortBy: string) => {
-        return async (event: React.MouseEvent<HTMLTableCellElement>) => {
-            try {
-                const data = await fetchInfoBoxLicense(currentPage, status as string,
-                    sortBy as string, storedOrganization as string, searchTerm);
-                data?.results && setData(data.results);
-                data?.count && setCount(data.count);
-            } catch (error) {
-                console.error('Error fetching license data:', error);
-            }
-        };
+    const handleSorting = async (sortBy: string) => {
+        setSortBy(sortBy);
+        fetchData()
     };
 
 
@@ -99,7 +91,7 @@ useEffect(() => {
                     <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
                         <h2 style={{fontFamily: "Source Sans 3"}}> {title} i {storedOrganization}</h2>
                         <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
-                        <OwnTable data={data}/>
+                        <OwnTable data={data} handleSorting={handleSorting}/>
                         <Pagination
                             count={Math.ceil(count / 10)}
                             page={currentPage}
