@@ -19,6 +19,7 @@ function LicensePool() {
     const [currentPage, setCurrentPage] = React.useState(1);
     const ITEMS_PER_PAGE = 10;
     const [count, setCount] = useState<number>(0);
+    const [sortBy, setSortBy] = useState<string>('application_name')
 
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +30,11 @@ function LicensePool() {
         setCurrentPage(value);
     };
 
+    const handleSorting = async (sortBy: string) => {
+        //setLoaded(false)
+        setSortBy(sortBy);
+        fetchData()
+    };
 
     // Function that gets input from the searchBar component.
     const updateSearchTerm = (term: string) => {
@@ -51,30 +57,30 @@ function LicensePool() {
         fetchSoftwareNames();
     }, [checked]);
 
+    const fetchData = async () => {
+        try {
+            const {
+                results,
+                count,
+                error,
+                message
+            } = await fetchPoolData(currentPage, sortBy as string,
+                searchTerm, checked ? org as string : undefined);
+            if (error) {
+                setErrorMessage(message);
+                setData([]);
+            } else {
+                setData(results);
+                setCount(count);
+            }
+        } catch (error) {
+            console.error('Error fetching license data:', error);
+        }
+    };
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const {
-                    results,
-                    count,
-                    error,
-                    message
-                } = await fetchPoolData(currentPage, searchTerm, checked ? org as string : undefined);
-                if (error) {
-                    setErrorMessage(message);
-                    setData([]);
-                } else {
-                    setData(results);
-                    setCount(count);
-                }
-            } catch (error) {
-                console.error('Error fetching license data:', error);
-            }
-        };
-
         fetchData();
-    }, [currentPage, checked, searchTerm]);
+    }, [currentPage, sortBy, checked, searchTerm]);
 
 
     return (
@@ -113,7 +119,7 @@ function LicensePool() {
 
                         </Stack>
                         <Stack direction={'column'} width={"100%"}>
-                            <PoolTable data={data}/>
+                            <PoolTable data={data} handleSorting={handleSorting}/>
                             <Pagination
                                 count={Math.ceil(count / ITEMS_PER_PAGE)}
                                 page={currentPage}
