@@ -411,7 +411,9 @@ class GetLicensePool(generics.ListAPIView):
         return result
 
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        sort = self.request.GET.get('sort', None)
+        queryset = self.get_queryset().order_by(sort)
+
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)
