@@ -86,14 +86,14 @@ class PoolRequest(models.Model):
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, primary_user_email, password=None, is_unit_head=False):
-        user = self.model(primary_user_email=primary_user_email, is_unit_head=is_unit_head)
+    def create_user(self, primary_user_email, password=None, is_unit_head=False, organization=None):
+        user = self.model(primary_user_email=primary_user_email, is_unit_head=is_unit_head, organization=organization)
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self, primary_user_email, password=None):
-        user = self.create_user(primary_user_email, password)
+    def create_superuser(self, primary_user_email, password=None, organization=None):
+        user = self.create_user(primary_user_email, password, organization=organization)
         user.is_admin = True
         user.is_unit_head = True
         user.save()
@@ -102,6 +102,7 @@ class CustomUserManager(BaseUserManager):
 
 class CustomUser(AbstractBaseUser):
     primary_user_email = models.EmailField(unique=True)
+    organization = models.CharField(max_length=100, default='')
     is_unit_head = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
