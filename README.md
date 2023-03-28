@@ -22,7 +22,7 @@ The project has the following (simplified) file structure:
 * [dashboard/](./siste-prosjekt/dashboard): The folder for the main project
   * [api/](./siste-prosjekt/dashboard/api): Where main the Python files lie. Views, urls, models etc.
   * [data/](./siste-prosjekt/dashboard/data): The .csv files used as data for the project.
-  * [frontend/](./siste-prosjekt/dashboard/frontend): Where the frontend Typescript files are located..
+  * [frontend/](./siste-prosjekt/dashboard/frontend): Where the frontend Typescript files are located.
   * [license_dashboard/](./siste-prosjekt/dashboard/license_dashboard): Django settings.
   * [TECHNICAL_README.md](./siste-prosjekt/dashboard/TECHNICAL_README.md): The technical README for the project.
   * [db.sqlite3](./siste-prosjekt/dashboard/db.sqlite3): The SQLite database file
