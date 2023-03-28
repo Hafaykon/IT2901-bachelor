@@ -4,8 +4,11 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
+from django.db.models import Count, Q, FloatField, F
+from django.db.models.functions import Cast
 from django_pandas.io import read_frame
-from rest_framework import generics, status
+from rest_framework import generics
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotFound
 from rest_framework.exceptions import ParseError
@@ -245,6 +248,65 @@ def software_counts(request):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except ParseError as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def leaderboard(request):
+    try:
+        # Get organization parameter
+        organization = request.GET.get('organization')
+
+        # Get top 25 organizations by active percentage
+        org_filter = Q(license_required=True) & Q(license_suite_names__isnull=True)
+        now = datetime.now()
+        last_90_days = now - timedelta(days=90)
+
+        top_orgs = SoftwarePerComputer.objects.filter(org_filter).values('organization').annotate(
+            total=Count('id'),
+            active=Count('id', filter=Q(last_used__gte=last_90_days)),
+            active_percentage=Cast(
+                100.0 * Count('id', filter=Q(last_used__gte=last_90_days)) / Cast(Count('id'), FloatField()),
+                FloatField())
+        ).order_by('-active_percentage')
+
+        top_orgs_sliced = top_orgs[:25]
+
+        # Format response data
+        leaderboard_data = []
+        organization_included = False
+        organization_data = None  # initialize organization_data to None
+
+        for i, org in enumerate(top_orgs_sliced):
+            active_percentage = round(org['active_percentage'], 4)
+            leaderboard_data.append({
+                'organization': org['organization'],
+                'active_percentage': active_percentage,
+                'rank': i + 1
+            })
+
+            if org['organization'] == organization:
+                organization_included = True
+
+        if organization and not organization_included:
+            for i, org in enumerate(top_orgs):
+                active_percentage = round(org['active_percentage'], 4)
+                leaderboard_data.append({
+                    'organization': org[organization],
+                    'active_percentage': active_percentage,
+                    'rank': i + 1
+                })
+
+        leaderboard_data.append({
+            organization_data
+        })
+
+        response_data = {
+            'leaderboard': leaderboard_data
+        }
+        return Response(response_data)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 def get_sorted_df_of_unused_licenses(software_data):
