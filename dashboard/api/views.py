@@ -258,10 +258,7 @@ def leaderboard(request):
     :return: Returns a list of the top 25 organizations by active percentage.
     """
     try:
-        # Get organization parameter
         organization = request.GET.get('organization')
-
-        # Get top 25 organizations by active percentage
         org_filter = Q(license_required=True) & Q(license_suite_names__isnull=True)
         now = datetime.now()
         last_90_days = now - timedelta(days=90)
@@ -275,14 +272,11 @@ def leaderboard(request):
                 FloatField())
         ).order_by('-active_percentage')
 
-        # Slice top 25 organizations
         top_orgs_sliced = top_orgs[:25]
 
         # Format response data
         leaderboard_data = []
         organization_included = False
-        organization_data = None  # initialize organization_data to None
-
 
         for i, org in enumerate(top_orgs_sliced):
             active_percentage = round(org['active_percentage'], 2)
@@ -295,19 +289,17 @@ def leaderboard(request):
             if org['organization'] == organization:
                 organization_included = True
 
+        # The org from the request is not in the top 25
         if organization and not organization_included:
-            for i, org in enumerate(top_orgs):
-                if org['organization'] == organization:
-                    active_percentage = round(org['active_percentage'], 2)
-                    leaderboard_data.append({
-                        'organization': org['organization'],
-                        'active_percentage': active_percentage,
-                        'rank': i + 1
-                    })
-                    break
-            leaderboard_data.append({
-                organization_data
-            })
+            org = top_orgs.filter(organization=organization).first()
+            if org:
+                index = list(top_orgs).index(org)
+                active_percentage = round(org['active_percentage'], 2)
+                leaderboard_data.append({
+                    'organization': org['organization'],
+                    'active_percentage': active_percentage,
+                    'rank': index + 1
+                })
 
         response_data = {
             'leaderboard': leaderboard_data
