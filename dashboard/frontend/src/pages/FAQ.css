@@ -1,0 +1,11 @@
+.Container {
+    width: 100%;
+    margin-top: 20px;
+    padding-left: 14%;
+}
+
+#Headline {
+    font-size: 30pt;
+    display: flex;
+    justify-content: flex-start;
+}

@@ -1,6 +1,7 @@
-import { Grid } from '@mui/material';
 import React from 'react';
+import { Grid, Typography } from '@mui/material';
 import ActiveLastBreadcrumb from '../components/ActivateLastBreadcrumb';
+import './FAQ.css';
 
 function FAQ() {
     return (
@@ -8,7 +9,9 @@ function FAQ() {
             <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
                 <ActiveLastBreadcrumb />
             </Grid>
-            <h1>Ofte stilte spørsmål</h1>
+            <Grid className='Container'>
+                <Typography id="Headline">Ofte stilte spørsmål</Typography>
+            </Grid>
         </div>
     );
 }
