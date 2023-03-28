@@ -6,6 +6,7 @@ import {OwnOrgData} from "../Interfaces";
 import {Grid, Stack} from '@mui/material';
 import OwnTable from "./licensepool/OwnTable";
 import Pagination from '@mui/material/Pagination';
+import CircularIndeterminate from './spinner/MuiLoadingSpinner';
 
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
@@ -17,6 +18,9 @@ const LicenseInfo: React.FC = () => {
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [count, setCount] = useState<number>(0);
     const [sortBy, setSortBy] = useState<string>('application_name')
+
+    const [loaded, setLoaded] = React.useState(false);
+
 
     useEffect(() => {
         switch (title) {
@@ -62,6 +66,7 @@ const LicenseInfo: React.FC = () => {
                     sortBy as string, storedOrganization as string, searchTerm);
                 data?.results && setData(data.results);
                 data?.count && setCount(data.count);
+                setLoaded(true);
             } catch (error) {
                 console.error('Error fetching license data:', error);
             }
@@ -74,17 +79,19 @@ const LicenseInfo: React.FC = () => {
     }
 
     const handlePageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
+        setLoaded(false)
         setCurrentPage(value);
     };
 
     const handleSorting = async (sortBy: string) => {
+        setLoaded(false)
         setSortBy(sortBy);
         fetchData()
     };
 
 
     return (
-        <div id={'licensepool_container'}
+        <>{loaded ? (<div id={'licensepool_container'}
              style={{display: 'flex', justifyContent: 'center', alignContent: "center", marginTop: "20px"}}>
             <Grid container className='license_pool' justifyContent={"center"}>
                 <Grid container justifyContent="center" alignItems="center" className={'license_table'} width={"75%"}>
@@ -99,11 +106,9 @@ const LicenseInfo: React.FC = () => {
                             color={"primary"}
                         />
                     </Stack>
-
-
                 </Grid>
             </Grid>
-        </div>)
+        </div> ) : (<CircularIndeterminate/>) }</>)
 };
 
 export default LicenseInfo;

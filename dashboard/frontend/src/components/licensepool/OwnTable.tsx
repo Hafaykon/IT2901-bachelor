@@ -96,7 +96,6 @@ export default function OwnTable({data, handleSorting}: Props) {
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
 
-
     useEffect(() => {
         if ((software.length) > 0) {
             setLoaded(true);
