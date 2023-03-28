@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
-from django.db.models import Count, Q, FloatField, F
+from django.db.models import Count, Q, FloatField
 from django.db.models.functions import Cast
 from django_pandas.io import read_frame
 from rest_framework import generics
@@ -252,6 +252,11 @@ def software_counts(request):
 
 @api_view(['GET'])
 def leaderboard(request):
+    """
+    Function to get the top 25 organizations by active percentage.
+    :param request: A GET request with an 'organization' parameter.
+    :return: Returns a list of the top 25 organizations by active percentage.
+    """
     try:
         # Get organization parameter
         organization = request.GET.get('organization')
@@ -261,6 +266,7 @@ def leaderboard(request):
         now = datetime.now()
         last_90_days = now - timedelta(days=90)
 
+        # Generate queryset of top 25 organizations by active percentage
         top_orgs = SoftwarePerComputer.objects.filter(org_filter).values('organization').annotate(
             total=Count('id'),
             active=Count('id', filter=Q(last_used__gte=last_90_days)),
@@ -269,6 +275,7 @@ def leaderboard(request):
                 FloatField())
         ).order_by('-active_percentage')
 
+        # Slice top 25 organizations
         top_orgs_sliced = top_orgs[:25]
 
         # Format response data
@@ -276,8 +283,9 @@ def leaderboard(request):
         organization_included = False
         organization_data = None  # initialize organization_data to None
 
+
         for i, org in enumerate(top_orgs_sliced):
-            active_percentage = round(org['active_percentage'], 4)
+            active_percentage = round(org['active_percentage'], 2)
             leaderboard_data.append({
                 'organization': org['organization'],
                 'active_percentage': active_percentage,
@@ -289,16 +297,17 @@ def leaderboard(request):
 
         if organization and not organization_included:
             for i, org in enumerate(top_orgs):
-                active_percentage = round(org['active_percentage'], 4)
-                leaderboard_data.append({
-                    'organization': org[organization],
-                    'active_percentage': active_percentage,
-                    'rank': i + 1
-                })
-
-        leaderboard_data.append({
-            organization_data
-        })
+                if org['organization'] == organization:
+                    active_percentage = round(org['active_percentage'], 2)
+                    leaderboard_data.append({
+                        'organization': org['organization'],
+                        'active_percentage': active_percentage,
+                        'rank': i + 1
+                    })
+                    break
+            leaderboard_data.append({
+                organization_data
+            })
 
         response_data = {
             'leaderboard': leaderboard_data
