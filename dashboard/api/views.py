@@ -35,6 +35,12 @@ def get_organizations(request, format=None):
 
 
 @api_view(['GET'])
+def get_email_length(request, format=None):
+    emails = SoftwarePerComputer.objects.values_list('primary_user_email').distinct()
+    return Response(len(emails))
+
+
+@api_view(['GET'])
 def get_software_recommendations(request, format=None):
     """
     :param request: A GET request with an optional 'organization' parameter.

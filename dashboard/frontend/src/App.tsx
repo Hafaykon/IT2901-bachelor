@@ -8,6 +8,7 @@ import FAQ from './pages/FAQ';
 import Home from './pages/Home';
 import Navbar from './components/navbar/Navbar';
 import Licenses from './pages/Licenses';
+import Login from './pages/Login';
 import { Leaderboard } from './components/leaderboard/Leaderboard';
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
             <Navbar/>
             <Routes>
                 <Route path="/" element={<Home/>}/>
+                <Route path="/Login" element={<Login/>}/>
                 <Route path="/minside" element={<MyPage/>}/>
                 <Route path="/:title" element={<LicenseInfo/>}/>
                 <Route path="/lisensportal" element={<Licenses/>}/>
