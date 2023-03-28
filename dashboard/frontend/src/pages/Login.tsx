@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Box, TextField, Button, Container } from '@mui/material';
 import Typography from '@mui/joy/Typography';
+import './Login.css'
 
 interface LoginFormProps {
   onSubmit: (username: string, password: string) => void;
@@ -25,23 +26,17 @@ export default function Login() {
     return (
         <>
             <Container component='main' maxWidth='sm'>
-                <Box sx={{
-                    marginTop: '20%',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                }}>
-                    <Typography sx={{ mb: 2, fontSize: 8 }}>Dashboard</Typography>
-                    <Typography sx={{fontSize: 5}}>
+                <Box id="LogIn">
+                    <Typography id="Headline">
                         Logg inn
                     </Typography>
                     <Box component='form'
                         onSubmit={onSubmit}
                         sx={{ mt: 1 }}
                     >
-                        <TextField onChange={(e) => setUsername(e.target.value)} margin='normal' required fullWidth id='loginID' label='E-post eller brukernavn' name='LoginID' autoFocus />
+                        <TextField onChange={(e) => setUsername(e.target.value)} margin='normal' required fullWidth id='loginID' label='E-post' name='LoginID' autoFocus />
                         <TextField onChange={(e) => setPassword(e.target.value)} margin='normal' required fullWidth id='password' label='Passord' name='password' type='password' />
-                        <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2 }}>Logg inn</Button>
+                        <Button type='submit' fullWidth variant='contained' sx={{ mt: 3, mb: 2, backgroundColor: '#005aa7' }}>Logg inn</Button>
                     </Box>
                 </Box>
             </Container>
