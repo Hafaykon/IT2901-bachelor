@@ -21,5 +21,6 @@ urlpatterns = [
          name='software_per_computer_detail'),
     path('pool/create', views.CreatePoolObject.as_view(), name='create_pool_object'),
     path('licenseinfo/', LicenseInfoView.as_view(), name='licenseinfo'),
+    path('', views.get_email_length, name='get_email_length'),
 
 ]

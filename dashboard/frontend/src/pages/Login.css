@@ -1,0 +1,22 @@
+.formContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 4rem;
+  }
+  .formField {
+    margin: 2rem;
+    width: 100%;
+  }
+  .submitButton {
+    margin: 2rem;
+    width: 100%;
+  }
+  
+  
+  
+  
+  
+  
+  
+  
