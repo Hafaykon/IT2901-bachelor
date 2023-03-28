@@ -56,7 +56,10 @@
     font-size: 30px;
 }
 
-.org_name {
+#org_name {
+    color: #002d53;
+    font-family: Source Sans Pro, sans-serif;
+    font-size: 30pt;
     display: flex;
     width: 780px;
 }
@@ -75,7 +78,7 @@
 }
 
 #portal-link {
-    color: #002D53;
+    color: #005aa7;
     text-decoration: none;
     font-family: Source Sans Pro, sans-serif;
     font-style: normal;
@@ -94,7 +97,7 @@
 }
 
 #portal-link:hover {
-    border-bottom: 2px solid #002d53;
+    border-bottom: 2px solid #005aa7;
 }
 
 #org {
