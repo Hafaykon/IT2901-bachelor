@@ -309,6 +309,9 @@ class LicenseInfoView(generics.ListAPIView):
             .reset_index() \
             .rename(columns={0: 'details'})
 
+        sort = self.request.query_params.get('sort')
+        grouped_df = grouped_df.sort_values(sort)
+
         result = grouped_df.to_dict('records')
 
         if 'status' in self.request.query_params:
@@ -408,7 +411,9 @@ class GetLicensePool(generics.ListAPIView):
         return result
 
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        sort = self.request.GET.get('sort', None)
+        queryset = self.get_queryset().order_by(sort)
+
         page = self.paginate_queryset(queryset)
         if page is not None:
             serializer = self.get_serializer(page, many=True)

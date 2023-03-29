@@ -6,14 +6,20 @@ export const SidebarData = [
         cName: 'nav-text'
     },
     {
-        title: 'Min side',
-        path: '/minside',
+        title: 'Lisensportalen',
+        path: '/lisensportal',
 
         cName: 'nav-text'
     },
     {
-        title: 'Lisensportalen',
-        path: '/lisensportal',
+        title: 'Ledertavle',
+        path: '/leaderboard',
+
+        cName: 'nav-text'
+    },
+    {
+        title: 'Min side',
+        path: '/minside',
 
         cName: 'nav-text'
     },
@@ -25,7 +31,7 @@ export const SidebarData = [
     },
     {
         title: 'Logg ut',
-        path: '/loggut',
+        path: '/Login',
 
         cName: 'nav-text'
     }
