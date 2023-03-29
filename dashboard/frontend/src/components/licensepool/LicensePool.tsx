@@ -93,14 +93,22 @@ function LicensePool() {
                 <Grid container className='license_pool' justifyContent={"center"}>
                     <Grid container justifyContent="center" alignItems="center" className={'license_table'}
                           width={"75%"}>
-                        <Stack direction={"column"} spacing={1} width={"95%"} marginBottom={"10px"}>
-                            <h2 style={{fontFamily: 'Source Sans Pro, sans-serif'}}> Lisensportalen</h2>
+                        <Stack direction={"column"} width={"95%"} marginBottom={"10px"}>
+                            <h2 style={{fontFamily: 'Source Sans Pro, sans-serif', 
+                                fontSize: 40,
+                                marginTop: -0.6
+                            }}> 
+                                Lisensportalen
+                            </h2>
                             <h4 style={{
                                 fontFamily: 'Source Sans Pro, sans-serif',
                                 fontStyle: "italic",
                                 fontWeight: 200,
-                                marginTop: "-1%"
-                            }}>-Velg miljøvennlig!</h4>
+                                marginTop: "-2%",
+                                color: '#002d53'
+                            }}>
+                                -Velg miljøvennlig!
+                            </h4>
                         </Stack>
                         <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"} alignItems="center"
                                marginTop={"10px"}>

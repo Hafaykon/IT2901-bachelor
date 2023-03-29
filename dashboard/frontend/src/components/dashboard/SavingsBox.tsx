@@ -1,3 +1,4 @@
+import './Dashboard.css';
 import { Card, CardActionArea, CardContent, Stack, Typography } from '@mui/material';
 import CardOverflow from '@mui/joy/CardOverflow';
 import { useNavigate } from 'react-router-dom';
@@ -16,7 +17,7 @@ export function SavingsBox() {
             <CardOverflow>
                 <CardContent>
                     <Stack direction={'row'}>
-                    <Typography color="text.secondary" id="numbersBoxes">
+                    <Typography id="cardTitle">
                       Kroner spart
                     </Typography>
                         {/*  <SavingsIcon fontSize='large' sx={{position: 'absolute', top:20, right:15, color:'pink'}}></SavingsIcon> */}
