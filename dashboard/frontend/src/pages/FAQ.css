@@ -1,11 +1,30 @@
-.Container {
+.Header {
     width: 100%;
     margin-top: 20px;
     padding-left: 14%;
 }
 
 #Headline {
+    font-family: Source Sans Pro, sans-serif;
     font-size: 30pt;
     display: flex;
     justify-content: flex-start;
+}
+
+#Columns {
+    display: flex;
+    justify-items: center;
+    margin-left: 14%;
+    width: 80%;
+}
+
+#FAQs {
+    display: flex;
+    justify-self: center;
+}
+
+.SubHeadline {
+    color: #002d53;
+    font-family: Source Sans Pro, sans-serif;
+    font-size: 18pt;
 }
