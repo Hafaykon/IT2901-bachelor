@@ -49,7 +49,6 @@ export default function Login() {
 
     useEffect(() => {
         const token = localStorage.getItem('access')
-        console.log(token)
         const isLoggedIn = async () => {
             if (token) {
                 const response = await fetch('http://127.0.0.1:8000/api/login/verify/', {

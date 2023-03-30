@@ -15,8 +15,9 @@ import {isAuthAtom} from "./globalVariables/variables";
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useRecoilState(isAuthAtom);
     const token = localStorage.getItem('access')
-    useEffect(() => {
 
+
+    useEffect(() => {
         const isLoggedIn = async () => {
             if (token) {
                 try {
@@ -30,10 +31,8 @@ function App() {
                         }),
 
                     })
-                    const data = await response.json();
                     if (response.ok) {
                         setIsAuthenticated(true)
-                        console.log(data)
                     }
 
                 } catch (error) {

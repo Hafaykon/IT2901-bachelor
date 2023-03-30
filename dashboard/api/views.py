@@ -7,14 +7,12 @@ import pandas as pd
 from django_pandas.io import read_frame
 from rest_framework import generics, permissions
 from rest_framework import status
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.authtoken.models import Token
-from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.exceptions import NotFound
 from rest_framework.exceptions import ParseError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import PoolRequest, LicensePool, SoftwarePerComputer
@@ -35,6 +33,18 @@ def get_organizations(request, format=None):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     print(len(organizations))
     return Response(organizations)
+
+
+class GetUserInfo(APIView):
+    """
+    Returns the primary user email and organization of the user given a valid JWT.
+    """
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        user = request.user
+        return Response({'primary_user_email': user.primary_user_email, 'organization': user.organization})
 
 
 @api_view(['GET'])
@@ -455,7 +465,6 @@ class CreatePoolObject(generics.CreateAPIView):
     """
     queryset = LicensePool.objects.all()
     serializer_class = PoolSerializer
-
 
 # class LoginAPI(ObtainAuthToken):
 #     """
