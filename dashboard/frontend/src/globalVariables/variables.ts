@@ -18,4 +18,9 @@ export const softwareUserAtom = atom<LicensePoolData[]>({
     default: []
 })
 
+export const isAuthAtom = atom<boolean>({
+    key: 'isAuthenticated',
+    default: false
+})
+
 

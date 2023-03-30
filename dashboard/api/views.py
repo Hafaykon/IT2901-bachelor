@@ -15,13 +15,14 @@ from rest_framework.exceptions import NotFound
 from rest_framework.exceptions import ParseError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import PoolRequest, LicensePool, SoftwarePerComputer
 from .serializers import SoftwarePerComputerSerializer, PoolRequestSerializer, PoolSerializer
 
 
 @api_view(['GET'])
-@authentication_classes([TokenAuthentication])
+@authentication_classes([JWTAuthentication])
 @permission_classes([permissions.IsAuthenticated])
 def get_organizations(request, format=None):
     """
@@ -456,22 +457,22 @@ class CreatePoolObject(generics.CreateAPIView):
     serializer_class = PoolSerializer
 
 
-class LoginAPI(ObtainAuthToken):
-    """
-    API endpoint that allows users to login.
-    Returns a token and user information if the credentials are valid.
-    """
-    permission_classes = [permissions.AllowAny]
-
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data, context={'request': request})
-        if not serializer.is_valid():
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
-        return Response({
-            'token': token.key,
-            'user_id': user.pk,
-            'email': user.primary_user_email,
-            'organization': user.organization,
-        })
+# class LoginAPI(ObtainAuthToken):
+#     """
+#     API endpoint that allows users to login.
+#     Returns a token and user information if the credentials are valid.
+#     """
+#     permission_classes = [permissions.AllowAny]
+#
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.serializer_class(data=request.data, context={'request': request})
+#         if not serializer.is_valid():
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         user = serializer.validated_data['user']
+#         token, created = Token.objects.get_or_create(user=user)
+#         return Response({
+#             'token': token.key,
+#             'user_id': user.pk,
+#             'email': user.primary_user_email,
+#             'organization': user.organization,
+#         })

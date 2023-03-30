@@ -1,8 +1,14 @@
 # Every single endpoint is defined here
 from django.urls import path
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
+
 from . import views
-from .views import UpdatePoolObject
 from .views import LicenseInfoView
+from .views import UpdatePoolObject
 
 urlpatterns = [
     path('organizations/', views.get_organizations, name='organizations'),
@@ -21,6 +27,7 @@ urlpatterns = [
          name='software_per_computer_detail'),
     path('pool/create', views.CreatePoolObject.as_view(), name='create_pool_object'),
     path('licenseinfo/', LicenseInfoView.as_view(), name='licenseinfo'),
-    path('', views.LoginAPI.as_view(), name='login'),
-
+    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('login/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('login/verify/', TokenVerifyView.as_view(), name='token_verify'),
 ]
