@@ -41,6 +41,10 @@ export default function Login() {
         }
     }
 
+    /**
+     * Stores the access and refresh token in local storage.
+     * @param data The access and refresh token.
+     */
     const handleAuth = (data: { access: string, refresh: string }) => {
         localStorage.setItem('access', data.access)
         localStorage.setItem('refresh', data.refresh)
