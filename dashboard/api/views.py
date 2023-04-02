@@ -5,19 +5,23 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
 from django_pandas.io import read_frame
-from rest_framework import generics, status
-from rest_framework.decorators import api_view
+from rest_framework import generics, permissions
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework.exceptions import NotFound
 from rest_framework.exceptions import ParseError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import PoolRequest, LicensePool, SoftwarePerComputer
 from .serializers import SoftwarePerComputerSerializer, PoolRequestSerializer, PoolSerializer
 
 
-# Create your views here.
 @api_view(['GET'])
+#@authentication_classes([JWTAuthentication])
+#@permission_classes([permissions.IsAuthenticated])
 def get_organizations(request, format=None):
     """
     :return: Returns a list of all distinct organizations.
@@ -29,6 +33,19 @@ def get_organizations(request, format=None):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     print(len(organizations))
     return Response(organizations)
+
+
+class GetUserInfo(APIView):
+    """
+    Returns the primary user email and organization of the user given a valid JWT.
+    """
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        user = request.user
+        return Response({'primary_user_email': user.primary_user_email, 'organization': user.organization,
+                         'is_unit_head': user.is_unit_head})
 
 
 @api_view(['GET'])
@@ -370,7 +387,6 @@ def get_org_software_names(request, format=None):
 class GetLicensePool(generics.ListAPIView):
     """
     Returns a list of all licenses in the license pool.
-    parameters: application_name, organization
     """
     serializer_class = PoolSerializer
     queryset = LicensePool.objects.all()
@@ -455,3 +471,23 @@ class CreatePoolObject(generics.CreateAPIView):
     """
     queryset = LicensePool.objects.all()
     serializer_class = PoolSerializer
+
+# class LoginAPI(ObtainAuthToken):
+#     """
+#     API endpoint that allows users to login.
+#     Returns a token and user information if the credentials are valid.
+#     """
+#     permission_classes = [permissions.AllowAny]
+#
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.serializer_class(data=request.data, context={'request': request})
+#         if not serializer.is_valid():
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         user = serializer.validated_data['user']
+#         token, created = Token.objects.get_or_create(user=user)
+#         return Response({
+#             'token': token.key,
+#             'user_id': user.pk,
+#             'email': user.primary_user_email,
+#             'organization': user.organization,
+#         })

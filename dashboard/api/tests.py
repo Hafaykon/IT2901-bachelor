@@ -4,9 +4,9 @@ from urllib.parse import urlencode
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase
+from rest_framework.test import APITestCase, APIClient
 
-from .models import SoftwarePerComputer, LicensePool
+from .models import SoftwarePerComputer, LicensePool, CustomUser
 
 
 # Create your tests here.
@@ -252,8 +252,8 @@ class TestSoftwarePCViews(APITestCase):
         response = self.client.get(url)
         response_data = response.data['results']
         expected_data = [{'application_name': 'myapplication', 'primary_user_full_name': 'My User',
-                           'computer_name': 'mycomputer',
-                           'details': [{'id': 1, 'last_used': datetime.date(2022, 2, 1)}], 'status': 'available'}]
+                          'computer_name': 'mycomputer',
+                          'details': [{'id': 1, 'last_used': datetime.date(2022, 2, 1)}], 'status': 'available'}]
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response_data, expected_data)
@@ -391,3 +391,53 @@ class TestLicensePool(TestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(LicensePool.objects.filter(primary_user_full_name='TEST').count(), 1)
         self.assertEqual(LicensePool.objects.get(primary_user_full_name='TEST').primary_user_full_name, 'TEST')
+
+
+class TestUser(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        self.user = CustomUser.objects.create_user(primary_user_email='test@example.com',
+                                                   organization='Test Organization',
+                                                   password='test_password')
+
+    def test_obtain_token(self):
+        url = reverse('token_obtain_pair')
+        data = {
+            'primary_user_email': 'test@example.com',
+            'password': 'test_password'
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('access', response.data)
+        self.assertIn('refresh', response.data)
+
+    def test_refresh_token(self):
+        response = self.client.post(
+            reverse('token_obtain_pair'),
+            {
+                'primary_user_email': 'test@example.com',
+                'password': 'test_password',
+            },
+            format='json'
+        )
+        refresh_token = response.data['refresh']
+        old_access_token = response.data['access']
+
+        response = self.client.post(
+            reverse('token_refresh'),
+            {'refresh': refresh_token},
+            format='json'
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn('access', response.data)
+        self.assertNotEqual(old_access_token, response.data['access'])
+
+    def test_invalid_credentials(self):
+        url = reverse('token_obtain_pair')
+        data = {
+            'primary_user_email': 'test@example.com',
+            'password': 'wrong_password'
+        }
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+

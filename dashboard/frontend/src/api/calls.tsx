@@ -8,7 +8,7 @@ export const fetchOrganizations = async () => {
     try {
         const response = await fetch('http://127.0.0.1:8000/api/organizations/');
         const data = await response.json();
-        return [...data];
+        return data;
     } catch (error) {
         console.log(error);
     }
@@ -126,7 +126,7 @@ export const fetchPoolData = async (page: number, sort: string, software?: strin
 };
 
 
-export const fetchInfoBoxLicense = async ( page: number, status: string, sort:string, org?: string, software?: string) => {
+export const fetchInfoBoxLicense = async (page: number, status: string, sort: string, org?: string, software?: string) => {
     try {
         let url = `http://127.0.0.1:8000/api/licenseinfo/?page=${page}&status=${status}&sort=${sort}`;
         if (software && org) {
@@ -150,7 +150,7 @@ export const fetchInfoBoxLicense = async ( page: number, status: string, sort:st
  * @param organization - Optional parameter to filter on organization.
  * @param pool - parameter to select wether to search in pool or not.
  */
-export const fetchSoftwareUsedInOrg = async (status: string, pool : string,  organization?: string) => {
+export const fetchSoftwareUsedInOrg = async (status: string, pool: string, organization?: string) => {
     try {
         let url = `http://127.0.0.1:8000/api/software/?status=${status}&pool=${pool}`;
         if (organization) {

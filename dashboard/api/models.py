@@ -1,4 +1,8 @@
+from django.conf import settings
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
+
+User = settings.AUTH_USER_MODEL
 
 
 # Create your models here.
@@ -82,3 +86,41 @@ class PoolRequest(models.Model):
     family_edition = models.CharField(max_length=100, null=True, blank=True)
     request = models.CharField(max_length=100)
     completed = models.BooleanField()
+
+
+class CustomUserManager(BaseUserManager):
+    def create_user(self, primary_user_email, password=None, is_unit_head=False, organization=None):
+        user = self.model(primary_user_email=primary_user_email, is_unit_head=is_unit_head, organization=organization)
+        user.set_password(password)
+        user.save()
+        return user
+
+    def create_superuser(self, primary_user_email, password=None, organization=None):
+        user = self.create_user(primary_user_email, password, organization=organization)
+        user.is_admin = True
+        user.is_unit_head = True
+        user.save()
+        return user
+
+
+class CustomUser(AbstractBaseUser):
+    primary_user_email = models.EmailField(unique=True)
+    organization = models.CharField(max_length=100, default='')
+    is_unit_head = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    objects = CustomUserManager()
+    USERNAME_FIELD = 'primary_user_email'
+
+    def __str__(self):
+        return self.primary_user_email
+
+    def has_perm(self, perm, obj=None):
+        return True
+
+    def has_module_perms(self, app_label):
+        return True
+
+    @property
+    def is_staff(self):
+        return self.is_admin
