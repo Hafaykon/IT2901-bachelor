@@ -10,7 +10,7 @@ export const SidebarData = [
 
         cName: 'nav-text'
     },
-{
+    {
         title: 'Lisensportalen',
         path: '/lisensportal',
 
