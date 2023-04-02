@@ -254,7 +254,7 @@ def software_counts(request):
         unused_software = software.filter(last_used__lte=date).count()
 
         # Count of active licenses
-        active_licenses = software.filter(last_used__lte=date).count()
+        active_licenses = software.filter(last_used__gte=date).count()
         available_licenses = LicensePool.objects.filter(organization=organization).count()
 
         counts = {
