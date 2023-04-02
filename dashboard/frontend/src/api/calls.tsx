@@ -101,9 +101,9 @@ export const fetchInfoBoxData = async (org?: string) => {
     }
 };
 
-export const fetchPoolData = async (page: number, software?: string, org?: string) => {
+export const fetchPoolData = async (page: number, sort: string, software?: string, org?: string) => {
     try {
-        let url = `http://127.0.0.1:8000/api/pool/get/?page=${page}`;
+        let url = `http://127.0.0.1:8000/api/pool/get/?page=${page}&sort=${sort}`;
         if (software && org) {
             url = `${url}&application_name=${software}&organization=${org}`;
         } else if (software) {
@@ -126,9 +126,9 @@ export const fetchPoolData = async (page: number, software?: string, org?: strin
 };
 
 
-export const fetchInfoBoxLicense = async (page: number, status: string, org?: string, software?: string) => {
+export const fetchInfoBoxLicense = async ( page: number, status: string, sort:string, org?: string, software?: string) => {
     try {
-        let url = `http://127.0.0.1:8000/api/licenseinfo/?page=${page}&status=${status}`;
+        let url = `http://127.0.0.1:8000/api/licenseinfo/?page=${page}&status=${status}&sort=${sort}`;
         if (software && org) {
             url += `&application_name=${software}&organization=${org}`;
         } else if (software) {

@@ -242,6 +242,8 @@ class TestSoftwarePCViews(APITestCase):
 
     def test_get_licenseinfo(self):
         query_params = {
+            'page': '1',
+            'sort': 'application_name',
             'organization': 'Servere',
             'status': 'available',
         }
@@ -332,7 +334,14 @@ class TestLicensePool(TestCase):
         self.url = reverse('software_per_computer_detail', kwargs={'id': self.license_pool.id})
 
     def test_get_license_pool(self):
-        url = reverse("licensepool")
+        query_params = {
+            'page': '1',
+            'sort': 'application_name',
+            'organization': 'IT-tjenesten',
+            'status': 'available',
+        }
+        encoded_query_params = urlencode(query_params)
+        url = reverse("licensepool") + '?' + encoded_query_params
         response_message = self.client.get(url)
         expected_data = {
             'application_name': 'Google Chrome 109',

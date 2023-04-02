@@ -34,9 +34,15 @@ export function Leaderboard() {
             <ActiveLastBreadcrumb />
           </Grid>
           <Box data-testid="leaderboard" style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: '20px' }}>
-          <Grid justifyContent={'center'} alignItems={'center'} width={'75%'}>
+          <Grid justifyContent={'center'} alignItems={'center'} width={'72%'}>
             <Stack direction={'column'} width={'75%'}>
-              <h2 style={{ fontFamily: 'Source Sans Pro, sans serif' }}>Ledertavle</h2>
+              <h2 style={{ 
+                  fontFamily: 'Source Sans Pro, sans serif',
+                  fontSize: 40,
+                  marginTop: -0.6
+                }}>
+                    Ledertavle
+                </h2>
               <p style={{ fontStyle: 'italic', marginTop: '-10px', marginBottom: '50px' }}>Ledertavlen viser hvordan din enhet ligger ann i forhold til andre enheter basert på hvor stor andel av lisensen en har er i bruk</p>
             </Stack><TableContainer component={Paper}>
               <Table sx={{ minWidth: 650, borderRadius: '50px', fontWeight:'700'}} aria-label="simple table">
