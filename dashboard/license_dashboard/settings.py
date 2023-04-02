@@ -144,6 +144,6 @@ AUTH_USER_MODEL = 'api.CustomUser'
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=10),
-    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(minutes=20),
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=1),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(minutes=1),
 }

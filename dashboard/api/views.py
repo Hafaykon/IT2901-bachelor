@@ -20,8 +20,8 @@ from .serializers import SoftwarePerComputerSerializer, PoolRequestSerializer, P
 
 
 @api_view(['GET'])
-@authentication_classes([JWTAuthentication])
-@permission_classes([permissions.IsAuthenticated])
+#@authentication_classes([JWTAuthentication])
+#@permission_classes([permissions.IsAuthenticated])
 def get_organizations(request, format=None):
     """
     :return: Returns a list of all distinct organizations.
@@ -44,7 +44,8 @@ class GetUserInfo(APIView):
 
     def get(self, request, format=None):
         user = request.user
-        return Response({'primary_user_email': user.primary_user_email, 'organization': user.organization})
+        return Response({'primary_user_email': user.primary_user_email, 'organization': user.organization,
+                         'is_unit_head': user.is_unit_head})
 
 
 @api_view(['GET'])
