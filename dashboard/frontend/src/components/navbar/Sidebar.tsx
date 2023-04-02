@@ -1,4 +1,4 @@
-import {useRecoilState, useSetRecoilState} from "recoil";
+import {useSetRecoilState} from "recoil";
 import {isAuthAtom} from "../../globalVariables/variables";
 
 
@@ -10,12 +10,13 @@ export const SidebarData = [
 
         cName: 'nav-text'
     },
-    {
+{
         title: 'Lisensportalen',
         path: '/lisensportal',
 
         cName: 'nav-text'
     },
+
     {
         title: 'Ledertavle',
         path: '/leaderboard',

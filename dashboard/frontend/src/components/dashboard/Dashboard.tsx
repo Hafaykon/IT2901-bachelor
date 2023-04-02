@@ -11,6 +11,7 @@ import {fetchInfoBoxData} from '../../api/calls';
 import CircularIndeterminate from '../spinner/MuiLoadingSpinner';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import {SavingsBox} from './SavingsBox';
+import {Link} from 'react-router-dom';
 
 interface Count {
     total_licenses: number,
@@ -67,12 +68,13 @@ function Dashboard() {
                             <ActiveLastBreadcrumb/>
                             <Grid container>
                                 <Stack direction="row">
-                                   <Typography id='org_name'>{org}</Typography>
-                                   <Stack direction="row">
-                                        <a href="/lisensportal" id="portal-link">
+                                    <Typography id='org_name'>{org}</Typography>
+                                    <Stack direction="row">
+                                        <Link to="/lisensportal" id="portal-link">
                                             Til lisensportalen
                                             <LogoutOutlinedIcon style={{alignContent: "center"}}/>
-                                        </a>
+                                        </Link>
+
                                     </Stack>
                                 </Stack>
                             </Grid>

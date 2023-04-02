@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
 import {useRecoilState} from 'recoil';
 import {Navigate, Route, Routes} from 'react-router-dom';
@@ -15,6 +15,8 @@ import Navbar from './components/navbar/Navbar';
 function App() {
     const [isAuthenticated, setIsAuthenticated] = useRecoilState(isAuthAtom);
     const token = localStorage.getItem('access')
+    const [isLoading, setIsLoading] = useState(true);
+
     useEffect(() => {
         const isLoggedIn = async () => {
             if (token) {
@@ -37,6 +39,7 @@ function App() {
                     console.error(error);
                 }
             }
+            setIsLoading(false)
         }
         isLoggedIn()
 
@@ -44,15 +47,19 @@ function App() {
     return (
         <>
             <Navbar/>
-            <Routes>
-                <Route path="/Login" element={<Login/>}/>
-                <Route path="/" element={isAuthenticated ? <Home/> : <Navigate to="/Login"/>}/>
-                <Route path="/minside" element={isAuthenticated ? <MyPage/> : <Navigate to="/Login"/>}/>
-                <Route path="/:title" element={isAuthenticated ? <LicenseInfo/> : <Navigate to="/Login"/>}/>
-                <Route path="/lisensportal" element={isAuthenticated ? <Licenses/> : <Navigate to="/Login"/>}/>
-                <Route path="/FAQ" element={isAuthenticated ? <FAQ/> : <Navigate to="/Login"/>}/>
-                <Route path="/leaderboard" element={isAuthenticated ? <Leaderboard/> : <Navigate to="/Login"/>}/>
-            </Routes>
+            {isLoading ? (
+                <div>Loading...</div>
+            ) : (
+                <Routes>
+                    <Route path="/Login" element={<Login/>}/>
+                    <Route path="/" element={isAuthenticated ? <Home/> : <Navigate to="/Login"/>}/>
+                    <Route path="/minside" element={isAuthenticated ? <MyPage/> : <Navigate to="/Login"/>}/>
+                    <Route path="/lisensportal" element={isAuthenticated ? <Licenses/> : <Navigate to="/Login"/>}/>
+                    <Route path="/:title" element={isAuthenticated ? <LicenseInfo/> : <Navigate to="/Login"/>}/>
+                    <Route path="/FAQ" element={isAuthenticated ? <FAQ/> : <Navigate to="/Login"/>}/>
+                    <Route path="/leaderboard" element={isAuthenticated ? <Leaderboard/> : <Navigate to="/Login"/>}/>
+                </Routes>
+            )}
         </>
     );
 }
