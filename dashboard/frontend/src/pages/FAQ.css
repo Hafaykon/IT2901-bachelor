@@ -15,6 +15,7 @@
     display: flex;
     justify-items: center;
     margin-left: 14%;
+    padding-bottom: 20px;
     width: 80%;
 }
 
@@ -23,8 +24,18 @@
     justify-self: center;
 }
 
-.SubHeadline {
+#SubHeadline {
     color: #002d53;
     font-family: Source Sans Pro, sans-serif;
-    font-size: 18pt;
+    font-size: 19pt;
+}
+
+.accordions{
+    white-space: pre-line;
+    width: 86%;
+}
+
+#details {
+    font-family: Source Sans Pro, sans-serif;
+    font-size: 11pt;
 }
