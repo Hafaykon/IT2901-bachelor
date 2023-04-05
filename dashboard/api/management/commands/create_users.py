@@ -2,6 +2,7 @@ import os
 import sys
 
 from django.core.wsgi import get_wsgi_application
+from django.db import transaction
 
 sys.path.append('C:\\Users\\Vegard\\bachelor\\it2901-bachelor\\dashboard')
 
@@ -16,23 +17,32 @@ CustomUser = get_user_model()
 # Get all unique email addresses and their organizations from the SoftwarePerComputer model
 email_and_organizations = SoftwarePerComputer.objects.values_list('primary_user_email', 'organization').distinct()
 
-# Loop through each email address and organization
-for email, organization in email_and_organizations:
-    if email is not None:
-        # Check if the user already exists
-        user_exists = CustomUser.objects.filter(primary_user_email=email).exists()
+# Calculate the total number of unique email addresses and organizations
+total_users = len(email_and_organizations)
 
-        if not user_exists:
-            # If not, create a new user account with a default password and set the organization
-            user = CustomUser.objects.create_user(primary_user_email=email, password='defaultpassword',
-                                                  organization=organization)
-            print(f'Created user account for {email} with organization {organization}')
-        else:
-            # If the user already exists, update the organization field
-            user = CustomUser.objects.get(primary_user_email=email)
-            if user.organization != organization:
-                user.organization = organization
-                user.save()
-                print(f'Updated organization for {email} to {organization}')
+# Use a transaction to batch database operations
+with transaction.atomic():
+    # Loop through each email address and organization
+    for index, (email, organization) in enumerate(email_and_organizations):
+        if email is not None:
+            # Check if the user already exists
+            user_exists = CustomUser.objects.filter(primary_user_email=email).exists()
+
+            if not user_exists:
+                # If not, create a new user account with a default password and set the organization
+                user = CustomUser.objects.create_user(primary_user_email=email, password='defaultpassword',
+                                                      organization=organization)
+                print(f'Created user account for {email} with organization {organization}')
             else:
-                print(f'User account for {email} already exists and has the correct organization')
+                # If the user already exists, update the organization field
+                user = CustomUser.objects.get(primary_user_email=email)
+                if user.organization != organization:
+                    user.organization = organization
+                    user.save()
+                    print(f'Updated organization for {email} to {organization}')
+                else:
+                    print(f'User account for {email} already exists and has the correct organization')
+
+        # Calculate and display the number of remaining users
+        remaining_users = total_users - (index + 1)
+        print(f'Remaining users to process: {remaining_users}')
