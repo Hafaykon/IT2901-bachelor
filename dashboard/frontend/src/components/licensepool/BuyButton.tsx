@@ -22,7 +22,7 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
     }
 
     const releaseLicense = async () => {
-        const response = await fetch('http://127.0.0.1:8000/api/pool_req/create', {
+        const response = await fetch('http://127.0.0.1:8000/api/requests/create', {
             method: 'POST', // Change this from 'GET' to 'POST'
             headers: {
                 'Content-Type': 'application/json',

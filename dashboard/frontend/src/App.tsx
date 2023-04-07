@@ -35,7 +35,7 @@ function App() {
                     if (verifyLoginResponse.ok) {
                         setIsAuthenticated(true);
 
-                        const userDataResponse = await fetch('http://127.0.0.1:8000/api/user/', {
+                        const userDataResponse = await fetch('http://127.0.0.1:8000/api/licenses/user/', {
                             method: 'GET',
                             headers: {
                                 'Content-Type': 'application/json',

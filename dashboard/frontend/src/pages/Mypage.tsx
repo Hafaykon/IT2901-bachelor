@@ -20,7 +20,7 @@ function MyPage() {
 
     useEffect(() => {
         const fetchPoolRequests = async () => {
-            const response = await fetch('http://127.0.0.1:8000/api/pool_req/get/', {
+            const response = await fetch('http://127.0.0.1:8000/api/requests/get/', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -37,7 +37,7 @@ function MyPage() {
     }, []);
 
     const handleApprove = async (requestId: number) => {
-        const response = await fetch(`http://127.0.0.1:8000/api/pool_req/${requestId}`, {
+        const response = await fetch(`http://127.0.0.1:8000/api/requests/${requestId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ function MyPage() {
     };
 
     const handleDisapprove = async (requestId: number) => {
-        const response = await fetch(`http://127.0.0.1:8000/api/pool_req/${requestId}`, {
+        const response = await fetch(`http://127.0.0.1:8000/api/requests/${requestId}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
