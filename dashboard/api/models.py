@@ -61,23 +61,20 @@ class SoftwarePerComputer(models.Model):
 
 class LicensePool(models.Model):
     objects = models.Manager()  # default manager
-    #primary_user_full_name = models.CharField(max_length=100)
-    #primary_user_email = models.ForeignKey(User, on_delete=models.CASCADE, related_name='license_pool_licenses')
-    #computer_name = models.CharField(max_length=100)
     freed_by_organization = models.CharField(max_length=100)
     application_name = models.CharField(max_length=100)
     date_added = models.DateField(max_length=100, default='1900-01-01')
     family = models.CharField(max_length=100, null=True, blank=True)
     family_version = models.CharField(max_length=100, null=True, blank=True)
     family_edition = models.CharField(max_length=100, null=True, blank=True)
-    spc_id = models.IntegerField()
-
+    spc_id = models.IntegerField(unique=True)
 
 
 class PoolRequest(models.Model):
     objects = models.Manager()  # default manager
     requested_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='requests', null=True,
                                      blank=True)
+
     contact_organization = models.CharField(max_length=100)
     application_name = models.CharField(max_length=100)
     family = models.CharField(max_length=100, null=True, blank=True)
@@ -89,7 +86,7 @@ class PoolRequest(models.Model):
     completed = models.BooleanField(default=False)
     reviewed_by = models.EmailField(max_length=100, null=True, blank=True)
     reviewed_date = models.DateField(blank=True, null=True)
-    spc_id = models.IntegerField()
+    spc_id = models.IntegerField(blank=True, null=True)
 
 
 class CustomUserManager(BaseUserManager):

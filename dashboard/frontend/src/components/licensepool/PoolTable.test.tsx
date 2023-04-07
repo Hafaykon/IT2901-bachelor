@@ -13,6 +13,7 @@ const mockData: LicensePoolData[] = [
         "details": [
             {
                 "id": 520185,
+                "spc_id": 520185,
                 "full_name": "Anette Løberg",
                 "computer_name": "TK5CG8403ZP7",
                 "email": "anette.loberg@trondheim.kommune.no",

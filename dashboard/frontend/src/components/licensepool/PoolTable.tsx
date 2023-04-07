@@ -86,8 +86,8 @@ function Row(props: RowProps) {
                                                 </div>
                                             </TableCell>
                                             <TableCell>{detailRow.last_used ?? 'Ikke registrert'}</TableCell>
-                                            <TableCell> <BuyButton id={detailRow.id}
-                                                                   full_name={detailRow.full_name}/> </TableCell>
+                                            <TableCell> <BuyButton id={detailRow.spc_id}
+                                                                   application_name={row.application_name}/> </TableCell>
 
                                         </TableRow>
                                     ))}
@@ -110,6 +110,7 @@ export default function PoolTable({data, handleSorting}: Props) {
 
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
+    console.log(software);
 
 
 // Rest of the component code

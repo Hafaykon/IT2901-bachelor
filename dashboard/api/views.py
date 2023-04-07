@@ -4,6 +4,8 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
+from django.db import IntegrityError
+from django.db.models import Subquery, Q
 from rest_framework import generics, permissions
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -239,8 +241,11 @@ def software_counts(request):
         if not organization:
             raise ParseError("No organization provided")
 
+        licenses_in_pool = LicensePool.objects.values('spc_id')
         software = SoftwarePerComputer.objects.filter(organization=organization, license_required=True,
-                                                      license_suite_names__isnull=True)
+                                                      license_suite_names__isnull=True).exclude(
+            Q(id__in=Subquery(licenses_in_pool)))
+
         software = software.exclude(application_name__in=removable_software)
 
         # Count of total licenses filter by organization
@@ -304,11 +309,15 @@ class LicenseInfoView(generics.ListAPIView):
             raise ParseError("The 'status' parameter is required.")
 
         threshold_date = datetime.now() - timedelta(days=90)
+        licenses_in_pool = LicensePool.objects.values('spc_id')
         queryset = self.queryset.filter(
             license_required=True,
             license_suite_names__isnull=True,
             organization=organization,
-        )
+        ).exclude(
+            Q(id__in=Subquery(licenses_in_pool)))
+
+
         if application_name:
             queryset = queryset.filter(application_name=application_name)
 
@@ -317,6 +326,7 @@ class LicenseInfoView(generics.ListAPIView):
 
         elif application_status == 'available':
             queryset = queryset.filter(last_used__lte=threshold_date)
+
         return queryset
 
     def aggregate_data(self, data):
@@ -411,16 +421,16 @@ class GetLicensePool(generics.ListAPIView):
     def get_queryset(self):
         queryset = LicensePool.objects.all().order_by('application_name')
         application_name = self.request.GET.get('application_name', None)
-        organization = self.request.GET.get('organization', None)
+        freed_by_organization = self.request.GET.get('organization', None)
 
         if application_name:
-            if application_name in LicensePool.objects.values_list('application_name', flat=True).distinct():
+            if application_name in SoftwarePerComputer.objects.values_list('application_name', flat=True).distinct():
                 queryset = queryset.filter(application_name=application_name)
             else:
                 raise NotFound("The given application name does not exist.")
-        if organization:
-            if organization in LicensePool.objects.values_list('organization', flat=True).distinct():
-                queryset = queryset.filter(organization=organization)
+        if freed_by_organization:
+            if freed_by_organization in SoftwarePerComputer.objects.values_list('organization', flat=True).distinct():
+                queryset = queryset.filter(freed_by_organization=freed_by_organization)
             else:
                 raise NotFound("The given organization does not exist.")
         queryset = queryset.exclude(application_name__in=removable_software)
@@ -430,14 +440,14 @@ class GetLicensePool(generics.ListAPIView):
         aggregated_data = defaultdict(list)
 
         for record in data:
-            key = (record['application_name'], record['organization'])
+            key = (record['application_name'], record['freed_by_organization'])
             aggregated_data[key].append(record)
 
         result = []
-        for (application, organization), details in aggregated_data.items():
+        for (application, freed_by_organization), details in aggregated_data.items():
             result.append({
                 'application_name': application,
-                'organization': organization,
+                'freed_by_organization': freed_by_organization,
                 'details': details,
             })
 
@@ -485,19 +495,23 @@ class UpdatePoolRequest(generics.RetrieveUpdateAPIView):
             pool_request.completed = True
 
             if pool_request.request == 'add':
-                license_pool = LicensePool(
-                    freed_by_organization=pool_request.contact_organization,
-                    application_name=pool_request.application_name,
-                    date_added=datetime.now(),
-                    family=pool_request.family,
-                    family_version=pool_request.family_version,
-                    family_edition=pool_request.family_edition,
-                    spc_id=pool_request.spc_id,
-                )
-                license_pool.save()
+                try:
+                    license_pool = LicensePool(
+                        freed_by_organization=pool_request.contact_organization,
+                        application_name=pool_request.application_name,
+                        date_added=datetime.now(),
+                        family=pool_request.family,
+                        family_version=pool_request.family_version,
+                        family_edition=pool_request.family_edition,
+                        spc_id=pool_request.spc_id,
+                    )
+                    license_pool.save()
+                except IntegrityError:
+                    return Response({'error': 'This license already exists in the pool.'},
+                                    status=status.HTTP_400_BAD_REQUEST)
             elif pool_request.request == 'remove':
-                license_pool = LicensePool.objects.filter(sp_id=pool_request.sp_id)
-                if license_pool():
+                license_pool = LicensePool.objects.filter(spc_id=pool_request.spc_id)
+                if license_pool.exists():
                     license_pool.delete()
         elif action == 'disapprove':
             pool_request.approved = False
@@ -516,7 +530,6 @@ class CreatePoolRequest(generics.CreateAPIView):
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        print(serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

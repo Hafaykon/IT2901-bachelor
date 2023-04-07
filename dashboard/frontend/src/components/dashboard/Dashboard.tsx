@@ -23,7 +23,7 @@ function Dashboard() {
 
     useEffect(() => {
             const fetchData = async () => {
-                if (accessToken) {
+                if (accessToken && org) {
                     // Fetch box data
                     const boxDataResponse: Count[] | undefined = await fetchInfoBoxData(org);
                     if (boxDataResponse !== undefined) {

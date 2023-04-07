@@ -22,6 +22,7 @@ class PoolSerializer(serializers.ModelSerializer):
         elif data['application_name'] not in SoftwarePerComputerSerializer.Meta.model.objects.values_list(
                 'application_name', flat=True).distinct():
             raise serializers.ValidationError("Application does not exist")
+
         return data
 
 
@@ -42,6 +43,7 @@ class PoolRequestSerializer(serializers.ModelSerializer):
 
         if data['request'] not in ['add', 'remove']:
             raise serializers.ValidationError("Request must be 'add' or 'remove'")
+
         return data
 
     def create(self, validated_data):
