@@ -17,6 +17,7 @@ def clean_data(data):
 
     # Filter the DataFrame to keep only the rows where 'License Required' is 1 (True)
     data = data[data['License Required'] == 1]
+    data['Primary User Email'] = data['Primary User Email'].fillna('ukjent_bruker@email.com')
 
     # Save the filtered data to a local CSV file
     data.to_csv('filtered_cleaned_data.csv', index=False)

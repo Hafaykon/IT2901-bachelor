@@ -4,7 +4,6 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
-from django_pandas.io import read_frame
 from rest_framework import generics, permissions
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -16,6 +15,7 @@ from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import PoolRequest, LicensePool, SoftwarePerComputer
+from .permissions import IsUnitHead
 from .serializers import SoftwarePerComputerSerializer, PoolRequestSerializer, PoolSerializer
 
 removable_software = ["Check Point Full Disk Encryption 7.4", "Microsoft Office 2007 Outlook",
@@ -255,7 +255,7 @@ def software_counts(request):
 
         # Count of active licenses
         active_licenses = software.filter(last_used__gte=date).count()
-        available_licenses = LicensePool.objects.filter(organization=organization).count()
+        available_licenses = LicensePool.objects.filter(freed_by_organization=organization).count()
 
         counts = {
             'total_licenses': total_licenses,
@@ -294,7 +294,6 @@ class LicenseInfoView(generics.ListAPIView):
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
-        # get parameters
         application_name = self.request.query_params.get('application_name', None)
         organization = self.request.query_params.get('organization')
         application_status = self.request.query_params.get('status')
@@ -318,37 +317,44 @@ class LicenseInfoView(generics.ListAPIView):
 
         elif application_status == 'available':
             queryset = queryset.filter(last_used__lte=threshold_date)
-
-        queryset = queryset.exclude(application_name__in=removable_software)
         return queryset
 
+    def aggregate_data(self, data):
+        aggregated_data = defaultdict(list)
+
+        for record in data:
+            key = (record['application_name'], record['primary_user_full_name'], record['primary_user_email'],
+                   record['organization'],
+                   record['computer_name'])
+            aggregated_data[key].append(record)
+
+        result = []
+        for (application, user, primary_user_email, organization, computer_name), details in aggregated_data.items():
+            result.append({
+                'application_name': application,
+                'primary_user_full_name': user,
+                'primary_user_email': primary_user_email,
+                'organization': organization,
+                'computer_name': computer_name,
+                'details': details
+            })
+
+        return result
+
     def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
+        sort = self.request.GET.get('sort', None)
+        queryset = self.get_queryset().order_by(sort)
 
-        if queryset.count() == 0:
-            paginated_empty_list = self.paginate_queryset([])
-            return self.get_paginated_response(paginated_empty_list)
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            aggregated_data = self.aggregate_data(serializer.data)
+            return self.get_paginated_response(aggregated_data)
 
-        df = read_frame(queryset)
+        serializer = self.get_serializer(queryset, many=True)
+        aggregated_data = self.aggregate_data(serializer.data)
 
-        grouped_df = df.groupby(['application_name', 'primary_user_full_name', 'computer_name']) \
-            .apply(lambda x: x[['id', 'last_used']].to_dict('records')) \
-            .reset_index() \
-            .rename(columns={0: 'details'})
-
-        sort = self.request.query_params.get('sort')
-        grouped_df = grouped_df.sort_values(sort)
-
-        result = grouped_df.to_dict('records')
-
-        if 'status' in self.request.query_params:
-            status_value = self.request.query_params.get('status')
-            for item in result:
-                item["status"] = status_value
-
-        paginated_result = self.paginate_queryset(result)
-
-        return self.get_paginated_response(paginated_result)
+        return Response(aggregated_data)
 
 
 @api_view(['GET'])
@@ -453,18 +459,88 @@ class GetLicensePool(generics.ListAPIView):
         return Response(aggregated_data)
 
 
-@api_view(['GET'])
-def get_pool_requests(request):
-    organization = request.query_params.get('organization', None)
+class UpdatePoolRequest(generics.RetrieveUpdateAPIView):
+    """
+    Retrieve, update or delete a pool request.
+    """
+    queryset = PoolRequest.objects.all()
+    serializer_class = PoolRequestSerializer
+    permission_classes = [permissions.IsAuthenticated, IsUnitHead]
+    lookup_field = 'id'
 
-    pool_req = PoolRequest.objects.all()
-    if organization:
-        req_data = PoolRequest.objects.filter(contact_organization=organization)
-    else:
-        req_data = PoolRequest.objects.all()
+    def update(self, request, *args, **kwargs):
+        pool_request = self.get_object()
 
-    serialize_request = PoolRequestSerializer(req_data, many=True)
-    return Response(serialize_request.data)
+        if pool_request.completed:
+            return Response({'error': 'This request has already been completed.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        action = request.data.get('action')
+        if action not in ['approve', 'disapprove']:
+            return Response({'error': 'Invalid action.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        pool_request.reviewed_by = request.user.primary_user_email
+        pool_request.reviewed_date = datetime.now().date()
+        if action == 'approve':
+            pool_request.approved = True
+            pool_request.completed = True
+
+            if pool_request.request == 'add':
+                license_pool = LicensePool(
+                    freed_by_organization=pool_request.contact_organization,
+                    application_name=pool_request.application_name,
+                    date_added=datetime.now(),
+                    family=pool_request.family,
+                    family_version=pool_request.family_version,
+                    family_edition=pool_request.family_edition,
+                    spc_id=pool_request.spc_id,
+                )
+                license_pool.save()
+            elif pool_request.request == 'remove':
+                license_pool = LicensePool.objects.filter(sp_id=pool_request.sp_id)
+                if license_pool():
+                    license_pool.delete()
+        elif action == 'disapprove':
+            pool_request.approved = False
+            pool_request.completed = True
+
+        pool_request.save()
+        return Response(PoolRequestSerializer(pool_request).data)
+
+
+class CreatePoolRequest(generics.CreateAPIView):
+    queryset = PoolRequest.objects.all()
+    serializer_class = PoolRequestSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        print(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetPoolRequests(generics.ListCreateAPIView):
+    serializer_class = PoolRequestSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        own_requests_serializer = self.get_serializer(queryset['own_requests'], many=True)
+        org_requests_serializer = self.get_serializer(queryset['org_requests'], many=True)
+        return Response({
+            'own_requests': own_requests_serializer.data,
+            'org_requests': org_requests_serializer.data
+        })
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_unit_head:
+            own_requests = PoolRequest.objects.filter(requested_by=user.primary_user_email)
+            org_requests = PoolRequest.objects.filter(contact_organization=user.organization, completed=False)
+            return {'own_requests': own_requests, 'org_requests': org_requests}
+        else:
+            own_requests = PoolRequest.objects.filter(requested_by=user.primary_user_email)
+            return {'own_requests': own_requests, 'org_requests': []}
 
 
 class UpdatePoolObject(generics.RetrieveUpdateDestroyAPIView):
@@ -474,6 +550,13 @@ class UpdatePoolObject(generics.RetrieveUpdateDestroyAPIView):
     queryset = LicensePool.objects.all()
     serializer_class = PoolSerializer
     lookup_field = 'id'
+
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_unit_head:
+            return LicensePool.objects.filter(primary_user__organization=user.organization)
+        else:
+            return LicensePool.objects.filter(primary_user=user)
 
 
 class CreatePoolObject(generics.CreateAPIView):

@@ -7,12 +7,16 @@ import ReleaseButton from './ReleaseButton';
 const mockProps = {
     "id": 1,
     "full_name": "Jannik Georg Solvang",
+    "primary_user_email": "kekw",
+    'organization': 'fisk',
+    'application_name': 'APSIS Pro [Web]',
 
 }
 const mockFunction = jest.fn();
 
 beforeEach(() => {
-    render(<ReleaseButton id={mockProps.id} full_name={mockProps.full_name}/>);
+    render(<ReleaseButton id={mockProps.id} primary_user_email={mockProps.full_name}
+                          application_name={mockProps.application_name} organization={mockProps.organization}/>);
 })
 
 afterEach(() => {

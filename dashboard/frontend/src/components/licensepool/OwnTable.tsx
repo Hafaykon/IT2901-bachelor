@@ -80,7 +80,9 @@ function Row(props: RowProps) {
                                             </TableCell>
                                             <TableCell>10 poeng</TableCell>
                                             <TableCell align={"center"}> <ReleaseButton id={detailRow.id}
-                                                                                        full_name={row.primary_user_full_name}/>
+                                                                                        primary_user_email={row.primary_user_email}
+                                                                                        application_name={row.application_name}
+                                                                                        organization={row.organization}/>
                                             </TableCell>
 
                                         </TableRow>

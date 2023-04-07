@@ -16,6 +16,8 @@ export interface LicensePoolData {
 export interface OwnOrgData {
     application_name: string;
     primary_user_full_name: string;
+    primary_user_email: string;
+    organization: string;
     computer_name: string;
     status: string;
     details: Array<{
@@ -38,3 +40,17 @@ export interface SoftwareData {
 }
 
 
+export interface Count {
+    total_licenses: number,
+    active_licenses: number,
+    never_used: number,
+    unused_licenses: number,
+    available_licenses: number,
+
+}
+
+export interface UserInformation {
+    primary_user_email: string;
+    organization: string;
+    is_unit_head: boolean;
+}

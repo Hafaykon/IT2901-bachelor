@@ -8,7 +8,6 @@ User = settings.AUTH_USER_MODEL
 # Create your models here.
 class SoftwarePerComputer(models.Model):
     objects = models.Manager()  # default manager
-
     computer_name = models.CharField(max_length=100, verbose_name="Computer Name")
     application_name = models.CharField(max_length=100, verbose_name="Application Name")
     category = models.CharField(max_length=100, verbose_name="Category", null=True, blank=True)
@@ -62,29 +61,35 @@ class SoftwarePerComputer(models.Model):
 
 class LicensePool(models.Model):
     objects = models.Manager()  # default manager
-    primary_user_full_name = models.CharField(max_length=100)
-    primary_user_email = models.EmailField()
-    organization = models.CharField(max_length=100)
+    #primary_user_full_name = models.CharField(max_length=100)
+    #primary_user_email = models.ForeignKey(User, on_delete=models.CASCADE, related_name='license_pool_licenses')
+    #computer_name = models.CharField(max_length=100)
+    freed_by_organization = models.CharField(max_length=100)
     application_name = models.CharField(max_length=100)
+    date_added = models.DateField(max_length=100, default='1900-01-01')
     family = models.CharField(max_length=100, null=True, blank=True)
     family_version = models.CharField(max_length=100, null=True, blank=True)
     family_edition = models.CharField(max_length=100, null=True, blank=True)
-    computer_name = models.CharField(max_length=100)
-    # pris?
+    spc_id = models.IntegerField()
+
 
 
 class PoolRequest(models.Model):
     objects = models.Manager()  # default manager
-    primary_user_full_name = models.CharField(max_length=100)
-    primary_user_email = models.EmailField()
-    computer_name = models.CharField(max_length=100)
+    requested_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='requests', null=True,
+                                     blank=True)
     contact_organization = models.CharField(max_length=100)
     application_name = models.CharField(max_length=100)
     family = models.CharField(max_length=100, null=True, blank=True)
     family_version = models.CharField(max_length=100, null=True, blank=True)
     family_edition = models.CharField(max_length=100, null=True, blank=True)
     request = models.CharField(max_length=100)
-    completed = models.BooleanField()
+    request_date = models.DateField(blank=True, null=True)
+    approved = models.BooleanField(default=False)
+    completed = models.BooleanField(default=False)
+    reviewed_by = models.EmailField(max_length=100, null=True, blank=True)
+    reviewed_date = models.DateField(blank=True, null=True)
+    spc_id = models.IntegerField()
 
 
 class CustomUserManager(BaseUserManager):
@@ -94,8 +99,8 @@ class CustomUserManager(BaseUserManager):
         user.save()
         return user
 
-    def create_superuser(self, primary_user_email, password=None, organization=None):
-        user = self.create_user(primary_user_email, password, organization=organization)
+    def create_superuser(self, primary_user_email, password=None):
+        user = self.create_user(primary_user_email, password, organization='admin')
         user.is_admin = True
         user.is_unit_head = True
         user.save()
@@ -103,7 +108,8 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser):
-    primary_user_email = models.EmailField(unique=True)
+    # Make sure that primary_user_email is the key for the user.
+    primary_user_email = models.EmailField(primary_key=True, unique=True)
     organization = models.CharField(max_length=100, default='')
     is_unit_head = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
@@ -123,3 +129,11 @@ class CustomUser(AbstractBaseUser):
     @property
     def is_staff(self):
         return self.is_admin
+
+    @property
+    def requested_applications(self):
+        return self.requests.all()
+
+    @property
+    def software_per_computers(self):
+        return self.software_per_computer.all()
