@@ -264,68 +264,6 @@ def get_sorted_df_of_unused_licenses(software_data):
     df = df.sort_values(by='last_used', ascending=False)
     return df
 
-'''
-class LicenseInfoView(generics.ListAPIView):
-    queryset = SoftwarePerComputer.objects.all()
-    serializer_class = SoftwarePerComputerSerializer
-    pagination_class = PageNumberPagination
-
-    def get_queryset(self):
-        application_name = self.request.query_params.get('application_name', None)
-        organization = self.request.query_params.get('organization')
-        application_status = self.request.query_params.get('status')
-
-        if not organization:
-            raise ParseError("The 'organization' parameter is required.")
-        if not application_status:
-            raise ParseError("The 'status' parameter is required.")
-
-        threshold_date = datetime.now() - timedelta(days=90)
-        queryset = self.queryset.filter(
-            license_required=True,
-            license_suite_names__isnull=True,
-            organization=organization,
-        )
-        if application_name:
-            queryset = queryset.filter(application_name=application_name)
-
-        if application_status == 'unused':
-            queryset = queryset.filter(last_used__isnull=True)
-
-        elif application_status == 'available':
-            queryset = queryset.filter(last_used__lte=threshold_date)
-        return queryset
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-
-        if queryset.count() == 0:
-            paginated_empty_list = self.paginate_queryset([])
-            return self.get_paginated_response(paginated_empty_list)
-
-        df = read_frame(queryset)
-
-        grouped_df = df.groupby(['application_name', 'primary_user_full_name', 'computer_name']) \
-            .apply(lambda x: x[['id', 'last_used']].to_dict('records')) \
-            .reset_index() \
-            .rename(columns={0: 'details'})
-
-        sort = self.request.query_params.get('sort')
-        grouped_df = grouped_df.sort_values(sort)
-
-        result = grouped_df.to_dict('records')
-
-
-        if 'status' in self.request.query_params:
-            status_value = self.request.query_params.get('status')
-            for item in result:
-                item["status"] = status_value
-
-        paginated_result = self.paginate_queryset(result)
-
-        return self.get_paginated_response(paginated_result)
-'''
-
 
 class LicenseInfoView(generics.ListAPIView):
     queryset = SoftwarePerComputer.objects.all()

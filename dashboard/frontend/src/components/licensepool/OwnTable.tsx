@@ -25,18 +25,27 @@ function Row(props: RowProps) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
 
-    function timeSince(lastUsed: string | null): string {
-        if (!lastUsed) return 'Ikke registrert';
-
+    function calcTimeSince(lastUsed: string) {
         const now = new Date();
         const lastUsedDate = new Date(lastUsed);
         const diffInDays = Math.floor((now.getTime() - lastUsedDate.getTime()) / (1000 * 60 * 60 * 24));
+
+        return diffInDays;
+    }
+
+    function timeSince(lastUsed: string | null): string {
+        if (!lastUsed) return 'Ikke registrert';
+
+        const lastUsedDate = new Date(lastUsed);
+        const diffInDays = calcTimeSince(lastUsed)
 
         return `${lastUsedDate.toLocaleDateString()} (${diffInDays} dager siden)`;
     }
 
     const lastUsed = row.details[0]?.last_used;
-    const status = lastUsed ? 'aktiv' : 'Ikke i bruk';
+    let status = lastUsed ? 'Aktiv' : 'Ikke registrert';
+    if (lastUsed && calcTimeSince(lastUsed) > 90 ){status = 'Ubrukt'};
+
 
     return (
         <React.Fragment>

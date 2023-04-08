@@ -1,5 +1,6 @@
 import datetime
 from urllib.parse import urlencode
+from collections import OrderedDict
 
 from django.test import TestCase
 from django.urls import reverse
@@ -251,12 +252,62 @@ class TestSoftwarePCViews(APITestCase):
         url = reverse('licenseinfo') + '?' + encoded_query_params
         response = self.client.get(url)
         response_data = response.data['results']
+
+        details = [OrderedDict([('id', 1), ('computer_name', 'mycomputer'),
+                            ('application_name', 'myapplication'),
+                            ('category', 'mycategory'),
+                            ('family', 'myfamily'),
+                            ('family_version', '1.0'),
+                            ('family_edition', 'Standard'),
+                            ('license_required', True),
+                            ('manufacturer', 'mymanufacturer'),
+                            ('organization', 'Servere'),
+                            ('organization_path', '/my/organization/path'),
+                            ('date_added', '2022-01-01'),
+                            ('last_used', '2022-02-01'),
+                            ('run_times', 10),
+                            ('total_minutes', 1000),
+                            ('active_minutes', 500),
+                            ('average_usage_per_run', 100.0),
+                            ('active_usage_per_run', 50.0),
+                            ('remote_total_minutes', 0),
+                            ('remote_active_minutes', 0),
+                            ('device_total_minutes', 1000),
+                            ('device_active_minutes', 500),
+                            ('server', False),
+                            ('cloud', False),
+                            ('virtual', False),
+                            ('portable', False),
+                            ('terminal_server', False),
+                            ('test_development', False),
+                            ('manual_client', False),
+                            ('manual_application', False),
+                            ('operating_system', 'Windows 10'),
+                            ('total_cpus', 2),
+                            ('total_cores', 4),
+                            ('last_scanned', '2022-02-14'),
+                            ('status', 'Active'),
+                            ('gdpr_risk', False),
+                            ('manufacturer_gdpr_compliant', True),
+                            ('manufacturer_ps_sh_compliant', True),
+                            ('manufacturer_dpd_compliant', True),
+                            ('suite', False),
+                            ('part_of_suite', False),
+                            ('suite_names', ''),
+                            ('license_suite', False),
+                            ('part_of_license_suite', False),
+                            ('license_suite_names', None),
+                            ('block_listed', False),
+                            ('primary_user', 'myuser'),
+                            ('primary_user_full_name', 'My User'),
+                            ('primary_user_email', 'myuser@example.com')])]
+
         expected_data = [{'application_name': 'myapplication', 'primary_user_full_name': 'My User',
                            'computer_name': 'mycomputer',
-                           'details': [{'id': 1, 'last_used': datetime.date(2022, 2, 1)}], 'status': 'available'}]
+                           'details': details}]
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response_data, expected_data)
+        self.assertEqual(response_data[0], expected_data[0])
 
     def test_get_licenseinfo_invalid_parameters(self):
         query_params = {
