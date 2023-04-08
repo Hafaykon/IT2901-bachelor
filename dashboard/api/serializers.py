@@ -15,15 +15,19 @@ class PoolSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, data):
-        if data['organization'] not in SoftwarePerComputerSerializer.Meta.model.objects.values_list('organization',
-                                                                                                    flat=True).distinct():
+        if data['freed_by_organization'] not in SoftwarePerComputerSerializer.Meta.model.objects.values_list(
+                'organization',
+                flat=True).distinct():
             raise serializers.ValidationError("Organization does not exist")
 
         elif data['application_name'] not in SoftwarePerComputerSerializer.Meta.model.objects.values_list(
                 'application_name', flat=True).distinct():
             raise serializers.ValidationError("Application does not exist")
-
         return data
+
+    def create(self, validated_data):
+        validated_data['date_added'] = date.today()
+        return super(PoolSerializer, self).create(validated_data)
 
 
 class PoolRequestSerializer(serializers.ModelSerializer):
@@ -43,6 +47,12 @@ class PoolRequestSerializer(serializers.ModelSerializer):
 
         if data['request'] not in ['add', 'remove']:
             raise serializers.ValidationError("Request must be 'add' or 'remove'")
+
+        # A user should not be able to request the same license twice
+        if PoolRequestSerializer.Meta.model.objects.filter(requested_by=data['requested_by'],
+                                                           application_name=data['application_name'],
+                                                           request=data['request'], completed=False).exists():
+            raise serializers.ValidationError("You have already requested this license")
 
         return data
 

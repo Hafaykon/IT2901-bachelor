@@ -2,9 +2,6 @@ import {atom} from 'recoil';
 import {LicensePoolData, UserInformation} from '../Interfaces';
 
 
-
-
-
 export const orgAtom = atom<string>({
     key: 'organization',
     default: ''
@@ -20,9 +17,15 @@ export const userAtom = atom<UserInformation>({
     key: 'user',
     default: {
         primary_user_email: '',
+        primary_user_full_name: '',
+        computer_name: '',
         organization: '',
         is_unit_head: false,
     }
 
 })
 
+export const refreshTableAtom = atom<boolean>({
+    key: 'refreshTable',
+    default: false
+})

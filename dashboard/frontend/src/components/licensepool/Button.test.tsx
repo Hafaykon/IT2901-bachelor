@@ -15,7 +15,7 @@ const mockProps = {
 const mockFunction = jest.fn();
 
 beforeEach(() => {
-    render(<ReleaseButton id={mockProps.id} primary_user_email={mockProps.full_name}
+    render(<ReleaseButton spc_id={mockProps.id} primary_user_email={mockProps.full_name}
                           application_name={mockProps.application_name} organization={mockProps.organization}/>);
 })
 

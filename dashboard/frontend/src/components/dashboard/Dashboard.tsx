@@ -8,7 +8,7 @@ import {LeaderboardBox} from './LeaderboardBox';
 import {useRecoilValue} from 'recoil';
 import {orgAtom} from '../../globalVariables/variables';
 import {fetchInfoBoxData} from '../../api/calls';
-import CircularIndeterminate from '../spinner/MuiLoadingSpinner';
+import MuiLoadingSpinner from '../spinner/MuiLoadingSpinner';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import {SavingsBox} from './SavingsBox';
 import {Link} from 'react-router-dom';
@@ -91,7 +91,7 @@ function Dashboard() {
                     </Grid>
                 </div>
             ) : (
-                <CircularIndeterminate/>
+                <MuiLoadingSpinner/>
             )}
         </>
     )

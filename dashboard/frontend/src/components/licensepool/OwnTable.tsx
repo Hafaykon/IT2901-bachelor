@@ -15,6 +15,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {OwnOrgData} from '../../Interfaces';
 import ReleaseButton from "./ReleaseButton";
+import {userAtom} from "../../globalVariables/variables";
+import {useRecoilValue} from "recoil";
 
 
 interface RowProps {
@@ -24,6 +26,8 @@ interface RowProps {
 function Row(props: RowProps) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
+    const userData = useRecoilValue(userAtom)
+
 
     function timeSince(lastUsed: string | null): string {
         if (!lastUsed) return 'Ikke registrert';
@@ -69,7 +73,8 @@ function Row(props: RowProps) {
                                     <TableRow>
                                         <TableCell align="left"><b>Sist åpnet</b></TableCell>
                                         <TableCell align={"left"}><b>Mulig opptjeningspoeng</b></TableCell>
-                                        <TableCell align={"center"}><b>Frigjør</b></TableCell>
+                                        {userData.primary_user_email === row.primary_user_email &&
+                                            <TableCell align={"center"}><b>Frigjør</b></TableCell>}
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -79,11 +84,13 @@ function Row(props: RowProps) {
                                                 {timeSince(detailRow.last_used)}
                                             </TableCell>
                                             <TableCell>10 poeng</TableCell>
-                                            <TableCell align={"center"}> <ReleaseButton id={detailRow.id}
-                                                                                        primary_user_email={row.primary_user_email}
-                                                                                        application_name={row.application_name}
-                                                                                        organization={row.organization}/>
-                                            </TableCell>
+                                            {userData.primary_user_email === row.primary_user_email &&
+                                                <TableCell align={"center"}> <ReleaseButton spc_id={detailRow.id}
+                                                                                            primary_user_email={row.primary_user_email}
+                                                                                            application_name={row.application_name}
+                                                                                            organization={row.organization}/>
+                                                </TableCell>}
+
 
                                         </TableRow>
                                     ))}

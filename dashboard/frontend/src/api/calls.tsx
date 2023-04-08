@@ -85,12 +85,14 @@ export const fetchLicensesAssociatedWithUser = async (username: string) => {
         console.log(error);
     }
 };
-export const fetchInfoBoxData = async (org?: string) => {
+export const fetchInfoBoxData = async (org?: string, email?: string) => {
     try {
         let url = 'http://127.0.0.1:8000/api/licenses/count';
         if (org) {
             url = `${url}?organization=${org}`;
-
+        }
+        if (email) {
+            url += `&email=${email}`;
         }
         const response = await fetch(url);
         const data = await response.json();
@@ -125,15 +127,17 @@ export const fetchPoolData = async (page: number, sort: string, software?: strin
 };
 
 
-export const fetchInfoBoxLicense = async (page: number, status: string, sort: string, org?: string, software?: string) => {
+export const fetchInfoBoxLicense = async (page: number, status: string, sort: string, org?: string, software?: string, email?: string) => {
     try {
         let url = `http://127.0.0.1:8000/api/licenses/licenseinfo/?page=${page}&status=${status}&sort=${sort}`;
-        if (software && org) {
-            url += `&application_name=${software}&organization=${org}`;
-        } else if (software) {
+        if (software) {
             url += `&application_name=${software}`;
-        } else if (org) {
+        }
+        if (org) {
             url += `&organization=${org}`;
+        }
+        if (email) {
+            url += `&email=${email}`;
         }
         const response = await fetch(url);
         const data = await response.json();
@@ -143,17 +147,21 @@ export const fetchInfoBoxLicense = async (page: number, status: string, sort: st
         console.log(error);
     }
 };
+
 /***
  * Fetches all distinct software used within an organization from the backend.
  * @param status - Optional parameter to filter on status.
  * @param organization - Optional parameter to filter on organization.
  * @param pool - parameter to select wether to search in pool or not.
  */
-export const fetchSoftwareUsedInOrg = async (status: string, pool: string, organization?: string) => {
+export const fetchSoftwareUsedInOrg = async (status: string, pool: string, organization?: string, email?: string) => {
     try {
         let url = `http://127.0.0.1:8000/api/licenses/software/?status=${status}&pool=${pool}`;
         if (organization) {
             url += `&organization=${organization}`;
+        }
+        if (email) {
+            url += `&email=${email}`;
         }
         const response = await fetch(url);
         const data = await response.json();

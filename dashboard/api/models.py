@@ -90,14 +90,17 @@ class PoolRequest(models.Model):
 
 
 class CustomUserManager(BaseUserManager):
-    def create_user(self, primary_user_email, password=None, is_unit_head=False, organization=None):
-        user = self.model(primary_user_email=primary_user_email, is_unit_head=is_unit_head, organization=organization)
+    def create_user(self, primary_user_email, password=None, is_unit_head=False, organization=None,
+                    primary_user_full_name='', computer_name=''):
+        user = self.model(primary_user_email=primary_user_email, is_unit_head=is_unit_head, organization=organization,
+                          primary_user_full_name=primary_user_full_name, computer_name=computer_name)
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self, primary_user_email, password=None):
-        user = self.create_user(primary_user_email, password, organization='admin')
+    def create_superuser(self, primary_user_email, password=None, primary_user_full_name='', computer_name=''):
+        user = self.create_user(primary_user_email, password, organization='admin',
+                                primary_user_full_name=primary_user_full_name, computer_name=computer_name)
         user.is_admin = True
         user.is_unit_head = True
         user.save()
@@ -105,9 +108,11 @@ class CustomUserManager(BaseUserManager):
 
 
 class CustomUser(AbstractBaseUser):
-    # Make sure that primary_user_email is the key for the user.
     primary_user_email = models.EmailField(primary_key=True, unique=True)
+    primary_user_full_name = models.CharField(max_length=100, default='')
+    computer_name = models.CharField(max_length=100, default='')
     organization = models.CharField(max_length=100, default='')
+
     is_unit_head = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
