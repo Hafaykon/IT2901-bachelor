@@ -19,6 +19,7 @@
     "antd": "^5.3.1",
     "igniteui-react-charts": "^18.1.2",
     "react": "^18.2.0",
+    "react-cookie": "^4.1.1",
     "react-dom": "^18.2.0",
     "react-minimal-pie-chart": "^8.4.0",
     "react-router-dom": "^6.8.1",

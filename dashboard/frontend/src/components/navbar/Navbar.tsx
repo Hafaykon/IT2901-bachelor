@@ -39,7 +39,7 @@ function Navbar() {
                         {SidebarData.map((item, index) => {
                             return (
                                 <li key={index} className={item.cName}>
-                                    <NavLink to={item.path}>
+                                    <NavLink to={item.path} onClick={item.onClick}>
                                         <span id="spanning">{item.title}</span>
                                     </NavLink>
                                 </li>
