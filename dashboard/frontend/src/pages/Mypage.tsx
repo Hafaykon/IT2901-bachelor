@@ -5,6 +5,7 @@ import Info from '../components/mypage/Info';
 import { IUser } from '../components/mypage/types';
 
 
+
 function MyPage() {
   const user: IUser = {
     name: 'Emma Blix',
@@ -16,7 +17,7 @@ function MyPage() {
       <h1>Min side</h1>
       <div className="centered">
         <Info name={user.name} avatarUrl={user.avatarUrl} />
-        </div>
+      </div>
       <div id="charts" style={{ display: 'flex', flexDirection: 'row' }}>
         <div>
           <MyPageTable />
@@ -27,5 +28,3 @@ function MyPage() {
     </div>
   );
 }
-
-export default MyPage;
