@@ -6,7 +6,7 @@ import CardOverflow from '@mui/joy/CardOverflow';
 import {useNavigate} from 'react-router-dom';
 
 const defaultLabelStyle = {
-    fontSize: '4px',
+    fontSize: '5px',
     fontFamily: 'Source Sans Pro,sans-serif',
     fill: 'white'
 };
@@ -14,26 +14,27 @@ type Props = {
     total_licenses: number,
     active_licenses: number,
     never_used: number,
-    unused_licenses: number
+    unused_licenses: number,
+    available_licenses: number,
 }
 
 function DonutChart(infoBoxData: Props) {
     const navigate = useNavigate();
 
     const handleCardClick = () => {
-        navigate(`/licenses/Totale Lisenser`);
+        navigate(`/Totale Lisenser`);
     };
 
     return (
         <div data-testid="donutChart">
-            <Card sx={{height: 425, width: 670, mt: 7, borderRadius: 5}}>
+            <Card sx={{height: 425, width: 670, mt: 7, borderRadius: 5, ':hover' : {boxShadow: 20}}}>
                 <CardOverflow>
                     <CardActionArea onClick={handleCardClick}>
                         <CardContent>
                             <Stack direction="row">
                             <Typography sx={{
                                 textAlign: 'left',
-                                fontSize: 25,
+                                fontSize: 27,
                                 padding: 2,
                                 color: '#002d53',
                                 fontFamily: 'Source Sans Pro,sans-serif'
@@ -41,7 +42,7 @@ function DonutChart(infoBoxData: Props) {
                                 Total oversikt
                             </Typography>
                             <Tooltip title={<h2 style={{fontSize: 15, fontWeight: 'lighter'}}>
-                                    Diagrammet viser en oversikt over hvor mange aktive, uåpnede og ledige lisenser som eies i enheten.
+                                    Diagrammet viser en oversikt over hvor mange aktive, ubrukte og ledige lisenser som eies i enheten.
                                     </h2>} placement='top' arrow>
                                 <HelpIcon sx={{position: 'absolute', top: 30, right:20, color:'grey', fontSize: 25}} data-testid="donutchartHelpIcon"></HelpIcon>
                             </Tooltip>
@@ -52,33 +53,21 @@ function DonutChart(infoBoxData: Props) {
                                         sx={{
                                             width: 15,
                                             height: 15,
-                                            backgroundColor: '#E1E98B',
-                                            '&:hover': {
-                                                backgroundColor: 'primary.main',
-                                                opacity: [0.9, 0.8, 0.7],
-                                            },
+                                            backgroundColor: '#80cc9f',
                                         }}
                                     />
                                     <Box
                                         sx={{
                                             width: 15,
                                             height: 15,
-                                            backgroundColor: '#80ADD3',
-                                            '&:hover': {
-                                                backgroundColor: 'primary.main',
-                                                opacity: [0.9, 0.8, 0.7],
-                                            },
+                                            backgroundColor: '#f9c680',
                                         }}
                                     />
                                     <Box
                                         sx={{
                                             width: 15,
                                             height: 15,
-                                            backgroundColor: '#80CC9F',
-                                            '&:hover': {
-                                                backgroundColor: 'primary.main',
-                                                opacity: [0.9, 0.8, 0.7],
-                                            },
+                                            backgroundColor: '#f28f8d',
                                         }}
                                     />
                                 </Stack>
@@ -92,7 +81,7 @@ function DonutChart(infoBoxData: Props) {
                                     <Typography>
                                         Aktiv</Typography>
                                     <Typography>Ledig</Typography>
-                                    <Typography>Uåpnet</Typography>
+                                    <Typography>Ubrukt</Typography>
 
                                 </Stack>
                                 <PieChart
@@ -110,19 +99,19 @@ function DonutChart(infoBoxData: Props) {
                                     {
                                         name: 'Aktiv',
                                         value: infoBoxData.active_licenses ?? 1,
-                                        color: '#E1E98B',
+                                        color: '#80cc9f',
                                         key: "test"
                                     },
                                     {
                                         name: 'Ledig',
                                         value: infoBoxData.unused_licenses ?? 1,
-                                        color: '#80ADD3',
+                                        color: '#f9c680',
                                         key: "test2"
                                     },
                                     {
-                                        name: 'Uåpnet',
+                                        name: 'Ubrukt',
                                         value: infoBoxData.never_used ?? 1,
-                                        color: '#80CC9F',
+                                        color: '#f28f8d',
                                         key: "test3"
                                     }
                                 ]}

@@ -12,20 +12,19 @@ function InfoBox({title, numberOfLicenses}: InfoBoxProps) {
     const navigate = useNavigate();
 
     const handleCardClick = () => {
-        navigate(`/licenses/${title}`);
-        navigate(`/licenses/${title}`);
+        navigate(`/${title}`);
+        navigate(`/${title}`);
     };
 
-  let info = "";
-  {
-    {title=="Totale Lisenser" ?  info = 'Totale lisenser er alle lisenser du har tilgjengelig i enheten din.':
-    title=="Uåpnede Lisenser" ? info = 'Uåpnede lisenser er lisenser for programvare som aldri har blitt åpnet.' : 
-    info = 'Ledige lisenser er lisenser for programvare som ikke har blitt åpnet på 90 dager.'}
-  }
-
+    let info = "";
+    {
+      {title=="Totale Lisenser" ?  info = 'Totale lisenser er alle lisenser du har tilgjengelig i enheten din.':
+      title=="Ubrukte Lisenser" ? info = 'Ubrukte lisenser er lisenser for programvare som aldri har blitt åpnet.' : 
+      info = 'Ledige lisenser er lisenser for programvare som ikke har blitt åpnet på 90 dager.'}
+    }
 
     return (
-        <Card sx={{ width: 300, height: 180, borderRadius: 5}} data-testid="infoBox-test">
+        <Card sx={{ width: 300, height: 180, borderRadius: 5, ':hover' : {boxShadow: 20}}} data-testid="infoBox-test">
             <CardActionArea sx={{paddingBottom: 4}} onClick={handleCardClick}>
                 <CardContent>
                   <Stack direction={'row'}>

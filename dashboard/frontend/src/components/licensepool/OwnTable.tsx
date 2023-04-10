@@ -25,6 +25,17 @@ function Row(props: RowProps) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
 
+    function timeSince(lastUsed: string | null): string {
+        if (!lastUsed) return 'Ikke registrert';
+
+        const now = new Date();
+        const lastUsedDate = new Date(lastUsed);
+        const diffInDays = Math.floor((now.getTime() - lastUsedDate.getTime()) / (1000 * 60 * 60 * 24));
+
+        return `${lastUsedDate.toLocaleDateString()} (${diffInDays} dager siden)`;
+    }
+
+
     return (
         <React.Fragment>
             <TableRow sx={{'& > *': {borderBottom: 'unset'}}}>
@@ -65,7 +76,7 @@ function Row(props: RowProps) {
                                     {row.details.map((detailRow) => (
                                         <TableRow key={detailRow.id}>
                                             <TableCell component="th" scope="row">
-                                                {detailRow.last_used ?? 'Ikke registrert'}
+                                                {timeSince(detailRow.last_used)}
                                             </TableCell>
                                             <TableCell>10 poeng</TableCell>
                                             <TableCell align={"center"}> <ReleaseButton id={detailRow.id}
@@ -86,22 +97,19 @@ function Row(props: RowProps) {
 
 interface Props {
     data: OwnOrgData[];
+    handleSorting: (sortBy: string) => void;
 }
 
-export default function OwnTable({
-                                     data
-                                 }: Props) {
+export default function OwnTable({data, handleSorting}: Props) {
 
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
-
 
     useEffect(() => {
         if ((software.length) > 0) {
             setLoaded(true);
             console.log(software);
         }
-
     }, [software]);
 
     return (
@@ -110,10 +118,14 @@ export default function OwnTable({
                 <TableHead>
                     <TableRow>
                         <TableCell/>
-                        <TableCell><b>Lisensnavn</b></TableCell>
-                        <TableCell align={"left"}><b>Bruker</b></TableCell>
-                        <TableCell align={"left"}><b>Løpenummer</b></TableCell>
-                        <TableCell align={"left"}><b>Status</b></TableCell>
+                        <TableCell onClick={() => handleSorting("application_name")}
+                                    style={{cursor:"pointer"}}><b>Lisensnavn &#9660;</b></TableCell>
+                        <TableCell onClick={() => handleSorting("primary_user_full_name")}
+                                   align={"left"} style={{cursor:"pointer"}}><b>Bruker &#9660;</b></TableCell>
+                        <TableCell onClick={() => handleSorting("computer_name")}
+                                   align={"left"} style={{cursor:"pointer"}}><b>Løpenummer &#9660;</b></TableCell>
+                        <TableCell onClick={() => handleSorting("status")}
+                                   align={"left"} style={{cursor:"pointer"}}><b>Status &#9660;</b></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -121,9 +133,7 @@ export default function OwnTable({
                         <Row key={index} row={user}/>
                     ))}
                 </TableBody>
-
             </Table>
         </TableContainer></div>} </>
-
     );
 }

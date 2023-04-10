@@ -4,6 +4,7 @@ import {cleanup, render, screen} from "@testing-library/react";
 import PoolTable from "./PoolTable";
 import {LicensePoolData} from "../../Interfaces";
 import userEvent from "@testing-library/user-event";
+import handleSorting from './LicensePool';
 
 const mockData: LicensePoolData[] = [
     {
@@ -27,13 +28,13 @@ const mockData: LicensePoolData[] = [
 
 describe('The pool table', () => {
     beforeEach(() => {
-        render(<PoolTable data={mockData}/>);
+        render(<PoolTable data={mockData} handleSorting={handleSorting}/>);
     })
     afterEach(() => {
         cleanup()
     })
     it('renders without crashing', async () => {
-        expect(await screen.findByText('Lisensnavn')).toBeInTheDocument();
+        expect(await screen.findByText('Lisensnavn ▼')).toBeInTheDocument();
         expect(await screen.findByText('IT-tjenesten')).toBeInTheDocument();
         expect(await screen.findByText('navn@email.com')).toBeInTheDocument();
 

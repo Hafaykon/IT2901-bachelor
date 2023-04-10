@@ -1,20 +1,23 @@
 import React, {useEffect, useState} from 'react';
 import './Dashboard.css';
-import {Grid, Stack} from '@mui/material';
+import {Grid, Stack, Typography} from '@mui/material';
 import InfoBox from './InfoBox';
 import DonutChart from './DonutChart';
-import {SavingsBox} from './SavingsBox';
+import ActiveLastBreadcrumb from '../ActivateLastBreadcrumb';
+import {LeaderboardBox} from './LeaderboardBox';
 import {useRecoilValue} from 'recoil';
 import {orgAtom} from '../../globalVariables/variables';
 import {fetchInfoBoxData} from '../../api/calls';
 import CircularIndeterminate from '../spinner/MuiLoadingSpinner';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import { SavingsBox } from './SavingsBox';
 
 interface Count {
     total_licenses: number,
     active_licenses: number,
     never_used: number,
-    unused_licenses: number
+    unused_licenses: number,
+    available_licenses: number,
 
 }
 
@@ -38,17 +41,24 @@ function Dashboard() {
     return (
         <>
             {boxData ? (
-                <div id="body">
-                    <Grid container id='boxes'>
-                        <Grid container className={'org_info'} justifyContent={"flex-end"} alignContent={"flex-end"}>
-                            <Stack direction="row" sx={{width: "100%"}} id='headline' spacing={75}>
-                                <h2 id={"organization"}>{org}</h2>
-                                <a href="/lisensportal" id="portal-link">
-                                    Til lisensportalen
-                                    <LogoutOutlinedIcon style={{alignContent: "center"}}/>
-                                </a>
-                            </Stack>
-                        </Grid>
+                <div className={'body'}>
+                    <Grid container id='header'>
+                        <Stack spacing={2}>
+                            <ActiveLastBreadcrumb />
+                            <Grid container>
+                                <Stack direction="row">
+                                   <Typography id='org_name'>{org}</Typography>
+                                   <Stack direction="row">
+                                        <a href="/lisensportal" id="portal-link">
+                                            Til lisensportalen
+                                            <LogoutOutlinedIcon style={{alignContent: "center"}}/>
+                                        </a>
+                                    </Stack>
+                                </Stack>
+                            </Grid>
+                        </Stack>
+                    </Grid>
+                    <Grid container id="boxes">
                         <Grid item>
                             <Stack direction="row" spacing={8}>
                                 <InfoBox
@@ -56,7 +66,7 @@ function Dashboard() {
                                     numberOfLicenses={boxData[0]?.total_licenses ?? 0}
                                 />
                                 <InfoBox
-                                    title="Uåpnede Lisenser"
+                                    title="Ubrukte Lisenser"
                                     numberOfLicenses={boxData[0]?.never_used ?? 0}
                                 />
                                 <InfoBox
@@ -65,14 +75,16 @@ function Dashboard() {
                                 />
                             </Stack>
                         </Grid>
+                    </Grid>
+                    <Grid container id="boxes">
                         <Grid container id={'donut_chart'}>
                             <DonutChart never_used={boxData[0].never_used} total_licenses={boxData[0].total_licenses}
                                         unused_licenses={boxData[0].unused_licenses}
-                                        active_licenses={boxData[0].active_licenses}/>
+                                        active_licenses={boxData[0].active_licenses} available_licenses={boxData[0].available_licenses}/>
                             <Grid item sx={{ml: 8, mt: 7}}>
                                 <Stack direction={'column'} spacing={8}>
-                                    <SavingsBox title="Potensiell Sparing" savings={2000}/>
-                                    <SavingsBox title="Kroner Spart" savings={3000}/>
+                                    <SavingsBox />
+                                    <LeaderboardBox/>
                                 </Stack>
                             </Grid>
                         </Grid>
