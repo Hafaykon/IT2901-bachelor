@@ -46,7 +46,7 @@ function LicensePool() {
         // Fetches distinct software names.
         const fetchSoftwareNames = async () => {
             try {
-                const data: string[] | undefined = await fetchSoftwareUsedInOrg('available', 'true',  checked ? org as string : '');
+                const data: string[] | undefined = await fetchSoftwareUsedInOrg('available', 'true', checked ? org as string : '');
                 if (data !== undefined) {
                     setOrgSoftware(data);
                 }
@@ -94,10 +94,11 @@ function LicensePool() {
                     <Grid container justifyContent="center" alignItems="center" className={'license_table'}
                           width={"75%"}>
                         <Stack direction={"column"} width={"95%"} marginBottom={"10px"}>
-                            <h2 style={{fontFamily: 'Source Sans Pro, sans-serif', 
+                            <h2 style={{
+                                fontFamily: 'Source Sans Pro, sans-serif',
                                 fontSize: 40,
                                 marginTop: -0.6
-                            }}> 
+                            }}>
                                 Lisensportalen
                             </h2>
                             <h4 style={{

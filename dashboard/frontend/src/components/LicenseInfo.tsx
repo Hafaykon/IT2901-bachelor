@@ -55,7 +55,7 @@ const LicenseInfo: React.FC = () => {
     }, [status]);
 
     useEffect(() => {
-       fetchData();
+        fetchData();
     }, [searchTerm, currentPage, status, sortBy]);
 
 
@@ -92,29 +92,37 @@ const LicenseInfo: React.FC = () => {
 
 
     return (
-        <><div>
-            <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
-                <ActiveLastBreadcrumb />
-            </Grid>
-            {loaded ? (<Box id={'licensepool_container'}
-             style={{display: 'flex', justifyContent: 'center', alignContent: "center", marginTop: "20px"}}>
-            <Grid container className='license_pool' justifyContent={"center"}>
-                <Grid container justifyContent="center" alignItems="center" className={'license_table'} width={"75%"}>
-                    <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
-                        <h2 style={{fontFamily: "Source Sans 3"}}> {title} i {storedOrganization}</h2>
-                        <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
-                        <OwnTable data={data} handleSorting={handleSorting}/>
-                        <Pagination
-                            count={Math.ceil(count / 10)}
-                            page={currentPage}
-                            onChange={handlePageChange}
-                            color={"primary"}
-                        />
-                    </Stack>
+        <>
+            <div>
+                <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+                    <ActiveLastBreadcrumb/>
                 </Grid>
-            </Grid>
-        </Box> ) : (<CircularIndeterminate/>) }
-        </div></>)
+                {loaded ? (<Box id={'licensepool_container'}
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignContent: "center",
+                                    marginTop: "20px"
+                                }}>
+                    <Grid container className='license_pool' justifyContent={"center"}>
+                        <Grid container justifyContent="center" alignItems="center" className={'license_table'}
+                              width={"75%"}>
+                            <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
+                                <h2 style={{fontFamily: "Source Sans 3"}}> {title} i {storedOrganization}</h2>
+                                <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
+                                <OwnTable data={data} handleSorting={handleSorting}/>
+                                <Pagination
+                                    count={Math.ceil(count / 10)}
+                                    page={currentPage}
+                                    onChange={handlePageChange}
+                                    color={"primary"}
+                                />
+                            </Stack>
+                        </Grid>
+                    </Grid>
+                </Box>) : (<CircularIndeterminate/>)}
+            </div>
+        </>)
 };
 
 export default LicenseInfo;

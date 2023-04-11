@@ -5,19 +5,30 @@ from datetime import datetime, timedelta
 import numpy as np
 import pandas as pd
 from django_pandas.io import read_frame
-from rest_framework import generics, status
+from rest_framework import generics, permissions
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.exceptions import NotFound
 from rest_framework.exceptions import ParseError
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from .models import PoolRequest, LicensePool, SoftwarePerComputer
 from .serializers import SoftwarePerComputerSerializer, PoolRequestSerializer, PoolSerializer
 
+removable_software = ["Check Point Full Disk Encryption 7.4", "Microsoft Office 2007 Outlook",
+                      "Microsoft Office 2010 Outlook", "Microsoft Office 2007 Standard", "Snow Inventory 3.2",
+                      "Microsoft Office 97 Access", "Trend Micro Apex One 14", "Snow Inventory 3.7",
+                      "Microsoft Office 2000 Access", "Microsoft Office 2007 Word", "Microsoft Office 2010 Standard",
+                      "Microsoft Office 2000 PowerPoint", "Microsoft Office 2000 Outlook",
+                      "Microsoft Office 2007 Excel", "Snow Inventory 6.7"]
 
-# Create your views here.
+
 @api_view(['GET'])
+# @authentication_classes([JWTAuthentication])
+# @permission_classes([permissions.IsAuthenticated])
 def get_organizations(request, format=None):
     """
     :return: Returns a list of all distinct organizations.
@@ -29,6 +40,19 @@ def get_organizations(request, format=None):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     print(len(organizations))
     return Response(organizations)
+
+
+class GetUserInfo(APIView):
+    """
+    Returns the primary user email and organization of the user given a valid JWT.
+    """
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        user = request.user
+        return Response({'primary_user_email': user.primary_user_email, 'organization': user.organization,
+                         'is_unit_head': user.is_unit_head})
 
 
 @api_view(['GET'])
@@ -215,10 +239,9 @@ def software_counts(request):
         if not organization:
             raise ParseError("No organization provided")
 
-        software = SoftwarePerComputer.objects.filter(
-            organization=organization
-        ).values('last_used', 'license_required')
-        software = software.filter(license_required=True, license_suite_names__isnull=True)
+        software = SoftwarePerComputer.objects.filter(organization=organization, license_required=True,
+                                                      license_suite_names__isnull=True)
+        software = software.exclude(application_name__in=removable_software)
 
         # Count of total licenses filter by organization
         total_licenses = software.count()
@@ -226,11 +249,12 @@ def software_counts(request):
         # Count of software that has last_used = null (Xupervisor haven't registered activity)
         never_used = software.filter(last_used__isnull=True).count()
 
-        # Count of software that has last_used >= 90 days
-        df = get_sorted_df_of_unused_licenses(software)
-        unused_software = len(df)
+        # Count of software that has last_used > 90 days
+        date = datetime.now() - timedelta(days=90)
+        unused_software = software.filter(last_used__lte=date).count()
+
         # Count of active licenses
-        active_licenses = total_licenses - unused_software - never_used
+        active_licenses = software.filter(last_used__gte=date).count()
         available_licenses = LicensePool.objects.filter(organization=organization).count()
 
         counts = {
@@ -241,10 +265,10 @@ def software_counts(request):
             'available_licenses': available_licenses
         }
         return Response(counts)
-    except Exception as e:
-        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     except ParseError as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 def get_sorted_df_of_unused_licenses(software_data):
@@ -270,6 +294,7 @@ class LicenseInfoView(generics.ListAPIView):
     pagination_class = PageNumberPagination
 
     def get_queryset(self):
+        # get parameters
         application_name = self.request.query_params.get('application_name', None)
         organization = self.request.query_params.get('organization')
         application_status = self.request.query_params.get('status')
@@ -293,6 +318,8 @@ class LicenseInfoView(generics.ListAPIView):
 
         elif application_status == 'available':
             queryset = queryset.filter(last_used__lte=threshold_date)
+
+        queryset = queryset.exclude(application_name__in=removable_software)
         return queryset
 
     def list(self, request, *args, **kwargs):
@@ -342,6 +369,7 @@ def get_org_software_names(request, format=None):
     threshold_date = datetime.now() - timedelta(days=90)
 
     try:
+        software = None
         if pool == 'true':
             software = LicensePool.objects.values_list('application_name', flat=True).distinct()
         elif pool == 'false':
@@ -358,9 +386,8 @@ def get_org_software_names(request, format=None):
             software = software.filter(organization=organization)
         if len(software) == 0:
             return Response([])
-
+        software = software.exclude(application_name__in=removable_software)
         software = sorted(software)
-
         return Response(software)
 
     except Exception as e:
@@ -370,7 +397,6 @@ def get_org_software_names(request, format=None):
 class GetLicensePool(generics.ListAPIView):
     """
     Returns a list of all licenses in the license pool.
-    parameters: application_name, organization
     """
     serializer_class = PoolSerializer
     queryset = LicensePool.objects.all()
@@ -391,6 +417,7 @@ class GetLicensePool(generics.ListAPIView):
                 queryset = queryset.filter(organization=organization)
             else:
                 raise NotFound("The given organization does not exist.")
+        queryset = queryset.exclude(application_name__in=removable_software)
         return queryset
 
     def aggregate_data(self, data):
@@ -455,3 +482,23 @@ class CreatePoolObject(generics.CreateAPIView):
     """
     queryset = LicensePool.objects.all()
     serializer_class = PoolSerializer
+
+# class LoginAPI(ObtainAuthToken):
+#     """
+#     API endpoint that allows users to login.
+#     Returns a token and user information if the credentials are valid.
+#     """
+#     permission_classes = [permissions.AllowAny]
+#
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.serializer_class(data=request.data, context={'request': request})
+#         if not serializer.is_valid():
+#             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+#         user = serializer.validated_data['user']
+#         token, created = Token.objects.get_or_create(user=user)
+#         return Response({
+#             'token': token.key,
+#             'user_id': user.pk,
+#             'email': user.primary_user_email,
+#             'organization': user.organization,
+#         })
