@@ -1,1 +1,4 @@
 /.idea
+/dashboard/data/
+/dashboard/db.sqlite3
+__pycache__/

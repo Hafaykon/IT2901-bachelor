@@ -58,7 +58,7 @@ const SoftwareSearchBar: React.FC<SoftwareSearchBarProps> = ({data, setSelectedS
                                     </>
                                 ),
                                 sx: {
-                                    
+
                                     height: '50px',
                                     borderRadius: '12px',
                                     backgroundColor: 'white',

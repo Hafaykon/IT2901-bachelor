@@ -103,11 +103,10 @@ function Row(props: RowProps) {
 
 interface Props {
     data: LicensePoolData[];
+    handleSorting: (sortBy: string) => void;
 }
 
-export default function PoolTable({
-                                      data
-                                  }: Props) {
+export default function PoolTable({data, handleSorting}: Props) {
 
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
@@ -137,8 +136,10 @@ export default function PoolTable({
                             <TableHead>
                                 <TableRow>
                                     <TableCell/>
-                                    <TableCell><b>Lisensnavn</b></TableCell>
-                                    <TableCell align={"left"}><b>Enhet</b></TableCell>
+                                    <TableCell onClick={() => handleSorting("application_name")}
+                                               style={{cursor: "pointer"}}><b>Lisensnavn &#9660;</b></TableCell>
+                                    <TableCell onClick={() => handleSorting("organization")} align={"left"}
+                                               style={{cursor: "pointer"}}> <b>Enhet &#9660;</b></TableCell>
                                     <TableCell align={"left"}><b>Kontaktinformasjon</b></TableCell>
                                 </TableRow>
                             </TableHead>

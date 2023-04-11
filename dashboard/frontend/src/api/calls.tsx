@@ -8,7 +8,7 @@ export const fetchOrganizations = async () => {
     try {
         const response = await fetch('http://127.0.0.1:8000/api/organizations/');
         const data = await response.json();
-        return [...data];
+        return data;
     } catch (error) {
         console.log(error);
     }
@@ -101,9 +101,9 @@ export const fetchInfoBoxData = async (org?: string) => {
     }
 };
 
-export const fetchPoolData = async (page: number, software?: string, org?: string) => {
+export const fetchPoolData = async (page: number, sort: string, software?: string, org?: string) => {
     try {
-        let url = `http://127.0.0.1:8000/api/pool/get/?page=${page}`;
+        let url = `http://127.0.0.1:8000/api/pool/get/?page=${page}&sort=${sort}`;
         if (software && org) {
             url = `${url}&application_name=${software}&organization=${org}`;
         } else if (software) {
@@ -126,9 +126,9 @@ export const fetchPoolData = async (page: number, software?: string, org?: strin
 };
 
 
-export const fetchInfoBoxLicense = async (page: number, status: string, org?: string, software?: string) => {
+export const fetchInfoBoxLicense = async (page: number, status: string, sort: string, org?: string, software?: string) => {
     try {
-        let url = `http://127.0.0.1:8000/api/licenseinfo/?page=${page}&status=${status}`;
+        let url = `http://127.0.0.1:8000/api/licenseinfo/?page=${page}&status=${status}&sort=${sort}`;
         if (software && org) {
             url += `&application_name=${software}&organization=${org}`;
         } else if (software) {
@@ -150,7 +150,7 @@ export const fetchInfoBoxLicense = async (page: number, status: string, org?: st
  * @param organization - Optional parameter to filter on organization.
  * @param pool - parameter to select wether to search in pool or not.
  */
-export const fetchSoftwareUsedInOrg = async (status: string, pool : string,  organization?: string) => {
+export const fetchSoftwareUsedInOrg = async (status: string, pool: string, organization?: string) => {
     try {
         let url = `http://127.0.0.1:8000/api/software/?status=${status}&pool=${pool}`;
         if (organization) {

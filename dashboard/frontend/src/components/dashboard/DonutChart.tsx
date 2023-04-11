@@ -1,6 +1,6 @@
 import React from 'react';
-import { Box, Card, ButtonBase, CardActionArea, CardContent, Stack, Tooltip, Typography } from '@mui/material';
-import { PieChart } from 'react-minimal-pie-chart';
+import {Box, ButtonBase, Card, CardActionArea, CardContent, Stack, Tooltip, Typography} from '@mui/material';
+import {PieChart} from 'react-minimal-pie-chart';
 import HelpIcon from '@mui/icons-material/Help';
 import CardOverflow from '@mui/joy/CardOverflow';
 import {useNavigate} from 'react-router-dom';
@@ -27,25 +27,28 @@ function DonutChart(infoBoxData: Props) {
 
     return (
         <div data-testid="donutChart">
-            <Card sx={{height: 425, width: 670, mt: 7, borderRadius: 5, ':hover' : {boxShadow: 20}}}>
+            <Card sx={{height: 425, width: 670, mt: 7, borderRadius: 5, ':hover': {boxShadow: 20}}}>
                 <CardOverflow>
                     <CardActionArea onClick={handleCardClick}>
                         <CardContent>
                             <Stack direction="row">
-                            <Typography sx={{
-                                textAlign: 'left',
-                                fontSize: 25,
-                                padding: 2,
-                                color: '#002d53',
-                                fontFamily: 'Source Sans Pro,sans-serif'
-                            }}>
-                                Total oversikt
-                            </Typography>
-                            <Tooltip title={<h2 style={{fontSize: 15, fontWeight: 'lighter'}}>
-                                    Diagrammet viser en oversikt over hvor mange aktive, ubrukte og ledige lisenser som eies i enheten.
-                                    </h2>} placement='top' arrow>
-                                <HelpIcon sx={{position: 'absolute', top: 30, right:20, color:'grey', fontSize: 25}} data-testid="donutchartHelpIcon"></HelpIcon>
-                            </Tooltip>
+                                <Typography sx={{
+                                    textAlign: 'left',
+                                    fontSize: 27,
+                                    padding: 2,
+                                    color: '#002d53',
+                                    fontFamily: 'Source Sans Pro,sans-serif'
+                                }}>
+                                    Total oversikt
+                                </Typography>
+                                <Tooltip title={<h2 style={{fontSize: 15, fontWeight: 'lighter'}}>
+                                    Diagrammet viser en oversikt over hvor mange aktive, ubrukte og ledige lisenser som
+                                    eies i enheten.
+                                </h2>} placement='top' arrow>
+                                    <HelpIcon
+                                        sx={{position: 'absolute', top: 30, right: 20, color: 'grey', fontSize: 25}}
+                                        data-testid="donutchartHelpIcon"></HelpIcon>
+                                </Tooltip>
                             </Stack>
                             <Stack direction="row" sx={{paddingLeft: 7}}>
                                 <Stack spacing={5} sx={{paddingTop: 7.5, paddingLeft: 3}}>
@@ -95,26 +98,26 @@ function DonutChart(infoBoxData: Props) {
                                     lineWidth={40}
 
 
-                                data={[
-                                    {
-                                        name: 'Aktiv',
-                                        value: infoBoxData.active_licenses ?? 1,
-                                        color: '#80cc9f',
-                                        key: "test"
-                                    },
-                                    {
-                                        name: 'Ledig',
-                                        value: infoBoxData.unused_licenses ?? 1,
-                                        color: '#f9c680',
-                                        key: "test2"
-                                    },
-                                    {
-                                        name: 'Ubrukt',
-                                        value: infoBoxData.never_used ?? 1,
-                                        color: '#f28f8d',
-                                        key: "test3"
-                                    }
-                                ]}
+                                    data={[
+                                        {
+                                            name: 'Aktiv',
+                                            value: infoBoxData.active_licenses ?? 1,
+                                            color: '#80cc9f',
+                                            key: "test"
+                                        },
+                                        {
+                                            name: 'Ledig',
+                                            value: infoBoxData.unused_licenses ?? 1,
+                                            color: '#f9c680',
+                                            key: "test2"
+                                        },
+                                        {
+                                            name: 'Ubrukt',
+                                            value: infoBoxData.never_used ?? 1,
+                                            color: '#f28f8d',
+                                            key: "test3"
+                                        }
+                                    ]}
                                 />
                             </Stack>
                         </CardContent>
