@@ -9,6 +9,9 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {Box, Grid, Stack} from '@mui/material';
 import ActiveLastBreadcrumb from '../ActivateLastBreadcrumb';
+import { useRecoilValue } from 'recoil';
+/**import { userAtom } from "../../globalVariables/variables";**/
+
 
 function createData(
     position: number,
@@ -19,7 +22,7 @@ function createData(
 }
 
 const rows = [
-    createData(1, 'Arbeidsmiljøenheten', 79),
+    createData(1, 'Arbeidsmiljøenheten', 90),
     createData(2, 'IT-tjenesten', 59),
     createData(3, 'Kulturenheten', 20),
 
@@ -34,17 +37,35 @@ interface Leaderboard {
 }
 
 
+
+
 export function Leaderboard() {
+    /** 
     const [data, setData] = React.useState<Leaderboard[]>([]);
+    const accessToken = localStorage.getItem('access');
+    const userInfo = useRecoilValue(userAtom);
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch('http://127.0.0.1:8000/api/leaderboard/');
+            const response = await fetch('http://127.0.0.1:8000/api/leaderboard/', {
+                method: 'GET',
+                headers: {
+                    'content-type': 'application/json',
+                    'authorization': `bearer ${accessToken}`
+                },
+                body: JSON.stringify({
+                    'organization': userInfo.organization,
+                })
+            });
             const data = await response.json();
             setData(data);
+            console.log(data);
         }
-        fetchData()
-    }, [])
+
+        fetchData();
+    }, []);
+}
+*/
 
     return (
         <>

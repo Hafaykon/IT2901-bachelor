@@ -258,7 +258,8 @@ def leaderboard(request):
     :return: Returns a list of the top 25 organizations by active percentage.
     """
     try:
-        organization = request.GET.get('organization')
+        organization = request.user.organization
+        print(organization)
         org_filter = Q(license_required=True) & Q(license_suite_names__isnull=True)
         now = datetime.now()
         last_90_days = now - timedelta(days=90)
