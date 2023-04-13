@@ -9,6 +9,13 @@ import {fetchInfoBoxData} from "../api/calls";
 import DonutChart from "../components/dashboard/DonutChart";
 import PoolRequestList from "../components/dashboard/PoolRequestList";
 import MuiLoadingSpinner from "../components/spinner/MuiLoadingSpinner";
+import MyPageTable from "../components/mypage/MyPageTable";
+import Info from "../components/mypage/Info";
+import { IUser } from '../components/mypage/types';
+import './MyPage.css';
+
+
+
 
 interface RequestObject {
     own_requests: OrgRequest[];
@@ -23,6 +30,10 @@ function MyPage() {
     const [showHistory, setShowHistory] = useState(false);
     const [boxData, setBoxData] = useState<Count[]>([]);
 
+     const user: IUser = {
+    name: 'Emma Blix',
+    avatarUrl: 'https://example.com/avatar.jpg',
+  };
 
 
     useEffect(() => {
@@ -120,6 +131,14 @@ function MyPage() {
                                     Hei {userInfo.primary_user_full_name}
                                 </h2>
                             </Grid>
+                            <div className="centered">
+                            <Info name={user.name} avatarUrl={user.avatarUrl} />
+                            </div>
+
+                            <div id="charts" style={{ display: 'flex', flexDirection: 'row' }}>
+                            <MyPageTable/>
+                            </div>
+
                             <Grid item xs={12}>
                                 <DonutChart
                                     never_used={boxData[0].never_used}
