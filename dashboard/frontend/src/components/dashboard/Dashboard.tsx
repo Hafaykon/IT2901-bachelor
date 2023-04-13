@@ -8,55 +8,32 @@ import {LeaderboardBox} from './LeaderboardBox';
 import {useRecoilValue} from 'recoil';
 import {orgAtom} from '../../globalVariables/variables';
 import {fetchInfoBoxData} from '../../api/calls';
-import CircularIndeterminate from '../spinner/MuiLoadingSpinner';
+import MuiLoadingSpinner from '../spinner/MuiLoadingSpinner';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import {SavingsBox} from './SavingsBox';
 import {Link} from 'react-router-dom';
+import {Count} from "../../Interfaces";
 
-interface Count {
-    total_licenses: number,
-    active_licenses: number,
-    never_used: number,
-    unused_licenses: number,
-    available_licenses: number,
-
-}
 
 function Dashboard() {
-    const storedOrganization: string | undefined = JSON.parse(localStorage.getItem('organization') ?? 'null');
     const org = useRecoilValue(orgAtom)
     const [boxData, setBoxData] = useState<Count[] | undefined>(undefined);
     const accessToken = localStorage.getItem('access')
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const data: Count[] | undefined = await fetchInfoBoxData(storedOrganization);
-            if (data !== undefined) {
-                setBoxData(data);
-            }
-        };
-        fetchData();
-    }, [org]);
 
     useEffect(() => {
-        if (accessToken) {
-            const fetchUserInfo = async () => {
-                const response = await fetch('http://127.0.0.1:8000/api/user/', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${accessToken}`
+            const fetchData = async () => {
+                if (accessToken && org) {
+                    // Fetch box data
+                    const boxDataResponse: Count[] | undefined = await fetchInfoBoxData(org);
+                    if (boxDataResponse !== undefined) {
+                        setBoxData(boxDataResponse);
                     }
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    console.log(data);
                 }
             };
 
-            fetchUserInfo();
-        }
-    }, []);
+            fetchData();
+        }, [accessToken, org]);
 
 
     return (
@@ -114,7 +91,7 @@ function Dashboard() {
                     </Grid>
                 </div>
             ) : (
-                <CircularIndeterminate/>
+                <MuiLoadingSpinner/>
             )}
         </>
     )
