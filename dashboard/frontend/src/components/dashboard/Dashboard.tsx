@@ -8,34 +8,32 @@ import {LeaderboardBox} from './LeaderboardBox';
 import {useRecoilValue} from 'recoil';
 import {orgAtom} from '../../globalVariables/variables';
 import {fetchInfoBoxData} from '../../api/calls';
-import CircularIndeterminate from '../spinner/MuiLoadingSpinner';
+import MuiLoadingSpinner from '../spinner/MuiLoadingSpinner';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import { SavingsBox } from './SavingsBox';
+import {SavingsBox} from './SavingsBox';
+import {Link} from 'react-router-dom';
+import {Count} from "../../Interfaces";
 
-interface Count {
-    total_licenses: number,
-    active_licenses: number,
-    never_used: number,
-    unused_licenses: number,
-    available_licenses: number,
-
-}
 
 function Dashboard() {
-    const storedOrganization: string | undefined = JSON.parse(localStorage.getItem('organization') ?? 'null');
     const org = useRecoilValue(orgAtom)
-    const [boxData, setBoxData] = useState<Count[] | undefined>(undefined
-    );
+    const [boxData, setBoxData] = useState<Count[] | undefined>(undefined);
+    const accessToken = localStorage.getItem('access')
+
 
     useEffect(() => {
-        const fetchData = async () => {
-            const data: Count[] | undefined = await fetchInfoBoxData(storedOrganization);
-            if (data !== undefined) {
-                setBoxData(data);
-            }
-        };
-        fetchData();
-    }, [org]);
+            const fetchData = async () => {
+                if (accessToken && org) {
+                    // Fetch box data
+                    const boxDataResponse: Count[] | undefined = await fetchInfoBoxData(org);
+                    if (boxDataResponse !== undefined) {
+                        setBoxData(boxDataResponse);
+                    }
+                }
+            };
+
+            fetchData();
+        }, [accessToken, org]);
 
 
     return (
@@ -44,15 +42,16 @@ function Dashboard() {
                 <div className={'body'}>
                     <Grid container id='header'>
                         <Stack spacing={2}>
-                            <ActiveLastBreadcrumb />
+                            <ActiveLastBreadcrumb/>
                             <Grid container>
                                 <Stack direction="row">
-                                   <Typography className={'org_name'} sx={{fontSize: 30}}>{org}</Typography>
-                                   <Stack direction="row">
-                                        <a href="/lisensportal" id="portal-link">
+                                    <Typography id='org_name'>{org}</Typography>
+                                    <Stack direction="row">
+                                        <Link to="/lisensportal" id="portal-link">
                                             Til lisensportalen
                                             <LogoutOutlinedIcon style={{alignContent: "center"}}/>
-                                        </a>
+                                        </Link>
+
                                     </Stack>
                                 </Stack>
                             </Grid>
@@ -80,10 +79,11 @@ function Dashboard() {
                         <Grid container id={'donut_chart'}>
                             <DonutChart never_used={boxData[0].never_used} total_licenses={boxData[0].total_licenses}
                                         unused_licenses={boxData[0].unused_licenses}
-                                        active_licenses={boxData[0].active_licenses} available_licenses={boxData[0].available_licenses}/>
+                                        active_licenses={boxData[0].active_licenses}
+                                        available_licenses={boxData[0].available_licenses}/>
                             <Grid item sx={{ml: 8, mt: 7}}>
                                 <Stack direction={'column'} spacing={8}>
-                                    <SavingsBox />
+                                    <SavingsBox/>
                                     <LeaderboardBox/>
                                 </Stack>
                             </Grid>
@@ -91,7 +91,7 @@ function Dashboard() {
                     </Grid>
                 </div>
             ) : (
-                <CircularIndeterminate/>
+                <MuiLoadingSpinner/>
             )}
         </>
     )

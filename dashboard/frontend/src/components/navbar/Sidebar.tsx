@@ -1,4 +1,9 @@
+import {useSetRecoilState} from "recoil";
+import {isAuthAtom} from "../../globalVariables/variables";
+
+
 export const SidebarData = [
+
     {
         title: 'Mitt dashboard',
         path: '/',
@@ -6,14 +11,21 @@ export const SidebarData = [
         cName: 'nav-text'
     },
     {
-        title: 'Min side',
-        path: '/minside',
+        title: 'Lisensportalen',
+        path: '/lisensportal',
+
+        cName: 'nav-text'
+    },
+
+    {
+        title: 'Ledertavle',
+        path: '/leaderboard',
 
         cName: 'nav-text'
     },
     {
-        title: 'Lisensportalen',
-        path: '/lisensportal',
+        title: 'Min side',
+        path: '/minside',
 
         cName: 'nav-text'
     },
@@ -25,8 +37,13 @@ export const SidebarData = [
     },
     {
         title: 'Logg ut',
-        path: '/loggut',
-
-        cName: 'nav-text'
+        path: '/',
+        cName: 'nav-text',
+        onClick: () => {
+            localStorage.removeItem('access');
+            localStorage.removeItem('refresh');
+            const setAuth = useSetRecoilState(isAuthAtom);
+            setAuth(false);
+        }
     }
 ];

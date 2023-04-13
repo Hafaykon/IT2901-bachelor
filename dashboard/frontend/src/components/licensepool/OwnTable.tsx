@@ -15,6 +15,8 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {OwnOrgData} from '../../Interfaces';
 import ReleaseButton from "./ReleaseButton";
+import {userAtom} from "../../globalVariables/variables";
+import {useRecoilValue} from "recoil";
 
 
 interface RowProps {
@@ -24,6 +26,8 @@ interface RowProps {
 function Row(props: RowProps) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
+    const userData = useRecoilValue(userAtom)
+
 
     function timeSince(lastUsed: string | null): string {
         if (!lastUsed) return 'Ikke registrert';
@@ -69,7 +73,8 @@ function Row(props: RowProps) {
                                     <TableRow>
                                         <TableCell align="left"><b>Sist åpnet</b></TableCell>
                                         <TableCell align={"left"}><b>Mulig opptjeningspoeng</b></TableCell>
-                                        <TableCell align={"center"}><b>Frigjør</b></TableCell>
+                                        {userData.primary_user_email === row.primary_user_email &&
+                                            <TableCell align={"center"}><b>Frigjør</b></TableCell>}
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -79,9 +84,13 @@ function Row(props: RowProps) {
                                                 {timeSince(detailRow.last_used)}
                                             </TableCell>
                                             <TableCell>10 poeng</TableCell>
-                                            <TableCell align={"center"}> <ReleaseButton id={detailRow.id}
-                                                                                        full_name={row.primary_user_full_name}/>
-                                            </TableCell>
+                                            {userData.primary_user_email === row.primary_user_email &&
+                                                <TableCell align={"center"}> <ReleaseButton spc_id={detailRow.id}
+                                                                                            primary_user_email={row.primary_user_email}
+                                                                                            application_name={row.application_name}
+                                                                                            organization={row.organization}/>
+                                                </TableCell>}
+
 
                                         </TableRow>
                                     ))}
@@ -97,22 +106,19 @@ function Row(props: RowProps) {
 
 interface Props {
     data: OwnOrgData[];
+    handleSorting: (sortBy: string) => void;
 }
 
-export default function OwnTable({
-                                     data
-                                 }: Props) {
+export default function OwnTable({data, handleSorting}: Props) {
 
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
-
 
     useEffect(() => {
         if ((software.length) > 0) {
             setLoaded(true);
             console.log(software);
         }
-
     }, [software]);
 
     return (
@@ -121,10 +127,14 @@ export default function OwnTable({
                 <TableHead>
                     <TableRow>
                         <TableCell/>
-                        <TableCell><b>Lisensnavn</b></TableCell>
-                        <TableCell align={"left"}><b>Bruker</b></TableCell>
-                        <TableCell align={"left"}><b>Løpenummer</b></TableCell>
-                        <TableCell align={"left"}><b>Status</b></TableCell>
+                        <TableCell onClick={() => handleSorting("application_name")}
+                                   style={{cursor: "pointer"}}><b>Lisensnavn &#9660;</b></TableCell>
+                        <TableCell onClick={() => handleSorting("primary_user_full_name")}
+                                   align={"left"} style={{cursor: "pointer"}}><b>Bruker &#9660;</b></TableCell>
+                        <TableCell onClick={() => handleSorting("computer_name")}
+                                   align={"left"} style={{cursor: "pointer"}}><b>Løpenummer &#9660;</b></TableCell>
+                        <TableCell onClick={() => handleSorting("status")}
+                                   align={"left"} style={{cursor: "pointer"}}><b>Status &#9660;</b></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -132,9 +142,7 @@ export default function OwnTable({
                         <Row key={index} row={user}/>
                     ))}
                 </TableBody>
-
             </Table>
         </TableContainer></div>} </>
-
     );
 }

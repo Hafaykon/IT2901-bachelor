@@ -7,6 +7,11 @@ import {Box, Grid, Stack} from '@mui/material';
 import OwnTable from "./licensepool/OwnTable";
 import Pagination from '@mui/material/Pagination';
 import ActiveLastBreadcrumb from './ActivateLastBreadcrumb';
+import MuiLoadingSpinner from './spinner/MuiLoadingSpinner';
+import {useRecoilValue} from "recoil";
+import {refreshTableAtom, userAtom} from "../globalVariables/variables";
+import Checkbox from "@mui/material/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
 
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
@@ -17,6 +22,13 @@ const LicenseInfo: React.FC = () => {
     const [status, setStatus] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
     const [count, setCount] = useState<number>(0);
+    const [sortBy, setSortBy] = useState<string>('application_name')
+    const [loaded, setLoaded] = React.useState(false);
+    const refreshTable = useRecoilValue(refreshTableAtom)
+    const [checked, setChecked] = useState<boolean>(false);
+    const userData = useRecoilValue(userAtom)
+    const email = checked ? userData.primary_user_email : ''
+
 
     useEffect(() => {
         switch (title) {
@@ -31,12 +43,13 @@ const LicenseInfo: React.FC = () => {
                 break;
             default:
                 setStatus(null);
+                break;
         }
         // Fetches distinct software names.
         const fetchSoftwareNames = async () => {
             if (status && storedOrganization) {
                 try {
-                    const data: string[] | undefined = await fetchSoftwareUsedInOrg(status, 'false', storedOrganization);
+                    const data: string[] | undefined = await fetchSoftwareUsedInOrg(status, 'false', storedOrganization, email);
                     if (data !== undefined) {
                         setOrgSoftware(data);
                     }
@@ -47,62 +60,95 @@ const LicenseInfo: React.FC = () => {
         };
 
         fetchSoftwareNames();
-    }, [status]);
-
+    }, [status, refreshTable, checked]);
 
     useEffect(() => {
-        const fetchData = async () => {
-            if (status && storedOrganization) {
-                console.log(status)
-                try {
-                    const data = await fetchInfoBoxLicense(currentPage, status as string, storedOrganization as string, searchTerm);
-                    data?.results && setData(data.results);
-                    data?.count && setCount(data.count);
-                } catch (error) {
-                    console.error('Error fetching license data:', error);
-                }
-            }
-        };
         fetchData();
-    }, [searchTerm, currentPage, status]);
+    }, [searchTerm, currentPage, status, sortBy, refreshTable, checked]);
 
+
+    const fetchData = async () => {
+        if (status && storedOrganization) {
+            console.log(status)
+            try {
+                const data = await fetchInfoBoxLicense(currentPage, status as string,
+                    sortBy as string, storedOrganization as string, searchTerm, email);
+                data?.results && setData(data.results);
+                data?.count && setCount(data.count);
+                setLoaded(true);
+            } catch (error) {
+                console.error('Error fetching license data:', error);
+            }
+        }
+    };
 
     // Function that gets input from the searchBar component.
     const handleChange = (term: string) => {
         setSearchTerm(term);
     }
 
+    const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setChecked(event.target.checked);
+    }
+
     const handlePageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
+        setLoaded(false)
         setCurrentPage(value);
+    };
+
+    const handleSorting = async (sortBy: string) => {
+        setLoaded(false)
+        setSortBy(sortBy);
+        fetchData()
     };
 
 
     return (
-        <div>
-        <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
-            <ActiveLastBreadcrumb />
-        </Grid>
-    <Box  id={'licensepool_container'}
-             style={{display: 'flex', justifyContent: 'center', alignContent: "center", marginTop: "20px"}}>
-            <Grid container className='license_pool' justifyContent={"center"}>
-                <Grid container justifyContent="center" alignItems="center" className={'license_table'} width={"75%"}>
-                    <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
-                        <h2 style={{fontFamily: "Source Sans 3"}}> {title} i {storedOrganization}</h2>
-                        <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
-                        <OwnTable data={data}/>
-                        <Pagination
-                            count={Math.ceil(count / 10)}
-                            page={currentPage}
-                            onChange={handlePageChange}
-                            color={"primary"}
-                        />
-                    </Stack>
-
-
+        <>
+            <div>
+                <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+                    <ActiveLastBreadcrumb/>
                 </Grid>
-            </Grid>
-        </Box>
-        </div>)
+                {loaded ? (<Box id={'licensepool_container'}
+                                style={{
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignContent: "center",
+                                    marginTop: "20px"
+                                }}>
+                    <Grid container className='license_pool' justifyContent={"center"}>
+                        <Grid container justifyContent="center" alignItems="center" className={'license_table'}
+                              width={"75%"}>
+                            <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
+                                <h2 style={{fontFamily: "Source Sans 3"}}> {title} i {storedOrganization}</h2>
+                                <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"}
+                                       alignItems="center"
+                                       marginTop={"10px"}>
+                                    <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
+                                    <FormControlLabel
+                                        control={
+                                            <Checkbox
+                                                checked={checked}
+                                                onChange={handleCheckboxChange}
+                                                inputProps={{'aria-label': 'controlled'}}
+                                            />
+                                        }
+                                        label="Bare egne lisenser"
+                                    />
+                                </Stack>
+                                <OwnTable data={data} handleSorting={handleSorting}/>
+                                <Pagination
+                                    count={Math.ceil(count / 10)}
+                                    page={currentPage}
+                                    onChange={handlePageChange}
+                                    color={"primary"}
+                                />
+                            </Stack>
+                        </Grid>
+                    </Grid>
+                </Box>) : (<MuiLoadingSpinner/>)}
+            </div>
+        </>)
 };
 
 export default LicenseInfo;

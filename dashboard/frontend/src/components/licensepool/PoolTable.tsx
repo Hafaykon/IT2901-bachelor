@@ -41,7 +41,7 @@ function Row(props: RowProps) {
                 <TableCell component="th" scope="row">
                     {row.application_name}
                 </TableCell>
-                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.organization}</TableCell>
+                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.freed_by_organization}</TableCell>
                 <TableCell>
                     <div>
                         <a href={`mailto`} target="_blank"
@@ -63,31 +63,20 @@ function Row(props: RowProps) {
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell align="left"><b>Bruker</b></TableCell>
-                                        <TableCell align="left"><b>Løpenummer</b></TableCell>
-                                        <TableCell align="left"><b>Email</b></TableCell>
-                                        <TableCell align="left"><b>Sist åpnet</b></TableCell>
-                                        <TableCell align={"left"}><b>Kjøp lisens</b></TableCell>
+                                        <TableCell align="left"><b>Frigitt av</b></TableCell>
+                                        <TableCell align="left"><b>Dato lagt til</b></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {row.details.map((detailRow) => (
                                         <TableRow key={detailRow.id}>
                                             <TableCell component="th" scope="row">
-                                                {detailRow.full_name ?? 'Ukjent'}
+                                                {detailRow.freed_by_organization ?? 'Ukjent'}
                                             </TableCell>
-                                            <TableCell>{detailRow.computer_name ?? 'Ukjent'}</TableCell>
-                                            <TableCell>
-                                                <div>
-                                                    <a href={`mailto:${detailRow.email}`} target="_blank"
-                                                       rel="noopener noreferrer">
-                                                        {detailRow.email}
-                                                    </a>
-                                                </div>
+                                            <TableCell>{detailRow.date_added ?? 'Ukjent'}</TableCell>
+                                            <TableCell> <BuyButton id={detailRow.spc_id}
+                                                                   application_name={row.application_name}/>
                                             </TableCell>
-                                            <TableCell>{detailRow.last_used ?? 'Ikke registrert'}</TableCell>
-                                            <TableCell> <BuyButton id={detailRow.id}
-                                                                   full_name={detailRow.full_name}/> </TableCell>
 
                                         </TableRow>
                                     ))}
@@ -103,14 +92,13 @@ function Row(props: RowProps) {
 
 interface Props {
     data: LicensePoolData[];
+    handleSorting: (sortBy: string) => void;
 }
 
-export default function PoolTable({
-                                      data
-                                  }: Props) {
-
+export default function PoolTable({data, handleSorting}: Props) {
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
+    console.log(software);
 
 
 // Rest of the component code
@@ -137,8 +125,10 @@ export default function PoolTable({
                             <TableHead>
                                 <TableRow>
                                     <TableCell/>
-                                    <TableCell><b>Lisensnavn</b></TableCell>
-                                    <TableCell align={"left"}><b>Enhet</b></TableCell>
+                                    <TableCell onClick={() => handleSorting("application_name")}
+                                               style={{cursor: "pointer"}}><b>Lisensnavn &#9660;</b></TableCell>
+                                    <TableCell onClick={() => handleSorting("organization")} align={"left"}
+                                               style={{cursor: "pointer"}}> <b>Enhet &#9660;</b></TableCell>
                                     <TableCell align={"left"}><b>Kontaktinformasjon</b></TableCell>
                                 </TableRow>
                             </TableHead>
