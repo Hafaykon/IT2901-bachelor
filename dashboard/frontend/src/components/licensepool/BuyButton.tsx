@@ -1,29 +1,34 @@
 import React from 'react';
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import IconButton from '@mui/material/IconButton';
-import {useRecoilValue} from "recoil";
-import {userAtom} from "../../globalVariables/variables";
+import {useRecoilValue, useSetRecoilState} from "recoil";
+import {refreshTableAtom, userAtom} from "../../globalVariables/variables";
 
 type ReserveButtonProps = {
     id: number;
     application_name: string;
-
 }
+
 const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
     const accessToken = localStorage.getItem('access');
     const userInfo = useRecoilValue(userAtom)
+    const isUnitHead = userInfo.is_unit_head;
+    const setRefresh = useSetRecoilState(refreshTableAtom)
+
     const handleClick = async () => {
-        const data = await releaseLicense();
+        const action = isUnitHead ? releaseLicense : requestReleaseLicense;
+        const data = await action();
+
         if (data) {
-            alert('Lisensen er frigjort')
+            const message = isUnitHead ? 'Lisens frigjort!' : 'Forespørsel sendt sendt til lisensansvarlig!';
+            alert(message);
         }
+    };
 
 
-    }
-
-    const releaseLicense = async () => {
+    const requestReleaseLicense = async () => {
         const response = await fetch('http://127.0.0.1:8000/api/requests/create', {
-            method: 'POST', // Change this from 'GET' to 'POST'
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`,
@@ -40,6 +45,28 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
         if (response.ok) {
             console.log(data);
             return data;
+        } else {
+            alert(data.non_field_errors[0])
+        }
+    }
+
+    const releaseLicense = async () => {
+        const response = await fetch('http://127.0.0.1:8000/api/pool/buy/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+                'spc_id': id,
+            }),
+        });
+        const data = await response.json();
+        if (response.ok) {
+            setRefresh((old) => !old)
+            return data;
+        } else {
+            alert(data.error)
         }
     }
 
@@ -48,6 +75,6 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
             <AddShoppingCartIcon/>
         </IconButton>
     );
-
 }
+
 export default BuyButton;

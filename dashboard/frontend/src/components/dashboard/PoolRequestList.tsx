@@ -70,7 +70,7 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
 
 
                             }
-                            {!isOwnRequest && (
+                            {!isOwnRequest && !isHistory && (
                                 <TableCell>
                                     <Stack direction={"row"} spacing={2}>
                                         <Button
