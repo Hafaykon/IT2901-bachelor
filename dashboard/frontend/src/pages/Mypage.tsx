@@ -16,13 +16,13 @@ interface RequestObject {
     history: OrgRequest[];
 }
 
-
 function MyPage() {
     const accessToken = localStorage.getItem('access');
     const [poolRequests, setPoolRequests] = useState<RequestObject>({own_requests: [], org_requests: [], history: []});
     const userInfo = useRecoilValue(userAtom)
     const [showHistory, setShowHistory] = useState(false);
     const [boxData, setBoxData] = useState<Count[]>([]);
+
 
 
     useEffect(() => {
