@@ -14,6 +14,8 @@ const mockData: OwnOrgData[] = [
     {
         "application_name": "APSIS Pro [Web]",
         "primary_user_full_name": "Jannik Georg Solvang",
+        "primary_user_email": "kekw",
+        'organization': 'Test',
         "computer_name": "TK5CG9428WVV",
         "details": [
             {
