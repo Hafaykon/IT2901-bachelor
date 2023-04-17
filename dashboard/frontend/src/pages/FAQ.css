@@ -24,7 +24,7 @@
     justify-self: center;
 }
 
-#SubHeadline {
+.SubHeadline {
     color: #002d53;
     font-family: Source Sans Pro, sans-serif;
     font-size: 19pt;
@@ -33,6 +33,11 @@
 .accordions{
     white-space: pre-line;
     width: 86%;
+}
+
+#panel1a-header{
+    font-size: 13pt;
+    font-weight: bolder;
 }
 
 #details {
