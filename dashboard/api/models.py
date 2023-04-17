@@ -57,6 +57,7 @@ class SoftwarePerComputer(models.Model):
     primary_user_full_name = models.CharField(max_length=100, verbose_name="Primary User Full Name", null=True,
                                               blank=True)
     primary_user_email = models.EmailField(verbose_name="Primary User Email", null=True, blank=True)
+    price = models.FloatField(verbose_name="Price", null=True, blank=True)
 
 
 class LicensePool(models.Model):

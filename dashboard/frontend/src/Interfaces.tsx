@@ -23,7 +23,7 @@ export interface OwnOrgData {
     details: Array<{
         id: number;
         last_used: string;
-
+        price: number;
     }>
 }
 
