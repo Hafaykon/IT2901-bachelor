@@ -10,15 +10,15 @@ import Paper from '@mui/material/Paper';
 import {Box, Grid, Stack} from '@mui/material';
 import ActiveLastBreadcrumb from '../ActivateLastBreadcrumb';
 import { useRecoilValue } from 'recoil';
-/**import { userAtom } from "../../globalVariables/variables";**/
-
+import { userAtom } from "../../globalVariables/variables";
+import { BoardInformation } from '../../Interfaces';
 
 function createData(
     position: number,
     unit: string,
     percentage: number,
 ) {
-    return {position, unit, percentage};
+    return { position, unit, percentage };
 }
 
 const rows = [
@@ -29,44 +29,40 @@ const rows = [
 
 ];
 
+
+/** 
+interface RowProps {
+    row: BoardInformation;
+}*/
+
 interface Leaderboard {
     organization: string;
     percentage: number;
     ranking: number,
-
 }
 
-
-
-
 export function Leaderboard() {
-    /** 
+    //const {row} = props;
+    const [open, setOpen] = React.useState(false);
+    
     const [data, setData] = React.useState<Leaderboard[]>([]);
     const accessToken = localStorage.getItem('access');
     const userInfo = useRecoilValue(userAtom);
-
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch('http://127.0.0.1:8000/api/leaderboard/', {
-                method: 'GET',
-                headers: {
-                    'content-type': 'application/json',
-                    'authorization': `bearer ${accessToken}`
-                },
-                body: JSON.stringify({
-                    'organization': userInfo.organization,
-                })
-            });
+            const response = await fetch(`http://127.0.0.1:8000/api/licenses/leaderboard/?organization=${userInfo.organization}`, {
+    method: 'GET',
+    headers: {
+        'content-type': 'application/json',
+        'authorization': `Bearer ${accessToken}`
+    },
+});
             const data = await response.json();
             setData(data);
             console.log(data);
         }
-
         fetchData();
     }, []);
-}
-*/
-
     return (
         <>
             <div>
@@ -102,7 +98,7 @@ export function Leaderboard() {
                                 {rows.map((row) => (
                                     <TableRow
                                         key={row.position}
-                                        sx={{'&:last-child td, &:last-child th': {border: 0}}}
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                                     >
                                         <TableCell component="th" scope="row">
                                             {row.position}
@@ -112,6 +108,7 @@ export function Leaderboard() {
                                     </TableRow>
                                 ))}
                             </TableBody>
+
                         </Table>
                     </TableContainer>
                     </Grid>
@@ -120,3 +117,4 @@ export function Leaderboard() {
         </>
     );
 }
+
