@@ -9,6 +9,7 @@ export interface LicensePoolData {
         family: string | null;
         family_version: string | null;
         family_edition: string | null;
+        price: number;
         spc_id: number;
     }>;
 }

@@ -68,6 +68,7 @@ class LicensePool(models.Model):
     family = models.CharField(max_length=100, null=True, blank=True)
     family_version = models.CharField(max_length=100, null=True, blank=True)
     family_edition = models.CharField(max_length=100, null=True, blank=True)
+    price = models.FloatField(verbose_name="Price", null=True, blank=True)
     spc_id = models.IntegerField(unique=True)
 
 

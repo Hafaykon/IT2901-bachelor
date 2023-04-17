@@ -65,6 +65,7 @@ function Row(props: RowProps) {
                                     <TableRow>
                                         <TableCell align="left"><b>Frigitt av</b></TableCell>
                                         <TableCell align="left"><b>Dato lagt til</b></TableCell>
+                                        <TableCell align="left"><b>Pris</b></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -74,6 +75,7 @@ function Row(props: RowProps) {
                                                 {detailRow.freed_by_organization ?? 'Ukjent'}
                                             </TableCell>
                                             <TableCell>{detailRow.date_added ?? 'Ukjent'}</TableCell>
+                                            <TableCell align="left">{detailRow.price},-</TableCell>
                                             <TableCell> <BuyButton id={detailRow.spc_id}
                                                                    application_name={row.application_name}/>
                                             </TableCell>
