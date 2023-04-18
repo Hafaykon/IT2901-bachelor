@@ -73,7 +73,6 @@ function Row(props: RowProps) {
                                     <TableRow>
                                         <TableCell align="left"><b>Sist åpnet</b></TableCell>
                                         <TableCell align="left"><b>Pris</b></TableCell>
-                                        <TableCell align={"left"}><b>Mulig opptjeningspoeng</b></TableCell>
                                         {userData.primary_user_email === row.primary_user_email &&
                                             <TableCell align={"center"}><b>Frigjør</b></TableCell>}
                                     </TableRow>
@@ -85,7 +84,6 @@ function Row(props: RowProps) {
                                                 {timeSince(detailRow.last_used)}
                                             </TableCell>
                                             <TableCell>{detailRow.price},-</TableCell>
-                                            <TableCell>10 poeng</TableCell>
                                             {(userData.primary_user_email === row.primary_user_email || userData.is_unit_head) && (
                                                 <TableCell align={"center"}>
                                                     <ReleaseButton
