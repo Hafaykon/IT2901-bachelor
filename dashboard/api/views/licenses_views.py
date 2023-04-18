@@ -4,13 +4,10 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
-from django.db.models import Count, Q, FloatField
+from django.db.models import Count, Q, FloatField, Subquery
 from django.db.models.functions import Cast
-from django_pandas.io import read_frame
-from rest_framework import generics
 from rest_framework import status
 from dateutil.parser import parse
-from django.db.models import Subquery, Q
 from rest_framework import generics, permissions
 from rest_framework import status
 from rest_framework.decorators import api_view

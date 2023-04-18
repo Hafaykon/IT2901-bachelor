@@ -12,11 +12,6 @@ type Props = {
     unused_licenses: number,
     available_licenses: number,
 }
-type CustomTooltipProps = {
-    active: boolean,
-    payload: any[],
-    data: any[],
-}
 
 
 function DonutChart(infoBoxData: Props) {
