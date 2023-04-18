@@ -26,6 +26,7 @@ function LicensePool() {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
+        setCurrentPage(1);
     };
 
     const handlePageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
@@ -41,6 +42,7 @@ function LicensePool() {
     // Function that gets input from the searchBar component.
     const updateSearchTerm = (term: string) => {
         setSearchTerm(term);
+        setCurrentPage(1);
     }
 
     useEffect(() => {

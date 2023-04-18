@@ -57,8 +57,9 @@ class SoftwarePerComputer(models.Model):
     primary_user_full_name = models.CharField(max_length=100, verbose_name="Primary User Full Name", null=True,
                                               blank=True)
     primary_user_email = models.EmailField(verbose_name="Primary User Email", null=True, blank=True)
+    price = models.FloatField(verbose_name="Price", null=True, blank=True)
 
-
+# Model for the License Pool
 class LicensePool(models.Model):
     objects = models.Manager()  # default manager
     freed_by_organization = models.CharField(max_length=100)
@@ -67,9 +68,11 @@ class LicensePool(models.Model):
     family = models.CharField(max_length=100, null=True, blank=True)
     family_version = models.CharField(max_length=100, null=True, blank=True)
     family_edition = models.CharField(max_length=100, null=True, blank=True)
+    price = models.FloatField(verbose_name="Price", null=True, blank=True)
     spc_id = models.IntegerField(unique=True)
 
-
+# Model for LicensePool requests
+# Currently not used
 class PoolRequest(models.Model):
     objects = models.Manager()  # default manager
     requested_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='requests', null=True,
