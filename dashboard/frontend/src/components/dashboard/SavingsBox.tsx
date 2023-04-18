@@ -1,19 +1,11 @@
 import './Dashboard.css';
-import {Card, CardActionArea, CardContent, Stack, Typography} from '@mui/material';
+import {Card, CardContent, Stack, Typography} from '@mui/material';
 import CardOverflow from '@mui/joy/CardOverflow';
-import {useNavigate} from 'react-router-dom';
 
 export function SavingsBox() {
-    const navigate = useNavigate();
-
-    const handleCardClick = () => {
-        navigate(`/leaderboard`);
-
-    };
 
     return (
-        <Card sx={{width: 300, height: 180, borderRadius: 5, ':hover': {boxShadow: 20}}} data-testid='savingsBox'>
-            <CardActionArea sx={{paddingBottom: 4}} onClick={handleCardClick}>
+        <Card sx={{width: 300, height: 140, borderRadius: 5}} data-testid='savingsBox'>
                 <CardOverflow>
                     <CardContent>
                         <Stack direction={'row'}>
@@ -29,7 +21,6 @@ export function SavingsBox() {
 
                     </CardContent>
                 </CardOverflow>
-            </CardActionArea>
         </Card>
 
     )

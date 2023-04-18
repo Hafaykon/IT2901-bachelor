@@ -11,6 +11,7 @@ import { Box, Grid, Stack } from '@mui/material';
 import ActiveLastBreadcrumb from '../ActivateLastBreadcrumb';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from "../../globalVariables/variables";
+import { grey } from '@mui/material/colors';
 
 function createData(
     position: number,
@@ -67,7 +68,7 @@ export function Leaderboard() {
     const dataArr = Object.values(data);
     console.log(dataArr)
 
-    const lastRow = data[data.length - 1];
+    //const lastRow = data[data.length - 1];
 
     return (
         <>
@@ -78,15 +79,55 @@ export function Leaderboard() {
                 <Box data-testid="leaderboard"
                     style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: '20px' }}>
                     <Grid justifyContent={'center'} alignItems={'center'} width={'75%'}>
-                        <Stack direction={'column'} width={'75%'}>
+                        <Stack direction={'column'} width={'90%'}>
                             <h2 style={{ fontFamily: 'Source Sans Pro, sans serif' }}>Ledertavle</h2>
-                            <p style={{ fontStyle: 'italic', marginTop: '-10px', marginBottom: '50px' }}>Ledertavlen
-                                viser
-                                hvordan din enhet ligger ann i forhold til andre enheter basert på hvor stor andel
-                                av
-                                lisensen en har er i bruk</p>
-                        </Stack>                        
-                        
+                            <p style={{ fontStyle: 'italic', marginTop: '-10px', marginBottom: '50px' }}>Ledertavlen gir deg en visuell representasjon av 
+                            hvordan din enhet presterer i forhold til andre enheter, 
+                            basert på andelen av aktive lisenser. Topplisten gir en oversikt over de 25 enhetene med flest aktive lisenser, og indikerer dermed 
+                            hvilke enheter som har færrest ubrukte lisenser.  </p>
+                        </Stack>
+                        <p>Din plassering</p>
+                        <TableContainer component={Paper}>
+                            <Table sx={{ minWidth: 650, fontWeight: '700', backgroundColor: '#C5DAF2' }}
+                                aria-label="simple table">
+                                <colgroup>
+                                    <col style={{ width: '15%' }} />
+                                    <col style={{ width: '80%' }} />
+                                    <col style={{ width: '5%' }} />
+                                </colgroup>
+                                <TableHead>
+                                    <TableRow sx={{ fontWeight: 'bold', padding: '10px' }}>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+
+                                    {data.map((row, index) => {
+                                        if (userInfo.organization === row.organization) {
+                                            return (
+                                                <TableRow
+                                                    key={index}
+                                                    sx={{ '&:last-child td, &:last-child th': { border: 0, backgroundColor: '#80cc9f' } }}
+                                                >
+                                                    <TableCell component="th" scope="row">
+                                                        {row.rank}
+                                                    </TableCell>
+                                                    <TableCell align="left">{row.organization}</TableCell>
+                                                    <TableCell align="center">{row.active_percentage}</TableCell>
+                                                </TableRow>
+                                            );
+                                        } else {
+                                            return null;
+                                        }
+                                    })}
+                                </TableBody>
+
+                            </Table>
+                        </TableContainer>
+
+                        <div style={{ padding: '10px' }}>
+
+                        </div>
+                        <p>Topplisten</p>
                         <TableContainer component={Paper}>
                             <Table sx={{ minWidth: 650, borderRadius: '50px', fontWeight: '700' }}
                                 aria-label="simple table">
@@ -103,7 +144,7 @@ export function Leaderboard() {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {data.map((row, index) => (
+                                    {data.slice(0,25).map((row, index) => (
                                         <TableRow
                                             key={index}
                                             sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
