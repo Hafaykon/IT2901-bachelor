@@ -121,7 +121,7 @@ export default function PoolTable({data, handleSorting}: Props) {
                                                style={{cursor: "pointer", textAlign: "center"}}>
                                         <b>Lisensnavn&#9660;</b>
                                     </TableCell>
-                                    <TableCell onClick={() => handleSorting("organization")} align={"left"}
+                                    <TableCell onClick={() => handleSorting("freed_by_organization")} align={"left"}
                                                style={{cursor: "pointer", textAlign: "center"}}>
                                         <b>Frigitt av&#9660;</b>
                                     </TableCell>
