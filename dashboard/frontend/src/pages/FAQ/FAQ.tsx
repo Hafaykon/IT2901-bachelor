@@ -28,7 +28,7 @@ function FAQ() {
                             <p>Hva brukes lisensdashboardet til?</p>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography id="details">
+                            <Typography component="span" id="details">
                                 Lisensdashboardet viser en oversikt over alle lisenser eid i din enhet.<br></br><br></br>
                                 Lisensene blir presentert på ulike måter i lisensdashboardet:
                                 <ul> 
@@ -48,7 +48,7 @@ function FAQ() {
                                 <p>Hvor kan jeg se hvilke lisenser enheten min eier?</p>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography id="details">
+                            <Typography component="span" id="details">
                                 Ved å trykke på boksen &quot;Totale lisenser&quot; åpnes en side med en tabelloversikt over alle 
                                 lisenser enheten eier.<br></br><br></br>
                                 Tabellen viser informasjon om hvilken bruker lisensen er tilknyttet og brukerens PC-løpenummer. I tillegg vises informasjon om lisensens status som aktiv, ledig eller ubrukt.
@@ -65,7 +65,7 @@ function FAQ() {
                                 <p>Hvor kan jeg se hvilke ubrukte lisenser enheten min har?</p>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography id="details">
+                            <Typography component="span" id="details">
                                 Ved å trykke på boksen &quot;Ubrukte lisenser&quot; åpnes en side med en tabelloversikt over alle 
                                 lisenser enheten eier som aldri er blitt tatt i bruk.<br></br><br></br>
                                 Tabellen viser informasjon om hvilken bruker lisensen er tilknyttet og brukerens løpenummer.
@@ -80,7 +80,7 @@ function FAQ() {
                                 <p>Hvor kan jeg se hvilke ledige lisenser enheten min har?</p>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography id="details">
+                            <Typography component="span" id="details">
                                 Ved å trykke på boksen &quot;Ledige lisenser&quot; åpnes en side med en tabelloversikt over alle 
                                 lisenser enheten eier som ikke har blitt bruk eller åpnet av brukeren de siste 90 dagene.<br></br><br></br>
                                 Tabellen viser informasjon om hvilken bruker lisensen er tilknyttet og brukerens løpenummer.<br></br><br></br>
@@ -96,7 +96,7 @@ function FAQ() {
                                 <p>Hvor kan jeg se hvilke lisenser jeg har?</p>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography id="details">
+                            <Typography component="span" id="details">
                                 Det finnes to måter å gjøre dette på. 
                                 <ul>
                                     <li>Gå inn på oversikten over totale lisenser i enheten og kryss av for å bare se egne lisenser i tabellen.</li>
@@ -119,7 +119,7 @@ function FAQ() {
                                 <p>Hva er lisensportalen?</p>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography id="details">
+                            <Typography component="span" id="details">
                                 Lisensportalen er en oversikt over alle lisenser som din enhet kan kjøpe fra andre enheter. 
                                 Det er også her lisenser din enhet har lagt til salg havner. <br></br><br></br>
                                 Lisensportalen skal oppfordre til gjenbruk av lisenser heller enn å kjøpe inn nye når det finnes mange 
@@ -140,7 +140,7 @@ function FAQ() {
                                 <p>Hvordan legger jeg ut en lisens til salg i lisensportalen?</p>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography id="details">
+                            <Typography component="span" id="details">
                                 Lisensansvarlige kan følge disse stegene for å frigjøre en lisens:
                                 <ol>
                                     <li>Gå inn på oversikten over totale lisenser i enheten.</li>
@@ -164,7 +164,7 @@ function FAQ() {
                                 <p>Hvordan kjøper jeg en lisens fra lisensportalen?</p>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography id="details">
+                            <Typography component="span" id="details">
                                 Lisensansvarlige kan følge disse stegene for å kjøpe en lisens:
                                 <ol>
                                     <li>Gå inn på lisensportalen og søk opp navnet på lisensen du ønsker å kjøpe.</li>
@@ -195,7 +195,7 @@ function FAQ() {
                                 <p>Hvordan er prisen på lisensene regnet ut?</p>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Typography id="details">
+                            <Typography component="span" id="details">
                                 I første omgang kan man kjøpe en enkeltlisens fra en annen enhet til en fastsatt defaultpris.Dette er basert på noe manglende data tilgjengelig om lisenspris.<br></br><br></br>
                                 Visse lisenser har en annen defaultpris basert på utgiveren av lisensen. Lisensene med en annen defaultpris er lisenser som er Trondheim kommune har mange eksemplarer av. <br></br><br></br>
                                 Default priser som er fastsatt:
@@ -219,7 +219,7 @@ function FAQ() {
                                 <p>Jeg la med uhell til en lisens i lisensportalen. Hvordan får jeg den tilbake?</p>
                         </AccordionSummary>
                         <AccordionDetails>
-                        <Typography id="details">
+                        <Typography component="span" id="details">
                             Du kan lett få tilbake en lisens ved å kjøpe den fra lisensportalen slik man ville gjort med andre lisenser.
                         </Typography>
                         </AccordionDetails>
@@ -237,7 +237,7 @@ function FAQ() {
                                 <p>Hva er ledertavlen?</p>
                         </AccordionSummary>
                         <AccordionDetails>
-                        <Typography id="details">
+                        <Typography component="span" id="details">
                             Ledertavlen sammenligner alle enheter i Trondheim Kommune basert på hvor stor andel av alle lisensene eid 
                             i enheten er aktive. <br></br>
                             Det betyr at dersom din enhet har en liten prosentandel ubrukte og ledige lisenser, vil enheten ligge høyt oppe på ledertavlen.
@@ -252,7 +252,7 @@ function FAQ() {
                                 <p>Hvordan kan jeg øke min enhets plassering i ledertavlen?</p>
                         </AccordionSummary>
                         <AccordionDetails>
-                        <Typography id="details">
+                        <Typography component="span" id="details">
                             Du kan øke din enhets plassering i ledertavlen ved å minimere antall ledige og ubrukte lisenser din enhet eier. <br></br>
                             Den enkleste måten å gjøre dette på er å legge disse lisensene ut til salg i lisensportalen.
                         </Typography>
