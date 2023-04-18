@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useLocation, useParams} from 'react-router-dom';
 import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
 import {OwnOrgData} from "../Interfaces";
@@ -16,8 +16,13 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
     const {title} = useParams();
+    const useQuery = () => {
+        return new URLSearchParams(useLocation().search);
+    };
+    const query = useQuery();
+    const searchTermFromUrl = query.get("searchTerm");
     const [data, setData] = useState<OwnOrgData[]>([]);
-    const [searchTerm, setSearchTerm] = useState<string>();
+    const [searchTerm, setSearchTerm] = useState<string>(searchTermFromUrl || "");
     const [orgSoftware, setOrgSoftware] = useState<string[]>([]);
     const [status, setStatus] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);

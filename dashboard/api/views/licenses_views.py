@@ -431,3 +431,30 @@ class GetUserInfo(APIView):
             {'primary_user_email': user.primary_user_email, 'primary_user_full_name': user.primary_user_full_name,
              'computer_name': user.computer_name, 'organization': user.organization,
              'is_unit_head': user.is_unit_head})
+
+
+@api_view(['GET'])
+def check_if_unused(request):
+    """
+    Checks if the given application_name is unused before a potential new license is bought.
+    """
+    organization = request.GET.get('organization', None)
+    application_name = request.GET.get('application_name', None)
+    licenses_in_pool = LicensePool.objects.values('spc_id')
+    try:
+        if not organization:
+            raise ParseError("The 'organization' parameter is required.")
+        if not application_name:
+            raise ParseError("The 'application_name' parameter is required.")
+
+        software = SoftwarePerComputer.objects.all().filter(license_required=True, license_suite_names__isnull=True,
+                                                            organization=organization, last_used__isnull=True,
+                                                            application_name=application_name).exclude(
+            Q(id__in=Subquery(licenses_in_pool)))
+
+        if software.count() == 0:
+            return Response({"unused": False, "count": 0})
+        else:
+            return Response({"unused": True, "count": software.count()})
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
