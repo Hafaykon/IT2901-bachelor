@@ -71,9 +71,8 @@ function Row(props: RowProps) {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell align="left"><b>Sist åpnet</b></TableCell>
-                                        <TableCell align={"left"}><b>Mulig opptjeningspoeng</b></TableCell>
-                                        {userData.primary_user_email === row.primary_user_email &&
-                                            <TableCell align={"center"}><b>Frigjør</b></TableCell>}
+                                        <TableCell align="left"><b>Pris</b></TableCell>
+                                        <TableCell align={"left"}><b>Frigjør</b></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -82,19 +81,17 @@ function Row(props: RowProps) {
                                             <TableCell component="th" scope="row">
                                                 {timeSince(detailRow.last_used)}
                                             </TableCell>
-                                            <TableCell>10 poeng</TableCell>
-                                            {(userData.primary_user_email === row.primary_user_email || userData.is_unit_head) && (
-                                                <TableCell align={"center"}>
-                                                    <ReleaseButton
-                                                        spc_id={detailRow.id}
-                                                        primary_user_email={row.primary_user_email}
-                                                        application_name={row.application_name}
-                                                        organization={row.organization}
-                                                    />
+                                            <TableCell>{detailRow.price},-</TableCell>
+                                            <TableCell>
+                                               {userData.primary_user_email === row.primary_user_email || userData.is_unit_head ? (
+                                                  <ReleaseButton
+                                                    spc_id={detailRow.id}
+                                                    primary_user_email={row.primary_user_email}
+                                                    application_name={row.application_name}
+                                                    organization={row.organization}
+                                                  />
+                                                ) : <p>Kan ikke frigjøres</p>}
                                                 </TableCell>
-                                            )}
-
-
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -131,13 +128,13 @@ export default function OwnTable({data, handleSorting}: Props) {
                     <TableRow>
                         <TableCell/>
                         <TableCell onClick={() => handleSorting("application_name")}
-                                   style={{cursor: "pointer"}}><b>Lisensnavn &#9660;</b></TableCell>
+                                   style={{cursor: "pointer"}}><b>Lisensnavn&#9660;</b></TableCell>
                         <TableCell onClick={() => handleSorting("primary_user_full_name")}
-                                   align={"left"} style={{cursor: "pointer"}}><b>Bruker &#9660;</b></TableCell>
+                                   align={"left"} style={{cursor: "pointer"}}><b>Bruker&#9660;</b></TableCell>
                         <TableCell onClick={() => handleSorting("computer_name")}
-                                   align={"left"} style={{cursor: "pointer"}}><b>Løpenummer &#9660;</b></TableCell>
+                                   align={"left"} style={{cursor: "pointer"}}><b>Løpenummer&#9660;</b></TableCell>
                         <TableCell onClick={() => handleSorting("status")}
-                                   align={"left"} style={{cursor: "pointer"}}><b>Status &#9660;</b></TableCell>
+                                   align={"left"} style={{cursor: "pointer"}}><b>Status&#9660;</b></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>

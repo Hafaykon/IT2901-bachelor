@@ -82,7 +82,7 @@ function Dashboard() {
                                         active_licenses={boxData[0].active_licenses}
                                         available_licenses={boxData[0].available_licenses}/>
                             <Grid item sx={{ml: 8, mt: 7}}>
-                                <Stack direction={'column'} spacing={8}>
+                                <Stack direction={'column'} spacing={4.38}>
                                     <SavingsBox/>
                                     <LeaderboardBox/>
                                 </Stack>

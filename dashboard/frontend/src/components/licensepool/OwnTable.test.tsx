@@ -21,10 +21,10 @@ const mockData: OwnOrgData[] = [
             {
                 "id": 190955,
                 "last_used": "2022-12-14",
-                "status": "Aktiv"
+                "status": "Aktiv",
+                "price": 750
             }
         ],
-
     }
 ]
 
@@ -38,10 +38,10 @@ describe('The own table', () => {
     })
 
     it('renders without crashing', async () => {
-        expect(await screen.findByText('Lisensnavn ▼')).toBeInTheDocument();
-        expect(await screen.findByText('Bruker ▼')).toBeInTheDocument();
-        expect(await screen.findByText('Løpenummer ▼')).toBeInTheDocument();
-        expect(await screen.findByText('Status ▼')).toBeInTheDocument();
+        expect(await screen.findByText('Lisensnavn▼')).toBeInTheDocument();
+        expect(await screen.findByText('Bruker▼')).toBeInTheDocument();
+        expect(await screen.findByText('Løpenummer▼')).toBeInTheDocument();
+        expect(await screen.findByText('Status▼')).toBeInTheDocument();
 
     })
     it('Can expand and display expected details', async () => {
