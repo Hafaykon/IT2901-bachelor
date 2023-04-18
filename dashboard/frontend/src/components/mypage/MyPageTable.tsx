@@ -6,6 +6,8 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { Grid } from '@mui/joy';
+
 
 interface IRow {
   lisensnavn: string;
@@ -35,21 +37,23 @@ const rows: IRow[] = [
 
 function MyPageTable() {
   return (
+    <Grid container sx={{marginTop: '3%' }}>
     <TableContainer component={Paper} sx={{
-      padding: '40px',
-      maxWidth: '500px',
+      padding: '30px',
+      marginTop: '20%',
+      maxWidth: '420px',
       margin: '40px auto',
       boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
       borderRadius: '10px',
       height: '100%',
       overflow: 'auto',
-      maxHeight: '400px',
+      maxHeight: '420px',
     }}>
-      <Table sx={{ minWidth: 400 }} aria-label="simple table">
+      <Table sx={{ minWidth: 220 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell sx={{ fontWeight: 'bold' }}>Lisensnavn</TableCell>
-            <TableCell align="right" sx={{ fontWeight: 'bold' }}>Løpenummer</TableCell>
+            <TableCell align="center" sx={{ fontWeight: 'bold' }}>Løpenummer</TableCell>
             <TableCell align="right" sx={{ fontWeight: 'bold' }}>Status</TableCell>
           </TableRow>
         </TableHead>
@@ -62,13 +66,14 @@ function MyPageTable() {
               <TableCell component="th" scope="row">
                 {row.lisensnavn}
               </TableCell>
-              <TableCell align="right">{row.lopenummer}</TableCell>
+              <TableCell align="center">{row.lopenummer}</TableCell>
               <TableCell align="right">{row.status}</TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
     </TableContainer>
+    </Grid>
   );
 }
 
