@@ -1,11 +1,13 @@
 import datetime as dt
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
+from datetime import timedelta
 
 import numpy as np
 import pandas as pd
 from dateutil.parser import parse
 from django.db.models import Subquery, Q
+from django.utils import timezone
 from rest_framework import generics, permissions
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -367,7 +369,6 @@ class LicenseInfoView(generics.ListAPIView):
         # Ikke brukt på 90 dager
         elif application_status == 'available':
             queryset = queryset.filter(last_used__lte=threshold_date)
-
         return queryset
 
     def aggregate_data(self, data):
@@ -375,8 +376,7 @@ class LicenseInfoView(generics.ListAPIView):
 
         for record in data:
             key = (record['application_name'], record['primary_user_full_name'], record['primary_user_email'],
-                   record['organization'],
-                   record['computer_name'])
+                   record['organization'], record['computer_name'])
             last_used = record['last_used']
             application_status = ('Ubrukt' if last_used is None else
                                   ('Ledig' if parse(last_used) <= datetime.now() - timedelta(days=90) else 'Aktiv'))
@@ -399,21 +399,16 @@ class LicenseInfoView(generics.ListAPIView):
             }
             for (application, user, primary_user_email, organization, computer_name), details in aggregated_data.items()
         ]
-
         return result
 
     def list(self, request, *args, **kwargs):
         sort = self.request.GET.get('sort', None)
         queryset = self.get_queryset().order_by(sort)
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            aggregated_data = self.aggregate_data(serializer.data)
-            return self.get_paginated_response(aggregated_data)
-
         serializer = self.get_serializer(queryset, many=True)
         aggregated_data = self.aggregate_data(serializer.data)
+        page = self.paginate_queryset(aggregated_data)
+        if page is not None:
+            return self.get_paginated_response(page)
 
         return Response(aggregated_data)
 
@@ -447,10 +442,19 @@ def check_if_unused(request):
         if not application_name:
             raise ParseError("The 'application_name' parameter is required.")
 
-        software = SoftwarePerComputer.objects.all().filter(license_required=True, license_suite_names__isnull=True,
-                                                            organization=organization, last_used__isnull=True,
-                                                            application_name=application_name).exclude(
-            Q(id__in=Subquery(licenses_in_pool)))
+        current_date = timezone.now().date()
+        ninety_days_ago = current_date - timedelta(days=90)
+
+        software = SoftwarePerComputer.objects.filter(
+            license_required=True,
+            license_suite_names__isnull=True,
+            organization=organization,
+            application_name=application_name
+        ).exclude(
+            id__in=Subquery(licenses_in_pool)
+        ).filter(
+            Q(last_used__isnull=True) | Q(last_used__lte=ninety_days_ago)
+        )
 
         if software.count() == 0:
             return Response({"unused": False, "count": 0})

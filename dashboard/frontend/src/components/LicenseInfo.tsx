@@ -64,6 +64,7 @@ const LicenseInfo: React.FC = () => {
             }
         };
 
+
         fetchSoftwareNames();
     }, [status, refreshTable, checked]);
 
@@ -81,6 +82,7 @@ const LicenseInfo: React.FC = () => {
                 data?.results && setData(data.results);
                 data?.count && setCount(data.count);
                 setLoaded(true);
+                console.log(data)
             } catch (error) {
                 console.error('Error fetching license data:', error);
             }
@@ -131,7 +133,9 @@ const LicenseInfo: React.FC = () => {
                                 <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"}
                                        alignItems="center"
                                        marginTop={"10px"}>
-                                    <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
+                                    <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}
+                                                       initialValue={searchTerm}/>
+
                                     <FormControlLabel
                                         control={
                                             <Checkbox

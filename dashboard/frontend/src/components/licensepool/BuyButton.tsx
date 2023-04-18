@@ -43,16 +43,10 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
     };
 
     const handleClose = () => {
+        setRefresh((old) => !old)
         setOpen(false);
     };
 
-    const buyLicense = async () => {
-        const data = await releaseLicense();
-        if (data) {
-            setBought(true);
-            setVisible(false);
-        }
-    };
 
     const handleClick = async () => {
         const action = isUnitHead ? releaseLicense : requestReleaseLicense;
@@ -60,7 +54,7 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
 
         if (data) {
             const message = isUnitHead ? 'Lisens frigjort!' : 'Forespørsel sendt sendt til lisensansvarlig!';
-            alert(message);
+            setBought(true);
         }
     };
 
@@ -102,7 +96,6 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
         });
         const data = await response.json();
         if (response.ok) {
-            setRefresh((old) => !old)
             return data;
         } else {
             alert(data.error)
@@ -133,7 +126,7 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
                         id="alert-dialog-title"
                         sx={{textAlign: "center", padding: '25px'}}
                     >
-                        {unusedLicenses > 0 ? `Du har ${unusedLicenses} uåpnede lisenser av denne typen fra før.` : 'De har ingen uåpnede lisenser av denne typen. Skriv noe lurt her'}
+                        {unusedLicenses > 0 ? `Du har ${unusedLicenses} uåpnede/ledige lisens(er) av ${application_name} fra før.` : `Du har ingen uåpnede lisens(er) av ${application_name}.`}
                     </DialogTitle>
                     <DialogContent>
                         <DialogContentText
@@ -144,15 +137,20 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
                             {unusedLicenses > 0 ? (
                                 <>
                                     Du kan finne de{' '}
-                                    <NavLink to={`/licenses/Ubrukte Lisenser?searchTerm=${application_name}`}>
-
+                                    <NavLink to={`/Totale Lisenser?searchTerm=${application_name}`}>
                                         her
                                     </NavLink>
-                                    . Benytt deg av de før du du går til innkjøp fra andre enheter. Å
+                                    <br/>
+                                    Benytt deg av de før du du går til innkjøp fra andre enheter. Å
                                     hindre unødvendig innkjøp av lisenser sparer miljøet!
                                 </>
                             ) : (
-                                'De har ingen uåpnede lisenser av denne typen. Skriv noe lurt her'
+                                <>
+                                    Vurder nøye om du trenger en ny lisens før du kjøper.
+                                    <br/>
+                                    Å unngå unødvendige innkjøp av lisenser bidrar til å spare miljøet og redusere
+                                    kostnader.
+                                </>
                             )}
                         </DialogContentText>
                     </DialogContent>
@@ -161,12 +159,13 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
                             {visible && (
                                 <Button
                                     variant="contained"
-                                    onClick={buyLicense}
+                                    onClick={handleClick}
+                                    disabled={bought}
                                     sx={{
                                         padding: '10px',
-                                        backgroundColor: '#80ADD3',
+                                        backgroundColor: bought ? '#ccc' : '#80ADD3',
                                         fontFamily: 'Source Sans 3, sans-serif',
-                                        '&:hover': {backgroundColor: '#709CC2'},
+                                        '&:hover': {backgroundColor: bought ? '#ccc' : '#709CC2'},
                                     }}
                                 >
                                     Kjøp lisens
