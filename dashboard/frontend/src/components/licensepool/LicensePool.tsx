@@ -97,11 +97,12 @@ function LicensePool() {
                 <Grid container className='license_pool' justifyContent={"center"}>
                     <Grid container justifyContent="center" alignItems="center" className={'license_table'}
                           width={"75%"}>
-                        <Stack direction={"column"} width={"95%"} marginBottom={"10px"}>
+                        <Stack direction={"column"} width={"95%"} marginBottom={"10px"} marginLeft={'-1%'}>
                             <h2 style={{
                                 fontFamily: 'Source Sans Pro, sans-serif',
-                                fontSize: 40,
-                                marginTop: -0.6
+                                fontSize: '30pt',
+                                marginTop: -0.6,
+                                fontWeight: 400
                             }}>
                                 Lisensportalen
                             </h2>

@@ -9,6 +9,7 @@
     font-size: 30pt;
     display: flex;
     justify-content: flex-start;
+    margin-left: -0.5%;
 }
 
 #Columns {
