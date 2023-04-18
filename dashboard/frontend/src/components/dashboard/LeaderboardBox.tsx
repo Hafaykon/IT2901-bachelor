@@ -1,7 +1,19 @@
-import {Card, CardActionArea, CardContent, Stack} from '@mui/material';
+import { Card, CardActionArea, CardContent, Stack } from '@mui/material';
 import CardOverflow from '@mui/joy/CardOverflow';
 import BarChartIcon from '@mui/icons-material/BarChart';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useRecoilValue } from 'recoil';
+import React, { useEffect } from 'react';
+import { userAtom } from '../../globalVariables/variables';
+
+
+
+interface Leaderboard {
+    organization: string;
+    active_percentage: number;
+    rank: number,
+}
+
 
 export function LeaderboardBox() {
     const navigate = useNavigate();
@@ -10,21 +22,48 @@ export function LeaderboardBox() {
         navigate(`/leaderboard`);
 
     };
+    const [data, setData] = React.useState<Leaderboard[]>([]);
+    const accessToken = localStorage.getItem('access');
+    const userInfo = useRecoilValue(userAtom);
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await fetch(`http://127.0.0.1:8000/api/licenses/leaderboard/?organization=${userInfo.organization}`, {
+                method: 'GET',
+                headers: {
+                    'content-type': 'application/json',
+                    'authorization': `Bearer ${accessToken}`
+                },
+            });
+            const data = await response.json();
+            setData(data.leaderboard);
+        }
+        fetchData();
+    }, []);
+
 
     return (
-        <Card sx={{width: 300, height: 300, borderRadius: 5, ':hover': {boxShadow: 20}}} data-testid='savingsBox'>
-            <CardActionArea sx={{paddingBottom: 4}} onClick={handleCardClick}>
+        <Card sx={{ width: 300, height: 250, borderRadius: 5, ':hover': { boxShadow: 20 } }} data-testid='savingsBox'>
+            <CardActionArea sx={{ paddingBottom: 4 }} onClick={handleCardClick}>
                 <CardOverflow>
                     <CardContent>
                         <Stack direction={'row'}>
                             {/*  <SavingsIcon fontSize='large' sx={{position: 'absolute', top:20, right:15, color:'pink'}}></SavingsIcon> */}
                         </Stack>
                         <div color="text.secondary" id="numbersBoxes">
-                            <BarChartIcon sx={{fontSize: 100, color: '#80CC9F'}}></BarChartIcon>
-                            <p style={{fontSize: '25px', fontWeight: 'semi-bold', marginTop: '-10px'}}>Din enhet er
-                                på <span style={{fontWeight: 'bold'}}>x plass</span>.</p>
-                            <p style={{fontSize: '15px', fontStyle: 'italic'}}>Du må øke aktive lisenser til x prosent
-                                for å klatre på listen.</p>
+                            
+                            <BarChartIcon sx={{ fontSize: 100, color: '#80CC9F' }}></BarChartIcon>
+                            <p style={{ fontSize: '25px', fontWeight: 'semi-bold', marginTop: '-10px' }}>Din enhet er
+                                på <span style={{ fontWeight: 'bold' }}>{data.map((row) => {
+                                    if (userInfo.organization === row.organization) {
+                                        return (
+                                            row.rank.toString()
+                                        );
+                                    } else {
+                                        return null;
+                                    }
+                                })}. plass
+                                </span> </p> 
+                            <p style={{ fontSize: '15px', fontStyle: 'italic' }}> Se oversikt over topplisten med andre enheter.</p>
                         </div>
 
                     </CardContent>

@@ -171,6 +171,22 @@ export const fetchSoftwareUsedInOrg = async (status: string, pool: string, organ
     }
 };
 
+/*export const fetchLeaderboard = async (organization?: string)=>{
+    try{
+        let url = 'http://127.0.0.1:8000/api/leaderboard/';
+        if (organization) {
+            url = `${url}?organization=${organization}`;
+        }
+        const response = await fetch(url);
+        return await response.json();
+    } 
+    catch (error) {
+        console.log(error);
+    }
+};*/
+
+
+
 
 export default {
     fetchOrganizations,

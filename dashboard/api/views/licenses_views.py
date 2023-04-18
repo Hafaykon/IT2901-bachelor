@@ -4,8 +4,10 @@ from datetime import datetime, timedelta
 
 import numpy as np
 import pandas as pd
+from django.db.models import Count, Q, FloatField, Subquery
+from django.db.models.functions import Cast
+from rest_framework import status
 from dateutil.parser import parse
-from django.db.models import Subquery, Q
 from rest_framework import generics, permissions
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -260,6 +262,67 @@ def software_counts(request):
         return Response(counts)
     except ParseError as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['GET'])
+def leaderboard(request):
+    """
+    Function to get the top 25 organizations by active percentage.
+    :param request: A GET request with an 'organization' parameter.
+    :return: Returns a list of the top 25 organizations by active percentage.
+    """
+    try:
+        organization = request.user.organization
+        print(organization)
+        org_filter = Q(license_required=True) & Q(license_suite_names__isnull=True)
+        now = datetime.now()
+        last_90_days = now - timedelta(days=90)
+
+        # Generate queryset of top 25 organizations by active percentage
+        top_orgs = SoftwarePerComputer.objects.filter(org_filter).values('organization').annotate(
+            total=Count('id'),
+            active=Count('id', filter=Q(last_used__gte=last_90_days)),
+            active_percentage=Cast(
+                100.0 * Count('id', filter=Q(last_used__gte=last_90_days)) / Cast(Count('id'), FloatField()),
+                FloatField())
+        ).order_by('-active_percentage')
+
+        top_orgs_sliced = top_orgs[:25]
+
+        # Format response data
+        leaderboard_data = []
+        organization_included = False
+
+        for i, org in enumerate(top_orgs_sliced):
+            active_percentage = round(org['active_percentage'], 2)
+            leaderboard_data.append({
+                'organization': org['organization'],
+                'active_percentage': active_percentage,
+                'rank': i + 1
+            })
+
+            if org['organization'] == organization:
+                organization_included = True
+
+        # The org from the request is not in the top 25
+        if organization and not organization_included:
+            org = top_orgs.filter(organization=organization).first()
+            if org:
+                index = list(top_orgs).index(org)
+                active_percentage = round(org['active_percentage'], 2)
+                leaderboard_data.append({
+                    'organization': org['organization'],
+                    'active_percentage': active_percentage,
+                    'rank': index + 1
+                })
+
+        response_data = {
+            'leaderboard': leaderboard_data
+        }
+        return Response(response_data)
+
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
