@@ -138,11 +138,10 @@ function MyPage() {
           <Grid sx={{ paddingTop: 5, paddingLeft: 25 }}>
             <ActiveLastBreadcrumb />
           </Grid>
-
           <Box sx={{ padding: 2 }}>
             <Grid container spacing={2} justifyContent="center">
-              <Grid item xs={12}>
-                <h2 style={{ textAlign: 'center' }}>
+              <Grid item xs={12} sx={{ marginLeft: 8 }}>
+                <h2 style={{ textAlign: 'left' }}>
                   {userInfo.primary_user_full_name}
                 </h2>
               </Grid>
@@ -151,6 +150,25 @@ function MyPage() {
                   <Info name={user.name} avatarUrl={user.avatarUrl} />
                 </div>
               </Grid>
+              <Box
+                sx={{
+                  marginTop: 4,
+                  marginBottom: 2,
+                  backgroundColor: 'rgb(245, 245, 245)',
+                  borderRadius: '4px'
+                }}>
+                <Grid sx={{marginLeft: 16}}>
+                  <h2 style={{textAlign: 'left', marginTop: '1rem' }}>
+                    Aktive forespørsler (må godkjennes)
+                  </h2>
+                  </Grid>
+                <Grid sx={{marginRight: 57, paddingRight: 14, width: '110%'}}>
+                <PoolRequestUserList
+                  userRequests={poolRequests.own_requests}
+                  isHistory={false}
+                />
+                </Grid>
+              </Box>
               <Grid id="donutChartMyPage" item xs={12} sm={6}>
                 <DonutChart
                   never_used={boxData[0].never_used}
@@ -168,19 +186,10 @@ function MyPage() {
               <Grid item xs={12}>
                 {userInfo.is_unit_head ? (
                   <>
-                    <h2 style={{ textAlign: 'center' }}>
+                    <h2 style={{ textAlign: 'left' }}>
                       Aktive forespørsler (må godkjennes)
                     </h2>
-                    <PoolRequestList
-                      poolRequests={poolRequests.org_requests}
-                      onApprove={handleApprove}
-                      onDisapprove={handleDisapprove}
-                      isOwnRequest={false}
-                      isHistory={false}
-                    />
-                    <Grid container spacing={2} alignItems="center">
-                      <Grid item>
-                        <FormControlLabel
+                    <FormControlLabel
                           control={
                             <Checkbox
                               checked={showHistory}
@@ -190,10 +199,20 @@ function MyPage() {
                           }
                           label="Vis historikk"
                         />
+                    <PoolRequestList
+                      poolRequests={poolRequests.org_requests}
+                      onApprove={handleApprove}
+                      onDisapprove={handleDisapprove}
+                      isOwnRequest={false}
+                      isHistory={false}
+                    />
+                    <Grid container spacing={2} alignItems="center">
+                      <Grid item>
+                      <h2 style={{ textAlign: 'left' }}>Historikk</h2>
                       </Grid>
                       {showHistory && (
                         <Grid item>
-                          <h2 style={{ textAlign: 'center' }}>Historikk</h2>
+                          
                           <PoolRequestList
                             poolRequests={poolRequests.history}
                             onApprove={handleApprove}
@@ -207,21 +226,7 @@ function MyPage() {
                   </>
                 ) : (
                   <Box>
-                    <Box
-                      sx={{
-                        marginTop: 4,
-                        marginBottom: 2,
-                        backgroundColor: 'rgb(245, 245, 245)',
-                        borderRadius: '4px'
-                      }}>
-                      <h2 style={{ textAlign: 'center' }}>
-                        Aktive forespørsler (må godkjennes)
-                      </h2>
-                      <PoolRequestUserList
-                        userRequests={poolRequests.own_requests}
-                        isHistory={false}
-                      />
-                    </Box>
+                    <h2 style={{ textAlign: 'left' }}>Historikk</h2>
                     <Grid container spacing={1} alignItems="center">
                       <Grid item>
                         <FormControlLabel
@@ -239,7 +244,6 @@ function MyPage() {
                       {showHistory && (
                         <Grid item>
                           <Box>
-                            <h2 style={{ textAlign: 'center' }}>Historikk</h2>
                             <PoolRequestList
                               poolRequests={poolRequests.history}
                               onApprove={handleApprove}
