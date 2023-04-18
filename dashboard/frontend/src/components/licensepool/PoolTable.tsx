@@ -38,19 +38,11 @@ function Row(props: RowProps) {
                         {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                     </IconButton>
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" style={{textAlign: "center"}}>
                     {row.application_name}
                 </TableCell>
-                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.freed_by_organization}</TableCell>
-                <TableCell>
-                    <div>
-                        <a href={`mailto`} target="_blank"
-                           rel="noopener noreferrer">
-                            {"navn@email.com"}
-                        </a>
-                    </div>
+                <TableCell align="center" style={{paddingRight: "20px"}}>{row.freed_by_organization}</TableCell>
 
-                </TableCell>
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
@@ -63,17 +55,14 @@ function Row(props: RowProps) {
                             <Table size="small" aria-label="purchases">
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell align="left"><b>Frigitt av</b></TableCell>
                                         <TableCell align="left"><b>Dato lagt til</b></TableCell>
                                         <TableCell align="left"><b>Pris</b></TableCell>
+                                        <TableCell align="left"><b>Kjøp</b></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {row.details.map((detailRow) => (
                                         <TableRow key={detailRow.id}>
-                                            <TableCell component="th" scope="row">
-                                                {detailRow.freed_by_organization ?? 'Ukjent'}
-                                            </TableCell>
                                             <TableCell>{detailRow.date_added ?? 'Ukjent'}</TableCell>
                                             <TableCell align="left">{detailRow.price},-</TableCell>
                                             <TableCell> <BuyButton id={detailRow.spc_id}
@@ -127,14 +116,18 @@ export default function PoolTable({data, handleSorting}: Props) {
                             </colgroup>
                             <TableHead>
                                 <TableRow>
-                                    <TableCell/>
+                                    <TableCell style={{textAlign: "center"}}/>
                                     <TableCell onClick={() => handleSorting("application_name")}
-                                               style={{cursor: "pointer"}}><b>Lisensnavn&#9660;</b></TableCell>
+                                               style={{cursor: "pointer", textAlign: "center"}}>
+                                        <b>Lisensnavn&#9660;</b>
+                                    </TableCell>
                                     <TableCell onClick={() => handleSorting("organization")} align={"left"}
-                                               style={{cursor: "pointer"}}> <b>Enhet&#9660;</b></TableCell>
-                                    <TableCell align={"left"}><b>Kontaktinformasjon</b></TableCell>
+                                               style={{cursor: "pointer", textAlign: "center"}}>
+                                        <b>Frigitt av&#9660;</b>
+                                    </TableCell>
                                 </TableRow>
                             </TableHead>
+
                             <TableBody>
                                 {software.map((user, index) => (
                                     <Row key={index} row={user}/>
