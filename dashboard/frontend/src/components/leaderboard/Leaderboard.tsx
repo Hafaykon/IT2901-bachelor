@@ -51,20 +51,24 @@ export function Leaderboard() {
     return (
         <>
             <div>
-                <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+                <Grid>
                     <ActiveLastBreadcrumb/>
                 </Grid>
                 <Box data-testid="leaderboard"
-                     style={{display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: '20px'}}>
+                    style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', marginTop: '20px', marginLeft: '1.5%' }}>
                     <Grid justifyContent={'center'} alignItems={'center'} width={'75%'}>
                         <Stack direction={'column'} width={'90%'}>
-                            <h2 style={{fontFamily: 'Source Sans Pro, sans serif'}}>Ledertavle</h2>
-                            <p style={{fontStyle: 'italic', marginTop: '-10px', marginBottom: '50px'}}>Ledertavlen gir
-                                deg en visuell representasjon av
-                                hvordan din enhet presterer i forhold til andre enheter,
-                                basert på andelen av aktive lisenser. Topplisten gir en oversikt over de 25 enhetene med
-                                flest aktive lisenser, og indikerer dermed
-                                hvilke enheter som har færrest ubrukte lisenser. </p>
+                            <h2 style={{ 
+                                fontFamily: 'Source Sans Pro, sans serif', 
+                                fontSize: '30pt', 
+                                marginTop: -0.6, 
+                                fontWeight: 400 }}>
+                                    Ledertavle
+                            </h2>
+                            <p style={{ fontStyle: 'italic', marginTop: '-10px', marginBottom: '50px' }}>Ledertavlen gir deg en visuell representasjon av 
+                            hvordan din enhet presterer i forhold til andre enheter, 
+                            basert på andelen av aktive lisenser. Topplisten gir en oversikt over de 25 enhetene med flest aktive lisenser, og indikerer dermed 
+                            hvilke enheter som har færrest ubrukte lisenser.  </p>
                         </Stack>
                         <p>Din plassering</p>
                         <TableContainer component={Paper}>
