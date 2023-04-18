@@ -84,12 +84,16 @@ function Row(props: RowProps) {
                                                 {timeSince(detailRow.last_used)}
                                             </TableCell>
                                             <TableCell>10 poeng</TableCell>
-                                            {userData.primary_user_email === row.primary_user_email &&
-                                                <TableCell align={"center"}> <ReleaseButton spc_id={detailRow.id}
-                                                                                            primary_user_email={row.primary_user_email}
-                                                                                            application_name={row.application_name}
-                                                                                            organization={row.organization}/>
-                                                </TableCell>}
+                                            {(userData.primary_user_email === row.primary_user_email || userData.is_unit_head) && (
+                                                <TableCell align={"center"}>
+                                                    <ReleaseButton
+                                                        spc_id={detailRow.id}
+                                                        primary_user_email={row.primary_user_email}
+                                                        application_name={row.application_name}
+                                                        organization={row.organization}
+                                                    />
+                                                </TableCell>
+                                            )}
 
 
                                         </TableRow>

@@ -1,9 +1,8 @@
-import {Checkbox, FormControlLabel, Grid, Box, Paper} from "@mui/material";
+import {Box, Checkbox, FormControlLabel, Grid} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import ActiveLastBreadcrumb from "../components/ActivateLastBreadcrumb";
 import {useRecoilValue} from "recoil";
 import {userAtom} from "../globalVariables/variables";
-import PoolRequestUserList from "../components/dashboard/PoolRequestUserList";
 import {Count, OrgRequest} from "../Interfaces";
 import {fetchInfoBoxData} from "../api/calls";
 import DonutChart from "../components/dashboard/DonutChart";
@@ -176,9 +175,16 @@ function MyPage() {
                                             <h2 style={{textAlign: "center"}}>
                                                 Aktive forespørsler (må godkjennes)
                                             </h2>
-                                            <PoolRequestUserList
-                                                userRequests={poolRequests.own_requests}
+                                            <PoolRequestList
+                                                poolRequests={poolRequests.own_requests}
+                                                isOwnRequest={true}
                                                 isHistory={false}
+                                                onApprove={() => {
+                                                    console.log('')
+                                                }}
+                                                onDisapprove={() => {
+                                                    console.log('')
+                                                }}
                                             />
                                         </Box>
                                         <FormControlLabel
@@ -201,9 +207,16 @@ function MyPage() {
                                                 }}
                                             >
                                                 <h2 style={{textAlign: "center"}}>Historikk</h2>
-                                                <PoolRequestUserList
-                                                    userRequests={poolRequests.history}
+                                                <PoolRequestList
+                                                    poolRequests={poolRequests.history}
+                                                    isOwnRequest={true}
                                                     isHistory={true}
+                                                    onApprove={() => {
+                                                        console.log('')
+                                                    }}
+                                                    onDisapprove={() => {
+                                                        console.log('')
+                                                    }}
                                                 />
                                             </Box>
                                         )}
@@ -218,6 +231,7 @@ function MyPage() {
             )}
         </>
     );
+
 
 }
 

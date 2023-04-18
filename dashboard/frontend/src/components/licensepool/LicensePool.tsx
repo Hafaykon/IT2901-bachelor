@@ -8,6 +8,8 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Pagination from "@mui/material/Pagination";
 import ActiveLastBreadcrumb from "../ActivateLastBreadcrumb";
+import {useRecoilValue} from "recoil";
+import {refreshTableAtom} from "../../globalVariables/variables";
 
 function LicensePool() {
     const org = JSON.parse(localStorage.getItem('organization') ?? 'null');
@@ -20,7 +22,7 @@ function LicensePool() {
     const ITEMS_PER_PAGE = 10;
     const [count, setCount] = useState<number>(0);
     const [sortBy, setSortBy] = useState<string>('application_name')
-
+    const refreshTable = useRecoilValue(refreshTableAtom)
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
@@ -55,7 +57,7 @@ function LicensePool() {
             }
         };
         fetchSoftwareNames();
-    }, [checked]);
+    }, [checked, refreshTable]);
 
     const fetchData = async () => {
         try {
@@ -80,7 +82,7 @@ function LicensePool() {
 
     useEffect(() => {
         fetchData();
-    }, [currentPage, sortBy, checked, searchTerm]);
+    }, [currentPage, sortBy, checked, searchTerm, refreshTable]);
 
 
     return (

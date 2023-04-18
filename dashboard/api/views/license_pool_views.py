@@ -1,14 +1,16 @@
 from collections import defaultdict
-from rest_framework import generics, permissions, status
-from rest_framework_simplejwt.authentication import JWTAuthentication
+from datetime import datetime
 
-from ..permissions import IsUnitHead
+from django.core.exceptions import ObjectDoesNotExist
+from rest_framework import generics, permissions, status
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from ..models import SoftwarePerComputer, LicensePool
-from ..serializers import PoolSerializer
+from ..permissions import IsUnitHead
+from ..serializers import PoolSerializer, SoftwarePerComputerSerializer
 
 removable_software = ["Check Point Full Disk Encryption 7.4", "Microsoft Office 2007 Outlook",
                       "Microsoft Office 2010 Outlook", "Microsoft Office 2007 Standard", "Snow Inventory 3.2",
@@ -101,3 +103,37 @@ class GetLicensePool(generics.ListAPIView):
         aggregated_data = self.aggregate_data(serializer.data)
 
         return Response(aggregated_data)
+
+
+class BuyLicense(generics.GenericAPIView):
+    queryset = LicensePool.objects.all()
+    serializer_class = PoolSerializer
+    permission_classes = [IsUnitHead]
+
+    def post(self, request):
+        spc_id = request.data.get('spc_id')
+
+        if not spc_id:
+            return Response({'error': 'Missing spc_id.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = request.user
+
+        pool_instance = LicensePool.objects.filter(spc_id=spc_id)
+        if pool_instance.exists():
+            pool_instance.delete()
+        else:
+            return Response({'error': 'License not found in the pool.'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            software_instance = SoftwarePerComputer.objects.get(id=spc_id)
+            software_instance.primary_user_email = user.primary_user_email
+            software_instance.primary_user_full_name = user.primary_user_full_name
+            software_instance.computer_name = user.computer_name
+            software_instance.organization = user.organization
+            software_instance.last_used = datetime.today()
+            software_instance.save()
+
+            serialized_software_instance = SoftwarePerComputerSerializer(software_instance)
+            return Response(serialized_software_instance.data, status=status.HTTP_200_OK)
+        except ObjectDoesNotExist:
+            return Response({'error': 'SoftwarePerComputer instance not found.'}, status=status.HTTP_404_NOT_FOUND)
