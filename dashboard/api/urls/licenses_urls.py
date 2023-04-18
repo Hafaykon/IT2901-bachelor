@@ -16,4 +16,5 @@ urlpatterns = [
     path('user/', GetUserInfo.as_view(), name='user'),
     path('licenseinfo/', LicenseInfoView.as_view(), name='licenseinfo'),
    path('leaderboard/', leaderboard, name='leaderboard'),
+    path('check/', check_if_unused, name='check_if_unused'),
 ]
