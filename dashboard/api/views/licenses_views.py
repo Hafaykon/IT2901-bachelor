@@ -439,7 +439,8 @@ class LicenseInfoView(generics.ListAPIView):
         aggregated_data = defaultdict(list)
 
         for record in data:
-            key = (record['application_name'], record['primary_user_full_name'], record['primary_user_email'],
+            primary_user_full_name = record.get('primary_user_full_name') or 'Ukjent bruker'
+            key = (record['application_name'], primary_user_full_name, record['primary_user_email'],
                    record['organization'], record['computer_name'])
             last_used = record['last_used']
             application_status = ('Ubrukt' if last_used is None else
@@ -468,9 +469,15 @@ class LicenseInfoView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         sort = self.request.GET.get('sort', None)
-        queryset = self.get_queryset().order_by(sort)
+        queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         aggregated_data = self.aggregate_data(serializer.data)
+
+        if sort == "status":
+            aggregated_data = sorted(aggregated_data, key=lambda x: x['details'][0]['status'])
+        else:
+            aggregated_data = sorted(aggregated_data, key=lambda x: x[sort])
+
         page = self.paginate_queryset(aggregated_data)
         if page is not None:
             return self.get_paginated_response(page)
