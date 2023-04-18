@@ -30,7 +30,7 @@ function Row(props: RowProps) {
 
 
     function timeSince(lastUsed: string | null): string {
-        if (!lastUsed) return 'Ikke registrert';
+        if (!lastUsed) return 'Aldri tatt i bruk/registrert   .';
 
         const now = new Date();
         const lastUsedDate = new Date(lastUsed);
@@ -54,7 +54,7 @@ function Row(props: RowProps) {
                 <TableCell component="th" scope="row">
                     {row.application_name}
                 </TableCell>
-                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.primary_user_full_name ?? 'Ukjent bruker'}</TableCell>
+                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.primary_user_full_name}</TableCell>
                 <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.computer_name}</TableCell>
                 <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.details.length > 0 ? row.details[0].status : 'No status available'}</TableCell>
 
@@ -90,7 +90,7 @@ function Row(props: RowProps) {
                                                     application_name={row.application_name}
                                                     organization={row.organization}
                                                   />
-                                                ) : <p>Kan ikke frigjøres</p>}
+                                                ) : <p>Ingen tillatelse &#128711;</p>}
                                                 </TableCell>
                                         </TableRow>
                                     ))}

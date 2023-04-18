@@ -439,7 +439,8 @@ class LicenseInfoView(generics.ListAPIView):
         aggregated_data = defaultdict(list)
 
         for record in data:
-            key = (record['application_name'], record['primary_user_full_name'], record['primary_user_email'],
+            primary_user_full_name = record.get('primary_user_full_name') or 'Ukjent bruker'
+            key = (record['application_name'], primary_user_full_name, record['primary_user_email'],
                    record['organization'], record['computer_name'])
             last_used = record['last_used']
             application_status = ('Ubrukt' if last_used is None else
