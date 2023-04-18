@@ -9,6 +9,7 @@ from django.db.models.functions import Cast
 from django_pandas.io import read_frame
 from rest_framework import generics
 from rest_framework import status
+from dateutil.parser import parse
 from django.db.models import Subquery, Q
 from rest_framework import generics, permissions
 from rest_framework import status
@@ -425,9 +426,11 @@ class LicenseInfoView(generics.ListAPIView):
         if email:
             queryset = queryset.filter(primary_user_email=email)
 
+        # Ikke registrert aktivitet i Xupervisor
         if application_status == 'unused':
             queryset = queryset.filter(last_used__isnull=True)
 
+        # Ikke brukt på 90 dager
         elif application_status == 'available':
             queryset = queryset.filter(last_used__lte=threshold_date)
 
@@ -440,18 +443,28 @@ class LicenseInfoView(generics.ListAPIView):
             key = (record['application_name'], record['primary_user_full_name'], record['primary_user_email'],
                    record['organization'],
                    record['computer_name'])
-            aggregated_data[key].append(record)
+            last_used = record['last_used']
+            application_status = ('Ubrukt' if last_used is None else
+                                  ('Ledig' if parse(last_used) <= datetime.now() - timedelta(days=90) else 'Aktiv'))
 
-        result = []
-        for (application, user, primary_user_email, organization, computer_name), details in aggregated_data.items():
-            result.append({
+            details_record = {
+                'id': record['id'],
+                'last_used': last_used,
+                'status': application_status
+            }
+            aggregated_data[key].append(details_record)
+
+        result = [
+            {
                 'application_name': application,
                 'primary_user_full_name': user,
                 'primary_user_email': primary_user_email,
                 'organization': organization,
                 'computer_name': computer_name,
                 'details': details
-            })
+            }
+            for (application, user, primary_user_email, organization, computer_name), details in aggregated_data.items()
+        ]
 
         return result
 

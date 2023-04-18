@@ -9,6 +9,7 @@ export interface LicensePoolData {
         family: string | null;
         family_version: string | null;
         family_edition: string | null;
+        price: number;
         spc_id: number;
     }>;
 }
@@ -19,11 +20,11 @@ export interface OwnOrgData {
     primary_user_email: string;
     organization: string;
     computer_name: string;
-    status: string;
     details: Array<{
         id: number;
         last_used: string;
-
+        status: string;
+        price: number;
     }>
 }
 

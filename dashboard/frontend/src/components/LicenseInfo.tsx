@@ -85,10 +85,12 @@ const LicenseInfo: React.FC = () => {
     // Function that gets input from the searchBar component.
     const handleChange = (term: string) => {
         setSearchTerm(term);
+        setCurrentPage(1);
     }
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
+        setCurrentPage(1);
     }
 
     const handlePageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
