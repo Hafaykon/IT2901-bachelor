@@ -35,7 +35,7 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
                                                              onDisapprove
                                                          }) => {
     return (
-        <TableContainer component={Paper} sx={{marginTop: 4, maxWidth: '83%'}}>
+        <TableContainer component={Paper} sx={{marginTop: 4, width: '83%'}}>
             <Table>
                 <TableHead>
                     <TableRow>

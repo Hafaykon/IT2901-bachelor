@@ -183,12 +183,13 @@ function MyPage() {
               <Grid item xs={12} sm={6}>
                 <MyPageTable />
               </Grid>
-              <Grid item xs={15} sx={{marginLeft: '20%'}}>
+              <Grid item xs={10.8}>
                 {userInfo.is_unit_head ? (
-                  <>
+                  <Box >
                     <h2 style={{ textAlign: 'left' }}>
                       Aktive forespørsler (må godkjennes)
                     </h2>
+                    <Grid sx={{width: '120%'}}>
                     <PoolRequestList
                       poolRequests={poolRequests.org_requests}
                       onApprove={handleApprove}
@@ -196,6 +197,7 @@ function MyPage() {
                       isOwnRequest={false}
                       isHistory={false}
                     />
+                    </Grid>
                     <Grid
                       container
                       spacing={2}
@@ -215,7 +217,7 @@ function MyPage() {
                         />
                       </Grid>
                       {showHistory && (
-                        <Grid item>
+                        <Grid item sx={{width: '120%'}}>
                           <PoolRequestList
                             poolRequests={poolRequests.history}
                             onApprove={handleApprove}
@@ -226,9 +228,9 @@ function MyPage() {
                         </Grid>
                       )}
                     </Grid>
-                  </>
+                  </Box>
                 ) : (
-                  <Box sx={{marginLeft: '-1%'}}>
+                  <Box >
                     <h2 style={{ textAlign: 'left' }}>Historikk</h2>
                     <Grid container spacing={1} alignItems="left">
                       <Grid item>
@@ -246,7 +248,7 @@ function MyPage() {
                       </Grid>
                       {showHistory && (
                         <Grid item>
-                          <Box >
+                          <Box sx={{width: '102%'}}>
                             <PoolRequestList
                               poolRequests={poolRequests.history}
                               onApprove={handleApprove}
