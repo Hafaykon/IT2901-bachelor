@@ -35,7 +35,7 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
                                                              onDisapprove
                                                          }) => {
     return (
-        <TableContainer component={Paper} sx={{marginTop: 4, maxWidth: '80%', marginLeft: 'auto', marginRight: 'auto'}}>
+        <TableContainer component={Paper} sx={{marginTop: 4, maxWidth: '83%'}}>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -49,7 +49,7 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
                             <TableCell><b>Status</b></TableCell>
                         </>)
                         }
-                        {!isOwnRequest && <TableCell><b>Handling</b></TableCell>}
+                        {!isOwnRequest && !isHistory ? <TableCell><b>Handling</b></TableCell> : null}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -70,7 +70,7 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
 
 
                             }
-                            {!isOwnRequest && (
+                            {!isOwnRequest && !isHistory ? (
                                 <TableCell>
                                     <Stack direction={"row"} spacing={2}>
                                         <Button
@@ -89,7 +89,7 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
                                         </Button>
                                     </Stack>
                                 </TableCell>
-                            )}
+                            ) : null}
                         </TableRow>
                     ))}
                 </TableBody>
