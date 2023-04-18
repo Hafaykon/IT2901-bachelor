@@ -40,8 +40,6 @@ export function LeaderboardBox() {
         fetchData();
     }, []);
 
-    const dataArr = Object.values(data);
-
 
     return (
         <Card sx={{ width: 300, height: 250, borderRadius: 5, ':hover': { boxShadow: 20 } }} data-testid='savingsBox'>

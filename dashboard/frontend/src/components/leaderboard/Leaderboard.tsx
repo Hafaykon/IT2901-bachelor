@@ -11,29 +11,6 @@ import { Box, Grid, Stack } from '@mui/material';
 import ActiveLastBreadcrumb from '../ActivateLastBreadcrumb';
 import { useRecoilValue } from 'recoil';
 import { userAtom } from "../../globalVariables/variables";
-import { grey } from '@mui/material/colors';
-
-function createData(
-    position: number,
-    unit: string,
-    percentage: number,
-) {
-    return { position, unit, percentage };
-}
-
-const rows = [
-    createData(1, 'Arbeidsmiljøenheten', 90),
-    createData(2, 'IT-tjenesten', 59),
-    createData(3, 'Kulturenheten', 20),
-
-
-];
-
-
-/** 
-interface RowProps {
-    row: BoardInformation;
-}*/
 
 interface Leaderboard {
     organization: string;
@@ -42,8 +19,6 @@ interface Leaderboard {
 }
 
 export function Leaderboard() {
-    //const {row} = props;
-    const [open, setOpen] = React.useState(false);
 
     const [data, setData] = React.useState<Leaderboard[]>([]);
     const accessToken = localStorage.getItem('access');
