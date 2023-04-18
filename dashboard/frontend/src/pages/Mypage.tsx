@@ -109,7 +109,7 @@ function MyPage() {
         <>
             {boxData.length > 0 ? (
                 <div>
-                    <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+                    <Grid>
                         <ActiveLastBreadcrumb/>
                     </Grid>
                     <Box sx={{padding: 2}}>

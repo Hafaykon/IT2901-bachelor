@@ -4,6 +4,7 @@ import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link, {LinkProps} from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import {useLocation, useNavigate} from 'react-router-dom';
+import './ActivateLastBreadcrumb.css';
 
 interface LinkRouterProps extends LinkProps {
     to: string;
@@ -46,7 +47,7 @@ export default function ActiveLastBreadcrumb() {
     const pathnames = location.pathname.split('/').filter((x) => x);
 
     return (
-        <Breadcrumbs aria-label="breadcrumb">
+        <Breadcrumbs aria-label="breadcrumb" id="breadcrumbs">
             <LinkRouter underline="hover" color="inherit" to="/">
                 Dashboard
             </LinkRouter>

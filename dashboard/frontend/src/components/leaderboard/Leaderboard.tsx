@@ -30,7 +30,7 @@ export function Leaderboard() {
 
         <>
             <div>
-                <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+                <Grid>
                     <ActiveLastBreadcrumb/>
                 </Grid>
                 <Box data-testid="leaderboard"

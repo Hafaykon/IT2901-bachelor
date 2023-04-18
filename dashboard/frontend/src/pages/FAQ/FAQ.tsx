@@ -1,13 +1,13 @@
 import React from 'react';
 import { Accordion, AccordionDetails, AccordionSummary, Grid, Typography } from '@mui/material';
-import ActiveLastBreadcrumb from '../components/ActivateLastBreadcrumb';
+import ActiveLastBreadcrumb from '../../components/ActivateLastBreadcrumb';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import './FAQ.css';
 
 function FAQ() {
     return (
         <div>
-            <Grid container sx={{paddingTop: 5, paddingLeft: 25}}>
+            <Grid container>
                 <ActiveLastBreadcrumb />
             </Grid>
             <Grid className='Header'>
@@ -49,11 +49,10 @@ function FAQ() {
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography id="details">
-                                Ved å trykke på knappen &quot;Totale lisenser&quot; åpnes en side med en tabelloversikt over alle 
+                                Ved å trykke på boksen &quot;Totale lisenser&quot; åpnes en side med en tabelloversikt over alle 
                                 lisenser enheten eier.<br></br><br></br>
-                                Tabellen viser informasjon om hvilken bruker lisensen er tilknyttet og brukerens løpenummer.<br></br>
-                                I tillegg vises informasjon om lisensens status. Det vil si om lisensen er aktiv i bruk, ubrukt eller ledig.<br></br>
-                                En lisens kan også ha staus som <i>frigjort</i> dersom den er blitt lagt til i lisensportalen.<br></br><br></br>
+                                Tabellen viser informasjon om hvilken bruker lisensen er tilknyttet og brukerens PC-løpenummer. I tillegg vises informasjon om lisensens status som aktiv, ledig eller ubrukt.
+                                <br></br><br></br>
                                 Ved å trykke på en spesifikk lisens i denne tabellen kan man se informasjon om når programvaren tilknyttet lisensen sist ble åpnet av brukeren.
                             </Typography>
                         </AccordionDetails>
@@ -67,7 +66,7 @@ function FAQ() {
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography id="details">
-                                Ved å trykke på knappen &quot;Ubrukte lisenser&quot; åpnes en side med en tabelloversikt over alle 
+                                Ved å trykke på boksen &quot;Ubrukte lisenser&quot; åpnes en side med en tabelloversikt over alle 
                                 lisenser enheten eier som aldri er blitt tatt i bruk.<br></br><br></br>
                                 Tabellen viser informasjon om hvilken bruker lisensen er tilknyttet og brukerens løpenummer.
                             </Typography>
@@ -82,10 +81,28 @@ function FAQ() {
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography id="details">
-                                Ved å trykke på knappen &quot;Ledige lisenser&quot; åpnes en side med en tabelloversikt over alle 
+                                Ved å trykke på boksen &quot;Ledige lisenser&quot; åpnes en side med en tabelloversikt over alle 
                                 lisenser enheten eier som ikke har blitt bruk eller åpnet av brukeren de siste 90 dagene.<br></br><br></br>
                                 Tabellen viser informasjon om hvilken bruker lisensen er tilknyttet og brukerens løpenummer.<br></br><br></br>
                                 Ved å trykke på en spesifikk lisens i denne tabellen kan man se tilleggsinformasjon om når lisensen sist ble åpnet.
+                            </Typography>
+                        </AccordionDetails>
+                    </Accordion>
+                    <Accordion className='accordions'>
+                        <AccordionSummary 
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header">
+                                <p>Hvor kan jeg se hvilke lisenser jeg har?</p>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography id="details">
+                                Det finnes to måter å gjøre dette på. 
+                                <ul>
+                                    <li>Gå inn på oversikten over totale lisenser i enheten og kryss av for å bare se egne lisenser i tabellen.</li>
+                                    <li>Gå inn på Min Side for å se oversikt over alle lisenser tilkoblet din bruker.</li>
+                                </ul>
+                                
                             </Typography>
                         </AccordionDetails>
                     </Accordion>
@@ -128,7 +145,7 @@ function FAQ() {
                                 <ol>
                                     <li>Gå inn på oversikten over totale lisenser i enheten.</li>
                                     <li>Finn og trykk på den lisensen som ønskes å selges gjennom lisensportalen.</li>
-                                    <li>Trykk på knappen hvor det står &quot;Legg i lisensportalen&quot;.</li>
+                                    <li>Trykk på knappen hvor det står &quot;Frigjør&quot;.</li>
                                 </ol>
                                 Lisensen ligger da tilgjengelig for kjøp i lisensportalen hvor andre enheter kan kjøpe den. 
                                 <br></br><br></br>
@@ -175,18 +192,35 @@ function FAQ() {
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
                             id="panel1a-header">
+                                <p>Hvordan er prisen på lisensene regnet ut?</p>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography id="details">
+                                I første omgang kan man kjøpe en enkeltlisens fra en annen enhet til en fastsatt defaultpris.Dette er basert på noe manglende data tilgjengelig om lisenspris.<br></br><br></br>
+                                Visse lisenser har en annen defaultpris basert på utgiveren av lisensen. Lisensene med en annen defaultpris er lisenser som er Trondheim kommune har mange eksemplarer av. <br></br><br></br>
+                                Default priser som er fastsatt:
+                                <ul>
+                                    <li>Lisenser produsert av Microsoft Corp har en default pris på 990kr.</li>
+                                    <li>Lisenser produsert av Adobe Systems Inc. har en default pris på 1500kr.</li>
+                                    <li>Lisenser produsert av Xensam AB. har en default pris på 1199kr.</li>
+                                    <li>Alle andre lisenser har en defaultpris på 750kr.</li>
+                                </ul> 
+                                <br></br>
+                                Senere er det planlagt at prissettingen skal endres til å ta inn innkjøpsprisen til hver enkelt lisens, 
+                                og disse skal kunne selges for en billigere pris i lisensportalen. 
+                            </Typography>
+                        </AccordionDetails>
+                    </Accordion>
+                    <Accordion className='accordions'>
+                        <AccordionSummary 
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header">
                                 <p>Jeg la med uhell til en lisens i lisensportalen. Hvordan får jeg den tilbake?</p>
                         </AccordionSummary>
                         <AccordionDetails>
                         <Typography id="details">
-                            En lisensansvarlig bruker kan enkelt få tilbake en lisens som ikke er blitt kjøpt fra lisensportalen. <br></br>
-                            <ol>
-                                <li>Gå inn på oversikt over totale lisenser i enheten</li>
-                                <li>Finn lisensen som ble med uhell lagt i lisensportalen. Den vil ha status som frigjort.</li>
-                                <li>Trykk på lisensen for å se mer informasjon.</li>
-                                <li>Trykk på knappen hvor det står &quot;Fjern fra lisensportal&quot;. Lisensen blir da automatisk fjernet fra lisensportalen.</li>
-                            </ol><br></br>
-                            En annen måte å få tilbake en lisens på er å kjøpe den tilbake fra lisensportalen slik man ville gjort med andre lisenser.
+                            Du kan lett få tilbake en lisens ved å kjøpe den fra lisensportalen slik man ville gjort med andre lisenser.
                         </Typography>
                         </AccordionDetails>
                     </Accordion>

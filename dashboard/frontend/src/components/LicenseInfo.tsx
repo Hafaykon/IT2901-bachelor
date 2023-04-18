@@ -106,7 +106,7 @@ const LicenseInfo: React.FC = () => {
     return (
         <>
             <div>
-                <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+                <Grid>
                     <ActiveLastBreadcrumb/>
                 </Grid>
                 {loaded ? (<Box id={'licensepool_container'}

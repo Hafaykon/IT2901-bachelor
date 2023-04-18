@@ -87,7 +87,7 @@ function LicensePool() {
 
     return (
         <div>
-            <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+            <Grid>
                 <ActiveLastBreadcrumb/>
             </Grid>
             <Box id={'licensepool_container'}
@@ -114,7 +114,7 @@ function LicensePool() {
                             </h4>
                         </Stack>
                         <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"} alignItems="center"
-                               marginTop={"10px"}>
+                               marginTop={"10px"} >
                             <SoftwareSearchBar setSelectedSoftware={updateSearchTerm} data={orgSoftware}/>
                             <FormControlLabel
                                 control={
@@ -129,7 +129,7 @@ function LicensePool() {
                             {errorMessage && <h3 style={{color: 'red'}}>{errorMessage}</h3>}
 
                         </Stack>
-                        <Stack direction={'column'} width={"100%"}>
+                        <Stack direction={'column'} width={"100%"} marginLeft={3}>
                             <PoolTable data={data} handleSorting={handleSorting}/>
                             <Pagination
                                 count={Math.ceil(count / ITEMS_PER_PAGE)}
