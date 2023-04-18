@@ -1,4 +1,10 @@
-import { Checkbox, FormControlLabel, Grid, Box, Container } from '@mui/material';
+import {
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  Box,
+  Container
+} from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ActiveLastBreadcrumb from '../components/ActivateLastBreadcrumb';
 import { useRecoilValue } from 'recoil';
@@ -146,13 +152,15 @@ function MyPage() {
                 </div>
               </Grid>
               <Grid id="donutChartMyPage" item xs={12} sm={6}>
-                  <DonutChart
-                    never_used={boxData[0].never_used}
-                    total_licenses={boxData[0].total_licenses}
-                    unused_licenses={boxData[0].unused_licenses}
-                    active_licenses={boxData[0].active_licenses}
-                    available_licenses={boxData[0].available_licenses}
-                  />
+                <DonutChart
+                  never_used={boxData[0].never_used}
+                  total_licenses={boxData[0].total_licenses}
+                  unused_licenses={boxData[0].unused_licenses}
+                  active_licenses={boxData[0].active_licenses}
+                  available_licenses={boxData[0].available_licenses}
+                  width={500}
+                  height={420}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <MyPageTable />
@@ -248,7 +256,7 @@ function MyPage() {
               </Grid>
             </Grid>
           </Box>
-          </Container>
+        </Container>
       ) : (
         <MuiLoadingSpinner />
       )}
