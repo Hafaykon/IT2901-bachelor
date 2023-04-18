@@ -20,10 +20,10 @@ export interface OwnOrgData {
     primary_user_email: string;
     organization: string;
     computer_name: string;
-    status: string;
     details: Array<{
         id: number;
         last_used: string;
+        status: string;
         price: number;
     }>
 }

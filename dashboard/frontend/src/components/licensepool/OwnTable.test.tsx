@@ -21,10 +21,10 @@ const mockData: OwnOrgData[] = [
             {
                 "id": 190955,
                 "last_used": "2022-12-14",
+                "status": "Aktiv",
                 "price": 750
             }
         ],
-        "status": "Aktiv"
     }
 ]
 
