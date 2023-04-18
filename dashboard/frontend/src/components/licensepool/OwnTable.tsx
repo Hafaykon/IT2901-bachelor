@@ -134,13 +134,13 @@ export default function OwnTable({data, handleSorting}: Props) {
                     <TableRow>
                         <TableCell/>
                         <TableCell onClick={() => handleSorting("application_name")}
-                                   style={{cursor: "pointer"}}><b>Lisensnavn &#9660;</b></TableCell>
+                                   style={{cursor: "pointer"}}><b>Lisensnavn&#9660;</b></TableCell>
                         <TableCell onClick={() => handleSorting("primary_user_full_name")}
-                                   align={"left"} style={{cursor: "pointer"}}><b>Bruker &#9660;</b></TableCell>
+                                   align={"left"} style={{cursor: "pointer"}}><b>Bruker&#9660;</b></TableCell>
                         <TableCell onClick={() => handleSorting("computer_name")}
-                                   align={"left"} style={{cursor: "pointer"}}><b>Løpenummer &#9660;</b></TableCell>
+                                   align={"left"} style={{cursor: "pointer"}}><b>Løpenummer&#9660;</b></TableCell>
                         <TableCell onClick={() => handleSorting("status")}
-                                   align={"left"} style={{cursor: "pointer"}}><b>Status &#9660;</b></TableCell>
+                                   align={"left"} style={{cursor: "pointer"}}><b>Status&#9660;</b></TableCell>
                     </TableRow>
                 </TableHead>
                 <TableBody>
