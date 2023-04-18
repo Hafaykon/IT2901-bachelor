@@ -468,9 +468,15 @@ class LicenseInfoView(generics.ListAPIView):
 
     def list(self, request, *args, **kwargs):
         sort = self.request.GET.get('sort', None)
-        queryset = self.get_queryset().order_by(sort)
+        queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         aggregated_data = self.aggregate_data(serializer.data)
+
+        if sort == "status":
+            aggregated_data = sorted(aggregated_data, key=lambda x: x['details'][0]['status'])
+        else:
+            aggregated_data = sorted(aggregated_data, key=lambda x: x[sort])
+
         page = self.paginate_queryset(aggregated_data)
         if page is not None:
             return self.get_paginated_response(page)
