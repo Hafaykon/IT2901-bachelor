@@ -64,7 +64,7 @@ function Row(props: RowProps) {
                                     {row.details.map((detailRow) => (
                                         <TableRow key={detailRow.id}>
                                             <TableCell>{detailRow.date_added ?? 'Ukjent'}</TableCell>
-                                            <TableCell align="left">{detailRow.price},-</TableCell>
+                                            <TableCell align="left">{detailRow.price ?? 500},-</TableCell>
                                             <TableCell> <BuyButton id={detailRow.spc_id}
                                                                    application_name={row.application_name}
                                             />
