@@ -448,7 +448,8 @@ class LicenseInfoView(generics.ListAPIView):
             details_record = {
                 'id': record['id'],
                 'last_used': last_used,
-                'status': application_status
+                'status': application_status,
+                'price': record['price'],
             }
             aggregated_data[key].append(details_record)
 
