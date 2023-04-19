@@ -187,6 +187,20 @@ export const checkIfOrgHasSoftware = async (software: string, org: string) => {
     }
 };
 
+export const fetchPotentialSavings = async (org: string) => {
+    try {
+        const url = `http://127.0.0.1:8000/api/licenses/moneysaved/?organization=${org}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return [data];
+        console.log("GOOD TIME")
+        console.log(data)
+
+    } catch (error) {
+        console.log(error);
+        console.log("BAD TIME")
+    }
+};
 /*export const fetchLeaderboard = async (organization?: string)=>{
     try{
         let url = 'http://127.0.0.1:8000/api/leaderboard/';
