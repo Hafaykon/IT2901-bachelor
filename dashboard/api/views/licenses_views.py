@@ -1,10 +1,16 @@
 import datetime as dt
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime
+from datetime import timedelta
 
 import numpy as np
 import pandas as pd
+from django.db.models import Count, Q, FloatField, Subquery, Sum
+from django.db.models.functions import Cast
+from rest_framework import status
+from dateutil.parser import parse
 from django.db.models import Subquery, Q
+from django.utils import timezone
 from rest_framework import generics, permissions
 from rest_framework import status
 from rest_framework.decorators import api_view
@@ -263,6 +269,67 @@ def software_counts(request):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
+@api_view(['GET'])
+def leaderboard(request):
+    """
+    Function to get the top 25 organizations by active percentage.
+    :param request: A GET request with an 'organization' parameter.
+    :return: Returns a list of the top 25 organizations by active percentage.
+    """
+    try:
+        organization = request.user.organization
+        print(organization)
+        org_filter = Q(license_required=True) & Q(license_suite_names__isnull=True)
+        now = datetime.now()
+        last_90_days = now - timedelta(days=90)
+
+        # Generate queryset of top 25 organizations by active percentage
+        top_orgs = SoftwarePerComputer.objects.filter(org_filter).values('organization').annotate(
+            total=Count('id'),
+            active=Count('id', filter=Q(last_used__gte=last_90_days)),
+            active_percentage=Cast(
+                100.0 * Count('id', filter=Q(last_used__gte=last_90_days)) / Cast(Count('id'), FloatField()),
+                FloatField())
+        ).order_by('-active_percentage')
+
+        top_orgs_sliced = top_orgs[:25]
+
+        # Format response data
+        leaderboard_data = []
+        organization_included = False
+
+        for i, org in enumerate(top_orgs_sliced):
+            active_percentage = round(org['active_percentage'], 2)
+            leaderboard_data.append({
+                'organization': org['organization'],
+                'active_percentage': active_percentage,
+                'rank': i + 1
+            })
+
+            if org['organization'] == organization:
+                organization_included = True
+
+        # The org from the request is not in the top 25
+        if organization and not organization_included:
+            org = top_orgs.filter(organization=organization).first()
+            if org:
+                index = list(top_orgs).index(org)
+                active_percentage = round(org['active_percentage'], 2)
+                leaderboard_data.append({
+                    'organization': org['organization'],
+                    'active_percentage': active_percentage,
+                    'rank': index + 1
+                })
+
+        response_data = {
+            'leaderboard': leaderboard_data
+        }
+        return Response(response_data)
+
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
 def get_sorted_df_of_unused_licenses(software_data):
     """
     :param software_data: The software data object you want to work with
@@ -359,48 +426,61 @@ class LicenseInfoView(generics.ListAPIView):
         if email:
             queryset = queryset.filter(primary_user_email=email)
 
+        # Ikke registrert aktivitet i Xupervisor
         if application_status == 'unused':
             queryset = queryset.filter(last_used__isnull=True)
 
+        # Ikke brukt på 90 dager
         elif application_status == 'available':
             queryset = queryset.filter(last_used__lte=threshold_date)
-
         return queryset
 
     def aggregate_data(self, data):
         aggregated_data = defaultdict(list)
 
         for record in data:
-            key = (record['application_name'], record['primary_user_full_name'], record['primary_user_email'],
-                   record['organization'],
-                   record['computer_name'])
-            aggregated_data[key].append(record)
+            primary_user_full_name = record.get('primary_user_full_name') or 'Ukjent bruker'
+            key = (record['application_name'], primary_user_full_name, record['primary_user_email'],
+                   record['organization'], record['computer_name'])
+            last_used = record['last_used']
+            application_status = ('Ubrukt' if last_used is None else
+                                  ('Ledig' if parse(last_used) <= datetime.now() - timedelta(days=90) else 'Aktiv'))
 
-        result = []
-        for (application, user, primary_user_email, organization, computer_name), details in aggregated_data.items():
-            result.append({
+            details_record = {
+                'id': record['id'],
+                'last_used': last_used,
+                'status': application_status,
+                'price': record['price'],
+            }
+            aggregated_data[key].append(details_record)
+
+        result = [
+            {
                 'application_name': application,
                 'primary_user_full_name': user,
                 'primary_user_email': primary_user_email,
                 'organization': organization,
                 'computer_name': computer_name,
                 'details': details
-            })
-
+            }
+            for (application, user, primary_user_email, organization, computer_name), details in aggregated_data.items()
+        ]
         return result
 
     def list(self, request, *args, **kwargs):
         sort = self.request.GET.get('sort', None)
-        queryset = self.get_queryset().order_by(sort)
-
-        page = self.paginate_queryset(queryset)
-        if page is not None:
-            serializer = self.get_serializer(page, many=True)
-            aggregated_data = self.aggregate_data(serializer.data)
-            return self.get_paginated_response(aggregated_data)
-
+        queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         aggregated_data = self.aggregate_data(serializer.data)
+
+        if sort == "status":
+            aggregated_data = sorted(aggregated_data, key=lambda x: x['details'][0]['status'])
+        else:
+            aggregated_data = sorted(aggregated_data, key=lambda x: x[sort])
+
+        page = self.paginate_queryset(aggregated_data)
+        if page is not None:
+            return self.get_paginated_response(page)
 
         return Response(aggregated_data)
 
@@ -418,3 +498,74 @@ class GetUserInfo(APIView):
             {'primary_user_email': user.primary_user_email, 'primary_user_full_name': user.primary_user_full_name,
              'computer_name': user.computer_name, 'organization': user.organization,
              'is_unit_head': user.is_unit_head})
+
+
+@api_view(['GET'])
+def check_if_unused(request):
+    """
+    Checks if the given application_name is unused before a potential new license is bought.
+    """
+    organization = request.GET.get('organization', None)
+    application_name = request.GET.get('application_name', None)
+    licenses_in_pool = LicensePool.objects.values('spc_id')
+    try:
+        if not organization:
+            raise ParseError("The 'organization' parameter is required.")
+        if not application_name:
+            raise ParseError("The 'application_name' parameter is required.")
+
+        current_date = timezone.now().date()
+        ninety_days_ago = current_date - timedelta(days=90)
+
+        software = SoftwarePerComputer.objects.filter(
+            license_required=True,
+            license_suite_names__isnull=True,
+            organization=organization,
+            application_name=application_name
+        ).exclude(
+            id__in=Subquery(licenses_in_pool)
+        ).filter(
+            Q(last_used__isnull=True) | Q(last_used__lte=ninety_days_ago)
+        )
+
+        if software.count() == 0:
+            return Response({"unused": False, "count": 0})
+        else:
+            return Response({"unused": True, "count": software.count()})
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_potential_savings(request):
+    """
+    Returns the amount of unused software within an organization, multiplied with their price.
+    """
+    try:
+        organization = request.GET.get('organization', None)
+        if not organization:
+            raise ParseError("No organization provided")
+
+        licenses_in_pool = LicensePool.objects.values('spc_id')
+        software = SoftwarePerComputer.objects.filter(organization=organization, license_required=True,
+                                                      license_suite_names__isnull=True).exclude(
+            Q(id__in=Subquery(licenses_in_pool)))
+
+        software = software.exclude(application_name__in=removable_software)
+
+        # Software that has last_used = null (Xupervisor haven't registered activity)
+        never_used = software.filter(last_used__isnull=True)
+
+        never_used_price_sum = never_used.aggregate(Sum('price'))['price__sum'] or 0
+
+        # Count of software that has last_used > 90 days
+        date = datetime.now() - timedelta(days=90)
+        unused_software = software.filter(last_used__lte=date)
+
+        unused_software_price_sum = unused_software.aggregate(Sum('price'))['price__sum'] or 0
+
+        potential_savings = never_used_price_sum + unused_software_price_sum
+
+        return Response(potential_savings)
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)

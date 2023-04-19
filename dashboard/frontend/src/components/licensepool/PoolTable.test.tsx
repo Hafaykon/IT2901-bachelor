@@ -19,6 +19,7 @@ const mockData: LicensePoolData[] = [
                 family: "Blackfish IE Tab",
                 family_version: "101500",
                 family_edition: "100",
+                price: 750,
                 spc_id: 520185
             }
         ]
@@ -33,7 +34,7 @@ describe('The pool table', () => {
         cleanup()
     })
     it('renders without crashing', async () => {
-        expect(await screen.findByText('Lisensnavn ▼')).toBeInTheDocument();
+        expect(await screen.findByText('Lisensnavn▼')).toBeInTheDocument();
         expect(await screen.findByText('IT-tjenesten')).toBeInTheDocument();
         expect(await screen.findByText('navn@email.com')).toBeInTheDocument();
 

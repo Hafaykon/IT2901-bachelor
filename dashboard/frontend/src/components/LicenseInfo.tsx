@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {useParams} from 'react-router-dom';
+import {useLocation, useParams} from 'react-router-dom';
 import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
 import {OwnOrgData} from "../Interfaces";
@@ -16,8 +16,13 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
     const {title} = useParams();
+    const useQuery = () => {
+        return new URLSearchParams(useLocation().search);
+    };
+    const query = useQuery();
+    const searchTermFromUrl = query.get("searchTerm");
     const [data, setData] = useState<OwnOrgData[]>([]);
-    const [searchTerm, setSearchTerm] = useState<string>();
+    const [searchTerm, setSearchTerm] = useState<string>(searchTermFromUrl || "");
     const [orgSoftware, setOrgSoftware] = useState<string[]>([]);
     const [status, setStatus] = useState<string | null>(null);
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -59,6 +64,7 @@ const LicenseInfo: React.FC = () => {
             }
         };
 
+
         fetchSoftwareNames();
     }, [status, refreshTable, checked]);
 
@@ -76,6 +82,7 @@ const LicenseInfo: React.FC = () => {
                 data?.results && setData(data.results);
                 data?.count && setCount(data.count);
                 setLoaded(true);
+                console.log(data)
             } catch (error) {
                 console.error('Error fetching license data:', error);
             }
@@ -85,10 +92,12 @@ const LicenseInfo: React.FC = () => {
     // Function that gets input from the searchBar component.
     const handleChange = (term: string) => {
         setSearchTerm(term);
+        setCurrentPage(1);
     }
 
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
+        setCurrentPage(1);
     }
 
     const handlePageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
@@ -106,7 +115,7 @@ const LicenseInfo: React.FC = () => {
     return (
         <>
             <div>
-                <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+                <Grid>
                     <ActiveLastBreadcrumb/>
                 </Grid>
                 {loaded ? (<Box id={'licensepool_container'}
@@ -124,7 +133,9 @@ const LicenseInfo: React.FC = () => {
                                 <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"}
                                        alignItems="center"
                                        marginTop={"10px"}>
-                                    <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}/>
+                                    <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}
+                                                       initialValue={searchTerm}/>
+
                                     <FormControlLabel
                                         control={
                                             <Checkbox
@@ -142,6 +153,7 @@ const LicenseInfo: React.FC = () => {
                                     page={currentPage}
                                     onChange={handlePageChange}
                                     color={"primary"}
+                                    style={{marginTop: '1rem'}}
                                 />
                             </Stack>
                         </Grid>

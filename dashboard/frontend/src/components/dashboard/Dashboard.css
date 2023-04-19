@@ -57,6 +57,7 @@
 #org_name {
     font-family: Source Sans Pro, sans-serif;
     font-size: 30pt;
+    font-weight: 400;
     display: flex;
     width: 780px;
 }
