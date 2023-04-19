@@ -200,10 +200,11 @@ function FAQ() {
                                 Visse lisenser har en annen defaultpris basert på utgiveren av lisensen. Lisensene med en annen defaultpris er lisenser som er Trondheim kommune har mange eksemplarer av. <br></br><br></br>
                                 Default priser som er fastsatt:
                                 <ul>
-                                    <li>Lisenser produsert av Microsoft Corp har en default pris på 990kr.</li>
-                                    <li>Lisenser produsert av Adobe Systems Inc. har en default pris på 1500kr.</li>
-                                    <li>Lisenser produsert av Xensam AB. har en default pris på 1199kr.</li>
-                                    <li>Alle andre lisenser har en defaultpris på 750kr.</li>
+                                    <li>Lisenser produsert av Adobe Systems Inc. har en default pris på 1500 kr.</li>
+                                    <li>Lisenser produsert av Boei Comp. har en default pris på 800 kr.</li>
+                                    <li>Lisenser produsert av Microsoft Corp. har en default pris på 990 kr.</li>
+                                    <li>Lisenser produsert av Xensam AB. har en default pris på 1199 kr.</li>
+                                    <li>Alle andre lisenser har en defaultpris på 750 kr.</li>
                                 </ul> 
                                 <br></br>
                                 Senere er det planlagt at prissettingen skal endres til å ta inn innkjøpsprisen til hver enkelt lisens, 
