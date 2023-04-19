@@ -5,7 +5,7 @@ from datetime import timedelta
 
 import numpy as np
 import pandas as pd
-from django.db.models import Count, Q, FloatField, Subquery
+from django.db.models import Count, Q, FloatField, Subquery, Sum
 from django.db.models.functions import Cast
 from rest_framework import status
 from dateutil.parser import parse
@@ -553,19 +553,18 @@ def get_potential_savings(request):
 
         software = software.exclude(application_name__in=removable_software)
 
-
         # Software that has last_used = null (Xupervisor haven't registered activity)
         never_used = software.filter(last_used__isnull=True)
-        potential_savings = 0
-        for license in never_used:
-            potential_savings += license["price"]
 
+        never_used_price_sum = never_used.aggregate(Sum('price'))['price__sum'] or 0
 
         # Count of software that has last_used > 90 days
         date = datetime.now() - timedelta(days=90)
         unused_software = software.filter(last_used__lte=date)
-        for license in unused_software:
-            potential_savings += license["price"]
+
+        unused_software_price_sum = unused_software.aggregate(Sum('price'))['price__sum'] or 0
+
+        potential_savings = never_used_price_sum + unused_software_price_sum
 
         return Response(potential_savings)
     except Exception as e:
