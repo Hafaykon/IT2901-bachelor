@@ -8,23 +8,23 @@ import handleSorting from './LicensePool';
 
 const mockData: LicensePoolData[] = [
     {
-        "application_name": "Blackfish IE Tab 15",
-        "organization": "IT-tjenesten",
-        "details": [
+        application_name: "Blackfish IE Tab 15",
+        freed_by_organization: "IT-tjenesten",
+        details: [
             {
-                "id": 520185,
-                "full_name": "Anette Løberg",
-                "computer_name": "TK5CG8403ZP7",
-                "email": "anette.loberg@trondheim.kommune.no",
-                "last_used": "2023-01-19",
-                "family": "Blackfish IE Tab",
-                "family_version": "101500",
-                "family_edition": "100"
+                id: 1,
+                freed_by_organization: "IT-tjenesten",
+                application_name: "Blackfish IE Tab 15",
+                date_added: "2023-04-08",
+                family: "Blackfish IE Tab",
+                family_version: "101500",
+                family_edition: "100",
+                price: 750,
+                spc_id: 520185
             }
         ]
     }
-]
-
+];
 
 describe('The pool table', () => {
     beforeEach(() => {
@@ -34,7 +34,7 @@ describe('The pool table', () => {
         cleanup()
     })
     it('renders without crashing', async () => {
-        expect(await screen.findByText('Lisensnavn ▼')).toBeInTheDocument();
+        expect(await screen.findByText('Lisensnavn▼')).toBeInTheDocument();
         expect(await screen.findByText('IT-tjenesten')).toBeInTheDocument();
         expect(await screen.findByText('navn@email.com')).toBeInTheDocument();
 

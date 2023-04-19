@@ -8,6 +8,8 @@ import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Pagination from "@mui/material/Pagination";
 import ActiveLastBreadcrumb from "../ActivateLastBreadcrumb";
+import {useRecoilValue} from "recoil";
+import {refreshTableAtom} from "../../globalVariables/variables";
 
 function LicensePool() {
     const org = JSON.parse(localStorage.getItem('organization') ?? 'null');
@@ -20,10 +22,11 @@ function LicensePool() {
     const ITEMS_PER_PAGE = 10;
     const [count, setCount] = useState<number>(0);
     const [sortBy, setSortBy] = useState<string>('application_name')
-
+    const refreshTable = useRecoilValue(refreshTableAtom)
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
+        setCurrentPage(1);
     };
 
     const handlePageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
@@ -39,6 +42,7 @@ function LicensePool() {
     // Function that gets input from the searchBar component.
     const updateSearchTerm = (term: string) => {
         setSearchTerm(term);
+        setCurrentPage(1);
     }
 
     useEffect(() => {
@@ -55,7 +59,7 @@ function LicensePool() {
             }
         };
         fetchSoftwareNames();
-    }, [checked]);
+    }, [checked, refreshTable]);
 
     const fetchData = async () => {
         try {
@@ -80,12 +84,12 @@ function LicensePool() {
 
     useEffect(() => {
         fetchData();
-    }, [currentPage, sortBy, checked, searchTerm]);
+    }, [currentPage, sortBy, checked, searchTerm, refreshTable]);
 
 
     return (
         <div>
-            <Grid sx={{paddingTop: 5, paddingLeft: 25}}>
+            <Grid>
                 <ActiveLastBreadcrumb/>
             </Grid>
             <Box id={'licensepool_container'}
@@ -93,11 +97,12 @@ function LicensePool() {
                 <Grid container className='license_pool' justifyContent={"center"}>
                     <Grid container justifyContent="center" alignItems="center" className={'license_table'}
                           width={"75%"}>
-                        <Stack direction={"column"} width={"95%"} marginBottom={"10px"}>
+                        <Stack direction={"column"} width={"95%"} marginBottom={"10px"} marginLeft={'-1%'}>
                             <h2 style={{
                                 fontFamily: 'Source Sans Pro, sans-serif',
-                                fontSize: 40,
-                                marginTop: -0.6
+                                fontSize: '30pt',
+                                marginTop: -0.6,
+                                fontWeight: 400
                             }}>
                                 Lisensportalen
                             </h2>
@@ -112,7 +117,7 @@ function LicensePool() {
                             </h4>
                         </Stack>
                         <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"} alignItems="center"
-                               marginTop={"10px"}>
+                               marginTop={"10px"} >
                             <SoftwareSearchBar setSelectedSoftware={updateSearchTerm} data={orgSoftware}/>
                             <FormControlLabel
                                 control={
@@ -127,15 +132,13 @@ function LicensePool() {
                             {errorMessage && <h3 style={{color: 'red'}}>{errorMessage}</h3>}
 
                         </Stack>
-                        <Stack direction={'column'} width={"100%"}>
+                        <Stack direction={'column'} width={"100%"} marginLeft={3}>
                             <PoolTable data={data} handleSorting={handleSorting}/>
                             <Pagination
                                 count={Math.ceil(count / ITEMS_PER_PAGE)}
                                 page={currentPage}
                                 onChange={handlePageChange}
-                                variant="outlined"
-                                shape="rounded"
-                                size="small"
+                                color={"primary"}
                                 style={{marginTop: '1rem'}}
                             />
 
