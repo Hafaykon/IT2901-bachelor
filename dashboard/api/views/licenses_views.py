@@ -5,7 +5,7 @@ from datetime import timedelta
 
 import numpy as np
 import pandas as pd
-from django.db.models import Count, Q, FloatField, Subquery
+from django.db.models import Count, Q, FloatField, Subquery, Sum
 from django.db.models.functions import Cast
 from rest_framework import status
 from dateutil.parser import parse
@@ -532,5 +532,40 @@ def check_if_unused(request):
             return Response({"unused": False, "count": 0})
         else:
             return Response({"unused": True, "count": software.count()})
+    except Exception as e:
+        return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_potential_savings(request):
+    """
+    Returns the amount of unused software within an organization, multiplied with their price.
+    """
+    try:
+        organization = request.GET.get('organization', None)
+        if not organization:
+            raise ParseError("No organization provided")
+
+        licenses_in_pool = LicensePool.objects.values('spc_id')
+        software = SoftwarePerComputer.objects.filter(organization=organization, license_required=True,
+                                                      license_suite_names__isnull=True).exclude(
+            Q(id__in=Subquery(licenses_in_pool)))
+
+        software = software.exclude(application_name__in=removable_software)
+
+        # Software that has last_used = null (Xupervisor haven't registered activity)
+        never_used = software.filter(last_used__isnull=True)
+
+        never_used_price_sum = never_used.aggregate(Sum('price'))['price__sum'] or 0
+
+        # Count of software that has last_used > 90 days
+        date = datetime.now() - timedelta(days=90)
+        unused_software = software.filter(last_used__lte=date)
+
+        unused_software_price_sum = unused_software.aggregate(Sum('price'))['price__sum'] or 0
+
+        potential_savings = never_used_price_sum + unused_software_price_sum
+
+        return Response(potential_savings)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
