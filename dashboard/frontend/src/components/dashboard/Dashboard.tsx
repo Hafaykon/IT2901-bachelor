@@ -42,7 +42,9 @@ function Dashboard() {
             <div className={'body'}>
               <Grid container id="header">
                 <Stack spacing={2}>
-                  <ActiveLastBreadcrumb />
+                  <Grid item sx={{marginLeft: -21, marginTop: -5}}>
+                    <ActiveLastBreadcrumb />
+                  </Grid>
                   <Grid container>
                     <Stack direction="row">
                       <Typography id="org_name">{org}</Typography>
