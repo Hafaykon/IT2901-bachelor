@@ -138,9 +138,7 @@ function LicensePool() {
                                 count={Math.ceil(count / ITEMS_PER_PAGE)}
                                 page={currentPage}
                                 onChange={handlePageChange}
-                                variant="outlined"
-                                shape="rounded"
-                                size="small"
+                                color={"primary"}
                                 style={{marginTop: '1rem'}}
                             />
 

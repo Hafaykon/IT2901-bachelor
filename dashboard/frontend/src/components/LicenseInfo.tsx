@@ -153,6 +153,7 @@ const LicenseInfo: React.FC = () => {
                                     page={currentPage}
                                     onChange={handlePageChange}
                                     color={"primary"}
+                                    style={{marginTop: '1rem'}}
                                 />
                             </Stack>
                         </Grid>
