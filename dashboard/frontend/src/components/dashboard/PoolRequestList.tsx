@@ -35,7 +35,7 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
                                                              onDisapprove
                                                          }) => {
     return (
-        <TableContainer component={Paper} sx={{marginTop: 4, width: '83%'}}>
+        <TableContainer component={Paper} sx={{marginTop: 4, maxWidth: '80%', marginLeft: 'auto', marginRight: 'auto'}}>
             <Table>
                 <TableHead>
                     <TableRow>
@@ -44,12 +44,12 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
                         <TableCell><b>Forespørsel opprettet</b></TableCell>
                         <TableCell><b>Forespørsel</b></TableCell>
                         {isHistory && (<>
-                            <TableCell><b>Reviewed by</b></TableCell>
-                            <TableCell><b>Reviewed date</b></TableCell>
+                            <TableCell><b>Prossesert av</b></TableCell>
+                            <TableCell><b>Prossesert dato</b></TableCell>
                             <TableCell><b>Status</b></TableCell>
                         </>)
                         }
-                        {!isOwnRequest && !isHistory ? <TableCell><b>Handling</b></TableCell> : null}
+                        {!isOwnRequest && !isHistory && <TableCell><b>Handling</b></TableCell>}
                     </TableRow>
                 </TableHead>
                 <TableBody>
@@ -70,7 +70,7 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
 
 
                             }
-                            {!isOwnRequest && !isHistory ? (
+                            {!isOwnRequest && !isHistory && (
                                 <TableCell>
                                     <Stack direction={"row"} spacing={2}>
                                         <Button
@@ -89,7 +89,7 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
                                         </Button>
                                     </Stack>
                                 </TableCell>
-                            ) : null}
+                            )}
                         </TableRow>
                     ))}
                 </TableBody>

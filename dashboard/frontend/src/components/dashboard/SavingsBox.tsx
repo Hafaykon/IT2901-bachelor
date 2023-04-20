@@ -1,35 +1,49 @@
 import './Dashboard.css';
-import {Card, CardActionArea, CardContent, Stack, Typography} from '@mui/material';
+import React, {useEffect, useState} from 'react';
+import {Card, CardContent, Stack, Typography} from '@mui/material';
 import CardOverflow from '@mui/joy/CardOverflow';
-import {useNavigate} from 'react-router-dom';
+import {orgAtom} from '../../globalVariables/variables';
+import {useRecoilValue} from 'recoil';
+import {fetchPotentialSavings} from '../../api/calls';
+
 
 export function SavingsBox() {
-    const navigate = useNavigate();
+    const [potentialSavings, setpotentialSavings] = useState<number | undefined>(undefined);
+    const organization = useRecoilValue(orgAtom)
 
-    const handleCardClick = () => {
-        navigate(`/leaderboard`);
+    useEffect(() => {
+        const fetchData = async () => {
+            if (organization) {
+                try {
+                    const data: string[] | undefined = await fetchPotentialSavings(organization);
+                    if (data !== undefined) {
+                        const numberData: number = +data;
+                        setpotentialSavings(numberData);
+                    }
+                } catch (error) {
+                    console.error('Error fetching potential savings:', error);
+                }
+            }
+        };
 
-    };
+        fetchData();
+        }, [organization]);
 
     return (
-        <Card sx={{width: 300, height: 180, borderRadius: 5, ':hover': {boxShadow: 20}}} data-testid='savingsBox'>
-            <CardActionArea sx={{paddingBottom: 4}} onClick={handleCardClick}>
+        <Card sx={{width: 300, height: 140, borderRadius: 5}} data-testid='savingsBox'>
                 <CardOverflow>
                     <CardContent>
                         <Stack direction={'row'}>
                             <Typography id="cardTitle">
-                                Kroner spart
+                                Potensiell sparing
                             </Typography>
                             {/*  <SavingsIcon fontSize='large' sx={{position: 'absolute', top:20, right:15, color:'pink'}}></SavingsIcon> */}
                         </Stack>
                         <Typography id="numbersBoxes">
-                            100 kr
+                            {potentialSavings?.toLocaleString('nb-NO', {useGrouping: true})} kr
                         </Typography>
-
-
                     </CardContent>
                 </CardOverflow>
-            </CardActionArea>
         </Card>
 
     )

@@ -170,6 +170,52 @@ export const fetchSoftwareUsedInOrg = async (status: string, pool: string, organ
         console.log(error);
     }
 };
+export const checkIfOrgHasSoftware = async (software: string, org: string) => {
+    try {
+        const url = `http://127.0.0.1:8000/api/licenses/check/?application_name=${software}&organization=${org}`;
+        const response = await fetch(url);
+        if (response.ok) {
+            const data = await response.json();
+            return {unused: data.unused, count: data.count, error: false, message: ''};
+        } else {
+            const errorData = await response.json();
+            return {unused: false, count: 0, error: true, message: errorData.error};
+        }
+
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+export const fetchPotentialSavings = async (org: string) => {
+    try {
+        const url = `http://127.0.0.1:8000/api/licenses/moneysaved/?organization=${org}`;
+        const response = await fetch(url);
+        const data = await response.json();
+        return [data];
+        console.log("GOOD TIME")
+        console.log(data)
+
+    } catch (error) {
+        console.log(error);
+        console.log("BAD TIME")
+    }
+};
+/*export const fetchLeaderboard = async (organization?: string)=>{
+    try{
+        let url = 'http://127.0.0.1:8000/api/leaderboard/';
+        if (organization) {
+            url = `${url}?organization=${organization}`;
+        }
+        const response = await fetch(url);
+        return await response.json();
+    } 
+    catch (error) {
+        console.log(error);
+    }
+};*/
+
+
 
 
 export default {

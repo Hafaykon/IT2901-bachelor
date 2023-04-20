@@ -7,7 +7,7 @@ import Login from './pages/authentication/Login';
 import MyPage from './pages/Mypage';
 import LicenseInfo from './components/LicenseInfo';
 import Licenses from './pages/Licenses';
-import FAQ from './pages/FAQ';
+import FAQ from './pages/FAQ/FAQ';
 import { Leaderboard } from './components/leaderboard/Leaderboard';
 import { isAuthAtom, orgAtom, userAtom } from "./globalVariables/variables";
 import Navbar from './components/navbar/Navbar';

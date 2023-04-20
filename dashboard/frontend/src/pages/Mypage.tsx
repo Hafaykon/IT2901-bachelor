@@ -38,7 +38,7 @@ function MyPage() {
   const [boxData, setBoxData] = useState<Count[]>([]);
 
   const user: IUser = {
-    name: 'Emma Blix',
+    name: 'Bertil Nedregård',
     avatarUrl: 'https://example.com/avatar.jpg'
   };
 
@@ -135,7 +135,7 @@ function MyPage() {
     <>
       {boxData.length > 0 ? (
         <Container>
-          <Grid sx={{ paddingTop: 5, paddingLeft: 25 }}>
+          <Grid item sx={{marginLeft: '-10%'}}>
             <ActiveLastBreadcrumb />
           </Grid>
           <Box sx={{ padding: 2 }}>
@@ -147,7 +147,7 @@ function MyPage() {
               </Grid>
               <Grid item xs={12}>
                 <div className="centered">
-                  <Info name={user.name} avatarUrl={user.avatarUrl} />
+                  <Info name={userInfo.primary_user_full_name} avatarUrl={user.avatarUrl} />
                 </div>
               </Grid>
               {!userInfo.is_unit_head && (
@@ -161,7 +161,7 @@ function MyPage() {
                     Aktive forespørsler (må godkjennes)
                   </h2>
                 </Grid>
-                <Grid item sx={{ marginLeft: 10, width: '106%'}}>
+                <Grid item sx={{width: '109%', marginLeft: '-4%'}}>
                   <PoolRequestUserList
                     userRequests={poolRequests.own_requests}
                     isHistory={false}
@@ -189,7 +189,7 @@ function MyPage() {
                     <h2 style={{ textAlign: 'left' }}>
                       Aktive forespørsler (må godkjennes)
                     </h2>
-                    <Grid sx={{width: '120%'}}>
+                    <Grid sx={{width: '123%', marginLeft: '-12%'}}>
                     <PoolRequestList
                       poolRequests={poolRequests.org_requests}
                       onApprove={handleApprove}
@@ -217,7 +217,7 @@ function MyPage() {
                         />
                       </Grid>
                       {showHistory && (
-                        <Grid item sx={{width: '120%'}}>
+                        <Grid item sx={{width: '123%', marginLeft: '-12%'}}>
                           <PoolRequestList
                             poolRequests={poolRequests.history}
                             onApprove={handleApprove}
@@ -248,7 +248,7 @@ function MyPage() {
                       </Grid>
                       {showHistory && (
                         <Grid item>
-                          <Box sx={{width: '102%'}}>
+                          <Box sx={{width: '104%', marginLeft: '-10%'}}>
                             <PoolRequestList
                               poolRequests={poolRequests.history}
                               onApprove={handleApprove}

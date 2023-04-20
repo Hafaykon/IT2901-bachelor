@@ -1,5 +1,5 @@
 import {atom} from 'recoil';
-import {LicensePoolData, UserInformation} from '../Interfaces';
+import {UserInformation} from '../Interfaces';
 
 
 export const orgAtom = atom<string>({

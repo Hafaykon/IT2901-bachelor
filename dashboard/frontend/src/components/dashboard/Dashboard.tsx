@@ -41,7 +41,9 @@ function Dashboard() {
         <div className={'body'}>
           <Grid container id="header">
             <Stack spacing={2}>
-              <ActiveLastBreadcrumb />
+              <Grid item sx={{ marginLeft: -21, marginTop: -5 }}>
+                <ActiveLastBreadcrumb />
+              </Grid>
               <Grid container>
                 <Stack direction="row">
                   <Typography id="org_name">{org}</Typography>
@@ -85,7 +87,7 @@ function Dashboard() {
                 height={425}
               />
               <Grid item sx={{ ml: 8, mt: 7 }}>
-                <Stack direction={'column'} spacing={8}>
+                <Stack direction={'column'} spacing={4.5}>
                   <SavingsBox />
                   <LeaderboardBox />
                 </Stack>

@@ -145,6 +145,6 @@ AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']
 
 SIMPLE_JWT = {
     'USER_ID_FIELD': 'primary_user_email',
-    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(minutes=10),
-    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(minutes=10),
+    "ACCESS_TOKEN_LIFETIME": datetime.timedelta(hours=1),
+    "REFRESH_TOKEN_LIFETIME": datetime.timedelta(hours=1),
 }
