@@ -30,7 +30,7 @@ export const SidebarData = [
         cName: 'nav-text'
     },
     {
-        title: 'FAQ',
+        title: 'Ofte stilte spørsmål',
         path: '/FAQ',
 
         cName: 'nav-text'

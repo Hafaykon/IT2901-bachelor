@@ -25,7 +25,7 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
     const setRefresh = useSetRecoilState(refreshTableAtom);
     const [open, setOpen] = useState(false);
     const [bought, setBought] = useState(false);
-    const [visible, setVisible] = useState(true);
+    const [visible] = useState(true);
     const [unusedLicenses, setUnusedLicenses] = useState(0);
 
     const fetchData = async () => {
@@ -53,8 +53,8 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
         const data = await action();
 
         if (data) {
-            const message = isUnitHead ? 'Lisens frigjort!' : 'Forespørsel sendt sendt til lisensansvarlig!';
-            setBought(true);
+/*             const message = isUnitHead ? 'Lisens frigjort!' : 'Forespørsel sendt sendt til lisensansvarlig!';
+ */            setBought(true);
         }
     };
 
