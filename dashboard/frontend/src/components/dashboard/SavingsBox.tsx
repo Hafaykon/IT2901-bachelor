@@ -1,11 +1,10 @@
-import './Dashboard.css';
+import './SavingsBox.css';
 import React, {useEffect, useState} from 'react';
-import {Card, CardContent, Stack, Typography} from '@mui/material';
+import {Card, CardContent, Stack, Tooltip, Typography} from '@mui/material';
 import CardOverflow from '@mui/joy/CardOverflow';
 import {orgAtom} from '../../globalVariables/variables';
 import {useRecoilValue} from 'recoil';
 import {fetchPotentialSavings} from '../../api/calls';
-
 
 export function SavingsBox() {
     const [potentialSavings, setpotentialSavings] = useState<number | undefined>(undefined);
@@ -30,21 +29,24 @@ export function SavingsBox() {
         }, [organization]);
 
     return (
-        <Card sx={{width: 300, height: 140, borderRadius: 5}} data-testid='savingsBox'>
-                <CardOverflow>
-                    <CardContent>
-                        <Stack direction={'row'}>
-                            <Typography id="cardTitle">
-                                Potensiell sparing
+        <Tooltip title={<h2 style={{fontSize: 15, fontWeight: 'lighter'}}>
+                Potensiell sparing viser hvor mye enheten kan spare ved å frigi alle ledige og ubrukte lisenser.
+            </h2>} followCursor arrow placement='top'>
+            <Card sx={{width: 300, height: 140, borderRadius: 5, backgroundColor: '#002d53'}} data-testid='savingsBox'>
+                    <CardOverflow>
+                        <CardContent>
+                            <Stack direction={'row'}>
+                                <Typography id="title">
+                                    Potensiell sparing
+                                </Typography>
+                                {/*  <SavingsIcon fontSize='large' sx={{position: 'absolute', top:20, right:15, color:'pink'}}></SavingsIcon> */}
+                            </Stack>
+                            <Typography id="numbers">
+                                {potentialSavings?.toLocaleString('nb-NO', {useGrouping: true})} kr
                             </Typography>
-                            {/*  <SavingsIcon fontSize='large' sx={{position: 'absolute', top:20, right:15, color:'pink'}}></SavingsIcon> */}
-                        </Stack>
-                        <Typography id="numbersBoxes">
-                            {potentialSavings?.toLocaleString('nb-NO', {useGrouping: true})} kr
-                        </Typography>
-                    </CardContent>
-                </CardOverflow>
-        </Card>
-
+                        </CardContent>
+                    </CardOverflow>
+            </Card>
+        </Tooltip>
     )
 }
