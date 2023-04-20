@@ -24,10 +24,10 @@ function Info({ name, avatarUrl }: IUser) {
       />
       <div style={{ flex: 1, marginLeft: '40px' }}>
         <Typography variant="h6" sx={{ marginBottom: '20px' }}>
-          Name: {name}
+          Navn: {name}
         </Typography>
         <Typography variant="h6" sx={{ marginBottom: '20px' }}>
-          Email: emma.blix@eksempel.com
+          Epost: ola.nordmann@eksempel.com
         </Typography>
         <Typography variant="h6" sx={{ marginBottom: '20px' }}>
           Telefon: 123 45 678
