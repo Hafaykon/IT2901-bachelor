@@ -7,6 +7,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Grid } from '@mui/joy';
+import {fetchInfoBoxLicense} from "../../api/calls";
+import {userInfo} from "os";
 
 
 interface IRow {
@@ -34,6 +36,7 @@ const rows: IRow[] = [
   createData('License 2', 8, 'Inactive'),
   createData('License 3', 9, 'Pending'),
 ];
+
 
 function MyPageTable() {
   return (

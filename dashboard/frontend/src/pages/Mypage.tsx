@@ -11,13 +11,14 @@ import { useRecoilValue } from 'recoil';
 import { userAtom } from '../globalVariables/variables';
 import PoolRequestUserList from '../components/dashboard/PoolRequestUserList';
 import { Count, OrgRequest } from '../Interfaces';
-import { fetchInfoBoxData } from '../api/calls';
+import {fetchInfoBoxData, fetchInfoBoxLicense, fetchLicensesAssociatedWithUser} from '../api/calls';
 import DonutChart from '../components/dashboard/DonutChart';
 import PoolRequestList from '../components/dashboard/PoolRequestList';
 import MuiLoadingSpinner from '../components/spinner/MuiLoadingSpinner';
 import MyPageTable from '../components/mypage/MyPageTable';
 import Info from '../components/mypage/Info';
 import { IUser } from '../components/mypage/types';
+import {UserInformation} from "../Interfaces";
 import './MyPage.css';
 
 interface RequestObject {
@@ -26,21 +27,40 @@ interface RequestObject {
   history: OrgRequest[];
 }
 
+
 function MyPage() {
+  const userInfo = useRecoilValue(userAtom);
+  const [showHistory, setShowHistory] = useState(false);
+  const [licenseData, setLicenseData] = useState<string[] | undefined>([]);
+  const [boxData, setBoxData] = useState<Count[]>([]);
+  const username = userInfo.primary_user_full_name
+
+
   const accessToken = localStorage.getItem('access');
   const [poolRequests, setPoolRequests] = useState<RequestObject>({
     own_requests: [],
     org_requests: [],
     history: []
   });
-  const userInfo = useRecoilValue(userAtom);
-  const [showHistory, setShowHistory] = useState(false);
-  const [boxData, setBoxData] = useState<Count[]>([]);
 
   const user: IUser = {
     name: 'Emma Blix',
     avatarUrl: 'https://example.com/avatar.jpg'
   };
+  useEffect(() => {
+   const fetchData = async () => {
+    if (username) {
+        try {
+            const data: string[] | undefined = await fetchLicensesAssociatedWithUser(username as string);
+            setLicenseData(data);
+            console.log(data);
+        } catch (error) {
+            console.error('Error fetching license data:', error);
+        }
+    }
+  };
+    fetchData();
+  }, [username]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -147,7 +167,7 @@ function MyPage() {
               </Grid>
               <Grid item xs={12}>
                 <div className="centered">
-                  <Info name={user.name} avatarUrl={user.avatarUrl} />
+                  <Info name={userInfo.primary_user_full_name} avatarUrl={user.avatarUrl} />
                 </div>
               </Grid>
               {!userInfo.is_unit_head && (
