@@ -52,7 +52,7 @@ class PoolRequestSerializer(serializers.ModelSerializer):
         if PoolRequestSerializer.Meta.model.objects.filter(requested_by=data['requested_by'],
                                                            application_name=data['application_name'],
                                                            request=data['request'], completed=False).exists():
-            raise serializers.ValidationError("You have already requested this license")
+            raise serializers.ValidationError("Du har allerede en aktiv forespørsel for denne lisensen.")
 
         return data
 

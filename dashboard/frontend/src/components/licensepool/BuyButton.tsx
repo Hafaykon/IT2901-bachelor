@@ -14,11 +14,11 @@ import {refreshTableAtom, userAtom} from "../../globalVariables/variables";
 import {checkIfOrgHasSoftware} from '../../api/calls';
 
 type ReserveButtonProps = {
-    id: number;
+    spc_id: number;
     application_name: string;
 };
 
-const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
+const BuyButton: React.FC<ReserveButtonProps> = ({spc_id, application_name}) => {
     const accessToken = localStorage.getItem('access');
     const userInfo = useRecoilValue(userAtom);
     const isUnitHead = userInfo.is_unit_head;
@@ -27,6 +27,7 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
     const [bought, setBought] = useState(false);
     const [visible] = useState(true);
     const [unusedLicenses, setUnusedLicenses] = useState(0);
+    const [error, setError] = useState('');
 
     const fetchData = async () => {
         if (application_name) {
@@ -37,8 +38,25 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
         }
     };
 
+    const checkIfUserHasRequested = async () => {
+        const response = await fetch(`http://127.0.0.1:8000/api/requests/check?spc_id=${spc_id}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            }
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            setError(data.error);
+        }
+    };
+
+
     const handleClickOpen = async () => {
         await fetchData();
+        await checkIfUserHasRequested();
         setOpen(true);
     };
 
@@ -51,10 +69,8 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
     const handleClick = async () => {
         const action = isUnitHead ? releaseLicense : requestReleaseLicense;
         const data = await action();
-
         if (data) {
-/*             const message = isUnitHead ? 'Lisens frigjort!' : 'Forespørsel sendt sendt til lisensansvarlig!';
- */            setBought(true);
+            setBought(true);
         }
     };
 
@@ -71,7 +87,7 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
                 'application_name': application_name,
                 'request': 'remove',
                 'requested_by': userInfo.primary_user_email,
-                'spc_id': id,
+                'spc_id': spc_id,
             }),
         });
         const data = await response.json();
@@ -91,7 +107,7 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
                 'Authorization': `Bearer ${accessToken}`,
             },
             body: JSON.stringify({
-                'spc_id': id,
+                'spc_id': spc_id,
             }),
         });
         const data = await response.json();
@@ -114,67 +130,88 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
                     aria-labelledby="alert-dialog-title"
                     aria-describedby="alert-dialog-description"
                 >
-                    <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+                    <div style={{display: "flex", justifyContent: "flex-end"}}>
                         <IconButton
                             onClick={handleClose}
-                            sx={{display: 'flex', justifyContent: 'flex-end', padding: '10px', width: 'auto'}}
+                            sx={{display: "flex", justifyContent: "flex-end", padding: "10px", width: "auto"}}
                         >
                             <CloseIcon/>
                         </IconButton>
                     </div>
-                    <DialogTitle
-                        id="alert-dialog-title"
-                        sx={{textAlign: "center", padding: '25px'}}
-                    >
-                        {unusedLicenses > 0 ? `Du har ${unusedLicenses} uåpnede/ledige lisens(er) av ${application_name} fra før.` : `Du har ingen uåpnede lisens(er) av ${application_name}.`}
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText
-                            id="alert-dialog-description"
-                            style={{textAlign: 'center', padding: '5px'}}
-
-                        >
-                            {unusedLicenses > 0 ? (
-                                <>
-                                    Du kan finne de{' '}
-                                    <NavLink to={`/Totale Lisenser?searchTerm=${application_name}`}>
-                                        her
-                                    </NavLink>
-                                    <br/>
-                                    Benytt deg av de før du du går til innkjøp fra andre enheter. Å
-                                    hindre unødvendig innkjøp av lisenser sparer miljøet!
-                                </>
-                            ) : (
-                                <>
-                                    Vurder nøye om du trenger en ny lisens før du kjøper.
-                                    <br/>
-                                    Å unngå unødvendige innkjøp av lisenser bidrar til å spare miljøet og redusere
-                                    kostnader.
-                                </>
-                            )}
-                        </DialogContentText>
-                    </DialogContent>
-                    <div style={{display: 'flex', justifyContent: 'center'}}>
-                        <DialogActions sx={{paddingBottom: '20px'}}>
-                            {visible && (
-                                <Button
-                                    variant="contained"
-                                    onClick={handleClick}
-                                    disabled={bought}
-                                    sx={{
-                                        padding: '10px',
-                                        backgroundColor: bought ? '#ccc' : '#80ADD3',
-                                        fontFamily: 'Source Sans 3, sans-serif',
-                                        '&:hover': {backgroundColor: bought ? '#ccc' : '#709CC2'},
-                                    }}
+                    {error ? (
+                        <DialogContent>
+                            <DialogContentText id="alert-dialog-description"
+                                               style={{textAlign: "center", padding: "5px"}}>
+                                <DialogTitle variant="h6" component="div" sx={{textAlign: "center"}}>
+                                    {error}
+                                </DialogTitle>
+                            </DialogContentText>
+                        </DialogContent>
+                    ) : (
+                        <>
+                            <DialogTitle
+                                id="alert-dialog-title"
+                                sx={{textAlign: "center", padding: "25px"}}
+                            >
+                                {unusedLicenses > 0 ? `Du har ${unusedLicenses} uåpnede/ledige lisens(er) av ${application_name} fra før.` : `Du har ingen uåpnede lisens(er) av ${application_name}.`}
+                            </DialogTitle>
+                            <DialogContent>
+                                <DialogContentText
+                                    id="alert-dialog-description"
+                                    style={{textAlign: "center", padding: "5px"}}
                                 >
-                                    Kjøp lisens
-                                </Button>
+                                    {unusedLicenses > 0 ? (
+                                        <>
+                                            Du kan finne de{" "}
+                                            <NavLink to={`/Totale Lisenser?searchTerm=${application_name}`}>
+                                                her
+                                            </NavLink>
+                                            <br/>
+                                            Benytt deg av de før du du går til innkjøp fra andre enheter. Å
+                                            hindre unødvendig innkjøp av lisenser sparer miljøet!
+                                        </>
+                                    ) : (
+                                        <>
+                                            Vurder nøye om du trenger en ny lisens før du kjøper.
+                                            <br/>
+                                            Å unngå unødvendige innkjøp av lisenser bidrar til å spare miljøet og
+                                            redusere
+                                            kostnader.
+                                        </>
+                                    )}
+                                </DialogContentText>
+                            </DialogContent>
+                            <div style={{display: "flex", justifyContent: "center"}}>
+                                <DialogActions sx={{paddingBottom: "20px"}}>
+                                    {visible && (
+                                        <Button
+                                            variant="contained"
+                                            onClick={handleClick}
+                                            disabled={bought}
+                                            sx={{
+                                                padding: "10px",
+                                                backgroundColor: bought ? "#ccc" : "#80ADD3",
+                                                fontFamily: "Source Sans 3, sans-serif",
+                                                "&:hover": {backgroundColor: bought ? "#ccc" : "#709CC2"},
+                                            }}
+                                        >
+                                            Kjøp lisens
+                                        </Button>
+                                    )}
+                                </DialogActions>
+                            </div>
+                            {bought && (
+                                isUnitHead ? (
+                                    <h2 style={{display: "flex", justifyContent: "center", color: "#3A5E7A"}}>
+                                        Lisens kjøpt!
+                                    </h2>
+                                ) : (
+                                    <h2 style={{display: "flex", justifyContent: "center", color: "#3A5E7A"}}>
+                                        Forespørsel sendt til lisens ansvarlig!
+                                    </h2>
+                                )
                             )}
-                        </DialogActions>
-                    </div>
-                    {bought && (
-                        <h2 style={{display: 'flex', justifyContent: 'center', color: '#3A5E7A'}}>Lisens kjøpt!</h2>
+                        </>
                     )}
                 </Dialog>
             </div>

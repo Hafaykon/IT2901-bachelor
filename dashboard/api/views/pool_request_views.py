@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.db import IntegrityError
 from rest_framework import generics, status, permissions
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from ..models import LicensePool, PoolRequest, SoftwarePerComputer
@@ -74,6 +75,17 @@ class UpdatePoolRequest(generics.RetrieveUpdateAPIView):
 class CreatePoolRequest(generics.CreateAPIView):
     queryset = PoolRequest.objects.all()
     serializer_class = PoolRequestSerializer
+
+
+@api_view(['GET'])
+def get_pool_request(request):
+    spc_id = request.GET.get('spc_id')
+    user = request.user
+    # Check if the user already has a request for this license
+    if PoolRequest.objects.filter(spc_id=spc_id, requested_by=user.primary_user_email, completed=False).exists():
+        return Response({'error': 'Du har allerede en aktiv forespørsel for denne lisensen.'},
+                        status=status.HTTP_400_BAD_REQUEST)
+    return Response({}, status=status.HTTP_200_OK)
 
 
 class GetPoolRequests(generics.ListCreateAPIView):
