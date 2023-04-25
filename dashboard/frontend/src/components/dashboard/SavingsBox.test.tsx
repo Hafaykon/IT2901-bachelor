@@ -2,18 +2,18 @@ import {cleanup, fireEvent, render, screen} from '@testing-library/react';
 import {SavingsBox} from './SavingsBox';
 import '@testing-library/jest-dom/extend-expect';
 import {MemoryRouter} from 'react-router-dom';
-import { RecoilRoot } from 'recoil';
+import {RecoilRoot} from 'recoil';
 
 
 describe('Testing render, DonutChart', () => {
 
     beforeEach(() => {
         render(
-        <MemoryRouter>
-            <RecoilRoot>
-                <SavingsBox/>
-            </RecoilRoot>
-        </MemoryRouter>);
+            <MemoryRouter>
+                <RecoilRoot>
+                    <SavingsBox/>
+                </RecoilRoot>
+            </MemoryRouter>);
     });
 
     afterEach(() => {

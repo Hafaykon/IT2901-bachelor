@@ -59,6 +59,7 @@ class SoftwarePerComputer(models.Model):
     primary_user_email = models.EmailField(verbose_name="Primary User Email", null=True, blank=True)
     price = models.FloatField(verbose_name="Price", null=True, blank=True)
 
+
 # Model for the License Pool
 class LicensePool(models.Model):
     objects = models.Manager()  # default manager
@@ -70,6 +71,7 @@ class LicensePool(models.Model):
     family_edition = models.CharField(max_length=100, null=True, blank=True)
     price = models.FloatField(verbose_name="Price", null=True, blank=True)
     spc_id = models.IntegerField(unique=True)
+
 
 # Model for PoolTable requests
 # Currently not used

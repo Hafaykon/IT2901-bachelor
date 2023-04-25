@@ -6,6 +6,7 @@ import {LicensePoolData} from "../../../Interfaces";
 import userEvent from "@testing-library/user-event";
 import handleSorting from '../LicensePool';
 import {RecoilRoot} from "recoil";
+import renderer from "react-test-renderer";
 
 const mockData: LicensePoolData[] = [
     {
@@ -28,8 +29,10 @@ const mockData: LicensePoolData[] = [
 ];
 
 describe('The pool table', () => {
+    const handleSortingMock = jest.fn();
+
     beforeEach(() => {
-        render(<RecoilRoot><PoolTable data={mockData} handleSorting={handleSorting}/></RecoilRoot>);
+        render(<RecoilRoot><PoolTable data={mockData} handleSorting={handleSortingMock}/></RecoilRoot>);
     })
     afterEach(() => {
         cleanup()
@@ -39,6 +42,13 @@ describe('The pool table', () => {
     it('renders without crashing', async () => {
         expect(await screen.findByText('Lisensnavn▼')).toBeInTheDocument();
         expect(await screen.findByText('IT-tjenesten')).toBeInTheDocument();
+    })
+
+    it('matches snapshot', async () => {
+        const testRenderer = renderer.create(
+            <RecoilRoot><PoolTable data={mockData} handleSorting={handleSortingMock}/></RecoilRoot>
+        );
+        expect(testRenderer.toJSON()).toMatchSnapshot();
     })
 
     it('can expand and display expected details', async () => {
@@ -52,9 +62,6 @@ describe('The pool table', () => {
     })
 
     it('calls handleSorting when column header is clicked', async () => {
-        const handleSortingMock = jest.fn();
-        render(<RecoilRoot><PoolTable data={mockData} handleSorting={handleSortingMock}/></RecoilRoot>);
-
         const columnHeaders = await screen.findAllByText('Lisensnavn▼');
         const columnHeader = columnHeaders[0]
         userEvent.click(columnHeader);

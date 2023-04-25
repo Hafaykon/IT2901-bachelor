@@ -1,12 +1,11 @@
 import datetime
 from urllib.parse import urlencode
 
+from api.models import SoftwarePerComputer, LicensePool, CustomUser
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
-
-from api.models import SoftwarePerComputer, LicensePool, CustomUser
 
 
 # Create your tests here.
@@ -440,4 +439,3 @@ class TestUser(TestCase):
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-

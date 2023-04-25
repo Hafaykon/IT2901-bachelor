@@ -49,7 +49,6 @@ const ReleaseButton: React.FC<ReserveButtonProps> = ({spc_id, primary_user_email
         });
         const data = await response.json();
         if (response.ok) {
-            console.log(data);
             return data;
         } else {
             alert(data.non_field_errors[0])

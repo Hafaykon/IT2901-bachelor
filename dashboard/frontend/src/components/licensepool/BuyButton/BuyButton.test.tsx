@@ -4,6 +4,8 @@ import {RecoilRoot} from 'recoil';
 import {cleanup, fireEvent, render, screen, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import BuyButton from './BuyButton';
+import 'isomorphic-fetch';
+import renderer from 'react-test-renderer';
 
 describe('BuyButton component user-based', () => {
     beforeEach(() => {
@@ -23,6 +25,15 @@ describe('BuyButton component user-based', () => {
         const buyButton = screen.getByLabelText('add to shopping cart');
         expect(buyButton).toBeInTheDocument();
     });
+
+    it('matches snapshot', async () => {
+        const testRenderer = renderer.create(
+            <RecoilRoot>
+                <BuyButton spc_id={1} application_name="TestApp"/>
+            </RecoilRoot>
+        );
+        expect(testRenderer.toJSON()).toMatchSnapshot();
+    })
 
     it('opens dialog when buy button is clicked', async () => {
         const buyButton = screen.getByLabelText('add to shopping cart');

@@ -95,10 +95,6 @@ interface Props {
 export default function PoolTable({data, handleSorting}: Props) {
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
-    console.log(software);
-
-
-// Rest of the component code
 
 
     useEffect(() => {

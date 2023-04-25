@@ -4,6 +4,8 @@ import {cleanup, fireEvent, render, screen, waitFor} from '@testing-library/reac
 import ReleaseButton from './ReleaseButton';
 import * as recoil from "recoil";
 import {RecoilRoot} from "recoil";
+import 'isomorphic-fetch';
+import renderer from "react-test-renderer";
 
 const mockProps = {
     "id": 1,
@@ -33,6 +35,15 @@ describe('The button for regular users', () => {
 
     it('renders without crashing', async () => {
         expect(screen.getByText('Forespør')).toBeInTheDocument();
+    })
+
+    it('matches snapshot', async () => {
+        const testRenderer = renderer.create(
+            <RecoilRoot> <ReleaseButton spc_id={mockProps.id} primary_user_email={mockProps.full_name}
+                                        application_name={mockProps.application_name}
+                                        organization={mockProps.organization}/></RecoilRoot>
+        );
+        expect(testRenderer.toJSON()).toMatchSnapshot();
     })
 
     it('can be clicked', async () => {
