@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from ..views import *
+from api.views import GetLicensePool, UpdatePoolObject, CreatePoolObject, BuyLicense
 
 urlpatterns = [
     path('get/', GetLicensePool.as_view(), name='licensepool'),

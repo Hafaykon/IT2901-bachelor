@@ -5,9 +5,9 @@ from rest_framework import generics, status, permissions
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from ..models import LicensePool, PoolRequest, SoftwarePerComputer
-from ..permissions import IsUnitHead
-from ..serializers import PoolRequestSerializer
+from api.models import LicensePool, PoolRequest, SoftwarePerComputer
+from api.permissions import IsUnitHead
+from api.serializers import PoolRequestSerializer
 
 
 class UpdatePoolRequest(generics.RetrieveUpdateAPIView):

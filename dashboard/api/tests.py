@@ -6,7 +6,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase, APIClient
 
-from .models import SoftwarePerComputer, LicensePool, CustomUser
+from api.models import SoftwarePerComputer, LicensePool, CustomUser
 
 
 # Create your tests here.

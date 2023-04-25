@@ -1,6 +1,6 @@
 from django.urls import path, include
 
-from ..views import *
+from api.views import UpdatePoolRequest, GetPoolRequests, CreatePoolRequest, get_pool_request
 
 urlpatterns = [
     path('<int:id>', UpdatePoolRequest.as_view(), name='pool_requests'),

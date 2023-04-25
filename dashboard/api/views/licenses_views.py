@@ -20,8 +20,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from ..models import SoftwarePerComputer, LicensePool
-from ..serializers import SoftwarePerComputerSerializer
+from api.models import SoftwarePerComputer, LicensePool
+from api.serializers import SoftwarePerComputerSerializer
 
 removable_software = ["Check Point Full Disk Encryption 7.4", "Microsoft Office 2007 Outlook",
                       "Microsoft Office 2010 Outlook", "Microsoft Office 2007 Standard", "Snow Inventory 3.2",
