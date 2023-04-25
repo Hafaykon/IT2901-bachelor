@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
             },
         ),
         migrations.CreateModel(
-            name='LicensePool',
+            name='PoolTable',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('freed_by_organization', models.CharField(max_length=100)),

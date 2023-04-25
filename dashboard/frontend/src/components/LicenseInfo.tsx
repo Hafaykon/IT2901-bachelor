@@ -4,7 +4,7 @@ import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
 import SoftwareSearchBar from './search/SoftwareSeachBar';
 import {OwnOrgData} from "../Interfaces";
 import {Box, Grid, Stack} from '@mui/material';
-import OwnTable from "./licensepool/OwnTable";
+import OwnTable from "./OwnTable/OwnTable";
 import Pagination from '@mui/material/Pagination';
 import ActiveLastBreadcrumb from './ActivateLastBreadcrumb';
 import MuiLoadingSpinner from './spinner/MuiLoadingSpinner';

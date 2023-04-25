@@ -1,7 +1,7 @@
 import {Box, Grid, Stack} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import SoftwareSearchBar from '../search/SoftwareSeachBar';
-import PoolTable from "./PoolTable";
+import PoolTable from "./PoolTable/PoolTable";
 import {LicensePoolData} from "../../Interfaces";
 import {fetchPoolData, fetchSoftwareUsedInOrg} from "../../api/calls";
 import Checkbox from '@mui/material/Checkbox';

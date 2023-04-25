@@ -71,7 +71,7 @@ class LicensePool(models.Model):
     price = models.FloatField(verbose_name="Price", null=True, blank=True)
     spc_id = models.IntegerField(unique=True)
 
-# Model for LicensePool requests
+# Model for PoolTable requests
 # Currently not used
 class PoolRequest(models.Model):
     objects = models.Manager()  # default manager
