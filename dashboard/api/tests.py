@@ -18,8 +18,8 @@ class TestSoftwarePCViews(APITestCase):
             application_name='myapplication',
             category='mycategory',
             family='myfamily',
-            family_version='1.0',
-            family_edition='Standard',
+            family_version='1',
+            family_edition='100',
             license_required=True,
             manufacturer='mymanufacturer',
             organization='Servere',
@@ -61,15 +61,16 @@ class TestSoftwarePCViews(APITestCase):
             block_listed=False,
             primary_user='myuser',
             primary_user_full_name='My User',
-            primary_user_email='myuser@example.com'
+            primary_user_email='myuser@example.com',
+            price=750.0
         )
         SoftwarePerComputer.objects.create(
             computer_name='mycomputer',
             application_name='Hovedtillitsvalgte',
             category='mycategory',
             family='myfamily',
-            family_version='1.0',
-            family_edition='Standard',
+            family_version='1',
+            family_edition='100',
             license_required=True,
             manufacturer='mymanufacturer',
             organization='Hovedtillitsvalgte',
@@ -111,7 +112,8 @@ class TestSoftwarePCViews(APITestCase):
             block_listed=False,
             primary_user='myuser',
             primary_user_full_name='My User',
-            primary_user_email='myuser@example.com'
+            primary_user_email='myuser@example.com',
+            price=750.0
         )
 
     def test_get_organizations_view(self):
@@ -215,13 +217,13 @@ class TestSoftwarePCViews(APITestCase):
         expected_software = [{'application_name': 'Hovedtillitsvalgte',
                               'data': [{'Active Minutes': 500,
                                         'Computer name': 'mycomputer',
-                                        'Last used': last_used,
+                                        'Last used': '2022-02-01',
                                         'Total Minutes': 1000,
                                         'Username': 'My User'}]},
                              {'application_name': 'myapplication',
                               'data': [{'Active Minutes': 500,
                                         'Computer name': 'mycomputer',
-                                        'Last used': last_used,
+                                        'Last used': '2022-02-01',
                                         'Total Minutes': 1000,
                                         'Username': 'My User'}]}]
 
@@ -251,10 +253,21 @@ class TestSoftwarePCViews(APITestCase):
         url = reverse('licenseinfo') + '?' + encoded_query_params
         response = self.client.get(url)
         response_data = response.data['results']
-        expected_data = [{'application_name': 'myapplication', 'primary_user_full_name': 'My User',
-                          'computer_name': 'mycomputer',
-                          'details': [{'id': 1, 'last_used': datetime.date(2022, 2, 1)}], 'status': 'available'}]
-
+        expected_data = [{
+            "application_name": 'myapplication',
+            "primary_user_full_name": 'My User',
+            "primary_user_email": "myuser@example.com",
+            "organization": 'Servere',
+            "computer_name": 'mycomputer',
+            "details": [
+                {
+                    "id": 1,
+                    "last_used": "2022-02-01",
+                    "status": "Ledig",
+                    "price": 750.0
+                }
+            ]
+        }]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response_data, expected_data)
 
@@ -275,8 +288,8 @@ class TestLicensePool(TestCase):
             application_name='Google Chrome 109',
             category='mycategory',
             family='myfamily',
-            family_version='1.0',
-            family_edition='Standard',
+            family_version='1',
+            family_edition='100',
             license_required=True,
             manufacturer='mymanufacturer',
             organization='IT-tjenesten',
@@ -322,14 +335,12 @@ class TestLicensePool(TestCase):
         )
         self.license_pool = LicensePool.objects.create(
             id=19,
-            primary_user_full_name='My User',
-            primary_user_email='myuser@example.com',
-            computer_name='mycomputer',
             application_name='Google Chrome 109',
             family='myfamily',
-            family_version='1.0',
-            family_edition='Standard',
-            organization='IT-tjenesten'
+            family_version='1',
+            family_edition='100',
+            freed_by_organization='IT-tjenesten',
+            spc_id=999
         )
         self.url = reverse('software_per_computer_detail', kwargs={'id': self.license_pool.id})
 
@@ -354,8 +365,8 @@ class TestLicensePool(TestCase):
                     'organization': 'IT-tjenesten',
                     'application_name': 'Google Chrome 109',
                     'family': 'myfamily',
-                    'family_version': '1.0',
-                    'family_edition': 'Standard',
+                    'family_version': '1',
+                    'family_edition': '100',
                     'computer_name': 'mycomputer'
                 }
             ]
@@ -378,19 +389,16 @@ class TestLicensePool(TestCase):
     def test_create_pool_object(self):
         url = reverse("create_pool_object")
         data = {
-            'primary_user_full_name': 'TEST',
-            'primary_user_email': 'TEST@example.com',
-            'computer_name': 'mycomputer',
             'application_name': 'Google Chrome 109',
-            'family': 'TEST',
-            'family_version': 'TEST',
-            'family_edition': 'TEST',
+            'family': 'myfamily',
+            'family_version': '1',
+            'family_edition': '100',
             'organization': 'IT-tjenesten'
         }
         response = self.client.post(url, data, content_type='application/json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(LicensePool.objects.filter(primary_user_full_name='TEST').count(), 1)
-        self.assertEqual(LicensePool.objects.get(primary_user_full_name='TEST').primary_user_full_name, 'TEST')
+        self.assertEqual(LicensePool.objects.filter(application_name='Google Chrome 109').count(), 1)
+        self.assertEqual(LicensePool.objects.get(organization='IT-tjenesten').primary_user_full_name, 'TEST')
 
 
 class TestUser(TestCase):

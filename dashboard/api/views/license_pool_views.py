@@ -8,7 +8,7 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from api.models import LicensePool
+from api.models import LicensePool, SoftwarePerComputer
 from api.permissions import IsUnitHead
 from api.serializers import PoolSerializer, SoftwarePerComputerSerializer
 
