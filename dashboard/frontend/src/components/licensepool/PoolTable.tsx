@@ -65,7 +65,7 @@ function Row(props: RowProps) {
                                         <TableRow key={detailRow.id}>
                                             <TableCell>{detailRow.date_added ?? 'Ukjent'}</TableCell>
                                             <TableCell align="left">{detailRow.price ?? 500},-</TableCell>
-                                            <TableCell> <BuyButton id={detailRow.spc_id}
+                                            <TableCell> <BuyButton spc_id={detailRow.spc_id}
                                                                    application_name={row.application_name}
                                             />
                                             </TableCell>
