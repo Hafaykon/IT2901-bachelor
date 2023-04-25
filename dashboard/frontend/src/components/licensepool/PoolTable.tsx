@@ -35,8 +35,13 @@ function Row(props: RowProps) {
                         size="small"
                         onClick={() => setOpen(!open)}
                     >
-                        {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+                        {open ? (
+                            <KeyboardArrowUpIcon/>
+                        ) : (
+                            <KeyboardArrowDownIcon data-testid="KeyboardArrowDownIcon"/>
+                        )}
                     </IconButton>
+
                 </TableCell>
                 <TableCell component="th" scope="row" style={{textAlign: "center"}}>
                     {row.application_name}

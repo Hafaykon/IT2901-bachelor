@@ -5,6 +5,7 @@ import OwnTable from "./OwnTable";
 import {OwnOrgData} from "../../Interfaces";
 import userEvent from "@testing-library/user-event";
 import handleSorting from '../LicenseInfo';
+import {RecoilRoot} from "recoil";
 
 const test_date = new Date('2022-12-14');
 const diff = Math.floor((Date.now() - test_date.getTime()) / (1000 * 3600 * 24));
@@ -31,7 +32,8 @@ const mockData: OwnOrgData[] = [
 
 describe('The own table', () => {
     beforeEach(() => {
-        render(<OwnTable data={mockData} handleSorting={handleSorting}/>);
+        render(<RecoilRoot><OwnTable data={mockData} handleSorting={handleSorting}/> </RecoilRoot>);
+
     })
     afterEach(() => {
         cleanup()
@@ -42,6 +44,7 @@ describe('The own table', () => {
         expect(await screen.findByText('Bruker▼')).toBeInTheDocument();
         expect(await screen.findByText('Løpenummer▼')).toBeInTheDocument();
         expect(await screen.findByText('Status▼')).toBeInTheDocument();
+        expect(await screen.findByText('APSIS Pro [Web]')).toBeInTheDocument();
 
     })
     it('Can expand and display expected details', async () => {
@@ -50,7 +53,7 @@ describe('The own table', () => {
         userEvent.click(input);
         expect(await screen.findByText('Detaljer')).toBeInTheDocument();
         expect(await screen.findByText(last_opened)).toBeInTheDocument();
-        expect(await screen.findByText('Frigjør lisens')).toBeInTheDocument();
+        expect(await screen.findByText('Ingen tillatelse 🛇')).toBeInTheDocument();
 
     })
 })

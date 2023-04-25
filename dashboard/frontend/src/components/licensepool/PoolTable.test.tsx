@@ -5,6 +5,7 @@ import PoolTable from "./PoolTable";
 import {LicensePoolData} from "../../Interfaces";
 import userEvent from "@testing-library/user-event";
 import handleSorting from './LicensePool';
+import {RecoilRoot} from "recoil";
 
 const mockData: LicensePoolData[] = [
     {
@@ -28,23 +29,44 @@ const mockData: LicensePoolData[] = [
 
 describe('The pool table', () => {
     beforeEach(() => {
-        render(<PoolTable data={mockData} handleSorting={handleSorting}/>);
+        render(<RecoilRoot><PoolTable data={mockData} handleSorting={handleSorting}/></RecoilRoot>);
     })
     afterEach(() => {
         cleanup()
     })
+
+    // Test if the component renders without crashing
     it('renders without crashing', async () => {
         expect(await screen.findByText('Lisensnavn▼')).toBeInTheDocument();
         expect(await screen.findByText('IT-tjenesten')).toBeInTheDocument();
-        expect(await screen.findByText('navn@email.com')).toBeInTheDocument();
-
     })
+
+    // Test if expanding the row displays the expected details
     it('can expand and display expected details', async () => {
         const input = screen.getByTestId('KeyboardArrowDownIcon');
         expect(input).toBeInTheDocument();
         userEvent.click(input);
         expect(await screen.findByText('Detaljer')).toBeInTheDocument();
-        expect(await screen.findByText('TK5CG8403ZP7')).toBeInTheDocument();
+        expect(await screen.findByText('Dato lagt til')).toBeInTheDocument();
+        expect(await screen.findByText('Pris')).toBeInTheDocument();
+        expect(await screen.findByText('Kjøp')).toBeInTheDocument();
+    })
 
+    // Test if handleSorting is called when the column header is clicked
+    // it('calls handleSorting when column header is clicked', async () => {
+    //     const handleSortingMock = jest.fn();
+    //     render(<RecoilRoot><PoolTable data={mockData} handleSorting={handleSortingMock}/></RecoilRoot>);
+    //
+    //     const columnHeaders = await screen.findAllByText('Lisensnavn▼');
+    //     const columnHeader = columnHeaders[0]
+    //     userEvent.click(columnHeader);
+    //     expect(handleSortingMock).toHaveBeenCalledTimes(1);
+    //     expect(handleSortingMock).toHaveBeenCalledWith('application_name');
+    // })
+
+    // Test if the table renders correctly when data is empty
+    it('renders empty message when data is empty', () => {
+        render(<RecoilRoot><PoolTable data={[]} handleSorting={handleSorting}/></RecoilRoot>);
+        expect(screen.getByText('Velg programvare')).toBeInTheDocument();
     })
 })

@@ -45,7 +45,6 @@ export function Leaderboard() {
   }, []);
 
   const dataArr = Object.values(data);
-  console.log(dataArr);
 
   //const lastRow = data[data.length - 1];
 

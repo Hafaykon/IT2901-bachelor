@@ -2,7 +2,7 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import {cleanup, fireEvent, render, screen} from '@testing-library/react';
 import ReleaseButton from './ReleaseButton';
-
+import {RecoilRoot} from "recoil";
 
 const mockProps = {
     "id": 1,
@@ -15,8 +15,9 @@ const mockProps = {
 const mockFunction = jest.fn();
 
 beforeEach(() => {
-    render(<ReleaseButton spc_id={mockProps.id} primary_user_email={mockProps.full_name}
-                          application_name={mockProps.application_name} organization={mockProps.organization}/>);
+    render(
+        <RecoilRoot> <ReleaseButton spc_id={mockProps.id} primary_user_email={mockProps.full_name}
+                          application_name={mockProps.application_name} organization={mockProps.organization}/></RecoilRoot>);
 })
 
 afterEach(() => {
