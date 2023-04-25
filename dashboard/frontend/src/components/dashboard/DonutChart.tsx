@@ -71,6 +71,7 @@ function DonutChart(infoBoxData: Props) {
     return (
         <Card
             id={"donutChart"}
+            data-testid='donutChart'
             sx={{
                 height: 425,
                 width: 670,

@@ -18,7 +18,7 @@ function FAQ() {
                 </p>
             </Grid>
             <Grid container id="Columns">
-                <p className='SubHeadline'>Lisensdashboard</p>
+                <p className='SubHeadline' data-testid='Dashboard'>Dashboard</p>
                 <Grid container>
                     <Accordion className='accordions'>                            
                     <AccordionSummary 
@@ -93,7 +93,7 @@ function FAQ() {
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
                             id="panel1a-header">
-                                <p>Hvor kan jeg se hvilke lisenser jeg har?</p>
+                                <p>Hvor kan jeg se hvilke lisenser jeg har tilknyttet min bruker?</p>
                         </AccordionSummary>
                         <AccordionDetails>
                             <Typography component="span" id="details">
@@ -103,6 +103,22 @@ function FAQ() {
                                     <li>Gå inn på Min Side for å se oversikt over alle lisenser tilkoblet din bruker.</li>
                                 </ul>
                                 
+                            </Typography>
+                        </AccordionDetails>
+                    </Accordion>
+                    <Accordion className='accordions'>
+                        <AccordionSummary 
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header">
+                                <p>Hvordan regnes potensiell sparing ut?</p>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Typography component="span" id="details">
+                                Potensiell sparing regnes ut ved å summere prisen på alle ubrukte og ledige lisenser enheten eier. <br></br><br></br>
+                                I første omgang er dette tallet noe høyt ved at alle prisene på lisenser eid er satt til en default. I tillegg er det ikke blitt 
+                                sortert ut alle lisenser for programvare som man trenger å ha på sin PC. <br></br><br></br>
+                                I fremtidige utgivelser vil dette tallet bli mer korrekt for hva enheten faktisk kan spare ved å frigi alle sine ubrukte og ledige lisenser. 
                             </Typography>
                         </AccordionDetails>
                     </Accordion>
@@ -228,21 +244,21 @@ function FAQ() {
                 </Grid>
             </Grid>
             <Grid container id="Columns">
-                <p className='SubHeadline'>Ledertavle</p>
+                <p className='SubHeadline'>Ledertavlen</p>
                 <Grid container>
                     <Accordion className='accordions'>
                         <AccordionSummary 
                             expandIcon={<ExpandMoreIcon />}
                             aria-controls="panel1a-content"
-                            id="panel1a-header">
+                            id="panel1a-header"
+                            data-testid='expandIcon'>
                                 <p>Hva er ledertavlen?</p>
                         </AccordionSummary>
                         <AccordionDetails>
-                        <Typography component="span" id="details">
-                            Ledertavlen sammenligner alle enheter i Trondheim Kommune basert på hvor stor andel av alle lisensene eid 
-                            i enheten er aktive. <br></br>
-                            Det betyr at dersom din enhet har en liten prosentandel ubrukte og ledige lisenser, vil enheten ligge høyt oppe på ledertavlen.
-                        </Typography>
+                            <Typography component="span" id="details">
+                                Ledertavlen sammenligner alle enheter i Trondheim Kommune basert på hvor stor andel av alle lisensene eid 
+                                i enheten er aktive.
+                            </Typography>
                         </AccordionDetails>
                     </Accordion>
                     <Accordion className='accordions'>
@@ -254,7 +270,7 @@ function FAQ() {
                         </AccordionSummary>
                         <AccordionDetails>
                         <Typography component="span" id="details">
-                            Du kan øke din enhets plassering i ledertavlen ved å minimere antall ledige og ubrukte lisenser din enhet eier. <br></br>
+                            Du kan øke din enhets plassering i ledertavlen ved å minimere antall ledige og ubrukte lisenser din enhet eier. <br></br><br></br>
                             Den enkleste måten å gjøre dette på er å legge disse lisensene ut til salg i lisensportalen.
                         </Typography>
                         </AccordionDetails>
