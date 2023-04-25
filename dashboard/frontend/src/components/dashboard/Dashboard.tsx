@@ -3,7 +3,7 @@ import './Dashboard.css';
 import {Grid, Stack, Typography} from '@mui/material';
 import InfoBox from './InfoBox';
 import DonutChart from './DonutChart';
-import ActiveLastBreadcrumb from '../ActivateLastBreadcrumb';
+import ActiveLastBreadcrumb from './ActivateLastBreadcrumb';
 import {LeaderboardBox} from './LeaderboardBox';
 import {useRecoilValue} from 'recoil';
 import {orgAtom} from '../../globalVariables/variables';
@@ -22,18 +22,18 @@ function Dashboard() {
 
 
     useEffect(() => {
-            const fetchData = async () => {
-                if (accessToken && org) {
-                    // Fetch box data
-                    const boxDataResponse: Count[] | undefined = await fetchInfoBoxData(org);
-                    if (boxDataResponse !== undefined) {
-                        setBoxData(boxDataResponse);
-                    }
+        const fetchData = async () => {
+            if (accessToken && org) {
+                // Fetch box data
+                const boxDataResponse: Count[] | undefined = await fetchInfoBoxData(org);
+                if (boxDataResponse !== undefined) {
+                    setBoxData(boxDataResponse);
                 }
-            };
+            }
+        };
 
-            fetchData();
-        }, [accessToken, org]);
+        fetchData();
+    }, [accessToken, org]);
 
 
     return (

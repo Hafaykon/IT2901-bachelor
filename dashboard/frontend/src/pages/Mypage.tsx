@@ -1,6 +1,6 @@
 import {Box, Checkbox, FormControlLabel, Grid} from "@mui/material";
 import React, {useEffect, useState} from "react";
-import ActiveLastBreadcrumb from "../components/ActivateLastBreadcrumb";
+import ActiveLastBreadcrumb from "../components/dashboard/ActivateLastBreadcrumb";
 import {useRecoilValue} from "recoil";
 import {userAtom} from "../globalVariables/variables";
 import {Count, OrgRequest} from "../Interfaces";

@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import './App.css';
-import { useRecoilState, useSetRecoilState } from 'recoil';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import {useRecoilState, useSetRecoilState} from 'recoil';
+import {Navigate, Route, Routes} from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/authentication/Login';
 import MyPage from './pages/Mypage';
-import LicenseInfo from './components/LicenseInfo';
+import LicenseInfo from './components/licenseInfo/LicenseInfo';
 import Licenses from './pages/Licenses';
 import FAQ from './pages/FAQ/FAQ';
-import { Leaderboard } from './components/leaderboard/Leaderboard';
-import { isAuthAtom, orgAtom, userAtom } from "./globalVariables/variables";
+import {Leaderboard} from './components/leaderboard/Leaderboard';
+import {isAuthAtom, orgAtom, userAtom} from "./globalVariables/variables";
 import Navbar from './components/navbar/Navbar';
 
 function App() {
@@ -60,18 +60,18 @@ function App() {
 
     return (
         <>
-            <Navbar />
+            <Navbar/>
             {isLoading ? (
                 <div>Loading...</div>
             ) : (
                 <Routes>
-                    <Route path="/Login" element={<Login />} />
-                    <Route path="/" element={isAuthenticated ? <Home /> : <Navigate to="/Login" />} />
-                    <Route path="/minside" element={isAuthenticated ? <MyPage /> : <Navigate to="/Login" />} />
-                    <Route path="/lisensportal" element={isAuthenticated ? <Licenses /> : <Navigate to="/Login" />} />
-                    <Route path="/:title" element={isAuthenticated ? <LicenseInfo /> : <Navigate to="/Login" />} />
-                    <Route path="/FAQ" element={isAuthenticated ? <FAQ /> : <Navigate to="/Login" />} />
-                    <Route path="/leaderboard" element={isAuthenticated ? <Leaderboard /> : <Navigate to="/Login" />} />
+                    <Route path="/Login" element={<Login/>}/>
+                    <Route path="/" element={isAuthenticated ? <Home/> : <Navigate to="/Login"/>}/>
+                    <Route path="/minside" element={isAuthenticated ? <MyPage/> : <Navigate to="/Login"/>}/>
+                    <Route path="/lisensportal" element={isAuthenticated ? <Licenses/> : <Navigate to="/Login"/>}/>
+                    <Route path="/:title" element={isAuthenticated ? <LicenseInfo/> : <Navigate to="/Login"/>}/>
+                    <Route path="/FAQ" element={isAuthenticated ? <FAQ/> : <Navigate to="/Login"/>}/>
+                    <Route path="/leaderboard" element={isAuthenticated ? <Leaderboard/> : <Navigate to="/Login"/>}/>
                 </Routes>
             )}
         </>

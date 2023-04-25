@@ -1,16 +1,15 @@
 from collections import defaultdict
 from datetime import datetime
 
+from api.models import LicensePool
+from api.permissions import IsUnitHead
+from api.serializers import PoolSerializer, SoftwarePerComputerSerializer
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import generics, permissions, status
 from rest_framework.exceptions import NotFound
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-from api.models import LicensePool
-from api.permissions import IsUnitHead
-from api.serializers import PoolSerializer, SoftwarePerComputerSerializer
 
 removable_software = ["Check Point Full Disk Encryption 7.4", "Microsoft Office 2007 Outlook",
                       "Microsoft Office 2010 Outlook", "Microsoft Office 2007 Standard", "Snow Inventory 3.2",
