@@ -8,9 +8,10 @@ type ReserveButtonProps = {
     primary_user_email: string;
     application_name: string;
     organization: string;
+    price: number;
 
 }
-const ReleaseButton: React.FC<ReserveButtonProps> = ({spc_id, primary_user_email, application_name, organization}) => {
+const ReleaseButton: React.FC<ReserveButtonProps> = ({spc_id, primary_user_email, application_name, organization, price}) => {
     const accessToken = localStorage.getItem('access');
     const userInfo = useRecoilValue((userAtom))
     const isUnitHead = userInfo.is_unit_head;
@@ -44,6 +45,7 @@ const ReleaseButton: React.FC<ReserveButtonProps> = ({spc_id, primary_user_email
                 'application_name': application_name,
                 'request': 'add',
                 'requested_by': primary_user_email,
+                'price': price,
                 'spc_id': spc_id,
             }),
         });
@@ -66,6 +68,7 @@ const ReleaseButton: React.FC<ReserveButtonProps> = ({spc_id, primary_user_email
             body: JSON.stringify({
                 'freed_by_organization': organization,
                 'application_name': application_name,
+                'price': price,
                 'spc_id': spc_id,
             }),
         });

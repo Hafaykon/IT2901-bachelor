@@ -92,6 +92,7 @@ function Row(props: RowProps) {
                                                         primary_user_email={row.primary_user_email}
                                                         application_name={row.application_name}
                                                         organization={row.organization}
+                                                        price={detailRow.price}
                                                     />
                                                 ) : <p>Ingen tillatelse &#128711;</p>}
                                             </TableCell>
