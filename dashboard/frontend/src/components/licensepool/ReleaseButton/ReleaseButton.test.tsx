@@ -50,7 +50,7 @@ describe('The button for regular users', () => {
     })
 
     it('can be clicked', async () => {
-        const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {
+        const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {//check
         });
         fireEvent.click(screen.getByText('Forespør'));
         await waitFor(() => expect(alertSpy).toHaveBeenCalledWith('Forespørsel sendt sendt til lisensansvarlig!'));
