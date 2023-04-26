@@ -13,6 +13,7 @@ const mockProps = {
     "primary_user_email": "kekw",
     'organization': 'fisk',
     'application_name': 'APSIS Pro [Web]',
+    'price': 1000
 
 }
 
@@ -25,7 +26,8 @@ describe('The button for regular users', () => {
         render(
             <RecoilRoot> <ReleaseButton spc_id={mockProps.id} primary_user_email={mockProps.full_name}
                                         application_name={mockProps.application_name}
-                                        organization={mockProps.organization}/></RecoilRoot>);
+                                        organization={mockProps.organization}
+                                        price={mockProps.price}/></RecoilRoot>);
     });
     afterEach(() => {
         cleanup();
@@ -41,7 +43,8 @@ describe('The button for regular users', () => {
         const testRenderer = renderer.create(
             <RecoilRoot> <ReleaseButton spc_id={mockProps.id} primary_user_email={mockProps.full_name}
                                         application_name={mockProps.application_name}
-                                        organization={mockProps.organization}/></RecoilRoot>
+                                        organization={mockProps.organization}
+                                        price={mockProps.price}/></RecoilRoot>
         );
         expect(testRenderer.toJSON()).toMatchSnapshot();
     })
@@ -65,7 +68,8 @@ describe('The button for unit heads', () => {
         render(
             <RecoilRoot> <ReleaseButton spc_id={mockProps.id} primary_user_email={mockProps.full_name}
                                         application_name={mockProps.application_name}
-                                        organization={mockProps.organization}/></RecoilRoot>);
+                                        organization={mockProps.organization}
+                                        price={mockProps.price}/></RecoilRoot>);
 
     })
 

@@ -71,7 +71,7 @@ class LicensePool(models.Model):
     family_edition = models.CharField(max_length=100, null=True, blank=True)
     price = models.FloatField(verbose_name="Price", null=True, blank=True)
     spc_id = models.IntegerField(unique=True)
-
+    #price = models.ForeignKey(SoftwarePerComputer.price, on_delete=models.CASCADE, related_name='price', null=True)
 
 # Model for PoolTable requests
 # Currently not used
