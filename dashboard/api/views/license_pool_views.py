@@ -31,7 +31,7 @@ class UpdatePoolObject(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         user = self.request.user
         if user.is_unit_head:
-            return LicensePool.objects.filter(primary_user__organization=user.organization)
+            return LicensePool.objects.filter(freed_by_organization=user.organization)
         else:
             return LicensePool.objects.filter(primary_user=user)
 

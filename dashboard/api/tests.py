@@ -2,13 +2,12 @@ import datetime
 from collections import OrderedDict
 from urllib.parse import urlencode
 
+from api.models import SoftwarePerComputer, LicensePool, CustomUser
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
-from rest_framework.test import APITestCase, APIClient
 from rest_framework.authtoken.models import Token
-
-from api.models import SoftwarePerComputer, LicensePool, CustomUser
+from rest_framework.test import APITestCase, APIClient
 
 
 # Create your tests here.
@@ -343,7 +342,8 @@ class TestLicensePool(TestCase):
             family_version='1',
             family_edition='100',
             freed_by_organization='IT-tjenesten',
-            spc_id=999
+            spc_id=999,
+
         )
         self.url = reverse('software_per_computer_detail', kwargs={'id': self.license_pool.id})
 
@@ -378,7 +378,7 @@ class TestLicensePool(TestCase):
                     ('family_version', '1'),
                     ('family_edition', '100'),
                     ('price', None),
-                    ('spc_id',999)
+                    ('spc_id', 999)
                 ])
             ],
         }
@@ -387,48 +387,39 @@ class TestLicensePool(TestCase):
         self.assertEqual(response_message.status_code, status.HTTP_200_OK)
         self.assertEqual(response_message_data, expected_data)
 
-
     def test_update_license_pool_object(self):
-        url = reverse("software_per_computer_detail", kwargs={"id": self.license_pool.id})
-        data = {
+        updated_data = {
             'id': self.license_pool.id,
-            'application_name': 'Google Chrome 110',
+            'application_name': 'Google Chrome 109',
             'date_added': '2023-01-02',
             'family': 'myfamily',
             'family_version': '1',
             'family_edition': '100',
             'freed_by_organization': 'IT-tjenesten',
-            'spc_id': 999
+            'spc_id': 999,
+            'price': None
         }
-
-        response = self.client.put(url, data, content_type='application/json')
+        response = self.client.put(self.url, updated_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(LicensePool.objects.filter(application_name='Google Chrome 110').count(), 1)
-        self.assertEqual(LicensePool.objects.get(organization=self.organization).primary_user, self.user)
-        '''
-        new_organization = "Servere"
-        data = {
-            'application_name': 'Google Chrome 109',
-            'organization': new_organization
-        }
+        self.assertEqual(response.data, updated_data)
+        self.license_pool.refresh_from_db()
+        self.assertEqual(self.license_pool.application_name, updated_data['application_name'])
+        self.assertEqual(self.license_pool.spc_id, updated_data['spc_id'])
 
-        self.client.force_authenticate(user=self.user)
-        response = self.client.patch(self.url, data, content_type='application/json')
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['organization'], new_organization)
-        '''
+
+
     def test_create_pool_object(self):
         url = reverse("create_pool_object")
         data = {
-                "id": 19,
-                "application_name": "Google Chrome 109",
-                "date_added": "2023-01-01",
-                "family": "myfamily",
-                "family_version": "1",
-                "family_edition": "100",
-                "freed_by_organization": "IT-tjenesten",
-                "spc_id": 1001
-                }
+            "id": 19,
+            "application_name": "Google Chrome 109",
+            "date_added": "2023-01-01",
+            "family": "myfamily",
+            "family_version": "1",
+            "family_edition": "100",
+            "freed_by_organization": "IT-tjenesten",
+            "spc_id": 1001
+        }
 
         self.client.force_authenticate(user=self.user)
         response = self.client.post(url, data, format='json')
@@ -437,7 +428,7 @@ class TestLicensePool(TestCase):
         self.assertEqual(LicensePool.objects.get(spc_id=1001).family, 'myfamily')
 
 
-class TestUser(TestCase):
+class TestAuthentication(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = CustomUser.objects.create_user(primary_user_email='test@example.com',
@@ -484,4 +475,3 @@ class TestUser(TestCase):
         }
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
-
