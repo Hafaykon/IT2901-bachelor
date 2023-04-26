@@ -1,7 +1,7 @@
 from collections import defaultdict
 from datetime import datetime
 
-from api.models import LicensePool
+from api.models import LicensePool, SoftwarePerComputer
 from api.permissions import IsUnitHead
 from api.serializers import PoolSerializer, SoftwarePerComputerSerializer
 from django.core.exceptions import ObjectDoesNotExist

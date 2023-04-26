@@ -42,9 +42,7 @@ export function Leaderboard() {
         fetchData();
     }, []);
 
-    const dataArr = Object.values(data);
 
-    //const lastRow = data[data.length - 1];
 
     return (
         <>
