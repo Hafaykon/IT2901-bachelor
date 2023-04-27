@@ -31,8 +31,9 @@ function MyPageTable({ data }: MyPageTableProps) {
           borderRadius: '10px',
           height: '100%',
           overflow: 'auto',
-          maxHeight: '420px',
+          maxHeight: '425px',
           width: '100%',
+          backgroundColor: '#fff',
         }}
       >
         <DataGrid
