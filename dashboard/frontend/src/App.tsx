@@ -4,7 +4,7 @@ import {useRecoilState, useSetRecoilState} from 'recoil';
 import {Navigate, Route, Routes} from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/authentication/Login';
-import MyPage from './pages/Mypage';
+import MyPage from './pages/Mypage/Mypage';
 import LicenseInfo from './components/licenseInfo/LicenseInfo';
 import Licenses from './pages/Licenses';
 import FAQ from './pages/FAQ/FAQ';

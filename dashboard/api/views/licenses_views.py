@@ -107,47 +107,30 @@ def get_org_software_users(request, format=None):
 
 
 @api_view(['GET'])
-def get_licenses_associated_with_user(request, format=None, username=None):
+def get_licenses_associated_with_user(request):
     """
-    :param request:  A GET request with an 'primary_user_full_name' or 'computer_name' parameter.
     :return: Returns a list of all the licenses currently associated with a user or computer_name.
     """
     try:
-        username = request.GET.get('primary_user_full_name', username)
-        if username is None:
-            raise KeyError("Provide a valid username or computer name")
-
-        software_data = SoftwarePerComputer.objects.filter(primary_user_full_name=username).values_list(
-            "application_name", flat=True).distinct()
-        if not software_data.exists():
-            software_data = SoftwarePerComputer.objects.filter(computer_name=username).values_list(
-                "application_name", flat=True).distinct()
-        software_data = software_data.filter(license_required=True)
-        software_df = pd.DataFrame.from_records(software_data.values())
-        grouped = software_df.groupby("application_name")
+        user = request.user
+        email = user.primary_user_email
+        computer_name = user.computer_name
+        print(email)
+        software_data = SoftwarePerComputer.objects.filter(primary_user_email=email,
+                                                           license_required=True)
 
         result = []
-        for name, group in grouped:
-            if 'active_minutes' in group:
-                data = {
-                    "application_name": name,
-                    "data": []
-                }
-                sorted_group = group.sort_values(by='last_used', ascending=True)
-                for i, row in sorted_group.iterrows():
-                    data["data"].append({
-                        "Username": row["primary_user_full_name"],
-                        "Computer name": row["computer_name"],
-                        "Total Minutes": row["total_minutes"],
-                        "Active Minutes": row["active_minutes"],
-                        "Last used": row["last_used"]
-                    })
-                result.append(data)
-
+        for item in software_data:
+            data = {
+                "application_name": item.application_name,
+                "computer_name": item.computer_name,
+                "status": item.status,
+            }
+            result.append(data)
+        print(len(result))
         return Response(result)
-
-    except KeyError as e:
-        return Response("No user or computer with that name")
+    except Exception as e:
+        return Response(str(e))
 
 
 @api_view(['GET'])

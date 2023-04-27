@@ -1,17 +1,17 @@
 import {Box, Checkbox, Container, FormControlLabel, Grid} from '@mui/material';
 import React, {useEffect, useState} from 'react';
-import ActiveLastBreadcrumb from '../components/ActivateLastBreadcrumb';
+import ActiveLastBreadcrumb from '../../components/dashboard/ActivateLastBreadcrumb';
 import {useRecoilValue} from 'recoil';
-import {userAtom} from '../globalVariables/variables';
-import PoolRequestUserList from '../components/dashboard/PoolRequestUserList';
-import {Count, OrgRequest} from '../Interfaces';
-import {fetchInfoBoxData} from '../api/calls';
-import DonutChart from '../components/dashboard/DonutChart';
-import PoolRequestList from '../components/dashboard/PoolRequestList';
-import MuiLoadingSpinner from '../components/spinner/MuiLoadingSpinner';
-import MyPageTable from '../components/mypage/MyPageTable';
-import Info from '../components/mypage/Info';
-import {IUser} from '../components/mypage/types';
+import {userAtom} from '../../globalVariables/variables';
+import PoolRequestUserList from '../../components/dashboard/PoolRequestUserList';
+import {Count, OrgRequest} from '../../Interfaces'
+import {fetchInfoBoxData} from '../../api/calls';
+import DonutChart from '../../components/dashboard/DonutChart';
+import PoolRequestList from '../../components/dashboard/PoolRequestList';
+import MuiLoadingSpinner from '../../components/spinner/MuiLoadingSpinner';
+import MyPageTable from '../../components/mypage/MyPageTable';
+import Info from '../../components/mypage/Info';
+import {IUser} from '../../components/mypage/types';
 import './MyPage.css';
 
 interface RequestObject {
@@ -218,8 +218,6 @@ function MyPage() {
                                     unused_licenses={boxData[0].unused_licenses ?? 0}
                                     active_licenses={boxData[0].active_licenses ?? 0}
                                     available_licenses={boxData[0].available_licenses ?? 0}
-                                    width={500}
-                                    height={420}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>

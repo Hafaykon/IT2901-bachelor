@@ -2,9 +2,9 @@ import React from 'react';
 import '@testing-library/jest-dom';
 import {fireEvent, render, screen, waitFor} from '@testing-library/react';
 import Mypage from './Mypage';
-import {fetchInfoBoxData} from '../api/calls'; // Import this function if it's not already imported
+import {fetchInfoBoxData} from '../../api/calls';
 import {RecoilRoot} from 'recoil';
-import {userAtom} from "../globalVariables/variables";
+import {userAtom} from "../../globalVariables/variables";
 import {BrowserRouter} from "react-router-dom";
 
 
@@ -30,7 +30,7 @@ const renderWithRecoil = (
     );
 };
 
-jest.mock('../api/calls', () => ({
+jest.mock('../../api/calls', () => ({
     fetchInfoBoxData: jest.fn()
 }));
 
