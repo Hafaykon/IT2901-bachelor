@@ -74,7 +74,7 @@ export function Leaderboard() {
                                 style={{
                                     fontStyle: 'italic',
                                     marginTop: '-10px',
-                                    marginBottom: '50px'
+                                    marginBottom: '40px'
                                 }}>
                                 Ledertavlen gir deg en visuell representasjon av hvordan din
                                 enhet presterer i forhold til andre enheter, basert på andelen
@@ -88,14 +88,15 @@ export function Leaderboard() {
                             <Table
                                 sx={{
                                     minWidth: 650,
+                                    fontFamily: 'Source Sans Pro, sans serif',
                                     fontWeight: '700',
                                     backgroundColor: '#C5DAF2'
                                 }}
                                 aria-label="simple table">
                                 <colgroup>
-                                    <col style={{width: '15%'}}/>
+                                    <col style={{width: '10%'}}/>
                                     <col style={{width: '80%'}}/>
-                                    <col style={{width: '5%'}}/>
+                                    <col style={{width: '10%'}}/>
                                 </colgroup>
                                 <TableHead>
                                     <TableRow
@@ -134,18 +135,24 @@ export function Leaderboard() {
                         <p>Topplisten</p>
                         <TableContainer component={Paper}>
                             <Table
-                                sx={{minWidth: 650, borderRadius: '50px', fontWeight: '700'}}
+                                sx={{
+                                    minWidth: 650, 
+                                    fontFamily: 'Source Sans Pro, sans serif',
+                                    borderRadius: '50px', 
+                                    fontWeight: '700'
+                                }}
                                 aria-label="simple table">
                                 <colgroup>
-                                    <col style={{width: '15%'}}/>
+                                    <col style={{width: '10%'}}/>
                                     <col style={{width: '80%'}}/>
-                                    <col style={{width: '5%'}}/>
+                                    <col style={{width: '10%'}}/>
                                 </colgroup>
                                 <TableHead>
-                                    <TableRow sx={{fontWeight: 'bold'}}>
+                                    <TableRow >
                                         <TableCell></TableCell>
-                                        <TableCell align="left">Enhet</TableCell>
-                                        <TableCell align="center">Prosent</TableCell>
+                                        <TableCell align="left" sx={{fontFamily: 'Source Sans Pro, sans serif', fontSize: 'medium', fontWeight: 900}}>Enhet</TableCell>
+                                        <TableCell align="center" sx={{fontFamily: 'Source Sans Pro, sans serif', fontSize: 'medium', fontWeight: 900}}>Prosent</TableCell>
+                                        
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -155,7 +162,7 @@ export function Leaderboard() {
                                             sx={{
                                                 '&:last-child td, &:last-child th': {border: 0}
                                             }}>
-                                            <TableCell component="th" scope="row">
+                                            <TableCell component="th" scope="row" sx={{fontWeight: 500}}>
                                                 {row.rank}
                                             </TableCell>
                                             <TableCell align="left">{row.organization}</TableCell>
