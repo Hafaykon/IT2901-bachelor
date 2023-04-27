@@ -12,6 +12,7 @@ import {useRecoilValue} from "recoil";
 import {refreshTableAtom, userAtom} from "../../globalVariables/variables";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
+import { Typography } from 'antd';
 
 const LicenseInfo: React.FC = () => {
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
@@ -121,13 +122,14 @@ const LicenseInfo: React.FC = () => {
                                     display: 'flex',
                                     justifyContent: 'center',
                                     alignContent: "center",
-                                    marginTop: "20px"
+                                    marginTop: "20px", 
+                                    fontFamily: 'Source Sans Pro,sans-serif'
                                 }}>
                     <Grid container className='license_pool' marginLeft={"-2%"}>
                         <Grid container justifyContent="center" alignItems="center" className={'license_table'}
                               width={"100%"}>
                             <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
-                                <h2 style={{fontFamily: "Source Sans 3"}}> 
+                                <h2 style={{fontFamily: 'Source Sans Pro,sans-serif'}}> 
                                     {title} i {storedOrganization}
                                 </h2>
                                 <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"}
@@ -145,7 +147,8 @@ const LicenseInfo: React.FC = () => {
                                                 inputProps={{'aria-label': 'controlled'}}
                                             />
                                         }
-                                        label="Vis mine lisenser"
+                                       
+                                        label={<Typography style={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '13pt'}}>Vis mine lisenser</Typography>}
                                     />
                                 </Stack>
                                 <OwnTable data={data} handleSorting={handleSorting}/>

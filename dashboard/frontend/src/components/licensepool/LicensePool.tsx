@@ -1,4 +1,4 @@
-import {Box, Grid, Stack} from '@mui/material';
+import {Box, Grid, Stack, Typography} from '@mui/material';
 import React, {useEffect, useState} from 'react';
 import SoftwareSearchBar from '../search/SoftwareSeachBar';
 import PoolTable from "./PoolTable/PoolTable";
@@ -110,8 +110,7 @@ function LicensePool() {
                                 fontFamily: 'Source Sans Pro, sans-serif',
                                 fontStyle: "italic",
                                 fontWeight: 200,
-                                marginTop: "-2%",
-                                color: '#002d53'
+                                marginTop: "-2%"
                             }}>
                                 -Velg miljøvennlig!
                             </h4>
@@ -127,7 +126,7 @@ function LicensePool() {
                                         inputProps={{'aria-label': 'controlled'}}
                                     />
                                 }
-                                label="Bare egen enhet"
+                                label={<Typography style={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '13pt'}}>Vis bare lisenser fra min enhet</Typography>}
                             />
                             {errorMessage && <h3 style={{color: 'red'}}>{errorMessage}</h3>}
 

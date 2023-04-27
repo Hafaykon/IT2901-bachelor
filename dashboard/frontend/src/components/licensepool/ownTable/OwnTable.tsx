@@ -51,14 +51,14 @@ function Row(props: RowProps) {
                         {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
                     </IconButton>
                 </TableCell>
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>
                     {row.application_name}
                 </TableCell>
-                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.primary_user_full_name}</TableCell>
-                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.computer_name}</TableCell>
+                <TableCell sx={{textAlign: "left", paddingRight: "20px", fontFamily: 'Source Sans Pro,sans-serif'}}>{row.primary_user_full_name}</TableCell>
+                <TableCell sx={{textAlign: "left", paddingRight: "20px", fontFamily: 'Source Sans Pro,sans-serif'}}>{row.computer_name}</TableCell>
                 <TableCell sx={{
                     textAlign: "left",
-                    paddingRight: "20px"
+                    paddingRight: "20px", fontFamily: 'Source Sans Pro,sans-serif'
                 }}>{row.details.length > 0 ? row.details[0].status : 'No status available'}</TableCell>
 
             </TableRow>
@@ -66,13 +66,12 @@ function Row(props: RowProps) {
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{margin: 1, marginLeft: '70px',paddingTop: '10px',  paddingBottom: '10px'}}>
-                            <Typography variant="h6" gutterBottom component="div">
+                            <Typography variant="h6" gutterBottom component="div" sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>
                                 {row.application_name}
                             </Typography>
 
-                            <Table size="small" aria-label="purchases" sx={{[`& .${tableCellClasses.root}`]: {
-      borderBottom: "none"
-    }}}>
+                            <Table size="small" aria-label="purchases" sx={{[`& .${tableCellClasses.root}`]: {borderBottom: "none"
+                                }}}>
                                 <colgroup>
                                     <col style={{width: '35%'}}/>
                                     <col style={{width: '30%'}}/>
@@ -80,9 +79,9 @@ function Row(props: RowProps) {
                                 </colgroup>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell align="left"><b>Sist åpnet</b></TableCell>
-                                        <TableCell align="left"><b>Pris</b></TableCell>
-                                        <TableCell align={"left"}><b>Frigjør</b></TableCell>
+                                        <TableCell align="left" sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Sist åpnet</b></TableCell>
+                                        <TableCell align="left" sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Pris</b></TableCell>
+                                        <TableCell align={"left"} sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Frigjør</b></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -148,13 +147,13 @@ export default function OwnTable({data, handleSorting}: Props) {
                         <TableRow>
                             <TableCell/>
                             <TableCell onClick={() => handleSorting("application_name")}
-                                    style={{cursor: "pointer"}}><b>Lisensnavn&#9660;</b></TableCell>
+                                    style={{cursor: "pointer", fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Lisensnavn&#9660;</b></TableCell>
                             <TableCell onClick={() => handleSorting("primary_user_full_name")}
-                                    align={"left"} style={{cursor: "pointer"}}><b>Bruker&#9660;</b></TableCell>
+                                    align={"left"} style={{cursor: "pointer", fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Bruker &#9660;</b></TableCell>
                             <TableCell onClick={() => handleSorting("computer_name")}
-                                    align={"left"} style={{cursor: "pointer"}}><b>Løpenummer&#9660;</b></TableCell>
+                                    align={"left"} style={{cursor: "pointer", fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Løpenummer &#9660;</b></TableCell>
                             <TableCell onClick={() => handleSorting("status")}
-                                    align={"left"} style={{cursor: "pointer"}}><b>Status&#9660;</b></TableCell>
+                                    align={"left"} style={{cursor: "pointer", fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Status &#9660;</b></TableCell>
                         </TableRow>
                     </TableHead>
                     <TableBody>

@@ -43,33 +43,38 @@ function Row(props: RowProps) {
                     </IconButton>
 
                 </TableCell>
-                <TableCell component="th" scope="row" style={{textAlign: "center"}}>
+                <TableCell component="th" scope="row" style={{textAlign: "left", fontFamily: 'Source Sans Pro,sans-serif'}}>
                     {row.application_name}
                 </TableCell>
-                <TableCell align="center" style={{paddingRight: "20px"}}>{row.freed_by_organization}</TableCell>
+                <TableCell align="left" style={{paddingRight: "20px", fontFamily: 'Source Sans Pro,sans-serif'}}>{row.freed_by_organization}</TableCell>
 
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Box sx={{margin: 1}}>
-                            <Typography variant="h6" gutterBottom component="div">
-                                Detaljer
+                        <Box sx={{margin: 1, marginLeft: '70px', paddingTop: '10px', paddingBottom: '10px'}}>
+                            <Typography variant="h6" gutterBottom component="div" sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>
+                            {row.application_name}
                             </Typography>
 
                             <Table size="small" aria-label="purchases">
+                                <colgroup>
+                                    <col style={{width: '45%'}}/>
+                                    <col style={{width: '35%'}}/>
+                                    <col style={{width: '20%'}}/>
+                                </colgroup>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell align="left"><b>Dato lagt til</b></TableCell>
-                                        <TableCell align="left"><b>Pris</b></TableCell>
-                                        <TableCell align="left"><b>Kjøp</b></TableCell>
+                                        <TableCell align="left" sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Dato lagt til</b></TableCell>
+                                        <TableCell align="left" sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Pris</b></TableCell>
+                                        <TableCell align="left" sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Kjøp</b></TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {row.details.map((detailRow) => (
                                         <TableRow key={detailRow.id}>
-                                            <TableCell>{detailRow.date_added ?? 'Ukjent'}</TableCell>
-                                            <TableCell align="left">{detailRow.price ?? 500},-</TableCell>
+                                            <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt'}}>{detailRow.date_added ?? 'Ukjent'}</TableCell>
+                                            <TableCell align="left" sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt'}}>{detailRow.price ?? 500},-</TableCell>
                                             <TableCell> <BuyButton spc_id={detailRow.spc_id}
                                                                    application_name={row.application_name}
                                             />
@@ -107,24 +112,24 @@ export default function PoolTable({data, handleSorting}: Props) {
     return (
         <>
             {loaded ? (
-                <div style={{width: "95%"}}>
+                <div style={{width: "98%"}}>
                     <TableContainer component={Paper}>
-                        <Table aria-label="collapsible table">
+                        <Table aria-label="collapsible table" >
                             <colgroup>
                                 <col style={{width: '5%'}}/>
-                                <col style={{width: '25%'}}/>
-                                <col style={{width: '35%'}}/>
+                                <col style={{width: '50%'}}/>
+                                <col style={{width: '45%'}}/>
                             </colgroup>
                             <TableHead>
                                 <TableRow>
                                     <TableCell style={{textAlign: "center"}}/>
                                     <TableCell onClick={() => handleSorting("application_name")}
-                                               style={{cursor: "pointer", textAlign: "center"}}>
-                                        <b>Lisensnavn&#9660;</b>
+                                               style={{cursor: "pointer", textAlign: "left", fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}>
+                                        <b>Lisensnavn &#9660;</b>
                                     </TableCell>
                                     <TableCell onClick={() => handleSorting("freed_by_organization")} align={"left"}
-                                               style={{cursor: "pointer", textAlign: "center"}}>
-                                        <b>Frigitt av&#9660;</b>
+                                               style={{cursor: "pointer", textAlign: "left", fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt'}}>
+                                        <b>Frigitt av &#9660;</b>
                                     </TableCell>
                                 </TableRow>
                             </TableHead>
