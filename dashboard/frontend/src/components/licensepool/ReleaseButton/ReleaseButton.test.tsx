@@ -36,7 +36,7 @@ describe('The button for regular users', () => {
 
 
     it('renders without crashing', async () => {
-        expect(screen.getByText('Forespør')).toBeInTheDocument();
+        expect(screen.getByText('Send forespørsel')).toBeInTheDocument();
     })
 
     it('matches snapshot', async () => {
@@ -52,7 +52,7 @@ describe('The button for regular users', () => {
     it('can be clicked', async () => {
         const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {//check
         });
-        fireEvent.click(screen.getByText('Forespør'));
+        fireEvent.click(screen.getByText('Send forespørsel'));
         await waitFor(() => expect(alertSpy).toHaveBeenCalledWith('Forespørsel sendt sendt til lisensansvarlig!'));
         alertSpy.mockRestore();
     })
@@ -78,15 +78,15 @@ describe('The button for unit heads', () => {
         jest.restoreAllMocks();
     })
 
-    it('renders with "Frigjør" text', async () => {
-        expect(screen.getByText('Frigjør')).toBeInTheDocument();
+    it('renders with "Legg i lisensportalen" text', async () => {
+        expect(screen.getByText('Legg i lisensportalen')).toBeInTheDocument();
     })
 
-    it('can be clicked with "Frigjør" text', async () => {
+    it('can be clicked with "Legg i lisensportalen" text', async () => {
         const alertSpy = jest.spyOn(window, 'alert').mockImplementation(() => {
             // do nothing
         });
-        fireEvent.click(screen.getByText('Frigjør'));
+        fireEvent.click(screen.getByText('Legg i lisensportalen'));
         await waitFor(() => expect(alertSpy).toHaveBeenCalledWith('Lisens frigjort!'));
         alertSpy.mockRestore();
     })

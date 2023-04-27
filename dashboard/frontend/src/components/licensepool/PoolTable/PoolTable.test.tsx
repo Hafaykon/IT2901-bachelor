@@ -40,7 +40,7 @@ describe('The pool table', () => {
 
     // Test if the component renders without crashing
     it('renders without crashing', async () => {
-        expect(await screen.findByText('Lisensnavn▼')).toBeInTheDocument();
+        expect(await screen.findByText('Lisensnavn ▼')).toBeInTheDocument();
         expect(await screen.findByText('IT-tjenesten')).toBeInTheDocument();
     })
 
@@ -55,14 +55,13 @@ describe('The pool table', () => {
         const input = screen.getByTestId('KeyboardArrowDownIcon');
         expect(input).toBeInTheDocument();
         userEvent.click(input);
-        expect(await screen.findByText('Detaljer')).toBeInTheDocument();
         expect(await screen.findByText('Dato lagt til')).toBeInTheDocument();
         expect(await screen.findByText('Pris')).toBeInTheDocument();
         expect(await screen.findByText('Kjøp')).toBeInTheDocument();
     })
 
     it('calls handleSorting when column header is clicked', async () => {
-        const columnHeaders = await screen.findAllByText('Lisensnavn▼');
+        const columnHeaders = await screen.findAllByText('Lisensnavn ▼');
         const columnHeader = columnHeaders[0]
         userEvent.click(columnHeader);
         expect(handleSortingMock).toHaveBeenCalledTimes(1);

@@ -52,8 +52,8 @@ describe('The own table', () => {
     it('matches snapshot', async () => {
         const testRenderer = renderer.create(
             <RecoilRoot><OwnTable data={mockData} handleSorting={handleSorting}/> </RecoilRoot>
-        );
-        expect(testRenderer.toJSON()).toMatchSnapshot();
+        ).toJSON();
+        expect(testRenderer).toMatchSnapshot();
 
     })
     it('Can expand and display expected details', async () => {
