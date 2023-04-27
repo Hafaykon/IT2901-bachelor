@@ -185,7 +185,7 @@ function MyPage() {
           <Grid item sx={{ marginLeft: '-10%' }}>
             <ActiveLastBreadcrumb />
           </Grid>
-          <Box sx={{ padding: 2 }}>
+          <Box sx={{ padding: 2 , width: '110%', marginLeft: '-1.5%'}}>
             <Grid container spacing={2} justifyContent="center">
               <Grid item xs={12} sx={{ marginLeft: 8 }}>
                 <h2 style={{ textAlign: 'left' }}>
@@ -204,14 +204,14 @@ function MyPage() {
                 <Grid
                   sx={{
                     paddingTop: 10,
-                    width: '100%'
+                    width: '90%'
                   }}>
-                  <Grid item sx={{ marginLeft: 10 }}>
+                  <Grid item sx={{ marginLeft: '1.5%' }}>
                     <h2 style={{ textAlign: 'left', marginTop: '1rem' }}>
                       Aktive forespørsler (må godkjennes)
                     </h2>
                   </Grid>
-                  <Grid item sx={{ marginLeft: 10, width: '103%'}}>
+                  <Grid item sx={{ marginLeft: '1.5%', width: '104.6%'}}>
                     <PoolRequestUserList
                       userRequests={poolRequests.own_requests}
                       isHistory={false}
@@ -219,20 +219,24 @@ function MyPage() {
                   </Grid>
                 </Grid>
               )}
-              <Grid id="donutChartMyPage" item xs={12} sm={6}>
-                <DonutChart
-                  data-testid="donut-chart"
-                  never_used={boxData[0].never_used ?? 0}
-                  total_licenses={boxData[0].total_licenses ?? 0}
-                  unused_licenses={boxData[0].unused_licenses ?? 0}
-                  active_licenses={boxData[0].active_licenses ?? 0}
-                  available_licenses={boxData[0].available_licenses ?? 0}
-                  width={510}
-                  height={420}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <MyPageTable data-testid="table" data={licenseData} />
+              <Grid container direction={'row'} id="rowGrid">
+                <Grid item id="donutChartMyPage" xs={14} sm={6}>
+                  <DonutChart
+                    data-testid="donut-chart"
+                    never_used={boxData[0].never_used ?? 0}
+                    total_licenses={boxData[0].total_licenses ?? 0}
+                    unused_licenses={boxData[0].unused_licenses ?? 0}
+                    active_licenses={boxData[0].active_licenses ?? 0}
+                    available_licenses={boxData[0].available_licenses ?? 0}
+                    width={530}
+                    height={432}
+                    showInformation={false}
+                    title='Min oversikt'
+                  />
+                </Grid>
+                <Grid item xs={14} sm={6} sx={{marginLeft: '-6%'}}>
+                  <MyPageTable data-testid="table" data={licenseData} />
+                </Grid>
               </Grid>
               <Grid item xs={10.8}>
                 {userInfo.is_unit_head ? (
@@ -240,7 +244,7 @@ function MyPage() {
                     <h2 style={{ textAlign: 'left' }}>
                       Aktive forespørsler (må godkjennes)
                     </h2>
-                    <Grid sx={{ width: '117%' }}>
+                    <Grid sx={{ width: '106.4%' }}>
                       <PoolRequestList
                         poolRequests={poolRequests.org_requests}
                         onApprove={handleApprove}

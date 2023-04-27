@@ -37,7 +37,7 @@ const
                                                        }) => {
         return (
             <TableContainer component={Paper}
-                            sx={{marginTop: 4, maxWidth: '85%'}}>
+                            sx={{marginTop: 4, width: '87%'}}>
                 <Table>
                     <TableHead>
                         <TableRow>
@@ -51,7 +51,7 @@ const
                                 <TableCell><b>Status</b></TableCell>
                             </>)
                             }
-                            {!isOwnRequest && !isHistory ? <TableCell><b>Handling</b></TableCell> : null}
+                            {!isOwnRequest && !isHistory ? <TableCell><b>Handling</b></TableCell> : <TableCell></TableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -93,7 +93,7 @@ const
                                             </Button>
                                         </Stack>
                                     </TableCell>
-                                )} : null
+                                )}
                             </TableRow>
                         ))}
                     </TableBody>

@@ -14,7 +14,7 @@ interface MyPageTableProps {
 
 function MyPageTable({ data }: MyPageTableProps) {
   const columns = [
-    { field: 'application_name', headerName: 'Lisensnavn', flex: 1 },
+    { field: 'application_name', headerName: 'Lisensnavn', flex: 3 },
     { field: 'computer_name', headerName: 'Løpenummer', flex: 1 },
     { field: 'status', headerName: 'Status', flex: 1 },
   ];
@@ -25,13 +25,13 @@ function MyPageTable({ data }: MyPageTableProps) {
         style={{
           padding: '30px',
           marginTop: '20%',
-          maxWidth: '420px',
+          maxWidth: '455px',
           margin: '40px auto',
           boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
           borderRadius: '10px',
           height: '100%',
           overflow: 'auto',
-          maxHeight: '425px',
+          maxHeight: '450px',
           width: '100%',
           backgroundColor: '#fff',
         }}

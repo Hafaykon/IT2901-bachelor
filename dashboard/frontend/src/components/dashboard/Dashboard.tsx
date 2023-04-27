@@ -85,6 +85,8 @@ function Dashboard() {
                 available_licenses={boxData[0].available_licenses}
                 width={670}
                 height={425}
+                showInformation={true}
+                title='Total oversikt'
               />
               <Grid item sx={{ ml: 8, mt: 7 }}>
                 <Stack direction={'column'} spacing={4.38}>

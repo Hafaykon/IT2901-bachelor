@@ -13,8 +13,7 @@ function Info({ name, avatarUrl }: IUser) {
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
-        width: 1000,
-        marginLeft: '0'
+        width: '92.5%'
       }}
     >
       <Avatar

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import Grid from '@mui/material/Grid';
 import MenuIcon from '@mui/icons-material/Menu';
-import trondheimLogo from '../../assets/trondheimLogo.png';
+import logo from '../../assets/TrondheimKommuneLogo.png'
 import './Navbar.css';
 import {NavLink} from 'react-router-dom';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -16,7 +16,7 @@ function Navbar() {
             <Grid id="navBar">
                 <Grid id="logoTrondheim">
                     <NavLink to="/" className="logo">
-                        <img src={trondheimLogo} alt="logo"/>
+                        <img src={logo} alt="logo"/>
                     </NavLink>
                 </Grid>
                 <Grid id="menuIcon">
