@@ -13,8 +13,8 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import {LicensePoolData} from '../../Interfaces';
-import BuyButton from "./BuyButton";
+import {LicensePoolData} from '../../../Interfaces';
+import BuyButton from "../BuyButton/BuyButton";
 
 
 interface RowProps {
@@ -35,8 +35,13 @@ function Row(props: RowProps) {
                         size="small"
                         onClick={() => setOpen(!open)}
                     >
-                        {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+                        {open ? (
+                            <KeyboardArrowUpIcon/>
+                        ) : (
+                            <KeyboardArrowDownIcon data-testid="KeyboardArrowDownIcon"/>
+                        )}
                     </IconButton>
+
                 </TableCell>
                 <TableCell component="th" scope="row" style={{textAlign: "center"}}>
                     {row.application_name}
@@ -65,7 +70,7 @@ function Row(props: RowProps) {
                                         <TableRow key={detailRow.id}>
                                             <TableCell>{detailRow.date_added ?? 'Ukjent'}</TableCell>
                                             <TableCell align="left">{detailRow.price ?? 500},-</TableCell>
-                                            <TableCell> <BuyButton id={detailRow.spc_id}
+                                            <TableCell> <BuyButton spc_id={detailRow.spc_id}
                                                                    application_name={row.application_name}
                                             />
                                             </TableCell>
@@ -90,10 +95,6 @@ interface Props {
 export default function PoolTable({data, handleSorting}: Props) {
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
-    console.log(software);
-
-
-// Rest of the component code
 
 
     useEffect(() => {
