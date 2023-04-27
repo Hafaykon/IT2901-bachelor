@@ -1,7 +1,7 @@
 import React from 'react';
 import '@testing-library/jest-dom'
-import { cleanup, render, screen } from '@testing-library/react';
-import { MemoryRouter} from 'react-router-dom';
+import {cleanup, render, screen} from '@testing-library/react';
+import {MemoryRouter} from 'react-router-dom';
 import FAQ from './FAQ';
 import userEvent from '@testing-library/user-event';
 
@@ -10,22 +10,23 @@ describe('Testing FAQ page', () => {
     beforeEach(() => {
         render(
             <MemoryRouter>
-                <FAQ />
+                <FAQ/>
             </MemoryRouter>
         )
     })
-    
+
     afterEach(() => {
         cleanup()
     })
 
-    it('renders without crashing', async() => {
+    it('renders without crashing', async () => {
         expect(await screen.findByText('Ofte stilte spørsmål')).toBeInTheDocument();
         expect(await screen.getByTestId('Dashboard')).toBeInTheDocument();
         expect(await screen.findByText('Lisensportalen')).toBeInTheDocument();
-        expect(await screen.findByText('Ledertavlen')).toBeInTheDocument();    })
+        expect(await screen.findByText('Ledertavlen')).toBeInTheDocument();
+    })
 
-    it('can expand and display answers',async () => {
+    it('can expand and display answers', async () => {
         const input = screen.getByTestId('expandIcon');
         expect(input).toBeInTheDocument();
         userEvent.click(input);

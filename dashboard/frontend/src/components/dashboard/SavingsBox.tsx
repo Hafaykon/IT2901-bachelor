@@ -26,26 +26,26 @@ export function SavingsBox() {
         };
 
         fetchData();
-        }, [organization]);
+    }, [organization]);
 
     return (
         <Tooltip title={<h2 style={{fontSize: 15, fontWeight: 'lighter'}}>
-                Potensiell sparing viser hvor mye enheten kan spare ved å frigi alle ledige og ubrukte lisenser.
-            </h2>} followCursor arrow placement='top'>
+            Potensiell sparing viser hvor mye enheten kan spare ved å frigi alle ledige og ubrukte lisenser.
+        </h2>} followCursor arrow placement='top'>
             <Card sx={{width: 300, height: 140, borderRadius: 5, backgroundColor: '#002d53'}} data-testid='savingsBox'>
-                    <CardOverflow>
-                        <CardContent>
-                            <Stack direction={'row'}>
-                                <Typography id="title">
-                                    Potensiell sparing
-                                </Typography>
-                                {/*  <SavingsIcon fontSize='large' sx={{position: 'absolute', top:20, right:15, color:'pink'}}></SavingsIcon> */}
-                            </Stack>
-                            <Typography id="numbers">
-                                {potentialSavings?.toLocaleString('nb-NO', {useGrouping: true})} kr
+                <CardOverflow>
+                    <CardContent>
+                        <Stack direction={'row'}>
+                            <Typography id="title">
+                                Potensiell sparing
                             </Typography>
-                        </CardContent>
-                    </CardOverflow>
+                            {/*  <SavingsIcon fontSize='large' sx={{position: 'absolute', top:20, right:15, color:'pink'}}></SavingsIcon> */}
+                        </Stack>
+                        <Typography id="numbers">
+                            {potentialSavings?.toLocaleString('nb-NO', {useGrouping: true})} kr
+                        </Typography>
+                    </CardContent>
+                </CardOverflow>
             </Card>
         </Tooltip>
     )

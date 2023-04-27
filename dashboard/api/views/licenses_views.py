@@ -5,11 +5,12 @@ from datetime import timedelta
 
 import numpy as np
 import pandas as pd
-from django.db.models import Count, Q, FloatField, Subquery, Sum
-from django.db.models.functions import Cast
-from rest_framework import status
+from api.models import SoftwarePerComputer, LicensePool
+from api.serializers import SoftwarePerComputerSerializer
 from dateutil.parser import parse
+from django.db.models import Count, FloatField, Sum
 from django.db.models import Subquery, Q
+from django.db.models.functions import Cast
 from django.utils import timezone
 from rest_framework import generics, permissions
 from rest_framework import status
@@ -19,9 +20,6 @@ from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.authentication import JWTAuthentication
-
-from ..models import SoftwarePerComputer, LicensePool
-from ..serializers import SoftwarePerComputerSerializer
 
 removable_software = ["Check Point Full Disk Encryption 7.4", "Microsoft Office 2007 Outlook",
                       "Microsoft Office 2010 Outlook", "Microsoft Office 2007 Standard", "Snow Inventory 3.2",

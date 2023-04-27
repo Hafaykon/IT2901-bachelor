@@ -216,8 +216,6 @@ export const fetchPotentialSavings = async (org: string) => {
 };*/
 
 
-
-
 export default {
     fetchOrganizations,
     fetchSoftwareRecommendations,
