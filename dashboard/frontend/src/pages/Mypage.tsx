@@ -32,6 +32,7 @@ function MyPage() {
     const [showHistory, setShowHistory] = useState(false);
     const [licenseData, setLicenseData] = useState<Data[]>([]);
     const [boxData, setBoxData] = useState<Count[]>([]);
+    const [isBoxDataFetched, setIsBoxDataFetched] = useState<boolean>(false);
     const username = userInfo.primary_user_full_name
 
 
@@ -80,8 +81,11 @@ function MyPage() {
                 userInfo.primary_user_email
             );
             if (boxDataResponse !== undefined) {
+                console.log(boxDataResponse);
                 setBoxData(boxDataResponse);
+
             }
+            setIsBoxDataFetched(true);
         };
         fetchData();
     }, []);
@@ -91,17 +95,24 @@ function MyPage() {
 
     useEffect(() => {
         const fetchPoolRequests = async () => {
-            const response = await fetch('http://127.0.0.1:8000/api/requests/get/', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`
+            try {
+                const response = await fetch('http://127.0.0.1:8000/api/requests/get/', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`
+                    }
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    setPoolRequests(data);
+                    console.log(data);
                 }
-            });
-            const data = await response.json();
-            if (response.ok) {
-                setPoolRequests(data);
-                console.log(data);
+                else {
+                    console.log(response);
+                }
+            } catch (error) {
+                console.log(error);
             }
         };
         fetchPoolRequests();
@@ -163,7 +174,7 @@ function MyPage() {
 
     return (
         <>
-            {boxData.length > 0 ? (
+            {isBoxDataFetched ? (
                 <Container>
                     <Grid item sx={{marginLeft: '-10%'}}>
                         <ActiveLastBreadcrumb/>
@@ -201,17 +212,18 @@ function MyPage() {
                             )}
                             <Grid id="donutChartMyPage" item xs={12} sm={6}>
                                 <DonutChart
-                                    never_used={boxData[0].never_used}
-                                    total_licenses={boxData[0].total_licenses}
-                                    unused_licenses={boxData[0].unused_licenses}
-                                    active_licenses={boxData[0].active_licenses}
-                                    available_licenses={boxData[0].available_licenses}
+                                    data-testid="donut-chart"
+                                    never_used={boxData[0].never_used ?? 0}
+                                    total_licenses={boxData[0].total_licenses ?? 0}
+                                    unused_licenses={boxData[0].unused_licenses ?? 0}
+                                    active_licenses={boxData[0].active_licenses ?? 0}
+                                    available_licenses={boxData[0].available_licenses ?? 0}
                                     width={500}
                                     height={420}
                                 />
                             </Grid>
                             <Grid item xs={12} sm={6}>
-                                <MyPageTable data={licenseData}/>
+                                <MyPageTable  data-testid="table" data={licenseData}/>
                             </Grid>
                             <Grid item xs={10.8}>
                                 {userInfo.is_unit_head ? (
@@ -280,6 +292,7 @@ function MyPage() {
                                                 <Grid item>
                                                     <Box sx={{width: '104%', marginLeft: '-10%'}}>
                                                         <PoolRequestList
+                                                            data-testid="request-history"
                                                             poolRequests={poolRequests.history}
                                                             onApprove={handleApprove}
                                                             onDisapprove={handleDisapprove}
@@ -297,7 +310,7 @@ function MyPage() {
                     </Box>
                 </Container>
             ) : (
-                <MuiLoadingSpinner/>
+                <MuiLoadingSpinner data-testid="loading-spinner" />
             )}
         </>
     );

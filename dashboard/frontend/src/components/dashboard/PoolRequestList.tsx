@@ -27,76 +27,80 @@ interface PoolRequestListProps {
     onDisapprove: (requestId: number) => void;
 }
 
-const PoolRequestList: React.FC<PoolRequestListProps> = ({
-                                                             poolRequests,
-                                                             isOwnRequest,
-                                                             isHistory = false,
-                                                             onApprove,
-                                                             onDisapprove
-                                                         }) => {
-    return (
-        <TableContainer component={Paper} sx={{marginTop: 4, maxWidth: '80%', marginLeft: 'auto', marginRight: 'auto'}}>
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell><b>Bruker</b></TableCell>
-                        <TableCell><b>Applikasjon </b></TableCell>
-                        <TableCell><b>Forespørsel opprettet</b></TableCell>
-                        <TableCell><b>Forespørsel</b></TableCell>
-                        {isHistory && (<>
-                            <TableCell><b>Prossesert av</b></TableCell>
-                            <TableCell><b>Prossesert dato</b></TableCell>
-                            <TableCell><b>Status</b></TableCell>
-                        </>)
-                        }
-                        {!isOwnRequest && !isHistory && <TableCell><b>Handling</b></TableCell>}
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {poolRequests.map((request) => (
-                        <TableRow key={request.id}>
-                            <TableCell>{request.requested_by}</TableCell>
-                            <TableCell>{request.application_name}</TableCell>
-                            <TableCell>{request.request_date}</TableCell>
-                            <TableCell>{request.request == "add" ? 'Overfør til pool' : 'Kjøp fra pool'}</TableCell>
-                            {isHistory && (
-                                <> <TableCell>{request.reviewed_by}</TableCell>
-                                    <TableCell>{request.reviewed_date}</TableCell>
-                                    <TableCell>{request.approved ? 'Godkjent' : 'Ikke godkjent'}</TableCell>
-                                </>
-
-
-                            )
-
-
+const
+    PoolRequestList: React.FC<PoolRequestListProps> = ({
+                                                           poolRequests,
+                                                           isOwnRequest,
+                                                           isHistory = false,
+                                                           onApprove,
+                                                           onDisapprove
+                                                       }) => {
+        return (
+            <TableContainer component={Paper}
+                            sx={{marginTop: 4, maxWidth: '80%', marginLeft: 'auto', marginRight: 'auto'}}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell><b>Bruker</b></TableCell>
+                            <TableCell><b>Applikasjon </b></TableCell>
+                            <TableCell><b>Forespørsel opprettet</b></TableCell>
+                            <TableCell><b>Forespørsel</b></TableCell>
+                            {isHistory && (<>
+                                <TableCell><b>Prossesert av</b></TableCell>
+                                <TableCell><b>Prossesert dato</b></TableCell>
+                                <TableCell><b>Status</b></TableCell>
+                            </>)
                             }
-                            {!isOwnRequest && !isHistory && (
-                                <TableCell>
-                                    <Stack direction={"row"} spacing={2}>
-                                        <Button
-                                            onClick={() => onApprove(request.id)}
-                                            variant="contained"
-                                            color="success"
-                                        >
-                                            Godkjenn
-                                        </Button>
-                                        <Button
-                                            onClick={() => onDisapprove(request.id)}
-                                            variant="contained"
-                                            color="error"
-                                        >
-                                            Avslå
-                                        </Button>
-                                    </Stack>
-                                </TableCell>
-                            )}
+                            {!isOwnRequest && !isHistory && <TableCell><b>Handling</b></TableCell>}
                         </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
-    );
-};
+                    </TableHead>
+                    <TableBody>
+                        {poolRequests.map((request) => (
+                            <TableRow key={request.id}>
+                                <TableCell>{request.requested_by}</TableCell>
+                                <TableCell>{request.application_name}</TableCell>
+                                <TableCell>{request.request_date}</TableCell>
+                                <TableCell>{request.request == "add" ? 'Overfør til pool' : 'Kjøp fra pool'}</TableCell>
+                                {isHistory && (
+                                    <> <TableCell>{request.reviewed_by}</TableCell>
+                                        <TableCell>{request.reviewed_date}</TableCell>
+                                        <TableCell>{request.approved ? 'Godkjent' : 'Ikke godkjent'}</TableCell>
+                                    </>
+
+
+                                )
+
+
+                                }
+                                {!isOwnRequest && !isHistory && (
+                                    <TableCell>
+                                        <Stack direction={"row"} spacing={2}>
+                                            <Button
+                                                onClick={() => onApprove(request.id)}
+                                                variant="contained"
+                                                color="success"
+                                                data-testid="approve-button"
+                                            >
+                                                Godkjenn
+                                            </Button>
+                                            <Button
+                                                onClick={() => onDisapprove(request.id)}
+                                                variant="contained"
+                                                color="error"
+                                                data-testid="disapprove-button"
+                                            >
+                                                Avslå
+                                            </Button>
+                                        </Stack>
+                                    </TableCell>
+                                )}
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        );
+    };
 
 
 export default PoolRequestList;
