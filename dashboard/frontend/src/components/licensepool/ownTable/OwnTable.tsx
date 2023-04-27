@@ -125,27 +125,32 @@ export default function OwnTable({data, handleSorting}: Props) {
     }, [software]);
 
     return (
-        <> {loaded && <div style={{width: "100%"}}><TableContainer component={Paper}>
-            <Table aria-label="collapsible table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell/>
-                        <TableCell onClick={() => handleSorting("application_name")}
-                                   style={{cursor: "pointer"}}><b>Lisensnavn&#9660;</b></TableCell>
-                        <TableCell onClick={() => handleSorting("primary_user_full_name")}
-                                   align={"left"} style={{cursor: "pointer"}}><b>Bruker&#9660;</b></TableCell>
-                        <TableCell onClick={() => handleSorting("computer_name")}
-                                   align={"left"} style={{cursor: "pointer"}}><b>Løpenummer&#9660;</b></TableCell>
-                        <TableCell onClick={() => handleSorting("status")}
-                                   align={"left"} style={{cursor: "pointer"}}><b>Status&#9660;</b></TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {software.map((user, index) => (
-                        <Row key={index} row={user}/>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer></div>} </>
+        <> 
+        {loaded && 
+        <div style={{width: "100%"}}>
+            <TableContainer component={Paper}>
+                <Table aria-label="collapsible table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell/>
+                            <TableCell onClick={() => handleSorting("application_name")}
+                                    style={{cursor: "pointer"}}><b>Lisensnavn&#9660;</b></TableCell>
+                            <TableCell onClick={() => handleSorting("primary_user_full_name")}
+                                    align={"left"} style={{cursor: "pointer"}}><b>Bruker&#9660;</b></TableCell>
+                            <TableCell onClick={() => handleSorting("computer_name")}
+                                    align={"left"} style={{cursor: "pointer"}}><b>Løpenummer&#9660;</b></TableCell>
+                            <TableCell onClick={() => handleSorting("status")}
+                                    align={"left"} style={{cursor: "pointer"}}><b>Status&#9660;</b></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {software.map((user, index) => (
+                            <Row key={index} row={user}/>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+        </div>} 
+       </>
     );
 }

@@ -123,14 +123,17 @@ const LicenseInfo: React.FC = () => {
                                     alignContent: "center",
                                     marginTop: "20px"
                                 }}>
-                    <Grid container className='license_pool' justifyContent={"center"}>
+                    <Grid container className='license_pool' marginLeft={"-2%"}>
                         <Grid container justifyContent="center" alignItems="center" className={'license_table'}
-                              width={"75%"}>
+                              width={"100%"}>
                             <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
-                                <h2 style={{fontFamily: "Source Sans 3"}}> {title} i {storedOrganization}</h2>
+                                <h2 style={{fontFamily: "Source Sans 3"}}> 
+                                    {title} i {storedOrganization}
+                                </h2>
                                 <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"}
                                        alignItems="center"
-                                       marginTop={"10px"}>
+                                       marginTop={"10px"}
+                                       paddingBottom={"20px"}>
                                     <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}
                                                        initialValue={searchTerm}/>
 
@@ -142,7 +145,7 @@ const LicenseInfo: React.FC = () => {
                                                 inputProps={{'aria-label': 'controlled'}}
                                             />
                                         }
-                                        label="Bare egne lisenser"
+                                        label="Vis mine lisenser"
                                     />
                                 </Stack>
                                 <OwnTable data={data} handleSorting={handleSorting}/>
