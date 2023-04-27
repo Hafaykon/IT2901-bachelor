@@ -66,7 +66,7 @@ function Row(props: RowProps) {
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
                         <Box sx={{margin: 1, marginLeft: '70px',paddingTop: '10px',  paddingBottom: '10px'}}>
-                            <Typography variant="h6" gutterBottom component="div" sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>
+                            <Typography variant="h6" gutterBottom component="div" sx={{fontFamily: 'Source Sans Pro,sans-serif', paddingBottom: '5px'}}>
                                 {row.application_name}
                             </Typography>
 
@@ -77,21 +77,21 @@ function Row(props: RowProps) {
                                     <col style={{width: '30%'}}/>
                                     <col style={{width: '35%%'}}/>
                                 </colgroup>
-                                <TableHead>
+                                <TableHead sx={{borderBottom: '#eee solid'}}>
                                     <TableRow>
                                         <TableCell align="left" sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Sist åpnet</b></TableCell>
                                         <TableCell align="left" sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Pris</b></TableCell>
                                         <TableCell align={"left"} sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Frigjør</b></TableCell>
                                     </TableRow>
                                 </TableHead>
-                                <TableBody>
+                                <TableBody >
                                     {row.details.map((detailRow) => (
                                         <TableRow key={detailRow.id}>
-                                            <TableCell component="th" scope="row">
+                                            <TableCell component="th" scope="row" sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '11pt'}}>
                                                 {timeSince(detailRow.last_used)}
                                             </TableCell>
-                                            <TableCell>{detailRow.price},-</TableCell>
-                                            <TableCell>
+                                            <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '11pt'}}>{detailRow.price},-</TableCell>
+                                            <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '11pt'}}>
                                                 {userData.primary_user_email === row.primary_user_email || userData.is_unit_head ? (
                                                     <ReleaseButton
                                                         spc_id={detailRow.id}
@@ -133,7 +133,7 @@ export default function OwnTable({data, handleSorting}: Props) {
     return (
         <> 
         {loaded && 
-        <div style={{width: "100%"}}>
+        <div style={{width: "103%"}}>
             <TableContainer component={Paper}>
                 <Table aria-label="collapsible table" >
                     <colgroup>
@@ -147,7 +147,7 @@ export default function OwnTable({data, handleSorting}: Props) {
                         <TableRow>
                             <TableCell/>
                             <TableCell onClick={() => handleSorting("application_name")}
-                                    style={{cursor: "pointer", fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Lisensnavn&#9660;</b></TableCell>
+                                    style={{cursor: "pointer", fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Lisensnavn &#9660;</b></TableCell>
                             <TableCell onClick={() => handleSorting("primary_user_full_name")}
                                     align={"left"} style={{cursor: "pointer", fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Bruker &#9660;</b></TableCell>
                             <TableCell onClick={() => handleSorting("computer_name")}

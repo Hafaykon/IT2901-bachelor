@@ -10,7 +10,7 @@ import renderer from "react-test-renderer";
 
 const test_date = new Date('2022-12-14');
 const diff = Math.floor((Date.now() - test_date.getTime()) / (1000 * 3600 * 24));
-const last_opened = "14.12.2022 (" + diff + " dager siden)"
+const last_opened = "12/14/2022 (" + diff + " dager siden)"
 
 const mockData: OwnOrgData[] = [
     {
@@ -41,10 +41,10 @@ describe('The own table', () => {
     })
 
     it('renders without crashing', async () => {
-        expect(await screen.findByText('Lisensnavn▼')).toBeInTheDocument();
-        expect(await screen.findByText('Bruker▼')).toBeInTheDocument();
-        expect(await screen.findByText('Løpenummer▼')).toBeInTheDocument();
-        expect(await screen.findByText('Status▼')).toBeInTheDocument();
+        expect(await screen.findByText('Lisensnavn ▼')).toBeInTheDocument();
+        expect(await screen.findByText('Bruker ▼')).toBeInTheDocument();
+        expect(await screen.findByText('Løpenummer ▼')).toBeInTheDocument();
+        expect(await screen.findByText('Status ▼')).toBeInTheDocument();
         expect(await screen.findByText('APSIS Pro [Web]')).toBeInTheDocument();
 
     })
@@ -60,9 +60,9 @@ describe('The own table', () => {
         const input = screen.getByTestId('KeyboardArrowDownIcon');
         expect(input).toBeInTheDocument();
         userEvent.click(input);
-        expect(await screen.findByText('Detaljer')).toBeInTheDocument();
+        expect(await screen.findByText('Sist åpnet')).toBeInTheDocument();
         expect(await screen.findByText(last_opened)).toBeInTheDocument();
-        expect(await screen.findByText('Ingen tillatelse 🛇')).toBeInTheDocument();
+        expect(await screen.findByText('Ingen tillatelse')).toBeInTheDocument();
 
     })
 })

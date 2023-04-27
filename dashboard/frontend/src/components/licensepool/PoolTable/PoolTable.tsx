@@ -5,7 +5,7 @@ import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -57,13 +57,14 @@ function Row(props: RowProps) {
                             {row.application_name}
                             </Typography>
 
-                            <Table size="small" aria-label="purchases">
+                            <Table size="small" aria-label="purchases" sx={{[`& .${tableCellClasses.root}`]: {borderBottom: "none"
+                                }}}>
                                 <colgroup>
                                     <col style={{width: '45%'}}/>
                                     <col style={{width: '35%'}}/>
                                     <col style={{width: '20%'}}/>
                                 </colgroup>
-                                <TableHead>
+                                <TableHead sx={{borderBottom: '#eee solid'}}>
                                     <TableRow>
                                         <TableCell align="left" sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Dato lagt til</b></TableCell>
                                         <TableCell align="left" sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '12pt', fontWeight: 800}}><b>Pris</b></TableCell>
@@ -112,7 +113,7 @@ export default function PoolTable({data, handleSorting}: Props) {
     return (
         <>
             {loaded ? (
-                <div style={{width: "98%"}}>
+                <div style={{width: "98.5%", marginLeft: '-0.4%'}}>
                     <TableContainer component={Paper}>
                         <Table aria-label="collapsible table" >
                             <colgroup>

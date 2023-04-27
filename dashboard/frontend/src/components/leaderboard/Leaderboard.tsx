@@ -57,7 +57,8 @@ export function Leaderboard() {
                         justifyContent: 'center',
                         alignContent: 'center',
                         marginTop: '20px',
-                        marginLeft: '1.5%'
+                        marginLeft: '1.8%', 
+                        width: '96.3%'
                     }}>
                     <Grid justifyContent={'center'} alignItems={'center'} width={'75%'}>
                         <Stack direction={'column'} width={'90%'}>
