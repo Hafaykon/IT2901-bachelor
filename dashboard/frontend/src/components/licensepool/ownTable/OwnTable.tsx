@@ -5,7 +5,7 @@ import Collapse from '@mui/material/Collapse';
 import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
+import TableCell, { tableCellClasses } from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
@@ -65,12 +65,19 @@ function Row(props: RowProps) {
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
                     <Collapse in={open} timeout="auto" unmountOnExit>
-                        <Box sx={{margin: 1}}>
+                        <Box sx={{margin: 1, marginLeft: '70px',paddingTop: '10px',  paddingBottom: '10px'}}>
                             <Typography variant="h6" gutterBottom component="div">
-                                Detaljer
+                                {row.application_name}
                             </Typography>
 
-                            <Table size="small" aria-label="purchases">
+                            <Table size="small" aria-label="purchases" sx={{[`& .${tableCellClasses.root}`]: {
+      borderBottom: "none"
+    }}}>
+                                <colgroup>
+                                    <col style={{width: '35%'}}/>
+                                    <col style={{width: '30%'}}/>
+                                    <col style={{width: '35%%'}}/>
+                                </colgroup>
                                 <TableHead>
                                     <TableRow>
                                         <TableCell align="left"><b>Sist åpnet</b></TableCell>
@@ -94,7 +101,7 @@ function Row(props: RowProps) {
                                                         organization={row.organization}
                                                         price={detailRow.price}
                                                     />
-                                                ) : <p>Ingen tillatelse &#128711;</p>}
+                                                ) : <p>Ingen tillatelse</p>}
                                             </TableCell>
                                         </TableRow>
                                     ))}
@@ -129,7 +136,14 @@ export default function OwnTable({data, handleSorting}: Props) {
         {loaded && 
         <div style={{width: "100%"}}>
             <TableContainer component={Paper}>
-                <Table aria-label="collapsible table">
+                <Table aria-label="collapsible table" >
+                    <colgroup>
+                        <col style={{width: '5%'}}/>
+                        <col style={{width: '30%'}}/>
+                        <col style={{width: '25%'}}/>
+                        <col style={{width: '20%'}}/>
+                        <col style={{width: '10%'}}/>
+                    </colgroup>
                     <TableHead>
                         <TableRow>
                             <TableCell/>

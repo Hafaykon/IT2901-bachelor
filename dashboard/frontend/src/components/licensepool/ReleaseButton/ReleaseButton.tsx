@@ -84,8 +84,8 @@ const ReleaseButton: React.FC<ReserveButtonProps> = ({spc_id, primary_user_email
 
 
     return (
-        <Button onClick={handleClick} variant="contained" color="success">
-            {isUnitHead ? 'Frigjør' : 'Forespør'}
+        <Button onClick={handleClick} variant="contained" sx={{backgroundColor: '#00953b'}}>
+            {isUnitHead ? 'Legg i lisensportalen' : 'Send forespørsel'}
         </Button>
     );
 
