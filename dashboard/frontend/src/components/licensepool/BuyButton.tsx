@@ -161,6 +161,7 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
                                     variant="contained"
                                     onClick={handleClick}
                                     disabled={bought}
+                                    data-testid="kjopknapp-test"
                                     sx={{
                                         padding: '10px',
                                         backgroundColor: bought ? '#ccc' : '#80ADD3',

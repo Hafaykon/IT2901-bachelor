@@ -74,6 +74,7 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
                                 <TableCell>
                                     <Stack direction={"row"} spacing={2}>
                                         <Button
+                                            data-testid="approved-test-id"
                                             onClick={() => onApprove(request.id)}
                                             variant="contained"
                                             color="success"
@@ -81,6 +82,7 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
                                             Godkjenn
                                         </Button>
                                         <Button
+                                            data-testid="disapproved-test-id"
                                             onClick={() => onDisapprove(request.id)}
                                             variant="contained"
                                             color="error"
