@@ -42,7 +42,7 @@ const
                     <TableHead>
                         <TableRow>
                             <TableCell><b>Bruker</b></TableCell>
-                            <TableCell><b>Applikasjon </b></TableCell>
+                            <TableCell><b>Lisensnavn </b></TableCell>
                             <TableCell><b>Forespørsel opprettet</b></TableCell>
                             <TableCell><b>Forespørsel</b></TableCell>
                             {isHistory && (<>
@@ -60,7 +60,7 @@ const
                                 <TableCell>{request.requested_by}</TableCell>
                                 <TableCell>{request.application_name}</TableCell>
                                 <TableCell>{request.request_date}</TableCell>
-                                <TableCell>{request.request == "add" ? 'Overfør til pool' : 'Kjøp fra pool'}</TableCell>
+                                <TableCell>{request.request == "add" ? 'Overfør til lisensportalen' : 'Kjøp fra lisensportalen'}</TableCell>
                                 {isHistory && (
                                     <> <TableCell>{request.reviewed_by}</TableCell>
                                         <TableCell>{request.reviewed_date}</TableCell>
