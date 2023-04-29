@@ -4,7 +4,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { IUser } from './types';
 
-function Info({ name, avatarUrl }: IUser) {
+function Info({ name, avatarUrl, email}: IUser) {
   return (
     <Paper
       sx={{
@@ -26,7 +26,7 @@ function Info({ name, avatarUrl }: IUser) {
           Navn: {name}
         </Typography>
         <Typography variant="h6" sx={{ marginBottom: '20px' }}>
-          Epost: ola.nordmann@eksempel.com
+          Epost: {email}
         </Typography>
       </div>
     </Paper>

@@ -49,6 +49,7 @@ function MyPage() {
 
   const user: IUser = {
     name: 'Bertil Nedregård',
+    email: 'bertil.nedregard@trondheim.kommune.no',
     avatarUrl: 'https://example.com/avatar.jpg'
   };
 
@@ -196,6 +197,7 @@ function MyPage() {
                 <div className="centered">
                   <Info
                     name={userInfo.primary_user_full_name}
+                    email={userInfo.primary_user_email}
                     avatarUrl={user.avatarUrl}
                   />
                 </div>
