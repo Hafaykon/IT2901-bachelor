@@ -19,7 +19,7 @@ function Info({ name, avatarUrl, email}: IUser) {
       <Avatar
         alt={name}
         src={avatarUrl}
-        sx={{ marginRight: '40px', width: '150px', height: '150px', flex: 'none' }}
+        sx={{ marginRight: '40px', width: '150px', height: '150px', flex: 'none' , backgroundColor: '#80ccef'}}
       />
       <div style={{ flex: 1, marginLeft: '40px' }}>
         <Typography variant="h6" sx={{ marginBottom: '20px', marginTop: '20px', fontFamily: 'Source Sans Pro,sans-serif'}}>
