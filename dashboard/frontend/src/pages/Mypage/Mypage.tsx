@@ -3,7 +3,8 @@ import {
   Checkbox,
   Container,
   FormControlLabel,
-  Grid
+  Grid,
+  Typography
 } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import ActiveLastBreadcrumb from '../../components/dashboard/ActivateLastBreadcrumb';
@@ -205,15 +206,16 @@ function MyPage() {
               {!userInfo.is_unit_head && (
                 <Grid
                   sx={{
-                    paddingTop: 10,
+                    paddingTop: '30px',
+                    paddingBottom: '5px',
                     width: '90%'
                   }}>
                   <Grid item sx={{ marginLeft: '1.5%' }}>
-                    <h2 style={{ textAlign: 'left', marginTop: '1rem' }}>
+                    <h2 style={{ textAlign: 'left', marginTop: '1rem', fontFamily: 'Source Sans Pro,sans-serif' }}>
                       Aktive forespørsler (må godkjennes)
                     </h2>
                   </Grid>
-                  <Grid item sx={{ marginLeft: '1.5%', width: '104.6%'}}>
+                  <Grid item sx={{ marginLeft: '1.5%', width: '91.2%'}}>
                     <PoolRequestUserList
                       userRequests={poolRequests.own_requests}
                       isHistory={false}
@@ -246,7 +248,7 @@ function MyPage() {
                     <h2 style={{ textAlign: 'left' }}>
                       Aktive forespørsler (må godkjennes)
                     </h2>
-                    <Grid sx={{ width: '106.4%' }}>
+                    <Grid sx={{ width: '92.6%' }}>
                       <PoolRequestList
                         poolRequests={poolRequests.org_requests}
                         onApprove={handleApprove}
@@ -257,38 +259,40 @@ function MyPage() {
                     </Grid>
                     <Grid
                       container
-                      spacing={2}
                       alignItems="center"
-                      sx={{ paddingTop: 3 }}>
+                      sx={{ paddingTop: '30px' }}>
                       <Grid item>
-                        <h2 style={{ textAlign: 'left' }}>Historikk</h2>
+                        <h2 style={{ textAlign: 'left' }}>Min historikk</h2>
                         <FormControlLabel
                           control={
                             <Checkbox
                               checked={showHistory}
                               onChange={handleShowHistory}
                               color="primary"
+                              sx={{fontFamily: 'Source Sans Pro,sans-serif'}}
                             />
                           }
-                          label="Vis historikk"
+                          label={<Typography style={{fontFamily: 'Source Sans Pro,sans-serif'}}>Vis historikk</Typography>}
                         />
                       </Grid>
                       {showHistory && (
-                        <Grid item sx={{ maxWidth: '400%'}}>
-                          <PoolRequestList
-                            poolRequests={poolRequests.history}
-                            onApprove={handleApprove}
-                            onDisapprove={handleDisapprove}
-                            isOwnRequest={false}
-                            isHistory={true}
-                          />
+                        <Grid item id="history">
+                          <Box sx={{ width: '98.5%' }}>
+                            <PoolRequestList
+                              poolRequests={poolRequests.history}
+                              onApprove={handleApprove}
+                              onDisapprove={handleDisapprove}
+                              isOwnRequest={false}
+                              isHistory={true}
+                            />
+                          </Box>
                         </Grid>
                       )}
                     </Grid>
                   </Box>
                 ) : (
                   <Box>
-                    <h2 style={{ textAlign: 'left' }}>Historikk</h2>
+                    <h2 style={{ textAlign: 'left' }}>Min historikk</h2>
                     <Grid container spacing={1} alignItems="left">
                       <Grid item>
                         <FormControlLabel
@@ -299,13 +303,13 @@ function MyPage() {
                               color="primary"
                             />
                           }
-                          label="Vis historikk"
+                          label={<Typography style={{fontFamily: 'Source Sans Pro,sans-serif'}}>Vis historikk</Typography>}
                           sx={{ width: '150px' }}
                         />
                       </Grid>
                       {showHistory && (
                         <Grid item>
-                          <Box sx={{ width: '100%' }}>
+                          <Box sx={{ width: '98.5%', marginTop: '-20px' }}>
                             <PoolRequestList
                               data-testid="request-history"
                               poolRequests={poolRequests.history}

@@ -50,6 +50,7 @@ function MyPageTable({ data }: MyPageTableProps) {
         }}
       >
         <DataGrid
+          style={{fontFamily: 'Source Sans Pro,sans-serif',}}
           rows={norwegianData}
           columns={columns}
           pageSize={5}

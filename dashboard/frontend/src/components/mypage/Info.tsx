@@ -22,10 +22,10 @@ function Info({ name, avatarUrl, email}: IUser) {
         sx={{ marginRight: '40px', width: '150px', height: '150px', flex: 'none' }}
       />
       <div style={{ flex: 1, marginLeft: '40px' }}>
-        <Typography variant="h6" sx={{ marginBottom: '20px', marginTop: '20px'}}>
+        <Typography variant="h6" sx={{ marginBottom: '20px', marginTop: '20px', fontFamily: 'Source Sans Pro,sans-serif'}}>
           Navn: {name}
         </Typography>
-        <Typography variant="h6" sx={{ marginBottom: '20px' }}>
+        <Typography variant="h6" sx={{ marginBottom: '20px', fontFamily: 'Source Sans Pro,sans-serif' }}>
           Epost: {email}
         </Typography>
       </div>

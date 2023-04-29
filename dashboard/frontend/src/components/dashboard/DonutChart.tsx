@@ -134,9 +134,9 @@ function DonutChart(infoBoxData: Props) {
                             height: "100%",
                         }}
                     >
-                        <Typography>Aktiv</Typography>
-                        <Typography>Ledig</Typography>
-                        <Typography>Ubrukt</Typography>
+                        <Typography sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>Aktiv</Typography>
+                        <Typography sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>Ledig</Typography>
+                        <Typography sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>Ubrukt</Typography>
                     </Stack>
 
                     <Chart
