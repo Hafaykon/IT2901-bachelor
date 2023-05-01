@@ -1,4 +1,3 @@
-import datetime
 from collections import OrderedDict
 from urllib.parse import urlencode
 
@@ -211,23 +210,15 @@ class TestSoftwarePCViews(APITestCase):
         """
         Should return specified user with his/her licenses.
         """
-        user = 'My User'
-        url = reverse('get_licenses_associated_with_user', args=[user])
-        response = self.client.get(url)
-        last_used = datetime.date(2022, 2, 1)
-        expected_software = [{'application_name': 'Hovedtillitsvalgte',
-                              'data': [{'Active Minutes': 500,
-                                        'Computer name': 'mycomputer',
-                                        'Last used': '2022-02-01',
-                                        'Total Minutes': 1000,
-                                        'Username': 'My User'}]},
-                             {'application_name': 'myapplication',
-                              'data': [{'Active Minutes': 500,
-                                        'Computer name': 'mycomputer',
-                                        'Last used': '2022-02-01',
-                                        'Total Minutes': 1000,
-                                        'Username': 'My User'}]}]
+        user = CustomUser.objects.create_user(primary_user_email='myuser@example.com',
+                                              organization='Hovedtillitsvalgte',
+                                              password='test_password',
+                                              is_unit_head=False)
+        self.client.force_authenticate(user=user)
 
+        url = reverse('get_licenses_associated_with_user')
+        response = self.client.get(url)
+        expected_software = [{'application_name': 'myapplication', 'computer_name': 'mycomputer', 'status': 'Active'}, {'application_name': 'Hovedtillitsvalgte', 'computer_name': 'mycomputer', 'status': 'Active'}]
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, expected_software)
 
@@ -405,8 +396,6 @@ class TestLicensePool(TestCase):
         self.license_pool.refresh_from_db()
         self.assertEqual(self.license_pool.application_name, updated_data['application_name'])
         self.assertEqual(self.license_pool.spc_id, updated_data['spc_id'])
-
-
 
     def test_create_pool_object(self):
         url = reverse("create_pool_object")
