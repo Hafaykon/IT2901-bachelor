@@ -12,13 +12,16 @@ type Props = {
     unused_licenses: number,
     available_licenses: number,
     width?: number;
-    height?: number;  
+    height?: number;
+    title?: string,
+    showInformation?: boolean,  
 }
 
 
 function DonutChart(infoBoxData: Props) {
     const navigate = useNavigate();
     const {width = 670, height = 425} = infoBoxData;
+    const {title = 'Total oversikt', showInformation = true} = infoBoxData;
 
 
     const chartEvents: ReactGoogleChartEvent[] = [
@@ -93,23 +96,25 @@ function DonutChart(infoBoxData: Props) {
                             fontFamily: 'Source Sans Pro,sans-serif',
                         }}
                     >
-                        Total oversikt
+                        {title}
                     </Typography>
-                    <Tooltip
-                        title={
-                            <h2 style={{fontSize: 15, fontWeight: 'lighter'}}>
-                                Diagrammet viser en oversikt over hvor mange aktive, ubrukte og ledige
-                                lisenser som eies i enheten.
-                            </h2>
-                        }
-                        placement="top"
-                        arrow
-                    >
-                        <HelpIcon
-                            sx={{color: 'grey', fontSize: 25, marginRight: 2, marginTop: 2}}
-                            data-testid="donutchartHelpIcon"
-                        ></HelpIcon>
-                    </Tooltip>
+                    {showInformation &&
+                        <Tooltip
+                            title={
+                                <h2 style={{fontSize: 15, fontWeight: 'lighter'}}>
+                                    Diagrammet viser en oversikt over hvor mange aktive, ubrukte og ledige
+                                    lisenser som eies i enheten.
+                                </h2>
+                            }
+                            placement="top"
+                            arrow
+                        >
+                            <HelpIcon
+                                sx={{color: 'grey', fontSize: 25, marginRight: 2, marginTop: 2}}
+                                data-testid="donutchartHelpIcon"
+                            ></HelpIcon>
+                        </Tooltip>
+                    }
                 </Stack>
 
                 <Stack direction="row" sx={{paddingLeft: 7, height: "100%", width: "100%", alignItems: 'center'}}>
@@ -129,9 +134,9 @@ function DonutChart(infoBoxData: Props) {
                             height: "100%",
                         }}
                     >
-                        <Typography>Aktiv</Typography>
-                        <Typography>Ledig</Typography>
-                        <Typography>Ubrukt</Typography>
+                        <Typography sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>Aktiv</Typography>
+                        <Typography sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>Ledig</Typography>
+                        <Typography sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>Ubrukt</Typography>
                     </Stack>
 
                     <Chart

@@ -4,7 +4,7 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import { IUser } from './types';
 
-function Info({ name, avatarUrl }: IUser) {
+function Info({ name, avatarUrl, email}: IUser) {
   return (
     <Paper
       sx={{
@@ -13,24 +13,20 @@ function Info({ name, avatarUrl }: IUser) {
         alignItems: 'center',
         justifyContent: 'space-between',
         flexDirection: 'row',
-        width: 1000,
-        marginLeft: '0'
+        width: '92.5%'
       }}
     >
       <Avatar
         alt={name}
         src={avatarUrl}
-        sx={{ marginRight: '40px', width: '150px', height: '150px', flex: 'none' }}
+        sx={{ marginRight: '40px', width: '150px', height: '150px', flex: 'none' , backgroundColor: '#80ccef'}}
       />
       <div style={{ flex: 1, marginLeft: '40px' }}>
-        <Typography variant="h6" sx={{ marginBottom: '20px' }}>
+        <Typography variant="h6" sx={{ marginBottom: '20px', marginTop: '20px', fontFamily: 'Source Sans Pro,sans-serif'}}>
           Navn: {name}
         </Typography>
-        <Typography variant="h6" sx={{ marginBottom: '20px' }}>
-          Epost: ola.nordmann@eksempel.com
-        </Typography>
-        <Typography variant="h6" sx={{ marginBottom: '20px' }}>
-          Telefon: 123 45 678
+        <Typography variant="h6" sx={{ marginBottom: '20px', fontFamily: 'Source Sans Pro,sans-serif' }}>
+          Epost: {email}
         </Typography>
       </div>
     </Paper>

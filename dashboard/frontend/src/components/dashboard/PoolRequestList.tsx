@@ -37,34 +37,32 @@ const
                                                        }) => {
         return (
             <TableContainer component={Paper}
-                            sx={{marginTop: 4, maxWidth: '85%'}}>
-                <Table>
+                            sx={{marginTop: 4, width: '100%'}}>
+                <Table >
                     <TableHead>
                         <TableRow>
-                            <TableCell><b>Bruker</b></TableCell>
-                            <TableCell><b>Applikasjon </b></TableCell>
-                            <TableCell><b>Forespørsel opprettet</b></TableCell>
-                            <TableCell><b>Forespørsel</b></TableCell>
+                            <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}><b>Lisensnavn </b></TableCell>
+                            <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}><b>Forespørsel opprettet</b></TableCell>
+                            <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}><b>Forespørsel</b></TableCell>
                             {isHistory && (<>
-                                <TableCell><b>Prossesert av</b></TableCell>
-                                <TableCell><b>Prossesert dato</b></TableCell>
-                                <TableCell><b>Status</b></TableCell>
+                                <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}><b>Prossesert av</b></TableCell>
+                                <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}><b>Prossesert dato</b></TableCell>
+                                <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}><b>Status</b></TableCell>
                             </>)
                             }
-                            {!isOwnRequest && !isHistory ? <TableCell><b>Handling</b></TableCell> : null}
+                            {!isOwnRequest && !isHistory ? <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}><b>Handling</b></TableCell> : <TableCell></TableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {poolRequests.map((request) => (
                             <TableRow key={request.id}>
-                                <TableCell>{request.requested_by}</TableCell>
-                                <TableCell>{request.application_name}</TableCell>
-                                <TableCell>{request.request_date}</TableCell>
-                                <TableCell>{request.request == "add" ? 'Overfør til pool' : 'Kjøp fra pool'}</TableCell>
+                                <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>{request.application_name}</TableCell>
+                                <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>{request.request_date}</TableCell>
+                                <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>{request.request == "add" ? 'Overfør til lisensportalen' : 'Kjøp fra lisensportalen'}</TableCell>
                                 {isHistory && (
-                                    <> <TableCell>{request.reviewed_by}</TableCell>
-                                        <TableCell>{request.reviewed_date}</TableCell>
-                                        <TableCell>{request.approved ? 'Godkjent' : 'Ikke godkjent'}</TableCell>
+                                    <> <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>{request.reviewed_by}</TableCell>
+                                        <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>{request.reviewed_date}</TableCell>
+                                        <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>{request.approved ? 'Godkjent' : 'Ikke godkjent'}</TableCell>
                                     </>
 
 
@@ -80,6 +78,7 @@ const
                                                 variant="contained"
                                                 color="success"
                                                 data-testid="approve-button"
+                                                sx={{fontFamily: 'Source Sans Pro,sans-serif'}}
                                             >
                                                 Godkjenn
                                             </Button>
@@ -88,12 +87,13 @@ const
                                                 variant="contained"
                                                 color="error"
                                                 data-testid="disapprove-button"
+                                                sx={{fontFamily: 'Source Sans Pro,sans-serif'}}
                                             >
                                                 Avslå
                                             </Button>
                                         </Stack>
                                     </TableCell>
-                                )} : null
+                                )}
                             </TableRow>
                         ))}
                     </TableBody>

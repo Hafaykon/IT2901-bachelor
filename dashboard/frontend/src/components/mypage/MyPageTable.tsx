@@ -12,12 +12,25 @@ interface MyPageTableProps {
   data: Data[];
 }
 
+interface NorwegianStatuses {
+  [key: string]: string;
+}
+
 function MyPageTable({ data }: MyPageTableProps) {
-  const columns = [
-    { field: 'application_name', headerName: 'Lisensnavn', flex: 1 },
-    { field: 'computer_name', headerName: 'Løpenummer', flex: 1 },
-    { field: 'status', headerName: 'Status', flex: 1 },
-  ];
+  const norwegianStatuses: NorwegianStatuses = {
+    active: 'Aktiv',
+    inactive: 'Ubrukt',
+    pending: 'Venter',
+  };
+
+  const columns = [    { field: 'application_name', headerName: 'Lisensnavn', flex: 3 },    { field: 'status', headerName: 'Status', flex: 1 },  ];
+
+  const norwegianData = data.map((row, index) => ({
+    id: index,
+    application_name: row.application_name,
+    computer_name: row.computer_name,
+    status: norwegianStatuses[row.status.toLowerCase()] ?? row.status,
+  }));
 
   return (
     <Grid container sx={{ marginTop: '3%' }}>
@@ -25,19 +38,20 @@ function MyPageTable({ data }: MyPageTableProps) {
         style={{
           padding: '30px',
           marginTop: '20%',
-          maxWidth: '420px',
+          maxWidth: '455px',
           margin: '40px auto',
           boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.1)',
           borderRadius: '10px',
           height: '100%',
           overflow: 'auto',
-          maxHeight: '425px',
+          maxHeight: '450px',
           width: '100%',
           backgroundColor: '#fff',
         }}
       >
         <DataGrid
-          rows={data.map((row, index) => ({ id: index, ...row }))}
+          style={{fontFamily: 'Source Sans Pro,sans-serif',}}
+          rows={norwegianData}
           columns={columns}
           pageSize={5}
           autoHeight

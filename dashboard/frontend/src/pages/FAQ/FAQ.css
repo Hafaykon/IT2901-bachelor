@@ -9,7 +9,6 @@
     font-size: 30pt;
     display: flex;
     justify-content: flex-start;
-    margin-left: -0.5%;
 }
 
 #Columns {
@@ -17,7 +16,7 @@
     justify-items: center;
     margin-left: 14%;
     padding-bottom: 20px;
-    width: 80%;
+    width: 84%;
 }
 
 #FAQs {
