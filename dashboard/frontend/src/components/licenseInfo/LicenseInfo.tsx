@@ -1,15 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {useLocation, useParams} from 'react-router-dom';
-import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../api/calls';
-import SoftwareSearchBar from './search/SoftwareSeachBar';
-import {OwnOrgData} from "../Interfaces";
+import {fetchInfoBoxLicense, fetchSoftwareUsedInOrg} from '../../api/calls';
+import SoftwareSearchBar from '../search/SoftwareSeachBar';
+import {OwnOrgData} from "../../Interfaces";
 import {Box, Grid, Stack} from '@mui/material';
-import OwnTable from "./licensepool/OwnTable";
+import OwnTable from "../licensepool/ownTable/OwnTable";
 import Pagination from '@mui/material/Pagination';
-import ActiveLastBreadcrumb from './ActivateLastBreadcrumb';
-import MuiLoadingSpinner from './spinner/MuiLoadingSpinner';
+import ActiveLastBreadcrumb from '../dashboard/ActivateLastBreadcrumb';
+import MuiLoadingSpinner from '../spinner/MuiLoadingSpinner';
 import {useRecoilValue} from "recoil";
-import {refreshTableAtom, userAtom} from "../globalVariables/variables";
+import {refreshTableAtom, userAtom} from "../../globalVariables/variables";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 
@@ -75,14 +75,12 @@ const LicenseInfo: React.FC = () => {
 
     const fetchData = async () => {
         if (status && storedOrganization) {
-            console.log(status)
             try {
                 const data = await fetchInfoBoxLicense(currentPage, status as string,
                     sortBy as string, storedOrganization as string, searchTerm, email);
                 data?.results && setData(data.results);
                 data?.count && setCount(data.count);
                 setLoaded(true);
-                console.log(data)
             } catch (error) {
                 console.error('Error fetching license data:', error);
             }

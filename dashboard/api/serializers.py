@@ -1,5 +1,7 @@
-from rest_framework import serializers
 from datetime import date
+
+from rest_framework import serializers
+
 from .models import SoftwarePerComputer, PoolRequest, LicensePool
 
 
@@ -49,10 +51,10 @@ class PoolRequestSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Request must be 'add' or 'remove'")
 
         # A user should not be able to request the same license twice
-        if PoolRequestSerializer.Meta.model.objects.filter(requested_by=data['requested_by'],
+        if PoolRequestSerializer.Meta.model.objects.filter(spc_id=data['spc_id'], requested_by=data['requested_by'],
                                                            application_name=data['application_name'],
                                                            request=data['request'], completed=False).exists():
-            raise serializers.ValidationError("You have already requested this license")
+            raise serializers.ValidationError("Du har allerede en aktiv forespørsel for denne lisensen.")
 
         return data
 

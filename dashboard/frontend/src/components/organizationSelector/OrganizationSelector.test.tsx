@@ -15,7 +15,7 @@ const organizations: string[] = [
     'Arbeidsmiljøenheten'
 ];
 
-jest.mock('../api/calls', () => ({
+jest.mock('../../api/calls', () => ({
     fetchOrganizations: () => Promise.resolve(organizations)
 }));
 
@@ -28,7 +28,6 @@ describe('Organization selector', () => {
                     <OrganizationSelector/>
                 </RecoilRoot>
             );
-
         });
     });
 
@@ -39,10 +38,20 @@ describe('Organization selector', () => {
 
 
     it('renders without crashing', async () => {
+        expect(await screen.findByTestId('autocomplete-search')).toBeInTheDocument();
         expect(screen.getByLabelText('Velg organisasjon')).toBeInTheDocument();
-        expect(screen.getByTestId('autocomplete-search')).toBeInTheDocument();
     });
 
+    it('matches snapshot', async () => {
+        const {asFragment} = await act(async () => {
+            return render(
+                <RecoilRoot>
+                    <OrganizationSelector/>
+                </RecoilRoot>
+            );
+        });
+        expect(asFragment()).toMatchSnapshot();
+    });
 
     it('can select an organization', async () => {
         const autocomplete = screen.getByTestId('autocomplete-search');

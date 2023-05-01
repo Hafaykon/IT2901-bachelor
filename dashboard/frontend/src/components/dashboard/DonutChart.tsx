@@ -11,11 +11,14 @@ type Props = {
     never_used: number,
     unused_licenses: number,
     available_licenses: number,
+    width?: number;
+    height?: number;  
 }
 
 
 function DonutChart(infoBoxData: Props) {
     const navigate = useNavigate();
+    const {width = 670, height = 425} = infoBoxData;
 
 
     const chartEvents: ReactGoogleChartEvent[] = [
@@ -73,8 +76,8 @@ function DonutChart(infoBoxData: Props) {
             id={"donutChart"}
             data-testid='donutChart'
             sx={{
-                height: 425,
-                width: 670,
+                height: height,
+                width: width,
                 mt: 7,
                 borderRadius: 5,
             }}
