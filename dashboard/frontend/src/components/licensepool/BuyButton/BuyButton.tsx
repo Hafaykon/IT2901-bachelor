@@ -10,8 +10,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import CloseIcon from '@mui/icons-material/Close';
 import {NavLink} from 'react-router-dom';
 import {useRecoilValue, useSetRecoilState} from "recoil";
-import {refreshTableAtom, userAtom} from "../../globalVariables/variables";
-import {checkIfOrgHasSoftware} from '../../api/calls';
+import {refreshTableAtom, userAtom} from "../../../globalVariables/variables";
+import {checkIfOrgHasSoftware} from '../../../api/calls';
 
 type ReserveButtonProps = {
     spc_id: number;
@@ -92,7 +92,6 @@ const BuyButton: React.FC<ReserveButtonProps> = ({spc_id, application_name}) => 
         });
         const data = await response.json();
         if (response.ok) {
-            console.log(data);
             return data;
         } else {
             alert(data.non_field_errors[0])
@@ -132,6 +131,7 @@ const BuyButton: React.FC<ReserveButtonProps> = ({spc_id, application_name}) => 
                 >
                     <div style={{display: "flex", justifyContent: "flex-end"}}>
                         <IconButton
+                            aria-label="close"
                             onClick={handleClose}
                             sx={{display: "flex", justifyContent: "flex-end", padding: "10px", width: "auto"}}
                         >
@@ -142,7 +142,7 @@ const BuyButton: React.FC<ReserveButtonProps> = ({spc_id, application_name}) => 
                         <DialogContent>
                             <DialogContentText id="alert-dialog-description"
                                                style={{textAlign: "center", padding: "5px"}}>
-                                <DialogTitle variant="h6" component="div" sx={{textAlign: "center"}}>
+                                <DialogTitle variant="h6" component="span" sx={{textAlign: "center"}}>
                                     {error}
                                 </DialogTitle>
                             </DialogContentText>

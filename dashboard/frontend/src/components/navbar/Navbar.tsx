@@ -22,17 +22,24 @@ function Navbar() {
                 <Grid id="menuIcon">
                     <NavLink to="#" className="menu-bars">
                         <MenuIcon
+                            data-testid="menuIcon"
                             sx={{fontSize: 50}}
                             onClick={showSidebar}
                             style={{color: '#302d2d'}}
                         />
                     </NavLink>
                 </Grid>
-                <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
+                <nav
+                    data-testid="sidebar"
+                    className={sidebar ? 'nav-menu active' : 'nav-menu'}>
                     <ul className="nav-menu-items" onClick={showSidebar}>
                         <li className="navbar-toggle">
                             <NavLink to="#" className="menu-bars">
-                                <ClearIcon sx={{fontSize: 40}} style={{color: '#302d2d'}}/>
+                                <ClearIcon
+                                    data-testid="clearIcon"
+                                    sx={{fontSize: 40}}
+                                    style={{color: '#302d2d'}}
+                                />
                             </NavLink>
                         </li>
 

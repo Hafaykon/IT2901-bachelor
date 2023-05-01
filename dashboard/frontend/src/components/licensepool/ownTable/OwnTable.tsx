@@ -13,9 +13,9 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import {OwnOrgData} from '../../Interfaces';
-import ReleaseButton from "./ReleaseButton";
-import {userAtom} from "../../globalVariables/variables";
+import {OwnOrgData} from '../../../Interfaces';
+import ReleaseButton from "../ReleaseButton/ReleaseButton";
+import {userAtom} from "../../../globalVariables/variables";
 import {useRecoilValue} from "recoil";
 
 
@@ -56,7 +56,10 @@ function Row(props: RowProps) {
                 </TableCell>
                 <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.primary_user_full_name}</TableCell>
                 <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.computer_name}</TableCell>
-                <TableCell sx={{textAlign: "left", paddingRight: "20px"}}>{row.details.length > 0 ? row.details[0].status : 'No status available'}</TableCell>
+                <TableCell sx={{
+                    textAlign: "left",
+                    paddingRight: "20px"
+                }}>{row.details.length > 0 ? row.details[0].status : 'No status available'}</TableCell>
 
             </TableRow>
             <TableRow>
@@ -83,15 +86,16 @@ function Row(props: RowProps) {
                                             </TableCell>
                                             <TableCell>{detailRow.price},-</TableCell>
                                             <TableCell>
-                                               {userData.primary_user_email === row.primary_user_email || userData.is_unit_head ? (
-                                                  <ReleaseButton
-                                                    spc_id={detailRow.id}
-                                                    primary_user_email={row.primary_user_email}
-                                                    application_name={row.application_name}
-                                                    organization={row.organization}
-                                                  />
+                                                {userData.primary_user_email === row.primary_user_email || userData.is_unit_head ? (
+                                                    <ReleaseButton
+                                                        spc_id={detailRow.id}
+                                                        primary_user_email={row.primary_user_email}
+                                                        application_name={row.application_name}
+                                                        organization={row.organization}
+                                                        price={detailRow.price}
+                                                    />
                                                 ) : <p>Ingen tillatelse &#128711;</p>}
-                                                </TableCell>
+                                            </TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>
@@ -117,7 +121,6 @@ export default function OwnTable({data, handleSorting}: Props) {
     useEffect(() => {
         if ((software.length) > 0) {
             setLoaded(true);
-            console.log(software);
         }
     }, [software]);
 
