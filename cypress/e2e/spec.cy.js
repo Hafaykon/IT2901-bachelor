@@ -21,7 +21,7 @@ describe('Test navbar', () => {
   });
 
   it('asserts equal navbar works', () => {
-    cy.get('[data-testid="MenuIcon"]').click();
+    cy.get('[data-testid="menuIcon"]').click();
     // cy.url().should('eq', 'http://localhost:8000/users/1/edit');
   });
 });
@@ -69,7 +69,7 @@ describe('Test min side - Leendert', () => {
     performLogin();
   });
   it('tester om lisensen som ble forespurt på er i listen over forespurte på min side', () => {
-    cy.get('[data-testid="MenuIcon"]').click();
+    cy.get('[data-testid="menuIcon"]').click();
     cy.get('a[href="/minside"]').click();
 
     cy.get('table')

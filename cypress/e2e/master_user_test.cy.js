@@ -37,7 +37,7 @@ describe('Test frigjør lisens - Leendert', () => {
     performLoginMaster();
   });
   it('tester om en master user kan godkjenne frigjøring av en lisens', () => {
-      cy.get('[data-testid="MenuIcon"]').click();
+      cy.get('[data-testid="menuIcon"]').click();
       cy.get('a[href="/minside"]').click();
 
       cy.get('table')
