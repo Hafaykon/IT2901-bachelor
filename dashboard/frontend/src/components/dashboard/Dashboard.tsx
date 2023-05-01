@@ -15,10 +15,14 @@ import { Link } from 'react-router-dom';
 import { Count } from '../../Interfaces';
 
 function Dashboard() {
+  // Retrieve organization name from global state
   const org = useRecoilValue(orgAtom);
+
+  // Define state variables for box data and access token
   const [boxData, setBoxData] = useState<Count[] | undefined>(undefined);
   const accessToken = localStorage.getItem('access');
 
+  // Fetch data from API when component mounts or access token/organization changes
   useEffect(() => {
     const fetchData = async () => {
       if (accessToken && org) {
@@ -37,7 +41,7 @@ function Dashboard() {
 
   return (
     <>
-      {boxData ? (
+      {boxData ? ( // If box data has been fetched
         <div className={'body'}>
           <Grid container id="header">
             <Stack spacing={2}>
@@ -60,6 +64,7 @@ function Dashboard() {
           <Grid container id="boxes">
             <Grid item>
               <Stack direction="row" spacing={8}>
+                {/* Display info boxes with data */}
                 <InfoBox
                   title="Totale Lisenser"
                   numberOfLicenses={boxData[0]?.total_licenses ?? 0}
@@ -77,6 +82,7 @@ function Dashboard() {
           </Grid>
           <Grid container id="boxes">
             <Grid container id={'donut_chart'}>
+              {/* Display donut chart with data */}
               <DonutChart
                 never_used={boxData[0].never_used}
                 total_licenses={boxData[0].total_licenses}
@@ -88,6 +94,7 @@ function Dashboard() {
                 showInformation={true}
                 title='Total oversikt'
               />
+              {/* Stack component containing SavingsBox and LeaderboardBox */}
               <Grid item sx={{ ml: 8, mt: 7 }}>
                 <Stack direction={'column'} spacing={4.38}>
                   <SavingsBox />

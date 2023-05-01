@@ -19,11 +19,17 @@ type Props = {
 
 
 function DonutChart(infoBoxData: Props) {
+    
+    // Get the function for navigating to different routes
     const navigate = useNavigate();
+
+    // Set default width and height for the chart if not provided
     const {width = 670, height = 425} = infoBoxData;
+
+    // Set default title and display information option for the chart if not provided
     const {title = 'Total oversikt', showInformation = true} = infoBoxData;
 
-
+    // Define what happens when a slice of the chart is clicked
     const chartEvents: ReactGoogleChartEvent[] = [
         {
             eventName: "select",
@@ -43,6 +49,7 @@ function DonutChart(infoBoxData: Props) {
                         column,
                         value: dataTable?.getValue(row, column),
                     });
+                    // Navigate to different routes based on the selected slice
                     const value = dataTable?.getValue(row, column)
                     if (value === 'Aktiv') {
                         navigate(`/Totale Lisenser`);
@@ -60,12 +67,15 @@ function DonutChart(infoBoxData: Props) {
         },
     ];
 
+    // Define the data to display in the chart
     const data = [
         ['Type', 'Value'],
         ['Aktiv', infoBoxData.active_licenses ?? 1],
         ['Ledig', infoBoxData.unused_licenses ?? 1],
         ['Ubrukt', infoBoxData.never_used ?? 1],
     ];
+
+    // Define the options for the chart
     const options = {
         pieHole: 0.4,
         legend: 'none',
@@ -73,7 +83,7 @@ function DonutChart(infoBoxData: Props) {
         colors: ['#80cc9f', '#f9c680', '#f28f8d'],
     };
 
-
+    // Render the chart component with the data, options and events defined above
     return (
         <Card
             id={"donutChart"}
@@ -98,6 +108,7 @@ function DonutChart(infoBoxData: Props) {
                     >
                         {title}
                     </Typography>
+                    {/* An optional help icon displaying information about the chart */}
                     {showInformation &&
                         <Tooltip
                             title={

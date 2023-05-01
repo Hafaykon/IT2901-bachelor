@@ -2,29 +2,35 @@ import * as React from 'react';
 import { Grid } from '@mui/joy';
 import { DataGrid } from '@mui/x-data-grid';
 
+// Define the Data interface
 interface Data {
   application_name: string;
   computer_name: string;
   status: string;
 }
 
+// Define the MyPageTableProps interface
 interface MyPageTableProps {
   data: Data[];
 }
 
+// Define the NorwegianStatuses interface
 interface NorwegianStatuses {
   [key: string]: string;
 }
 
 function MyPageTable({ data }: MyPageTableProps) {
+  // Define an object to map status values to their Norwegian counterparts
   const norwegianStatuses: NorwegianStatuses = {
     active: 'Aktiv',
     inactive: 'Ubrukt',
     pending: 'Venter',
   };
 
+  // Define the columns for the DataGrid component
   const columns = [    { field: 'application_name', headerName: 'Lisensnavn', flex: 3 },    { field: 'status', headerName: 'Status', flex: 1 },  ];
 
+  // Create a new array with the same structure as the input data, but with status values translated to Norwegian
   const norwegianData = data.map((row, index) => ({
     id: index,
     application_name: row.application_name,
@@ -32,6 +38,7 @@ function MyPageTable({ data }: MyPageTableProps) {
     status: norwegianStatuses[row.status.toLowerCase()] ?? row.status,
   }));
 
+  // Render the DataGrid component with the formatted data
   return (
     <Grid container sx={{ marginTop: '3%' }}>
       <div
