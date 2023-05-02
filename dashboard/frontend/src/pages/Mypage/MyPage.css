@@ -5,8 +5,8 @@
 }
 
 .centered {
-  display: flex;
-  justify-content: center;
+  margin-left: 5%;
+  width: 90%;
 }
   
   #charts {
@@ -23,11 +23,20 @@
   .history-label .MuiTypography-root {
     margin-left: 8px;
   }
+
+#rowGrid{
+  height: 500px;
+  margin-left: 7%;
+}
   
 #donutChartMyPage {
     width: 10%;
     height: 420px;
-    padding-left: 6.5%;
+    margin-left: -1%;
   }
+
+#history{
+  margin-top: -10px;
+}
 
 

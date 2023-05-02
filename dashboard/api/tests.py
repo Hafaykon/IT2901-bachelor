@@ -1,10 +1,11 @@
-import datetime
+from collections import OrderedDict
 from urllib.parse import urlencode
 
 from api.models import SoftwarePerComputer, LicensePool, CustomUser
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.authtoken.models import Token
 from rest_framework.test import APITestCase, APIClient
 
 
@@ -17,8 +18,8 @@ class TestSoftwarePCViews(APITestCase):
             application_name='myapplication',
             category='mycategory',
             family='myfamily',
-            family_version='1.0',
-            family_edition='Standard',
+            family_version='1',
+            family_edition='100',
             license_required=True,
             manufacturer='mymanufacturer',
             organization='Servere',
@@ -60,15 +61,16 @@ class TestSoftwarePCViews(APITestCase):
             block_listed=False,
             primary_user='myuser',
             primary_user_full_name='My User',
-            primary_user_email='myuser@example.com'
+            primary_user_email='myuser@example.com',
+            price=750.0
         )
         SoftwarePerComputer.objects.create(
             computer_name='mycomputer',
             application_name='Hovedtillitsvalgte',
             category='mycategory',
             family='myfamily',
-            family_version='1.0',
-            family_edition='Standard',
+            family_version='1',
+            family_edition='100',
             license_required=True,
             manufacturer='mymanufacturer',
             organization='Hovedtillitsvalgte',
@@ -110,7 +112,8 @@ class TestSoftwarePCViews(APITestCase):
             block_listed=False,
             primary_user='myuser',
             primary_user_full_name='My User',
-            primary_user_email='myuser@example.com'
+            primary_user_email='myuser@example.com',
+            price=750.0
         )
 
     def test_get_organizations_view(self):
@@ -207,23 +210,15 @@ class TestSoftwarePCViews(APITestCase):
         """
         Should return specified user with his/her licenses.
         """
-        user = 'My User'
-        url = reverse('get_licenses_associated_with_user', args=[user])
-        response = self.client.get(url)
-        last_used = datetime.date(2022, 2, 1)
-        expected_software = [{'application_name': 'Hovedtillitsvalgte',
-                              'data': [{'Active Minutes': 500,
-                                        'Computer name': 'mycomputer',
-                                        'Last used': last_used,
-                                        'Total Minutes': 1000,
-                                        'Username': 'My User'}]},
-                             {'application_name': 'myapplication',
-                              'data': [{'Active Minutes': 500,
-                                        'Computer name': 'mycomputer',
-                                        'Last used': last_used,
-                                        'Total Minutes': 1000,
-                                        'Username': 'My User'}]}]
+        user = CustomUser.objects.create_user(primary_user_email='myuser@example.com',
+                                              organization='Hovedtillitsvalgte',
+                                              password='test_password',
+                                              is_unit_head=False)
+        self.client.force_authenticate(user=user)
 
+        url = reverse('get_licenses_associated_with_user')
+        response = self.client.get(url)
+        expected_software = [{'application_name': 'myapplication', 'computer_name': 'mycomputer', 'status': 'Active'}, {'application_name': 'Hovedtillitsvalgte', 'computer_name': 'mycomputer', 'status': 'Active'}]
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data, expected_software)
 
@@ -250,10 +245,21 @@ class TestSoftwarePCViews(APITestCase):
         url = reverse('licenseinfo') + '?' + encoded_query_params
         response = self.client.get(url)
         response_data = response.data['results']
-        expected_data = [{'application_name': 'myapplication', 'primary_user_full_name': 'My User',
-                          'computer_name': 'mycomputer',
-                          'details': [{'id': 1, 'last_used': datetime.date(2022, 2, 1)}], 'status': 'available'}]
-
+        expected_data = [{
+            "application_name": 'myapplication',
+            "primary_user_full_name": 'My User',
+            "primary_user_email": "myuser@example.com",
+            "organization": 'Servere',
+            "computer_name": 'mycomputer',
+            "details": [
+                {
+                    "id": 1,
+                    "last_used": "2022-02-01",
+                    "status": "Ledig",
+                    "price": 750.0
+                }
+            ]
+        }]
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response_data, expected_data)
 
@@ -274,8 +280,8 @@ class TestLicensePool(TestCase):
             application_name='Google Chrome 109',
             category='mycategory',
             family='myfamily',
-            family_version='1.0',
-            family_edition='Standard',
+            family_version='1',
+            family_edition='100',
             license_required=True,
             manufacturer='mymanufacturer',
             organization='IT-tjenesten',
@@ -321,16 +327,24 @@ class TestLicensePool(TestCase):
         )
         self.license_pool = LicensePool.objects.create(
             id=19,
-            primary_user_full_name='My User',
-            primary_user_email='myuser@example.com',
-            computer_name='mycomputer',
             application_name='Google Chrome 109',
+            date_added='2023-01-01',
             family='myfamily',
-            family_version='1.0',
-            family_edition='Standard',
-            organization='IT-tjenesten'
+            family_version='1',
+            family_edition='100',
+            freed_by_organization='IT-tjenesten',
+            spc_id=999,
+
         )
         self.url = reverse('software_per_computer_detail', kwargs={'id': self.license_pool.id})
+
+        self.user = CustomUser.objects.create_user(primary_user_email='test@example.com',
+                                                   organization='IT-tjenesten',
+                                                   password='test_password',
+                                                   is_unit_head=True)
+        Token.objects.create(user=self.user)
+        self.client = APIClient()
+        self.client.force_authenticate(user=self.user)
 
     def test_get_license_pool(self):
         query_params = {
@@ -344,55 +358,66 @@ class TestLicensePool(TestCase):
         response_message = self.client.get(url)
         expected_data = {
             'application_name': 'Google Chrome 109',
-            'organization': 'IT-tjenesten',
+            'freed_by_organization': 'IT-tjenesten',
             'details': [
-                {
-                    'id': self.license_pool.id,
-                    'primary_user_full_name': 'My User',
-                    'primary_user_email': 'myuser@example.com',
-                    'organization': 'IT-tjenesten',
-                    'application_name': 'Google Chrome 109',
-                    'family': 'myfamily',
-                    'family_version': '1.0',
-                    'family_edition': 'Standard',
-                    'computer_name': 'mycomputer'
-                }
-            ]
+                OrderedDict([
+                    ('id', self.license_pool.id),
+                    ('freed_by_organization', 'IT-tjenesten'),
+                    ('application_name', 'Google Chrome 109'),
+                    ('date_added', '2023-01-01'),
+                    ('family', 'myfamily'),
+                    ('family_version', '1'),
+                    ('family_edition', '100'),
+                    ('price', None),
+                    ('spc_id', 999)
+                ])
+            ],
         }
 
         response_message_data = response_message.data.get('results')[0]
-        assert response_message_data == expected_data
+        self.assertEqual(response_message.status_code, status.HTTP_200_OK)
+        self.assertEqual(response_message_data, expected_data)
 
     def test_update_license_pool_object(self):
-        new_organization = "IT-tjenesten"
-        data = {
+        updated_data = {
+            'id': self.license_pool.id,
             'application_name': 'Google Chrome 109',
-            'organization': new_organization
+            'date_added': '2023-01-02',
+            'family': 'myfamily',
+            'family_version': '1',
+            'family_edition': '100',
+            'freed_by_organization': 'IT-tjenesten',
+            'spc_id': 999,
+            'price': None
         }
-
-        response = self.client.patch(self.url, data, content_type='application/json')
+        response = self.client.put(self.url, updated_data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.data['organization'], new_organization)
+        self.assertEqual(response.data, updated_data)
+        self.license_pool.refresh_from_db()
+        self.assertEqual(self.license_pool.application_name, updated_data['application_name'])
+        self.assertEqual(self.license_pool.spc_id, updated_data['spc_id'])
 
     def test_create_pool_object(self):
         url = reverse("create_pool_object")
         data = {
-            'primary_user_full_name': 'TEST',
-            'primary_user_email': 'TEST@example.com',
-            'computer_name': 'mycomputer',
-            'application_name': 'Google Chrome 109',
-            'family': 'TEST',
-            'family_version': 'TEST',
-            'family_edition': 'TEST',
-            'organization': 'IT-tjenesten'
+            "id": 19,
+            "application_name": "Google Chrome 109",
+            "date_added": "2023-01-01",
+            "family": "myfamily",
+            "family_version": "1",
+            "family_edition": "100",
+            "freed_by_organization": "IT-tjenesten",
+            "spc_id": 1001
         }
-        response = self.client.post(url, data, content_type='application/json')
+
+        self.client.force_authenticate(user=self.user)
+        response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(LicensePool.objects.filter(primary_user_full_name='TEST').count(), 1)
-        self.assertEqual(LicensePool.objects.get(primary_user_full_name='TEST').primary_user_full_name, 'TEST')
+        self.assertEqual(LicensePool.objects.filter(application_name='Google Chrome 109').count(), 2)
+        self.assertEqual(LicensePool.objects.get(spc_id=1001).family, 'myfamily')
 
 
-class TestUser(TestCase):
+class TestAuthentication(TestCase):
     def setUp(self):
         self.client = APIClient()
         self.user = CustomUser.objects.create_user(primary_user_email='test@example.com',
