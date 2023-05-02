@@ -270,9 +270,12 @@ function MyPage() {
                               onChange={handleShowHistory}
                               color="primary"
                               sx={{fontFamily: 'Source Sans Pro,sans-serif'}}
+                              data-testid="vishistorikk-id"
                             />
                           }
                           label={<Typography style={{fontFamily: 'Source Sans Pro,sans-serif'}}>Vis historikk</Typography>}
+                          data-testid="vishistorikk-id"
+
                         />
                       </Grid>
                       {showHistory && (

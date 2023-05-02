@@ -20,11 +20,11 @@ describe('Login test - master user', () => {
   });
 
   it('tries to log in as a master user', () => {
-    // This test should pass since we are already logged in
+    // should pass since already logged in
   });
 });
 
-describe('Test frigjør lisens - Leendert', () => {
+describe('Test frigjør lisens - Bertil', () => {
   beforeEach(() => {
     // run these tests as if in a desktop
     // browser with a 720p monitor
@@ -37,9 +37,11 @@ describe('Test frigjør lisens - Leendert', () => {
     performLoginMaster();
   });
   it('tester om en master user kan godkjenne frigjøring av en lisens', () => {
+      // går til min side
       cy.get('[data-testid="menuIcon"]').click();
       cy.get('a[href="/minside"]').click();
 
+      // lagrer navnet på første lisens, brukes nedenfor for å sjekke at den ikke lenger finnes
       cy.get('table')
       .first()
       .find('tbody tr:first-child')
@@ -49,6 +51,7 @@ describe('Test frigjør lisens - Leendert', () => {
         Cypress.env('app_navn', innerHtml);
        });
 
+      // finner første godkjenn-knapp av forespørsler. failer hvis ingen forespørsler finnes
       cy.get('[data-testid="approved-test-id"]')
           .first()
           .click()
@@ -62,14 +65,11 @@ describe('Test frigjør lisens - Leendert', () => {
         Cypress.env('rad_2', innerHtml)
 
        })
-          // sammenligningen !assert equals selv om det ikke blir gjort riktig. raden forsvinner ikke så sammenligner egt med seg selv.
       .then(() => {
                 expect(app_navn).to.not.eq(rad_2);
-
                 }
             )
       ;
-
   });
 });
 

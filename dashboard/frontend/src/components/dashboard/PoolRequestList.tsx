@@ -38,7 +38,7 @@ const
         return (
             <TableContainer component={Paper}
                             sx={{marginTop: 4, width: '100%'}}>
-                <Table >
+                <Table data-testid={isHistory ? "request-history-testid" : undefined} >
                     <TableHead>
                         <TableRow>
                             <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}><b>Lisensnavn </b></TableCell>
@@ -77,7 +77,7 @@ const
                                                 onClick={() => onApprove(request.id)}
                                                 variant="contained"
                                                 color="success"
-                                                data-testid="approve-button"
+                                                data-testid="approved-test-id"
                                                 sx={{fontFamily: 'Source Sans Pro,sans-serif'}}
                                             >
                                                 Godkjenn
@@ -86,7 +86,7 @@ const
                                                 onClick={() => onDisapprove(request.id)}
                                                 variant="contained"
                                                 color="error"
-                                                data-testid="disapprove-button"
+                                                data-testid="disapproved-test-id"
                                                 sx={{fontFamily: 'Source Sans Pro,sans-serif'}}
                                             >
                                                 Avslå
