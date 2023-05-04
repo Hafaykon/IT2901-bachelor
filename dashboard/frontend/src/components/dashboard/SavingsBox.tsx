@@ -7,9 +7,12 @@ import {useRecoilValue} from 'recoil';
 import {fetchPotentialSavings} from '../../api/calls';
 
 export function SavingsBox() {
+
+    // Declare and initiate state variables
     const [potentialSavings, setpotentialSavings] = useState<number | undefined>(undefined);
     const organization = useRecoilValue(orgAtom)
 
+      // Fetch data from API when component mounts or access token/organization changes
     useEffect(() => {
         const fetchData = async () => {
             if (organization) {
@@ -28,6 +31,7 @@ export function SavingsBox() {
         fetchData();
     }, [organization]);
 
+    /* Function returns a SavingsBox card with information on potential savings fetched from the API */
     return (
         <Tooltip title={<h2 style={{fontSize: 15, fontWeight: 'lighter'}}>
             Potensiell sparing viser hvor mye enheten kan spare ved å frigi alle ledige og ubrukte lisenser.
@@ -39,7 +43,6 @@ export function SavingsBox() {
                             <Typography id="title">
                                 Potensiell sparing
                             </Typography>
-                            {/*  <SavingsIcon fontSize='large' sx={{position: 'absolute', top:20, right:15, color:'pink'}}></SavingsIcon> */}
                         </Stack>
                         <Typography id="numbers">
                             {potentialSavings?.toLocaleString('nb-NO', {useGrouping: true})} kr

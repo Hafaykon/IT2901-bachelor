@@ -6,15 +6,14 @@ import {Chart, ReactGoogleChartEvent} from 'react-google-charts';
 
 
 type Props = {
-    total_licenses: number,
-    active_licenses: number,
-    never_used: number,
-    unused_licenses: number,
-    available_licenses: number,
-    width?: number;
-    height?: number;
-    title?: string,
-    showInformation?: boolean,  
+    total_licenses: number, // Number of licenses owend in the unit
+    active_licenses: number, // Number of licenses actively in use in the unit
+    never_used: number, // Number of unused licenses in the unit
+    unused_licenses: number, // Number of available licenses in the unit
+    width?: number; // Sets the width of the DonutChart card
+    height?: number; // Sets the height of the DonutChart card
+    title?: string, // Sets the title displayed in the DonutChart card
+    showInformation?: boolean,  // Boolean for showing a HelpIcon in the card or not
 }
 
 
@@ -127,7 +126,7 @@ function DonutChart(infoBoxData: Props) {
                         </Tooltip>
                     }
                 </Stack>
-
+                {/* Additional information about what the different colours mean in the donut chart */}
                 <Stack direction="row" sx={{paddingLeft: 7, height: "100%", width: "100%", alignItems: 'center'}}>
                     <Stack spacing={5} sx={{paddingTop: 7.5, paddingLeft: 3, height: "100%"}}>
                         <Box sx={{width: 15, height: 15, backgroundColor: '#80cc9f'}}/>

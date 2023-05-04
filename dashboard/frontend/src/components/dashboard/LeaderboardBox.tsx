@@ -13,14 +13,20 @@ interface Leaderboard {
 }
 
 export function LeaderboardBox() {
+
+  // Get the function for navigating to different routes
   const navigate = useNavigate();
 
   const handleCardClick = () => {
     navigate(`/leaderboard`);
   };
+
+  // Declare and initiate state variables
   const [data, setData] = React.useState<Leaderboard[]>([]);
   const accessToken = localStorage.getItem('access');
   const userInfo = useRecoilValue(userAtom);
+
+  /* Fetched leaderboard data from API when component mounts or access token/organization changes */
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
@@ -54,9 +60,6 @@ export function LeaderboardBox() {
       <CardActionArea sx={{ paddingBottom: 4 }} onClick={handleCardClick}>
         <CardOverflow>
           <CardContent>
-            <Stack direction={'row'}>
-              {/*  <SavingsIcon fontSize='large' sx={{position: 'absolute', top:20, right:15, color:'pink'}}></SavingsIcon> */}
-            </Stack>
             <div color="text.secondary" id="numbersBoxes">
               <BarChartIcon
                 sx={{ fontSize: 100, color: '#80CC9F' }}></BarChartIcon>

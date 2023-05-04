@@ -62,6 +62,7 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
             <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
               <b>Forespørsel</b>
             </TableCell>
+            {/* Added table headers if isHistory is true */}
             {isHistory && (
               <>
                 <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
@@ -75,6 +76,7 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
                 </TableCell>
               </>
             )}
+            {/* Added table headers if both isHistory and isOwnRequest is false*/}
             {!isOwnRequest && !isHistory ? (
               <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
                 <b>Handling</b>

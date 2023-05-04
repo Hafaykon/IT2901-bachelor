@@ -22,7 +22,7 @@ describe('Testing render, DonutChart', () => {
         await act(async () => {
             render(
                 <MemoryRouter>
-                    <DonutChart available_licenses={infoBoxData.available_licenses} never_used={infoBoxData.never_used}
+                    <DonutChart never_used={infoBoxData.never_used}
                                 total_licenses={infoBoxData.total_licenses}
                                 unused_licenses={infoBoxData.unused_licenses}
                                 active_licenses={infoBoxData.active_licenses}/>

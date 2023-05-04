@@ -35,6 +35,7 @@ interface Data {
 }
 
 function MyPage() {
+  
   // Declare and initialize state variables
   const userInfo = useRecoilValue(userAtom);
   const [showHistory, setShowHistory] = useState(false);
@@ -250,7 +251,6 @@ function MyPage() {
                     total_licenses={boxData[0].total_licenses ?? 0}
                     unused_licenses={boxData[0].unused_licenses ?? 0}
                     active_licenses={boxData[0].active_licenses ?? 0}
-                    available_licenses={boxData[0].available_licenses ?? 0}
                     width={530}
                     height={432}
                     showInformation={false}

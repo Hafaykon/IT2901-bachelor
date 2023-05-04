@@ -14,7 +14,9 @@ import { SavingsBox } from './SavingsBox';
 import { Link } from 'react-router-dom';
 import { Count } from '../../Interfaces';
 
+/* The home page of the application.  */
 function Dashboard() {
+  
   // Retrieve organization name from global state
   const org = useRecoilValue(orgAtom);
 
@@ -46,6 +48,7 @@ function Dashboard() {
           <Grid container id="header">
             <Stack spacing={2}>
               <Grid item sx={{ marginLeft: -21, marginTop: -5 }}>
+                {/* Adds breadcrumbs to the top left of the page */}
                 <ActiveLastBreadcrumb />
               </Grid>
               <Grid container>
@@ -88,7 +91,6 @@ function Dashboard() {
                 total_licenses={boxData[0].total_licenses}
                 unused_licenses={boxData[0].unused_licenses}
                 active_licenses={boxData[0].active_licenses}
-                available_licenses={boxData[0].available_licenses}
                 width={670}
                 height={425}
                 showInformation={true}
@@ -105,6 +107,7 @@ function Dashboard() {
           </Grid>
         </div>
       ) : (
+        /* If the page is not loaded, a spinner is displayed. */
         <MuiLoadingSpinner />
       )}
     </>

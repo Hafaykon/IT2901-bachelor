@@ -4,6 +4,8 @@ import ActiveLastBreadcrumb from '../../components/dashboard/ActivateLastBreadcr
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import './FAQ.css';
 
+/* Returns a Frequently Asked Question page with Accordion buttons with filled out static information. */
+/* The questions are divided itnto three specific themes. */
 function FAQ() {
     return (
         <div>
@@ -18,15 +20,18 @@ function FAQ() {
                 </p>
             </Grid>
             <Grid container id="Columns">
+                {/* First theme: Lisence dashbaord*/}
                 <p className='SubHeadline' data-testid='Dashboard'>Dashboard</p>
                 <Grid container>
                     <Accordion className='accordions'>
+                        {/* Information  shown on the accordion */}
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon/>}
                             aria-controls="panel1a-content"
                             id="panel1a-header">
                             <p>Hva brukes lisensdashboardet til?</p>
                         </AccordionSummary>
+                        {/* Information shown when accoordion is clicked. */}
                         <AccordionDetails>
                             <Typography component="span" id="details">
                                 Lisensdashboardet viser en oversikt over alle lisenser eid i din
@@ -148,6 +153,7 @@ function FAQ() {
                 </Grid>
             </Grid>
             <Grid container id="Columns">
+                {/* Second theme: Licenese pool */}
                 <p className='SubHeadline'>Lisensportalen</p>
                 <Grid container>
                     <Accordion className='accordions'>
@@ -288,6 +294,7 @@ function FAQ() {
                 </Grid>
             </Grid>
             <Grid container id="Columns">
+                {/* Third theme: Leaderboard */}
                 <p className='SubHeadline'>Ledertavlen</p>
                 <Grid container>
                     <Accordion className='accordions'>
