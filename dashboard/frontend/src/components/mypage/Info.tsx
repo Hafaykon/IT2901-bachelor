@@ -25,7 +25,7 @@ function Info({ name, avatarUrl, email}: IUser) {
         <Typography variant="h6" sx={{ marginBottom: '20px', marginTop: '20px', fontFamily: 'Source Sans Pro,sans-serif'}}>
           Navn: {name}
         </Typography>
-        <Typography variant="h6" sx={{ marginBottom: '20px', fontFamily: 'Source Sans Pro,sans-serif' }}>
+        <Typography data-testid="email-id" variant="h6" sx={{ marginBottom: '20px', fontFamily: 'Source Sans Pro,sans-serif' }}>
           Epost: {email}
         </Typography>
       </div>

@@ -62,6 +62,7 @@ function Dashboard() {
               <Stack direction="row" spacing={8}>
                 <InfoBox
                   title="Totale Lisenser"
+                  data-testid="totale-lisenser-id"
                   numberOfLicenses={boxData[0]?.total_licenses ?? 0}
                 />
                 <InfoBox
