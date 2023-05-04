@@ -20,9 +20,13 @@ interface Leaderboard {
 
 /*Fetches the leaderboard data from the backend API and sets it to the component state using useState hook */
 export function Leaderboard() {
+  // State to store fetched leaderboard data
   const [data, setData] = React.useState<Leaderboard[]>([]);
+  // Retrieve access token and user information
   const accessToken = localStorage.getItem('access');
   const userInfo = useRecoilValue(userAtom);
+
+  // Fetch leaderboard data from the API and update component state
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch(
@@ -63,6 +67,7 @@ export function Leaderboard() {
           }}>
           <Grid justifyContent={'center'} alignItems={'center'} width={'75%'}>
             <Stack direction={'column'} width={'90%'}>
+              {/* Leaderboard title and description */}
               <h2
                 style={{
                   fontFamily: 'Source Sans Pro, sans serif',
@@ -85,7 +90,8 @@ export function Leaderboard() {
                 enheter som har færrest ubrukte lisenser.{' '}
               </p>
             </Stack>
-
+            
+            {/* User's unit rank table */}
             <p>Din plassering</p>
             <TableContainer component={Paper}>
               <Table
@@ -106,6 +112,7 @@ export function Leaderboard() {
                     sx={{ fontWeight: 'bold', padding: '10px' }}></TableRow>
                 </TableHead>
                 <TableBody>
+                   {/* Render user's unit rank */}
                   {data.map((row, index) => {
                     if (userInfo.organization === row.organization) {
                       return (
@@ -135,6 +142,7 @@ export function Leaderboard() {
             </TableContainer>
 
             <div style={{ padding: '10px' }}></div>
+            {/* Top 25 units table */}
             <p>Topplisten</p>
             <TableContainer component={Paper}>
               <Table
@@ -174,6 +182,7 @@ export function Leaderboard() {
                   </TableRow>
                 </TableHead>
                 <TableBody>
+                   {/* Render top 25 units */}
                   {data.slice(0, 25).map((row, index) => (
                     <TableRow
                       key={index}
