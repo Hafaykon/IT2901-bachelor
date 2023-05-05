@@ -16,18 +16,20 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {LicensePoolData} from '../../../Interfaces';
 import BuyButton from "../BuyButton/BuyButton";
 
-
+// Define interface for row properties
 interface RowProps {
     row: LicensePoolData;
 }
 
+// Define Row component
 function Row(props: RowProps) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
 
+    // Render a single row and its collapsible content
     return (
         <React.Fragment>
-
+            { /* Main row content */ }
             <TableRow sx={{'& > *': {borderBottom: 'unset'}}}>
                 <TableCell>
                     <IconButton
@@ -47,7 +49,8 @@ function Row(props: RowProps) {
                     {row.application_name}
                 </TableCell>
                 <TableCell align="left" style={{paddingRight: "20px", fontFamily: 'Source Sans Pro,sans-serif'}}>{row.freed_by_organization}</TableCell>
-
+               
+                { /* Collapsible content row */ }
             </TableRow>
             <TableRow>
                 <TableCell style={{paddingBottom: 0, paddingTop: 0}} colSpan={6}>
@@ -56,7 +59,8 @@ function Row(props: RowProps) {
                             <Typography variant="h6" gutterBottom component="div" sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>
                             {row.application_name}
                             </Typography>
-
+                            
+                            { /* Sub-table with additional details */ }
                             <Table size="small" aria-label="purchases" sx={{[`& .${tableCellClasses.root}`]: {borderBottom: "none"
                                 }}}>
                                 <colgroup>
@@ -93,16 +97,18 @@ function Row(props: RowProps) {
     );
 }
 
+// Define interface for PoolTable properties
 interface Props {
     data: LicensePoolData[];
     handleSorting: (sortBy: string) => void;
 }
 
+// Define the main PoolTable component
 export default function PoolTable({data, handleSorting}: Props) {
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
 
-
+    // Set loaded state when data is received
     useEffect(() => {
         if ((software.length) > 0) {
             setLoaded(true);
@@ -110,6 +116,7 @@ export default function PoolTable({data, handleSorting}: Props) {
 
     }, [software]);
 
+    // Render the main table
     return (
         <>
             {loaded ? (
