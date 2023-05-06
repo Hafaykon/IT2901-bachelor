@@ -70,6 +70,7 @@ function Dashboard() {
                 {/* Display info boxes with data */}
                 <InfoBox
                   title="Totale Lisenser"
+                  data-testid="totale-lisenser-id"
                   numberOfLicenses={boxData[0]?.total_licenses ?? 0}
                 />
                 <InfoBox

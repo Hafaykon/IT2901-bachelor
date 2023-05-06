@@ -119,7 +119,7 @@ const BuyButton: React.FC<ReserveButtonProps> = ({spc_id, application_name}) => 
 
     return (
         <>
-            <IconButton onClick={handleClickOpen} color="primary" aria-label="add to shopping cart">
+            <IconButton onClick={handleClickOpen} color="primary" aria-label="add to shopping cart" data-testid="buybutton-id">
                 <AddShoppingCartIcon/>
             </IconButton>
             <div>
@@ -188,6 +188,7 @@ const BuyButton: React.FC<ReserveButtonProps> = ({spc_id, application_name}) => 
                                             variant="contained"
                                             onClick={handleClick}
                                             disabled={bought}
+                                            data-testid="kjop-lisens-id"
                                             sx={{
                                                 padding: "10px",
                                                 backgroundColor: bought ? "#ccc" : "#80ADD3",
