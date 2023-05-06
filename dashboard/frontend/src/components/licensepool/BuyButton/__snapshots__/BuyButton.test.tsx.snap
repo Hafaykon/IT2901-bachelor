@@ -5,7 +5,6 @@ Array [
   <button
     aria-label="add to shopping cart"
     className="MuiButtonBase-root MuiIconButton-root MuiIconButton-colorPrimary MuiIconButton-sizeMedium css-1kuq5xv-MuiButtonBase-root-MuiIconButton-root"
-    data-testid="buybutton-id"
     disabled={false}
     onBlur={[Function]}
     onClick={[Function]}
