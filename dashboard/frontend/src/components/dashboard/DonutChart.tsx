@@ -93,6 +93,8 @@ function DonutChart(infoBoxData: Props) {
                             fontSize: 27,
                             padding: 2,
                             color: '#002d53',
+                            paddingTop: "30px",
+                            paddingLeft: "25px",
                             fontFamily: 'Source Sans Pro,sans-serif',
                         }}
                     >
@@ -118,10 +120,10 @@ function DonutChart(infoBoxData: Props) {
                 </Stack>
 
                 <Stack direction="row" sx={{paddingLeft: 7, height: "100%", width: "100%", alignItems: 'center'}}>
-                    <Stack spacing={5} sx={{paddingTop: 7.5, paddingLeft: 3, height: "100%"}}>
-                        <Box sx={{width: 15, height: 15, backgroundColor: '#80cc9f'}}/>
-                        <Box sx={{width: 15, height: 15, backgroundColor: '#f9c680'}}/>
-                        <Box sx={{width: 15, height: 15, backgroundColor: '#f28f8d'}}/>
+                    <Stack spacing={5.2} sx={{paddingTop: 7.5, paddingLeft: 3, height: "100%"}}>
+                        <Box sx={{width: 18, height: 18, backgroundColor: '#80cc9f'}}/>
+                        <Box sx={{width: 18, height: 18, backgroundColor: '#f9c680'}}/>
+                        <Box sx={{width: 18, height: 18, backgroundColor: '#f28f8d'}}/>
                     </Stack>
                     <Stack
                         spacing={4}
@@ -132,11 +134,12 @@ function DonutChart(infoBoxData: Props) {
                             color: '#002d53',
                             fontStyle: 'Source Sans Pro,sans-serif',
                             height: "100%",
+                            fontSize: "30pt",
                         }}
                     >
-                        <Typography sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>Aktiv</Typography>
-                        <Typography sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>Ledig</Typography>
-                        <Typography sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>Ubrukt</Typography>
+                        <Typography sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: "14pt"}}>Aktiv</Typography>
+                        <Typography sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: "14pt"}}>Ledig</Typography>
+                        <Typography sx={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: "14pt"}}>Ubrukt</Typography>
                     </Stack>
 
                     <Chart
