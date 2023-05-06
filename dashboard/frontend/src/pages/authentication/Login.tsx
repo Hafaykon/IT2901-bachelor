@@ -6,6 +6,7 @@ import {useSetRecoilState} from "recoil";
 import {isAuthAtom} from "../../globalVariables/variables";
 import {useNavigate} from "react-router-dom";
 
+/* Login page that authenticates login information and stores it in localStorage */
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');

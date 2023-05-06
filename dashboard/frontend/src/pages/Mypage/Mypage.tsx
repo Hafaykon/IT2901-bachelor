@@ -21,6 +21,7 @@ import Info from '../../components/mypage/Info';
 import { IUser } from '../../components/mypage/types';
 import './MyPage.css';
 
+// Define necessary interfaces
 interface RequestObject {
   own_requests: OrgRequest[];
   org_requests: OrgRequest[];
@@ -34,6 +35,8 @@ interface Data {
 }
 
 function MyPage() {
+  
+  // Declare and initialize state variables
   const userInfo = useRecoilValue(userAtom);
   const [showHistory, setShowHistory] = useState(false);
   const [licenseData, setLicenseData] = useState<Data[]>([]);
@@ -54,6 +57,7 @@ function MyPage() {
     avatarUrl: 'https://example.com/avatar.jpg'
   };
 
+  // Fetch licenses for the user
   useEffect(() => {
     const fetchOwnLicenses = async () => {
       try {
@@ -80,6 +84,7 @@ function MyPage() {
     fetchOwnLicenses();
   }, [username]);
 
+  // Fetch licenses for the user
   useEffect(() => {
     const fetchData = async () => {
       // Fetch box data
@@ -95,10 +100,13 @@ function MyPage() {
     };
     fetchData();
   }, []);
+
+  // Handle showing history
   const handleShowHistory = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShowHistory(event.target.checked);
   };
 
+  // Fetch pool requests
   useEffect(() => {
     const fetchPoolRequests = async () => {
       try {
@@ -126,6 +134,7 @@ function MyPage() {
     fetchPoolRequests();
   }, []);
 
+  // Handle approving a request
   const handleApprove = async (requestId: number) => {
     const response = await fetch(
       `http://127.0.0.1:8000/api/requests/${requestId}`,
@@ -153,6 +162,7 @@ function MyPage() {
     }
   };
 
+  // Handle disapproving a request
   const handleDisapprove = async (requestId: number) => {
     const response = await fetch(
       `http://127.0.0.1:8000/api/requests/${requestId}`,
@@ -182,18 +192,23 @@ function MyPage() {
 
   return (
     <>
+    {/* Check if box data is fetched, and if true, render the container */}
       {isBoxDataFetched ? (
         <Container>
+          {/* Render breadcrumb navigation */}
           <Grid item sx={{ marginLeft: '-10%' }}>
             <ActiveLastBreadcrumb />
           </Grid>
+          {/* Render user information and layout */}
           <Box sx={{ padding: 2 , width: '110%', marginLeft: '-1.5%'}}>
             <Grid container spacing={2} justifyContent="center">
+              {/* Render user's full name */}
               <Grid item xs={12} sx={{ marginLeft: 8 }}>
                 <h2 style={{ textAlign: 'left' }}>
                   {userInfo.primary_user_full_name}
                 </h2>
               </Grid>
+              {/* Render user avatar and email */}
               <Grid item xs={12}>
                 <div className="centered">
                   <Info
@@ -203,6 +218,7 @@ function MyPage() {
                   />
                 </div>
               </Grid>
+              {/* If the user is not a unit head, render the PoolRequestUserList */}
               {!userInfo.is_unit_head && (
                 <Grid
                   sx={{
@@ -210,11 +226,13 @@ function MyPage() {
                     paddingBottom: '5px',
                     width: '90%'
                   }}>
+                    {/* Render the title for active requests that need approval */}
                   <Grid item sx={{ marginLeft: '1.5%' }}>
                     <h2 style={{ textAlign: 'left', marginTop: '1rem', fontFamily: 'Source Sans Pro,sans-serif' }}>
                       Aktive forespørsler (må godkjennes)
                     </h2>
                   </Grid>
+                  {/* Render the PoolRequestUserList component */}
                   <Grid item sx={{ marginLeft: '1.5%', width: '91.2%'}}>
                     <PoolRequestUserList
                       userRequests={poolRequests.own_requests}
@@ -223,15 +241,16 @@ function MyPage() {
                   </Grid>
                 </Grid>
               )}
+               {/* Render the donut chart and table */}
               <Grid container direction={'row'} id="rowGrid">
                 <Grid item id="donutChartMyPage" xs={14} sm={6}>
                   <DonutChart
                     data-testid="donut-chart"
+                    // Pass the chart data (with null coalescing operator for fallback values)
                     never_used={boxData[0].never_used ?? 0}
                     total_licenses={boxData[0].total_licenses ?? 0}
                     unused_licenses={boxData[0].unused_licenses ?? 0}
                     active_licenses={boxData[0].active_licenses ?? 0}
-                    available_licenses={boxData[0].available_licenses ?? 0}
                     width={530}
                     height={432}
                     showInformation={false}
@@ -242,12 +261,16 @@ function MyPage() {
                   <MyPageTable data-testid="table" data={licenseData} />
                 </Grid>
               </Grid>
+              {/* Render requests and history based on the user's role */}
               <Grid item xs={10.8}>
+                {/* If the user is a unit head, render requests and history for the unit */}
                 {userInfo.is_unit_head ? (
+                  // Render the title for active requests that need approval
                   <Box>
                     <h2 style={{ textAlign: 'left' }}>
                       Aktive forespørsler (må godkjennes)
                     </h2>
+                    {/* Render the PoolRequestList component for organization requests */}
                     <Grid sx={{ width: '92.6%' }}>
                       <PoolRequestList
                         poolRequests={poolRequests.org_requests}
@@ -257,12 +280,14 @@ function MyPage() {
                         isHistory={false}
                       />
                     </Grid>
+                    {/* Render the user's history section */}
                     <Grid
                       container
                       alignItems="center"
                       sx={{ paddingTop: '30px' }}>
                       <Grid item>
                         <h2 style={{ textAlign: 'left' }}>Min historikk</h2>
+                        {/* Render the "Show History" checkbox */}
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -278,6 +303,7 @@ function MyPage() {
 
                         />
                       </Grid>
+                      {/* Render the PoolRequestList component for the user's history if the "Show History" checkbox is checked */}
                       {showHistory && (
                         <Grid item id="history">
                           <Box sx={{ width: '98.5%' }}>
@@ -298,6 +324,7 @@ function MyPage() {
                     <h2 style={{ textAlign: 'left' }}>Min historikk</h2>
                     <Grid container spacing={1} alignItems="left">
                       <Grid item>
+                        {/* Render the "Show History" checkbox */}
                         <FormControlLabel
                           control={
                             <Checkbox
@@ -310,6 +337,7 @@ function MyPage() {
                           sx={{ width: '150px' }}
                         />
                       </Grid>
+                       {/* Render the PoolRequestList component for the user's history if the "Show History" checkbox is checked */}
                       {showHistory && (
                         <Grid item>
                           <Box sx={{ width: '98.5%', marginTop: '-20px' }}>
@@ -331,6 +359,7 @@ function MyPage() {
             </Grid>
           </Box>
         </Container>
+        // Render the MuiLoadingSpinner if the data is still being fetched
       ) : (
         <MuiLoadingSpinner data-testid="loading-spinner" />
       )}

@@ -21,12 +21,20 @@ const breadcrumbNameMap: { [key: string]: string } = {
     '/minside': 'Min side'
 };
 
-
+/* LinkRouter  returns a Link with a href to a location set by the variable to,*/
+/* Clicking the returned Link routes the user to the pathname location  */
 const LinkRouter = forwardRef<HTMLAnchorElement, LinkRouterProps>((props, ref) => {
+
+    // Set to & replace variables based on incoming props
     const {to, replace, ...rest} = props;
+
+    // Get the function for navigating to different routes
     const navigate = useNavigate();
+
+    // Get the current location
     const location = useLocation();
 
+    // Defines what happens when handleClick is called
     const handleClick = (event: React.MouseEvent<HTMLAnchorElement>) => {
         event.preventDefault();
         if (replace) {
@@ -42,6 +50,9 @@ const LinkRouter = forwardRef<HTMLAnchorElement, LinkRouterProps>((props, ref) =
 LinkRouter.displayName = 'LinkRouter';
 
 
+/* Function that returns the page's breadcrumbs. */
+/* The first element is always a LinkRouter element that paths to the dashboard. */
+/* The last element in the breadcrumb is just basic text, not a Link. */
 export default function ActiveLastBreadcrumb() {
     const location = useLocation();
     const pathnames = location.pathname.split('/').filter((x) => x);
@@ -60,6 +71,7 @@ export default function ActiveLastBreadcrumb() {
                         {breadcrumbNameMap[to]}
                     </Typography>
                 ) : (
+                    // Every element that is not the last in the index is a LinkRouter element
                     <LinkRouter underline="hover" color="inherit" to={to} key={to}>
                         {breadcrumbNameMap[to]}
                     </LinkRouter>

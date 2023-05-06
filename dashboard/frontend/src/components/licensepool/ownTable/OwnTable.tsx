@@ -18,17 +18,19 @@ import ReleaseButton from "../ReleaseButton/ReleaseButton";
 import {userAtom} from "../../../globalVariables/variables";
 import {useRecoilValue} from "recoil";
 
-
+// Define the RowProps interface for the Row component
 interface RowProps {
     row: OwnOrgData;
 }
 
+
+// Define the Row component, which represents a single row in the table
 function Row(props: RowProps) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
     const userData = useRecoilValue(userAtom)
 
-
+    // Function to calculate the time since last used in a readable format
     function timeSince(lastUsed: string | null): string {
         if (!lastUsed) return 'Aldri tatt i bruk/registrert   .';
 
@@ -38,7 +40,7 @@ function Row(props: RowProps) {
         return `${lastUsedDate.toLocaleDateString()} (${diffInDays} dager siden)`;
     }
 
-
+    // Render the row component and its content
     return (
         <React.Fragment>
             <TableRow sx={{'& > *': {borderBottom: 'unset'}}}>
@@ -114,22 +116,26 @@ function Row(props: RowProps) {
     );
 }
 
+// Define the Props interface for the OwnTable component
 interface Props {
     data: OwnOrgData[];
     handleSorting: (sortBy: string) => void;
 }
 
+// Define the OwnTable component, which represents the main table
 export default function OwnTable({data, handleSorting}: Props) {
 
     const software = data;
     const [loaded, setLoaded] = React.useState(false);
 
+    // Check if the software data is loaded
     useEffect(() => {
         if ((software.length) > 0) {
             setLoaded(true);
         }
     }, [software]);
 
+    // Render the table component and its content
     return (
         <> 
         {loaded && 

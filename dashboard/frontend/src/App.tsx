@@ -13,12 +13,15 @@ import {isAuthAtom, orgAtom, userAtom} from "./globalVariables/variables";
 import Navbar from './components/navbar/Navbar';
 
 function App() {
+    
+    // Declare and initiate state variables
     const [isAuthenticated, setIsAuthenticated] = useRecoilState(isAuthAtom);
     const token = localStorage.getItem('access');
     const [isLoading, setIsLoading] = useState(true);
     const setUserData = useSetRecoilState(userAtom);
     const setOrg = useSetRecoilState(orgAtom);
 
+    /* Fetches login-data from API*/
     useEffect(() => {
         const fetchData = async () => {
             if (token) {
@@ -62,8 +65,10 @@ function App() {
         <>
             <Navbar/>
             {isLoading ? (
+                /* While loading the application, this message is shown */
                 <div>Loading...</div>
             ) : (
+                /* The different pages that can be routed to if the user is logged in. */
                 <Routes>
                     <Route path="/Login" element={<Login/>}/>
                     <Route path="/" element={isAuthenticated ? <Home/> : <Navigate to="/Login"/>}/>

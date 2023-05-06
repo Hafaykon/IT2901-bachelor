@@ -112,7 +112,7 @@ function LicensePool() {
                                 fontWeight: 200,
                                 marginTop: "-2%"
                             }}>
-                                -Velg miljøvennlig!
+                                -Velg gjenbruk!
                             </h4>
                         </Stack>
                         <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"} alignItems="center"
