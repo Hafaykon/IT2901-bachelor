@@ -8,7 +8,6 @@ module.exports = {
     extends: [
         'eslint:recommended',
         'plugin:react/recommended',
-        "plugin:cypress/recommended",
         'plugin:@typescript-eslint/recommended',
         'plugin:prettier/recommended'
     ],
