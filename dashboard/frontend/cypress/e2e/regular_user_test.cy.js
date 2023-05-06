@@ -1,3 +1,5 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
+
 // Function to perform login
 function performLogin() {
     const mailfield = "#loginID";

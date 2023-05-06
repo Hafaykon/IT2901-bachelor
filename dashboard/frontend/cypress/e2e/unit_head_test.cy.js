@@ -1,3 +1,6 @@
+/* eslint-disable cypress/no-unnecessary-waiting */
+
+
 function performLoginMaster() {
     const mailfield = "#loginID";
     const passw = "#password";
