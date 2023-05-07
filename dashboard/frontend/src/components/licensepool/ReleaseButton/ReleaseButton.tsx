@@ -14,7 +14,13 @@ type ReserveButtonProps = {
 }
 
 // Define the main ReleaseButton component
-const ReleaseButton: React.FC<ReserveButtonProps> = ({spc_id, primary_user_email, application_name, organization, price}) => {
+const ReleaseButton: React.FC<ReserveButtonProps> = ({
+                                                         spc_id,
+                                                         primary_user_email,
+                                                         application_name,
+                                                         organization,
+                                                         price
+                                                     }) => {
     const accessToken = localStorage.getItem('access');
     const userInfo = useRecoilValue((userAtom))
     const isUnitHead = userInfo.is_unit_head;
@@ -88,7 +94,8 @@ const ReleaseButton: React.FC<ReserveButtonProps> = ({spc_id, primary_user_email
 
     // Render the button with an onClick handler
     return (
-        <Button data-testid="foresporsel-release-id" onClick={handleClick} variant="contained" sx={{backgroundColor: '#00953b'}}>
+        <Button data-testid="foresporsel-release-id" onClick={handleClick} variant="contained"
+                sx={{backgroundColor: '#00953b'}}>
             {isUnitHead ? 'Legg i lisensportalen' : 'Send forespørsel'}
         </Button>
     );

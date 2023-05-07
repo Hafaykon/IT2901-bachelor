@@ -5,6 +5,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import './FAQ.css';
 
 /* Returns a Frequently Asked Question page with Accordion buttons with filled out static information. */
+
 /* The questions are divided itnto three specific themes. */
 function FAQ() {
     return (

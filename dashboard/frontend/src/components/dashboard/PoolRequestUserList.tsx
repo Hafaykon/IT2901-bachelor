@@ -4,8 +4,8 @@ import {OrgRequest} from "../../Interfaces";
 
 // Defining the props that the UserRequestList component expects
 interface UserRequestListProps {
-    userRequests: OrgRequest[]; 
-    isHistory: boolean; 
+    userRequests: OrgRequest[];
+    isHistory: boolean;
 }
 
 // Defining the functional component PoolRequestUserList using the React.FC type and the UserRequestListProps interface

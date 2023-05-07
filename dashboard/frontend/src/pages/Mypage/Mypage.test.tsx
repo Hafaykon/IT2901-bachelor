@@ -68,7 +68,7 @@ describe('MyPage component', () => {
         await waitFor(() => expect(screen.queryByTestId('loading-spinner')).not.toBeInTheDocument(), {timeout: 3000});
     });
 
-     // Testing that the component renders correctly when data has been loaded
+    // Testing that the component renders correctly when data has been loaded
     it('renders when data has been loaded', async () => {
         renderWithRecoil(<Mypage/>, {primary_user_full_name: 'Bertil Nedregård'});
 

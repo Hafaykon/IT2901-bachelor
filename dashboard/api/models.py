@@ -5,7 +5,7 @@ from django.db import models
 User = settings.AUTH_USER_MODEL
 
 
-# Create your models here.
+
 class SoftwarePerComputer(models.Model):
     objects = models.Manager()  # default manager
     computer_name = models.CharField(max_length=100, verbose_name="Computer Name")
@@ -73,8 +73,7 @@ class LicensePool(models.Model):
     spc_id = models.IntegerField(unique=True)
     #price = models.ForeignKey(SoftwarePerComputer.price, on_delete=models.CASCADE, related_name='price', null=True)
 
-# Model for PoolTable requests
-# Currently not used
+
 class PoolRequest(models.Model):
     objects = models.Manager()  # default manager
     requested_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='requests', null=True,

@@ -53,8 +53,9 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
         const data = await action();
 
         if (data) {
-/*             const message = isUnitHead ? 'Lisens frigjort!' : 'Forespørsel sendt sendt til lisensansvarlig!';
- */            setBought(true);
+            /*             const message = isUnitHead ? 'Lisens frigjort!' : 'Forespørsel sendt sendt til lisensansvarlig!';
+             */
+            setBought(true);
         }
     };
 
