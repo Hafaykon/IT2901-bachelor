@@ -1,4 +1,4 @@
-# IT2901-bachelor project - Group  TRDK3
+# IT2901: Group  TRDK3
 ## Information
 This bachelor project is made as part of the subject _IT2901 - 
 Informatikk Prosjektarbeid II_ at the Norwegian University of Science and Technology. 
@@ -10,8 +10,11 @@ The project authors are:
 - Ida Waage Høyland
 - Solveig Myren
 - Sarmi Ponnuthurai
-- Alvaro W.
+- Alvaro Worren.
 - Håkon Hargott Wullum
+
+## Video Demonstration
+A video demonstration of the product can be found here: https://www.youtube.com/watch?v=j6zfSeAYlaw 
 
 ## Documentation
 This README provides general information about the project, and a guide on how to install and run it. 
@@ -19,16 +22,17 @@ This README provides general information about the project, and a guide on how t
 ### File structure
 The project has the following (simplified) file structure:
 
-* [dashboard/](./siste-prosjekt/dashboard): The folder for the main project
-  * [api/](./siste-prosjekt/dashboard/api): Where main the Python files lie. Views, urls, models etc.
-  * [data/](./siste-prosjekt/dashboard/data): The .csv files used as data for the project.
-  * [frontend/](./siste-prosjekt/dashboard/frontend): Where the frontend Typescript files are located.
-  * [license_dashboard/](./siste-prosjekt/dashboard/license_dashboard): Django settings.
-  * [TECHNICAL_README.md](./siste-prosjekt/dashboard/TECHNICAL_README.md): The technical README for the project.
-  * [db.sqlite3](./siste-prosjekt/dashboard/db.sqlite3): The SQLite database file
-  * [manage.py](./siste-prosjekt/dashboard/manage.py): The manage.py file used to start the server etc.
-* [README.md](./siste-prosjekt/README.md): The main repository README, the one you are currently reading.
-* [requirements.txt](./siste-prosjekt/requirements.txt): The Python dependencies. 
+* [dashboard/](dashboard): The folder for the main project
+  * [api/](dashboard/api): Where main the Python files lie. Views, urls, models etc.
+  * [frontend/](dashboard/frontend): Where the frontend Typescript files are located.
+  * [license_dashboard/](dashboard/license_dashboard): Django settings.
+  * [db.sqlite3](dashboard/db.sqlite3): The SQLite database file.
+  * [manage.py](dashboard/manage.py): The manage.py file used to start the server etc.
+  * [TECHNICAL_README.md](dashboard/TECHNICAL_README.md): The technical README for the project.
+
+
+* [README.md](README.md): The main repository README, the one you are currently reading.
+* [requirements.txt](requirements.txt): The Python dependencies. 
 
 
 ### Technical documentation
@@ -39,9 +43,12 @@ For a more technical and detailed documentation, please see the README in [dashb
 Installation assumes Python 3.11 or later is installed. From the root of the project:
 1. Run `pip install -r requirements.txt` to make sure all required Python dependencies are installed.
 2. Run `cd dashboard`
-3. Run `python manage.py runserver`
-4. Run `cd frontend`
-5. Run `npm install`, then `npm start`. The project will be accessible on the url [http://localhost:3000/](http://localhost:3000/)
+3. Run `python manage.py migrate`
+4. Run `python manage.py runserver`
+
+In another terminal:
+5. Run `cd frontend`
+6. Run `npm install`, then `npm start`. The project will be accessible on the url [http://localhost:3000/](http://localhost:3000/)
 
 Please see the troubleshooting section in the [technical README](dashboard/TECHNICAL_README.md) if you any issues with the installation appear.
 
@@ -49,8 +56,3 @@ Please see the troubleshooting section in the [technical README](dashboard/TECHN
 ## License
 The project is created under a GNU General Public License, version 3. 
 Please [click here](https://www.gnu.org/licenses/gpl-3.0.html) for more information.
-
-
-
-
-

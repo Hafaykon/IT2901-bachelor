@@ -3,12 +3,14 @@
 [Back to main README.md](../README.md)
 
 ## 1. Stack used
-The technology used for the backend is a combination of Django and Django Rest Framework (DRF) and SQLite.
+
+For the backend, we used for the backend a combination of Django and Django Rest Framework (DRF) and SQLite for the
+database system.
 For the frontend, we have used React and Typescript.
 
 - The database file is located in [dashboard/db.sqlite3](dashboard/db.sqlite3)
-- The python files are located in [dashboard/api](dashboard/api)
-- The Typescript files are located in [dashboard/frontend/src](dashboard/frontend/src)
+- The backend files are located in [dashboard/api](dashboard/api)
+- The frontend files are located in [dashboard/frontend/](dashboard/frontend/)
 
 ### MVT
 
@@ -31,48 +33,63 @@ is shown.
 Django does not use a controller to manage the model like in many other types of projects.
 Instead, a 'template' is used, which is our frontend (see above for a link).
 
-## 2. How the models are made
+#### Detailed repository (as viewed from /[dashboard](dashboard))
 
-The project is heavily dependent on the file [data/software_per_computer.csv](data/software_per_computer.csv).
+Please note that the files and folders mentioned here are what the team sees as the ones that could use some explanation
+of what they are.
+It is not meant as a list of all files.
 
-- The dashboard uses the SoftwarePerComputer model from [api/models.py](api/models.py).
-  It is an exact copy of the .csv file, with the same data.
-- The license pool is not based on data from another file.
-  It shares many of the fields as SoftwarePerComputer, such as `primary_user_full_name`.
-  At the moment, it contains random entries from SoftwarePerComputer in order to display mock data, but this will not be
-  the case if used in the real world.
+[api/](dashboard/api): Where main the Python files lie. urls, models etc.
 
-## 3. Troubleshooting
+- [/management](dashboard/api/management): Useful Python files during the development of the product. Should not be of
+  interest to most users.
+- [/urls](dashboard/api/urls): The Django urls.
+- [/views](dashboard/api/views): The Django views.
+- [tests.py](dashboard/api/tests.py): All tests used for frontend.
+
+[frontend/](dashboard/frontend): Where the frontend files are located.
+
+- [/cypress](dashboard/frontend/cypress): The Cypress test folder. The tests are in the folder called "e2e".
+- [/src](dashboard/frontend/src): Contains the most important files for frontend.
+    - [/components](dashboard/frontend/src/components): All the components used in the React pages, sorted in folders
+      for the respective page.
+    - [/pages](dashboard/frontend/src/pages): The page files.
+
+[license_dashboard/](dashboard/license_dashboard): Django settings.
+
+[db.sqlite3](dashboard/db.sqlite3): The SQLite database file.
+
+[manage.py](dashboard/manage.py): The manage.py file used to start the server etc.
+
+[TECHNICAL_README.md](dashboard/TECHNICAL_README.md): The technical README for the project.
+
+## 2. Troubleshooting
 
 - If another process is running on port 3000, run `npx kill-port 3000` before repeating step 5 of the installation.
 - If you get the error message `django.db.utils.OperationalError: table api_licensepool" already exists` when trying to
   migrate tables, run ` python manage.py migrate --fake`.
 
-## 4. Other information
+## 3. Other information - how to run tests
 
-### In order to run the Python unit tests:
+### Backend tests:
 
-1. Locate to /dashboard
-2. Run `python manage.py test`api
+1. Locate to RERERR/dashboard
+2. Run `python manage.py test api`
 
 The python tests are located in the file [api/tests.py](api/tests.py).
 
-### In order to run the Typescript tests:
+### Frontend tests:
 
 1. Locate to /dashboard/frontend
 2. Run `npm test`
 
 The Typescript tests are located throughout the frontend, in the same folder as the corresponding file that is tested.
 
-####
+### Cypress tests:
+The Cypress tests are located inside [dashboard/frontend/cypress](frontend/cypress).
+Since running them requires installation of Cypress, a tutorial will not be provided here.
+When Cypress is installed, run:
 
-### Python dependencies
-
-See [requirements.txt](requirements.txt), in the root of the project.
-
-
-
-
-
-
-
+1. `npx cypress open`.
+2. Choose to configure "E2E" testing.
+3. Run the tests.
