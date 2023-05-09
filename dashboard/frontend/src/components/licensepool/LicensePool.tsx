@@ -7,7 +7,7 @@ import {fetchPoolData, fetchSoftwareUsedInOrg} from "../../api/calls";
 import Checkbox from '@mui/material/Checkbox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Pagination from "@mui/material/Pagination";
-import ActiveLastBreadcrumb from "../dashboard/ActivateLastBreadcrumb";
+import ActiveLastBreadcrumb from "../dashboard/ActivateLastBreadcrumb/ActivateLastBreadcrumb";
 import {useRecoilValue} from "recoil";
 import {refreshTableAtom} from "../../globalVariables/variables";
 
@@ -117,7 +117,8 @@ function LicensePool() {
                         </Stack>
                         <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"} alignItems="center"
                                marginTop={"10px"}>
-                            <SoftwareSearchBar setSelectedSoftware={updateSearchTerm} data={orgSoftware}/>
+                            <SoftwareSearchBar setSelectedSoftware={updateSearchTerm}
+                                               data={orgSoftware}/>
                             <FormControlLabel
                                 control={
                                     <Checkbox
@@ -133,7 +134,7 @@ function LicensePool() {
 
                         </Stack>
                         <Stack direction={'column'} width={"100%"} marginLeft={3}>
-                            <PoolTable data={data} handleSorting={handleSorting}/>
+                            <PoolTable  data={data} handleSorting={handleSorting}/>
                             <Pagination
                                 count={Math.ceil(count / ITEMS_PER_PAGE)}
                                 page={currentPage}

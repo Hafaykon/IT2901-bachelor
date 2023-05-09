@@ -3,7 +3,6 @@ import {Button} from '@mui/material';
 import {useRecoilValue, useSetRecoilState} from "recoil";
 import {refreshTableAtom, userAtom} from "../../../globalVariables/variables";
 
-// Define the properties for the ReleaseButton component
 type ReserveButtonProps = {
     spc_id: number;
     primary_user_email: string;
@@ -13,7 +12,14 @@ type ReserveButtonProps = {
 
 }
 
-// Define the main ReleaseButton component
+/**
+ * A button that can be used to release licenses.
+ * @param spc_id The id of the license to release
+ * @param primary_user_email The email of the user who is requesting to free the license.
+ * @param application_name The name of the application
+ * @param organization The name of the organization
+ * @param price The price of the license
+ */
 const ReleaseButton: React.FC<ReserveButtonProps> = ({
                                                          spc_id,
                                                          primary_user_email,

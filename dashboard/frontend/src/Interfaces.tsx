@@ -1,4 +1,4 @@
-// Define the LicensePoolData interface for storing data related to license pools
+// Interfaces used for the application
 export interface LicensePoolData {
     application_name: string;
     freed_by_organization: string;
@@ -15,7 +15,6 @@ export interface LicensePoolData {
     }>;
 }
 
-// Define the OwnOrgData interface for storing information about an organization
 export interface OwnOrgData {
     application_name: string;
     primary_user_full_name: string;
@@ -30,7 +29,7 @@ export interface OwnOrgData {
     }>
 }
 
-// Define the SoftwareData interface for storing software-related data
+
 export interface SoftwareData {
     id: number;
     application_name: string;
@@ -43,7 +42,6 @@ export interface SoftwareData {
 
 }
 
-// Define the Count interface for storing information about license counts
 export interface Count {
     total_licenses: number,
     active_licenses: number,
@@ -53,7 +51,6 @@ export interface Count {
 
 }
 
-// Define the UserInformation interface for storing user information
 export interface UserInformation {
     primary_user_email: string;
     primary_user_full_name: string;
@@ -62,7 +59,6 @@ export interface UserInformation {
     is_unit_head: boolean;
 }
 
-// Define the OrgRequest interface for storing organization request data
 export interface OrgRequest {
     id: number;
     contact_organization: string;

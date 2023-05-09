@@ -19,7 +19,11 @@ type ReserveButtonProps = {
     application_name: string;
 };
 
-// Define the BuyButton component
+/**
+ * A button that allows the user to reserve or buy a license for a software application.
+ * @param spc_id The id of the software application
+ * @param application_name The name of the software application
+ */
 const BuyButton: React.FC<ReserveButtonProps> = ({spc_id, application_name}) => {
     // Set up necessary state variables and Recoil hooks
     const accessToken = localStorage.getItem('access');

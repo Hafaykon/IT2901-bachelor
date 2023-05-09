@@ -6,7 +6,7 @@ import {OwnOrgData} from "../../Interfaces";
 import {Box, Grid, Stack} from '@mui/material';
 import OwnTable from "../licensepool/ownTable/OwnTable";
 import Pagination from '@mui/material/Pagination';
-import ActiveLastBreadcrumb from '../dashboard/ActivateLastBreadcrumb';
+import ActiveLastBreadcrumb from '../dashboard/ActivateLastBreadcrumb/ActivateLastBreadcrumb';
 import MuiLoadingSpinner from '../spinner/MuiLoadingSpinner';
 import {useRecoilValue} from "recoil";
 import {refreshTableAtom, userAtom} from "../../globalVariables/variables";
@@ -14,9 +14,10 @@ import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import {Typography} from 'antd';
 
+/**
+ * This component is responsible for rendering the license information for the unit.
+ */
 const LicenseInfo: React.FC = () => {
-
-    // Declare and initialize state variables
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
     const {title} = useParams();
     const useQuery = () => {

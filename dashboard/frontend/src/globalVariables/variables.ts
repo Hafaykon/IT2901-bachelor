@@ -1,7 +1,6 @@
 import {atom} from 'recoil';
 import {UserInformation} from '../Interfaces';
-
-
+// This fine contains all global variables used in the application.
 export const orgAtom = atom<string>({
     key: 'organization',
     default: ''

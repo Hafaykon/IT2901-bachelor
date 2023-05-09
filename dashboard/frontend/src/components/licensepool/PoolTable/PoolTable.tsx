@@ -16,12 +16,20 @@ import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import {LicensePoolData} from '../../../Interfaces';
 import BuyButton from "../BuyButton/BuyButton";
 
-// Define interface for row properties
+
 interface RowProps {
     row: LicensePoolData;
 }
 
-// Define Row component
+interface Props {
+    data: LicensePoolData[];
+    handleSorting: (sortBy: string) => void;
+}
+
+/**
+ * Custom row component for the LicensePool Table component
+ * @param props - the row properties
+ */
 function Row(props: RowProps) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
@@ -123,13 +131,12 @@ function Row(props: RowProps) {
     );
 }
 
-// Define interface for PoolTable properties
-interface Props {
-    data: LicensePoolData[];
-    handleSorting: (sortBy: string) => void;
-}
 
-// Define the main PoolTable component
+/**
+ * Main table component for the LicensePool page
+ * @param data - the data to be displayed in the table
+ * @param handleSorting - the function to be called when the user clicks a column header
+ */
 export default function PoolTable({data, handleSorting}: Props) {
     const software = data;
     const [loaded, setLoaded] = React.useState(false);

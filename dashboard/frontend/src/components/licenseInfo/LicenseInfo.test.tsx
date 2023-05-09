@@ -3,6 +3,8 @@ import {render, screen} from '@testing-library/react';
 import {MemoryRouter, Route, Routes} from 'react-router-dom';
 import {RecoilRoot} from 'recoil';
 import LicenseInfo from './LicenseInfo';
+import renderer from "react-test-renderer";
+import React from "react";
 
 const mockOrgs = [[
     "Adobe Acrobat DC Professional",
@@ -52,6 +54,19 @@ describe('LicenseInfo page', () => {
         );
         expect(await screen.findByText('Totale Lisenser i IT-tjenesten')).toBeInTheDocument();
     });
+
+    it('matches snapshot', async () => {
+        const testRenderer = renderer.create(
+            <MemoryRouter initialEntries={['/Ubrukte Lisenser']}>
+                <RecoilRoot>
+                    <Routes>
+                        <Route path='/:title' element={<LicenseInfo/>}/>
+                    </Routes>
+                </RecoilRoot>
+            </MemoryRouter>
+        );
+        expect(testRenderer.toJSON()).toMatchSnapshot();
+    })
     it('renders the unused license page', async () => {
         render(
             <MemoryRouter initialEntries={['/Ubrukte Lisenser']}>

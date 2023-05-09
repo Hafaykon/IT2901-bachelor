@@ -3,8 +3,8 @@
 [Back to main README.md](../README.md)
 
 ## 1. Stack used
-
-The technology stack used is Django-React, and the database used is SQLite.
+The technology used for the backend is a combination of Django and Django Rest Framework (DRF) and SQLite.
+For the frontend, we have used React and Typescript.
 
 - The database file is located in [dashboard/db.sqlite3](dashboard/db.sqlite3)
 - The python files are located in [dashboard/api](dashboard/api)
@@ -50,10 +50,10 @@ The project is heavily dependent on the file [data/software_per_computer.csv](da
 
 ## 4. Other information
 
-### In order to run the Python tests:
+### In order to run the Python unit tests:
 
 1. Locate to /dashboard
-2. Run `python manage.py test`
+2. Run `python manage.py test`api
 
 The python tests are located in the file [api/tests.py](api/tests.py).
 

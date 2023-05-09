@@ -1,6 +1,6 @@
 import React from 'react';
 import {Accordion, AccordionDetails, AccordionSummary, Grid, Typography} from '@mui/material';
-import ActiveLastBreadcrumb from '../../components/dashboard/ActivateLastBreadcrumb';
+import ActiveLastBreadcrumb from '../../components/dashboard/ActivateLastBreadcrumb/ActivateLastBreadcrumb';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import './FAQ.css';
 

@@ -8,7 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import {Box, Grid, Stack} from '@mui/material';
-import ActiveLastBreadcrumb from '../dashboard/ActivateLastBreadcrumb';
+import ActiveLastBreadcrumb from '../dashboard/ActivateLastBreadcrumb/ActivateLastBreadcrumb';
 import {useRecoilValue} from 'recoil';
 import {userAtom} from '../../globalVariables/variables';
 
@@ -18,7 +18,10 @@ interface Leaderboard {
     rank: number;
 }
 
-/*Fetches the leaderboard data from the backend API and sets it to the component state using useState hook */
+/**
+ * Renders the Leaderboard component.
+ * The Leaderboard component shows the user's unit rank and the top 25 units based on their active percentage.
+ */
 export function Leaderboard() {
     // State to store fetched leaderboard data
     const [data, setData] = React.useState<Leaderboard[]>([]);

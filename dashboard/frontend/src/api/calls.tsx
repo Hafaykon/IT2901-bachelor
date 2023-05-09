@@ -85,6 +85,11 @@ export const fetchLicensesAssociatedWithUser = async (username: string) => {
         console.log(error);
     }
 };
+/**
+ * Fetches data used to populate the boxes on the dashboard.
+ * @param org - Optional parameter to filter on organization.
+ * @param email - Optional parameter to filter on email.
+ */
 export const fetchInfoBoxData = async (org?: string, email?: string) => {
     try {
         let url = 'http://127.0.0.1:8000/api/licenses/count';
@@ -101,7 +106,13 @@ export const fetchInfoBoxData = async (org?: string, email?: string) => {
         console.log(error);
     }
 };
-
+/**
+ * Fetches data used to populate the license pool table.
+ * @param page - Page number to fetch.
+ * @param sort - How to sort the data.
+ * @param software - Optional parameter to filter on software.
+ * @param org - Optional parameter to filter on organization.
+ */
 export const fetchPoolData = async (page: number, sort: string, software?: string, org?: string) => {
     try {
         let url = `http://127.0.0.1:8000/api/pool/get/?page=${page}&sort=${sort}`;
@@ -126,7 +137,15 @@ export const fetchPoolData = async (page: number, sort: string, software?: strin
     }
 };
 
-
+/**
+ * Fetches data used to populate OwnTable.
+ * @param page - Page number to fetch.
+ * @param status - Status of the license.
+ * @param sort - How to sort the data.
+ * @param org - Optional parameter to filter on organization.
+ * @param software - Optional parameter to filter on software.
+ * @param email - Optional parameter to filter on email.
+ */
 export const fetchInfoBoxLicense = async (page: number, status: string, sort: string, org?: string, software?: string, email?: string) => {
     try {
         let url = `http://127.0.0.1:8000/api/licenses/licenseinfo/?page=${page}&status=${status}&sort=${sort}`;
@@ -170,6 +189,11 @@ export const fetchSoftwareUsedInOrg = async (status: string, pool: string, organ
         console.log(error);
     }
 };
+/**
+ * Checks if the organization already has a license for the software.
+ * @param software - Software to check for.
+ * @param org - Organization to check for.
+ */
 export const checkIfOrgHasSoftware = async (software: string, org: string) => {
     try {
         const url = `http://127.0.0.1:8000/api/licenses/check/?application_name=${software}&organization=${org}`;
@@ -187,6 +211,10 @@ export const checkIfOrgHasSoftware = async (software: string, org: string) => {
     }
 };
 
+/**
+ * Fetches the amount of number that could potentially be saved.
+ * @param org - Organization to check for.
+ */
 export const fetchPotentialSavings = async (org: string) => {
     try {
         const url = `http://127.0.0.1:8000/api/licenses/moneysaved/?organization=${org}`;
@@ -201,19 +229,6 @@ export const fetchPotentialSavings = async (org: string) => {
         console.log("BAD TIME")
     }
 };
-/*export const fetchLeaderboard = async (organization?: string)=>{
-    try{
-        let url = 'http://127.0.0.1:8000/api/leaderboard/';
-        if (organization) {
-            url = `${url}?organization=${organization}`;
-        }
-        const response = await fetch(url);
-        return await response.json();
-    } 
-    catch (error) {
-        console.log(error);
-    }
-};*/
 
 
 export default {

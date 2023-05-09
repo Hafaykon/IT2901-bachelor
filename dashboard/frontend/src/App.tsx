@@ -13,8 +13,6 @@ import {isAuthAtom, orgAtom, userAtom} from "./globalVariables/variables";
 import Navbar from './components/navbar/Navbar';
 
 function App() {
-
-    // Declare and initiate state variables
     const [isAuthenticated, setIsAuthenticated] = useRecoilState(isAuthAtom);
     const token = localStorage.getItem('access');
     const [isLoading, setIsLoading] = useState(true);

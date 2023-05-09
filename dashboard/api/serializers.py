@@ -50,7 +50,7 @@ class PoolRequestSerializer(serializers.ModelSerializer):
         if data['request'] not in ['add', 'remove']:
             raise serializers.ValidationError("Request must be 'add' or 'remove'")
 
-        # A user should not be able to request the same license twice
+
         if PoolRequestSerializer.Meta.model.objects.filter(spc_id=data['spc_id'], requested_by=data['requested_by'],
                                                            application_name=data['application_name'],
                                                            request=data['request'], completed=False).exists():

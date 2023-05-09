@@ -1,20 +1,22 @@
 import React, {useEffect, useState} from 'react';
 import './Dashboard.css';
 import {Grid, Stack, Typography} from '@mui/material';
-import InfoBox from './InfoBox';
-import DonutChart from './DonutChart';
-import ActiveLastBreadcrumb from './ActivateLastBreadcrumb';
-import {LeaderboardBox} from './LeaderboardBox';
+import InfoBox from './InfoBox/InfoBox';
+import DonutChart from './DonutChart/DonutChart';
+import ActiveLastBreadcrumb from './ActivateLastBreadcrumb/ActivateLastBreadcrumb';
+import {LeaderboardBox} from './LeaderboardBox/LeaderboardBox';
 import {useRecoilValue} from 'recoil';
 import {orgAtom} from '../../globalVariables/variables';
 import {fetchInfoBoxData} from '../../api/calls';
 import MuiLoadingSpinner from '../spinner/MuiLoadingSpinner';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
-import {SavingsBox} from './SavingsBox';
+import {SavingsBox} from './SavingsBox/SavingsBox';
 import {Link} from 'react-router-dom';
 import {Count} from '../../Interfaces';
 
-/* The home page of the application.  */
+/**
+ * Renders the dashboard page.
+ */
 function Dashboard() {
 
     // Retrieve organization name from global state

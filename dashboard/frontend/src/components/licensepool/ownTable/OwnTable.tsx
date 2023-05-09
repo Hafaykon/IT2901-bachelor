@@ -18,13 +18,20 @@ import ReleaseButton from "../ReleaseButton/ReleaseButton";
 import {userAtom} from "../../../globalVariables/variables";
 import {useRecoilValue} from "recoil";
 
-// Define the RowProps interface for the Row component
+
 interface RowProps {
     row: OwnOrgData;
 }
 
+interface Props {
+    data: OwnOrgData[];
+    handleSorting: (sortBy: string) => void;
+}
 
-// Define the Row component, which represents a single row in the table
+
+/**
+ * Custom row for the OwnTable component
+ */
 function Row(props: RowProps) {
     const {row} = props;
     const [open, setOpen] = React.useState(false);
@@ -147,13 +154,12 @@ function Row(props: RowProps) {
     );
 }
 
-// Define the Props interface for the OwnTable component
-interface Props {
-    data: OwnOrgData[];
-    handleSorting: (sortBy: string) => void;
-}
 
-// Define the OwnTable component, which represents the main table
+/**
+ * Table component for the LicenseInfo page.
+ * @param data - The data to be displayed in the table
+ * @param handleSorting - Function to handle sorting of the table
+ */
 export default function OwnTable({data, handleSorting}: Props) {
 
     const software = data;
