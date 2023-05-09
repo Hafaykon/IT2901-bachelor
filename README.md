@@ -48,7 +48,7 @@ Installation assumes Python 3.11 or later is installed. From the root of the pro
 5. Run `python manage.py runserver`
 
 In another terminal:
-5. Run `cd frontend`
+5. Run `cd dashboard/frontend`
 6. Run `npm install`, then `npm start`. The project will be accessible on the url [http://localhost:3000/](http://localhost:3000/)
 
 Please see the troubleshooting section in the [technical README](dashboard/TECHNICAL_README.md) if you any issues with the installation appear.
