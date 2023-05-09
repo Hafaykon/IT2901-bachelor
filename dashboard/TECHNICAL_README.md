@@ -8,9 +8,9 @@ For the backend, we used for the backend a combination of Django and Django Rest
 database system.
 For the frontend, we have used React and Typescript.
 
-- The database file is located in [dashboard/db.sqlite3](dashboard/db.sqlite3)
-- The backend files are located in [dashboard/api](dashboard/api)
-- The frontend files are located in [dashboard/frontend/](dashboard/frontend/)
+- The database file is located in [dashboard/db.sqlite3](/dashboard/db.sqlite3)
+- The backend files are located in [dashboard/api](/dashboard/api)
+- The frontend files are located in [dashboard/frontend/](/dashboard/frontend/)
 
 ### MVT
 
