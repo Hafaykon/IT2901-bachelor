@@ -16,6 +16,7 @@ The project authors are:
 ## Video Demonstration
 A video demonstration of the product can be found here: https://www.youtube.com/watch?v=aS1Ls_RM_FY
 
+
 ## Documentation
 This README provides general information about the project, and a guide on how to install and run it. 
 
@@ -43,13 +44,22 @@ For a more technical and detailed documentation, please see the README in [dashb
 Installation assumes Python 3.11 or later is installed. From the root of the project:
 1. Run `pip install -r requirements.txt` to make sure all required Python dependencies are installed.
 2. Run `cd dashboard`
-3. Run `python manage.py makemigrations`
-4. Run `python manage.py migrate`
-5. Run `python manage.py runserver`
+3. Run `python manage.py migrate`
+4. Run `python manage.py runserver`
 
-In another terminal:
-5. Run `cd dashboard/frontend`
-6. Run `npm install`, then `npm start`. The project will be accessible on the url [http://localhost:3000/](http://localhost:3000/)
+In another terminal tab (don't close the previous one):
+1. Run `cd dashboard/frontend`
+2. Run `npm install`, then `npm start`. 
+
+The project will be accessible on the url [http://localhost:3000/](http://localhost:3000/). You can login using the following:
+- Email: `leendert.wienhofen@trondheim.kommune.no`
+  - You can use any of the 9000 user emails in the database, this is simply an example.
+- Password: `defaultpassword`
+  - This is the password for all users.
+
+- To access Django's browsable API, go to [http://127.0.0.1:8000/admin/](http://127.0.0.1:8000/admin/).
+  - The username is `admin@admin.com` and the password is 
+`admin`.
 
 Please see the troubleshooting section in the [technical README](dashboard/TECHNICAL_README.md) if you any issues with the installation appear.
 
