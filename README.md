@@ -46,9 +46,15 @@ Installation assumes Python 3.11 or later is installed. From the root of the pro
 3. Run `python manage.py migrate`
 4. Run `python manage.py runserver`
 
-In another terminal:
-5. Run `cd frontend`
-6. Run `npm install`, then `npm start`. The project will be accessible on the url [http://localhost:3000/](http://localhost:3000/)
+In another terminal tab (don't close the previous one):
+1. Run `cd frontend`
+2. Run `npm install`, then `npm start`. 
+
+The project will be accessible on the url [http://localhost:3000/](http://localhost:3000/). You can login using the following:
+- Email: `leendert.wienhofen@trondheim.kommune.no`
+  - You can use any of the 9000 user emails in the database, this is simply an example.
+- Password: `defaultpassword`
+  - This is the password for all users.
 
 Please see the troubleshooting section in the [technical README](dashboard/TECHNICAL_README.md) if you any issues with the installation appear.
 
