@@ -90,6 +90,7 @@ class PoolRequest(models.Model):
     completed = models.BooleanField(default=False)
     reviewed_by = models.EmailField(max_length=100, null=True, blank=True)
     reviewed_date = models.DateField(blank=True, null=True)
+    price = models.FloatField(verbose_name="Price", null=True, blank=True)
     spc_id = models.IntegerField(blank=True, null=True)
 
 

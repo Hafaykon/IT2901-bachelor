@@ -43,6 +43,7 @@ class UpdatePoolRequest(generics.RetrieveUpdateAPIView):
                         family=pool_request.family,
                         family_version=pool_request.family_version,
                         family_edition=pool_request.family_edition,
+                        price=pool_request.price,
                         spc_id=pool_request.spc_id,
                     )
                     license_pool.save()
