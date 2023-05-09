@@ -59,15 +59,20 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
             <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
               <b>Forespørsel opprettet</b>
             </TableCell>
+            {!isHistory && (
+            <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
+              <b>Forespørsel av</b>
+            </TableCell>
+            )}
             <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
               <b>Forespørsel</b>
             </TableCell>
             {/* Added table headers if isHistory is true */}
             {isHistory && (
               <>
-                <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
+                {/* <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
                   <b>Prossesert av</b>
-                </TableCell>
+                </TableCell> */}
                 <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
                   <b>Prossesert dato</b>
                 </TableCell>
@@ -96,6 +101,11 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
               <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
                 {request.request_date}
               </TableCell>
+              {!isHistory && (
+              <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
+                {request.requested_by}
+              </TableCell>
+              )}
               <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
                 {request.request == 'add'
                   ? 'Overfør til lisensportalen'
@@ -105,9 +115,9 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
               {isHistory && (
                 <>
                   {' '}
-                  <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
+                  {/*<TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
                     {request.reviewed_by}
-                  </TableCell>
+              </TableCell>*/}
                   <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>
                     {request.reviewed_date}
                   </TableCell>

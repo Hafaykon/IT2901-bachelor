@@ -281,8 +281,7 @@ function MyPage() {
                       />
                     </Grid>
                     {/* Render the user's history section */}
-                    <Grid
-                      container
+                    <Box
                       alignItems="center"
                       sx={{ paddingTop: '30px' }}>
                       <Grid item>
@@ -306,7 +305,7 @@ function MyPage() {
                       {/* Render the PoolRequestList component for the user's history if the "Show History" checkbox is checked */}
                       {showHistory && (
                         <Grid item id="history">
-                          <Box sx={{ width: '98.5%' }}>
+                          <Box sx={{ width: '92.5%' }}>
                             <PoolRequestList
                               poolRequests={poolRequests.history}
                               onApprove={handleApprove}
@@ -317,10 +316,11 @@ function MyPage() {
                           </Box>
                         </Grid>
                       )}
-                    </Grid>
+                    </Box>
                   </Box>
                 ) : (
-                  <Box>
+                  <Box alignItems={'center'}>
+                    <Grid container >
                     <h2 style={{ textAlign: 'left' }}>Min historikk</h2>
                     <Grid container spacing={1} alignItems="left">
                       <Grid item>
@@ -337,10 +337,11 @@ function MyPage() {
                           sx={{ width: '150px' }}
                         />
                       </Grid>
+                      </Grid>
                        {/* Render the PoolRequestList component for the user's history if the "Show History" checkbox is checked */}
                       {showHistory && (
                         <Grid item>
-                          <Box sx={{ width: '98.5%', marginTop: '-20px' }}>
+                          <Box sx={{ width: '125.5%', marginTop: '-20px' }}>
                             <PoolRequestList
                               data-testid="request-history"
                               poolRequests={poolRequests.history}
