@@ -40,7 +40,7 @@ Please note that the files and folders mentioned here are what the team sees as 
 of what they are.
 It is not meant as a list of all files.
 
-#### As seen from (as viewed from [root/dashboard/](../dashboard)):
+#### As viewed from [root/dashboard/](../dashboard):
 
 [api/](api): Where main the Python files lie. urls, models etc.
 
@@ -81,7 +81,7 @@ The python tests are located in the file [api/tests.py](api/tests.py).
 The Typescript tests are located throughout the frontend, in the same folder as the corresponding file that is tested.
 
 ### Cypress tests:
-The Cypress tests are located inside [frontend/cypress/](frontend/cypress).
+The Cypress tests are located inside [/dashboard/frontend/cypress/](frontend/cypress).
 Since running them requires installation of Cypress, a tutorial will not be provided here.
 When Cypress is installed, run:
 
