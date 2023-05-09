@@ -68,23 +68,23 @@ It is not meant as a list of all files.
 
 ### Backend tests:
 
-1. Locate to [/dashboard/](../dashboard)
+1. Locate to `/dashboard/` in the terminal.
 2. Run `python manage.py test api`
 
-The python tests are located in the file [api/tests.py](api/tests.py).
+The frontend tests are located in the file [dashboard/api/tests.py](api/tests.py).
 
 ### Frontend tests:
 
-1. Locate to /dashboard/frontend
+1. Locate to `/dashboard/frontend` in the terminal.
 2. Run `npm test`
 
-The Typescript tests are located throughout the frontend, in the same folder as the corresponding file that is tested.
+The frontend tests are located in the same folder as the corresponding file that is tested.
 
 ### Cypress tests:
 The Cypress tests are located inside [/dashboard/frontend/cypress/](frontend/cypress).
 Since running them requires installation of Cypress, a tutorial will not be provided here.
-When Cypress is installed, run:
+When Cypress is installed:
 
-1. `npx cypress open`.
+1. Run `npx cypress open` in the terminal.
 2. Choose to configure "E2E" testing.
-3. Run the tests.
+3. Run the tests in the browser chosen during configuration.
