@@ -40,11 +40,11 @@ Please note that the files and folders mentioned here are what the team sees as 
 of what they are.
 It is not meant as a list of all files.
 
-#### As seen from (as viewed from [root/dashboard/](../dashboard))
+#### As seen from (as viewed from [root/dashboard/](../dashboard)):
 
 [api/](api): Where main the Python files lie. urls, models etc.
 
-- [management/](api/management): Useful Python files during the development of the product. Should not be of
+- [management/commands](api/management/commands): Useful Python files during the development of the product. Should not be of
   interest to most users.
 - [urls/](api/urls): The Django urls.
 - [views/](api/views): The Django views.
