@@ -24,7 +24,7 @@ They are the actual tables in the database.
 
 #### View
 
-The view is located in [/dashboard/api/views.py](api/views).
+The view is located in [/dashboard/api/views](api/views).
 This file is how the data is accessed by the frontend.
 Depending on which of the the urls from [urls.py](api/urls.py) is requested on the frontend, the correct view
 is shown.
