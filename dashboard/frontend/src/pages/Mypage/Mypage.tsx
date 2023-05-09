@@ -36,7 +36,6 @@ function MyPage() {
     const [boxData, setBoxData] = useState<Count[]>([]);
     const [isBoxDataFetched, setIsBoxDataFetched] = useState<boolean>(false);
     const username = userInfo.primary_user_full_name;
-
     const accessToken = localStorage.getItem('access');
     const [poolRequests, setPoolRequests] = useState<RequestObject>({
         own_requests: [],
@@ -71,6 +70,7 @@ function MyPage() {
                 const data = await response.json();
                 if (response.ok) {
                     setLicenseData(data);
+
                 }
             } catch (error) {
                 console.log(error);
@@ -115,7 +115,7 @@ function MyPage() {
                 );
                 const data = await response.json();
                 if (response.ok) {
-                    setPoolRequests(data);
+                    setPoolRequests(data)
                 }
             } catch (error) {
                 console.log(error);
@@ -250,10 +250,10 @@ function MyPage() {
                                     <DonutChart
                                         data-testid="donut-chart"
                                         // Pass the chart data (with null coalescing operator for fallback values)
-                                        never_used={boxData[0].never_used ?? 0}
-                                        total_licenses={boxData[0].total_licenses ?? 0}
-                                        unused_licenses={boxData[0].unused_licenses ?? 0}
-                                        active_licenses={boxData[0].active_licenses ?? 0}
+                                        never_used={boxData && boxData[0] ? boxData[0].never_used : 0}
+                                        total_licenses={boxData && boxData[0] ? boxData[0].total_licenses : 0}
+                                        unused_licenses={boxData && boxData[0] ? boxData[0].unused_licenses : 0}
+                                        active_licenses={boxData && boxData[0] ? boxData[0].active_licenses : 0}
                                         width={530}
                                         height={432}
                                         showInformation={false}
