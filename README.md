@@ -43,8 +43,9 @@ For a more technical and detailed documentation, please see the README in [dashb
 Installation assumes Python 3.11 or later is installed. From the root of the project:
 1. Run `pip install -r requirements.txt` to make sure all required Python dependencies are installed.
 2. Run `cd dashboard`
-3. Run `python manage.py migrate`
-4. Run `python manage.py runserver`
+3. Run `python manage.py makemigrations`
+4. Run `python manage.py migrate`
+5. Run `python manage.py runserver`
 
 In another terminal:
 5. Run `cd frontend`

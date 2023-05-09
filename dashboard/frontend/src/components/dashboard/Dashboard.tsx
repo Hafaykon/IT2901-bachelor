@@ -26,22 +26,24 @@ function Dashboard() {
     const [boxData, setBoxData] = useState<Count[] | undefined>(undefined);
     const accessToken = localStorage.getItem('access');
 
-    // Fetch data from API when component mounts or access token/organization changes
+    // Fetch box data
     useEffect(() => {
         const fetchData = async () => {
-            if (accessToken && org) {
-                // Fetch box data
-                const boxDataResponse: Count[] | undefined = await fetchInfoBoxData(
-                    org
-                );
-                if (boxDataResponse !== undefined) {
-                    setBoxData(boxDataResponse);
+            try {
+                if (accessToken && org) {
+                    const boxDataResponse: Count[] | undefined = await fetchInfoBoxData(org);
+                    if (boxDataResponse !== undefined) {
+                        setBoxData(boxDataResponse);
+                    }
                 }
+            } catch (error) {
+                console.error('Error while fetching data:', error);
             }
         };
 
         fetchData();
     }, [accessToken, org]);
+
 
     return (
         <>

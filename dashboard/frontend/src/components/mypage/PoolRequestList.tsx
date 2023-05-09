@@ -26,6 +26,9 @@ interface PoolRequestListProps {
     onDisapprove: (requestId: number) => void;
 }
 
+/**
+ * A component that displays a list of active or historical poolrequests.
+ */
 const PoolRequestList: React.FC<PoolRequestListProps> = ({
                                                              poolRequests,
                                                              isOwnRequest,
@@ -38,7 +41,6 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
         <TableContainer component={Paper} sx={{marginTop: 4, width: '100%'}}>
             <Table>
                 <TableHead>
-                    {/* Define the table headers */}
                     <TableRow>
                         <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>
                             <b>Lisensnavn </b>
@@ -54,7 +56,6 @@ const PoolRequestList: React.FC<PoolRequestListProps> = ({
                         <TableCell sx={{fontFamily: 'Source Sans Pro,sans-serif'}}>
                             <b>Forespørsel</b>
                         </TableCell>
-                        {/* Added table headers if isHistory is true */}
                         {isHistory && (
                             <>
                                 {/* <TableCell sx={{ fontFamily: 'Source Sans Pro,sans-serif' }}>

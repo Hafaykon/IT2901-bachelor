@@ -38,7 +38,7 @@ describe('Test frigjør lisens - Bertil', () => {
             });
 
         // finner første godkjenn-knapp av forespørsler. failer hvis ingen forespørsler finnes
-        cy.get('[data-testid="approved-test-id"]')
+        cy.get('[data-testid="approve-button"]')
             .first()
             .click()
 

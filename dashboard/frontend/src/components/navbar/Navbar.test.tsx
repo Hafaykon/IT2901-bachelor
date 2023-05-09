@@ -41,16 +41,16 @@ describe('Testing render, Navbar', () => {
 
     it('hides sidebar when clear icon is clicked', () => {
         const menuIcon = screen.getByTestId('menuIcon');
-        userEvent.click(menuIcon); // Open the sidebar
+        userEvent.click(menuIcon);
         const clearIcon = screen.getByTestId('clearIcon');
-        userEvent.click(clearIcon); // Close the sidebar
+        userEvent.click(clearIcon);
         const navMenu = screen.getByTestId('sidebar');
         expect(navMenu).toHaveClass('nav-menu');
     });
 
     it('renders sidebar links correctly', () => {
         const menuIcon = screen.getByTestId('menuIcon');
-        userEvent.click(menuIcon); // Open the sidebar
+        userEvent.click(menuIcon);
         const sidebarLinks = screen.getAllByRole('link', {hidden: true});
         expect(sidebarLinks.length).toBeGreaterThan(0);
     });

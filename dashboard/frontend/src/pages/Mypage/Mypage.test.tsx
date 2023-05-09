@@ -7,6 +7,7 @@ import {RecoilRoot} from 'recoil';
 import {userAtom} from "../../globalVariables/variables";
 import {BrowserRouter} from "react-router-dom";
 import 'isomorphic-fetch';
+import renderer from 'react-test-renderer';
 
 const infoBoxData = {
     "total_licenses": 7,
@@ -21,6 +22,17 @@ const renderWithRecoil = (
     initialState: any
 ) => {
     return render(
+        <RecoilRoot
+            initializeState={({set}) => set(userAtom, initialState)}
+        >
+            <BrowserRouter>
+                {ui}
+            </BrowserRouter>
+        </RecoilRoot>
+    );
+};
+const renderWithRecoilSnapshot = (ui: React.ReactElement, initialState: any) => {
+    return renderer.create(
         <RecoilRoot
             initializeState={({set}) => set(userAtom, initialState)}
         >
@@ -85,4 +97,12 @@ describe('MyPage component', () => {
 
         await waitFor(() => expect(screen.getByText('Prossesert dato')).toBeInTheDocument());
     });
+    it('matches snapshot', async () => {
+        (fetchInfoBoxData as jest.Mock).mockReturnValueOnce([infoBoxData]);
+        (localStorage.getItem as jest.Mock).mockReturnValueOnce('fakeToken');
+
+        const testRenderer = renderWithRecoilSnapshot(<Mypage/>, {primary_user_full_name: 'Bertil Nedregård'});
+        expect(testRenderer.toJSON()).toMatchSnapshot();
+    });
+
 });

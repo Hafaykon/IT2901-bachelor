@@ -50,53 +50,62 @@ const ReleaseButton: React.FC<ReserveButtonProps> = ({
 
     // Send a request to free the user's own license
     const requestFreeOwnLicense = async () => {
-        const response = await fetch('http://127.0.0.1:8000/api/requests/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify({
-                'contact_organization': organization,
-                'application_name': application_name,
-                'request': 'add',
-                'requested_by': primary_user_email,
-                'price': price,
-                'spc_id': spc_id,
-            }),
-        });
-        const data = await response.json();
-        if (response.ok) {
-            return data;
-        } else {
-            alert(data.non_field_errors[0])
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/requests/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify({
+                    'contact_organization': organization,
+                    'application_name': application_name,
+                    'request': 'add',
+                    'requested_by': primary_user_email,
+                    'price': price,
+                    'spc_id': spc_id,
+                }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                return data;
+            } else {
+                alert(data.non_field_errors[0])
+            }
+        } catch (error) {
+            console.error(error);
         }
-    }
+    };
+
 
     // Free the license and update the pool
     const freeLicense = async () => {
-        const response = await fetch('http://127.0.0.1:8000/api/pool/create', {
-            method: 'POST', // Change this from 'GET' to 'POST'
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${accessToken}`,
-            },
-            body: JSON.stringify({
-                'freed_by_organization': organization,
-                'application_name': application_name,
-                'price': price,
-                'spc_id': spc_id,
-            }),
-        });
-        const data = await response.json();
-        if (response.ok) {
-            setRefresh((old) => !old)
-            return data;
-        } else {
-            alert(data.non_field_errors[0])
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/pool/create', {
+                method: 'POST', // Change this from 'GET' to 'POST'
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${accessToken}`,
+                },
+                body: JSON.stringify({
+                    'freed_by_organization': organization,
+                    'application_name': application_name,
+                    'price': price,
+                    'spc_id': spc_id,
+                }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setRefresh((old) => !old)
+                return data;
+            } else {
+                alert(data.non_field_errors[0])
+            }
+        } catch (error) {
+            console.error(error);
         }
+    };
 
-    }
 
     // Render the button with an onClick handler
     return (

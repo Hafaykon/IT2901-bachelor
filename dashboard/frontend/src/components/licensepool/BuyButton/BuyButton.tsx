@@ -38,35 +38,45 @@ const BuyButton: React.FC<ReserveButtonProps> = ({spc_id, application_name}) => 
 
     // Fetch data about the software application's licenses
     const fetchData = async () => {
-        if (application_name) {
-            const result = await checkIfOrgHasSoftware(
-                application_name,
-                userInfo.organization
-            );
-            if (result && !result.error) {
-                setUnusedLicenses(result.count);
+        try {
+            if (application_name) {
+                const result = await checkIfOrgHasSoftware(
+                    application_name,
+                    userInfo.organization
+                );
+                if (result && !result.error) {
+                    setUnusedLicenses(result.count);
+                }
             }
+        } catch (error) {
+            console.error(error);
+            alert('An error occurred while processing your request.');
         }
     };
+
 
     // Check if the user has requested a license for the software
     const checkIfUserHasRequested = async () => {
-        const response = await fetch(
-            `http://127.0.0.1:8000/api/requests/check?spc_id=${spc_id}`,
-            {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`
+        try {
+            const response = await fetch(
+                `http://127.0.0.1:8000/api/requests/check?spc_id=${spc_id}`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`
+                    }
                 }
+            );
+            const data = await response.json();
+            if (!response.ok) {
+                setError(data.error);
             }
-        );
-
-        const data = await response.json();
-        if (!response.ok) {
-            setError(data.error);
+        } catch (error) {
+            console.error(error);
         }
     };
+
 
     // Open the dialog when the BuyButton is clicked
     const handleClickOpen = async () => {
@@ -92,47 +102,57 @@ const BuyButton: React.FC<ReserveButtonProps> = ({spc_id, application_name}) => 
 
     // Request to release a license
     const requestReleaseLicense = async () => {
-        const response = await fetch('http://127.0.0.1:8000/api/requests/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`
-            },
-            body: JSON.stringify({
-                contact_organization: userInfo.organization,
-                application_name: application_name,
-                request: 'remove',
-                requested_by: userInfo.primary_user_email,
-                spc_id: spc_id
-            })
-        });
-        const data = await response.json();
-        if (response.ok) {
-            return data;
-        } else {
-            alert(data.non_field_errors[0]);
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/requests/create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`
+                },
+                body: JSON.stringify({
+                    contact_organization: userInfo.organization,
+                    application_name: application_name,
+                    request: 'remove',
+                    requested_by: userInfo.primary_user_email,
+                    spc_id: spc_id
+                })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                return data;
+            } else {
+                alert(data.non_field_errors[0]);
+            }
+        } catch (error) {
+            console.error(error);
         }
     };
 
+
     // Release a license
     const releaseLicense = async () => {
-        const response = await fetch('http://127.0.0.1:8000/api/pool/buy/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${accessToken}`
-            },
-            body: JSON.stringify({
-                spc_id: spc_id
-            })
-        });
-        const data = await response.json();
-        if (response.ok) {
-            return data;
-        } else {
-            alert(data.error);
+        try {
+            const response = await fetch('http://127.0.0.1:8000/api/pool/buy/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`
+                },
+                body: JSON.stringify({
+                    spc_id: spc_id
+                })
+            });
+            const data = await response.json();
+            if (response.ok) {
+                return data;
+            } else {
+                alert(data.error);
+            }
+        } catch (error) {
+            console.error(error);
         }
     };
+
 
 // Render the BuyButton component and the dialog
     return (

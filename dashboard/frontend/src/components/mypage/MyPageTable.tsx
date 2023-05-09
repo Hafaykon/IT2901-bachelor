@@ -19,6 +19,10 @@ interface NorwegianStatuses {
     [key: string]: string;
 }
 
+/**
+ * This component renders a table with the licenses to the user.
+ * @param data The data to be rendered in the table.
+ */
 function MyPageTable({data}: MyPageTableProps) {
     // Define an object to map status values to their Norwegian counterparts
     const norwegianStatuses: NorwegianStatuses = {

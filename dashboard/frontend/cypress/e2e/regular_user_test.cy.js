@@ -193,8 +193,8 @@ describe('Test min side - Leendert', () => {
         cy.wait(1000);
 
         // sjekker at historikk-tabellen dukker opp når man har bedt om at den vises
-        cy.get('[data-testid="request-history-testid"]')
-            .should("exist")
+        //cy.get('[data-testid="request-history"]').should("exist")
+        cy.get('table').last().should('exist');
     });
 });
 

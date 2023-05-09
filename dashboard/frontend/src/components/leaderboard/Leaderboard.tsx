@@ -29,26 +29,31 @@ export function Leaderboard() {
     const accessToken = localStorage.getItem('access');
     const userInfo = useRecoilValue(userAtom);
 
-    // Fetch leaderboard data from the API and update component state
+    // Fetch leaderboard data from the API
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(
-                `http://127.0.0.1:8000/api/licenses/leaderboard/?organization=${userInfo.organization}`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'content-type': 'application/json',
-                        authorization: `Bearer ${accessToken}`
+            try {
+                const response = await fetch(
+                    `http://127.0.0.1:8000/api/licenses/leaderboard/?organization=${userInfo.organization}`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            'content-type': 'application/json',
+                            authorization: `Bearer ${accessToken}`
+                        }
                     }
+                );
+                const data = await response.json();
+                if (response.ok) {
+                    setData(data.leaderboard);
                 }
-            );
-            const data = await response.json();
-            if (response.ok) {
-                setData(data.leaderboard);
+            } catch (error) {
+                console.error('Error while fetching data:', error);
             }
         };
         fetchData();
     }, []);
+
 
     /*Renders the Leaderboard table. The first table shows the users unit rank.
     And the second table shows the top 25 units based on their active percentage */

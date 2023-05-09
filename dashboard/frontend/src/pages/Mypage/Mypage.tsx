@@ -50,6 +50,11 @@ function MyPage() {
         avatarUrl: 'https://example.com/avatar.jpg'
     };
 
+    // Handle showing history
+    const handleShowHistory = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setShowHistory(event.target.checked);
+    };
+
     // Fetch licenses for the user
     useEffect(() => {
         const fetchOwnLicenses = async () => {
@@ -93,10 +98,6 @@ function MyPage() {
         fetchData();
     }, []);
 
-    // Handle showing history
-    const handleShowHistory = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setShowHistory(event.target.checked);
-    };
 
     // Fetch pool requests
     useEffect(() => {
@@ -125,59 +126,68 @@ function MyPage() {
 
     // Handle approving a request
     const handleApprove = async (requestId: number) => {
-        const response = await fetch(
-            `http://127.0.0.1:8000/api/requests/${requestId}`,
-            {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`
-                },
-                body: JSON.stringify({
-                    action: 'approve'
-                })
-            }
-        );
+        try {
+            const response = await fetch(
+                `http://127.0.0.1:8000/api/requests/${requestId}`,
+                {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    body: JSON.stringify({
+                        action: 'approve'
+                    })
+                }
+            );
 
-        if (response.ok) {
-            setPoolRequests((prevState) => {
-                const updatedOrgRequests = prevState.org_requests.filter(
-                    (request) => request.id !== requestId
-                );
-                return {...prevState, org_requests: updatedOrgRequests};
-            });
-        } else {
-            console.log(response);
+            if (response.ok) {
+                setPoolRequests((prevState) => {
+                    const updatedOrgRequests = prevState.org_requests.filter(
+                        (request) => request.id !== requestId
+                    );
+                    return {...prevState, org_requests: updatedOrgRequests};
+                });
+            } else {
+                console.log(response);
+            }
+        } catch (error) {
+            console.error('Error while approving request:', error);
         }
     };
 
     // Handle disapproving a request
     const handleDisapprove = async (requestId: number) => {
-        const response = await fetch(
-            `http://127.0.0.1:8000/api/requests/${requestId}`,
-            {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${accessToken}`
-                },
-                body: JSON.stringify({
-                    action: 'disapprove'
-                })
-            }
-        );
+        try {
+            const response = await fetch(
+                `http://127.0.0.1:8000/api/requests/${requestId}`,
+                {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${accessToken}`
+                    },
+                    body: JSON.stringify({
+                        action: 'disapprove'
+                    })
+                }
+            );
 
-        if (response.ok) {
-            setPoolRequests((prevState) => {
-                const updatedOrgRequests = prevState.org_requests.filter(
-                    (request) => request.id !== requestId
-                );
-                return {...prevState, org_requests: updatedOrgRequests};
-            });
-        } else {
-            console.log(response);
+            if (response.ok) {
+                setPoolRequests((prevState) => {
+                    const updatedOrgRequests = prevState.org_requests.filter(
+                        (request) => request.id !== requestId
+                    );
+                    return {...prevState, org_requests: updatedOrgRequests};
+                });
+            } else {
+                console.log(response);
+            }
+        } catch (error) {
+            console.error('Error while disapproving request:', error);
         }
     };
+
 
     return (
         <>

@@ -6,7 +6,9 @@ import {useSetRecoilState} from "recoil";
 import {isAuthAtom} from "../../globalVariables/variables";
 import {useNavigate} from "react-router-dom";
 
-/* Login page that authenticates login information and stores it in localStorage */
+/**
+ * The login page.
+ */
 export default function Login() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -42,10 +44,8 @@ export default function Login() {
         }
     }
 
-    /**
-     * Stores the access and refresh token in local storage.
-     * @param data The access and refresh token.
-     */
+
+    //Stores the access and refresh token in local storage.
     const handleAuth = (data: { access: string, refresh: string }) => {
         localStorage.setItem('access', data.access)
         localStorage.setItem('refresh', data.refresh)
@@ -94,13 +94,20 @@ export default function Login() {
                             setEmail(e.target.value);
                             setErrorMessage('');
                         }} margin='normal' required fullWidth
-                                   id='loginID' label='E-post' name='LoginID' autoFocus type={"email"}/>
+                                   id='loginID' label='E-post' data-testid='emaill' name='LoginID' autoFocus
+                                   type={"email"}/>
                         <TextField onChange={(e) => {
                             setPassword(e.target.value);
                             setErrorMessage('')
-                        }} margin='normal' required fullWidth
-                                   id='password' label='Passord' name='password' type='password'/>
-                        <Button type='submit' fullWidth variant='contained'
+                        }} margin='normal'
+                                   required
+                                   fullWidth
+                                   id='password'
+                                   data-testid='passwordd'
+                                   label='Passord'
+                                   name='password'
+                                   type='password'/>
+                        <Button type='submit' fullWidth variant='contained' data-testid='buttonn'
                                 sx={{mt: 3, mb: 2, backgroundColor: '#005aa7'}}>Logg inn</Button>
                     </Box>
                 </Box>

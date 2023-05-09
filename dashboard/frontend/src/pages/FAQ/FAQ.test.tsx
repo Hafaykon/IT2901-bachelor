@@ -4,6 +4,7 @@ import {cleanup, render, screen} from '@testing-library/react';
 import {MemoryRouter} from 'react-router-dom';
 import FAQ from './FAQ';
 import userEvent from '@testing-library/user-event';
+import renderer from "react-test-renderer";
 
 describe('Testing FAQ page', () => {
 
@@ -32,6 +33,15 @@ describe('Testing FAQ page', () => {
         userEvent.click(input);
         expect(await screen.findByText('Hva er ledertavlen?')).toBeInTheDocument();
         expect(await screen.findByText('Ledertavlen sammenligner alle enheter i Trondheim Kommune basert på hvor stor andel av alle lisensene eid i enheten er aktive.')).toBeInTheDocument();
+    })
+
+    it('matches snapshot', async () => {
+        const testRenderer = renderer.create(
+            <MemoryRouter>
+                <FAQ/>
+            </MemoryRouter>
+        );
+        expect(testRenderer.toJSON()).toMatchSnapshot();
     })
 
 });
