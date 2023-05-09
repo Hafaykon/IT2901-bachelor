@@ -15,6 +15,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { Typography } from 'antd';
 
 const LicenseInfo: React.FC = () => {
+
+    // Declare and initialize state variables
     const storedOrganization: string | null = JSON.parse(localStorage.getItem('organization') ?? 'null');
     const {title} = useParams();
     const useQuery = () => {
@@ -73,7 +75,7 @@ const LicenseInfo: React.FC = () => {
         fetchData();
     }, [searchTerm, currentPage, status, sortBy, refreshTable, checked]);
 
-
+    // Fetches license information
     const fetchData = async () => {
         if (status && storedOrganization) {
             try {
@@ -94,11 +96,13 @@ const LicenseInfo: React.FC = () => {
         setCurrentPage(1);
     }
 
+    // Function that gets input from the Checkbox component
     const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
         setCurrentPage(1);
     }
 
+    
     const handlePageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
         setLoaded(false)
         setCurrentPage(value);
@@ -117,7 +121,8 @@ const LicenseInfo: React.FC = () => {
                 <Grid>
                     <ActiveLastBreadcrumb/>
                 </Grid>
-                {loaded ? (<Box id={'licensepool_container'}
+                {loaded ? (
+                <Box id={'licensepool_container'}
                                 style={{
                                     display: 'flex',
                                     justifyContent: 'center',
