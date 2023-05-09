@@ -12,7 +12,7 @@ import {useRecoilValue} from "recoil";
 import {refreshTableAtom, userAtom} from "../../globalVariables/variables";
 import Checkbox from "@mui/material/Checkbox";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import { Typography } from 'antd';
+import {Typography} from 'antd';
 
 const LicenseInfo: React.FC = () => {
 
@@ -102,7 +102,7 @@ const LicenseInfo: React.FC = () => {
         setCurrentPage(1);
     }
 
-    
+
     const handlePageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
         setLoaded(false)
         setCurrentPage(value);
@@ -122,52 +122,54 @@ const LicenseInfo: React.FC = () => {
                     <ActiveLastBreadcrumb/>
                 </Grid>
                 {loaded ? (
-                <Box id={'licensepool_container'}
-                                style={{
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignContent: "center",
-                                    marginTop: "20px", 
-                                    fontFamily: 'Source Sans Pro,sans-serif'
-                                }}>
-                    <Grid container className='license_pool' marginLeft={"-2%"}>
-                        <Grid container justifyContent="center" alignItems="center" className={'license_table'}
-                              width={"100%"}>
-                            <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
-                                <h2 style={{fontFamily: 'Source Sans Pro,sans-serif'}}> 
-                                    {title} i {storedOrganization}
-                                </h2>
-                                <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"}
-                                       alignItems="center"
-                                       marginTop={"10px"}
-                                       paddingBottom={"20px"}>
-                                    <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}
-                                                       initialValue={searchTerm}/>
+                    <Box id={'licensepool_container'}
+                         style={{
+                             display: 'flex',
+                             justifyContent: 'center',
+                             alignContent: "center",
+                             marginTop: "20px",
+                             fontFamily: 'Source Sans Pro,sans-serif'
+                         }}>
+                        <Grid container className='license_pool' marginLeft={"-2%"}>
+                            <Grid container justifyContent="center" alignItems="center" className={'license_table'}
+                                  width={"100%"}>
+                                <Stack direction={"column"} spacing={1} width={"70%"} marginBottom={"10px"}>
+                                    <h2 style={{fontFamily: 'Source Sans Pro,sans-serif'}}>
+                                        {title} i {storedOrganization}
+                                    </h2>
+                                    <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"}
+                                           alignItems="center"
+                                           marginTop={"10px"}
+                                           paddingBottom={"20px"}>
+                                        <SoftwareSearchBar data={orgSoftware} setSelectedSoftware={handleChange}
+                                                           initialValue={searchTerm}/>
 
-                                    <FormControlLabel
-                                        control={
-                                            <Checkbox
-                                                checked={checked}
-                                                onChange={handleCheckboxChange}
-                                                inputProps={{'aria-label': 'controlled'}}
-                                            />
-                                        }
-                                       
-                                        label={<Typography style={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '13pt'}}>Vis mine lisenser</Typography>}
+                                        <FormControlLabel
+                                            control={
+                                                <Checkbox
+                                                    checked={checked}
+                                                    onChange={handleCheckboxChange}
+                                                    inputProps={{'aria-label': 'controlled'}}
+                                                />
+                                            }
+
+                                            label={<Typography
+                                                style={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '13pt'}}>Vis
+                                                mine lisenser</Typography>}
+                                        />
+                                    </Stack>
+                                    <OwnTable data={data} handleSorting={handleSorting}/>
+                                    <Pagination
+                                        count={Math.ceil(count / 10)}
+                                        page={currentPage}
+                                        onChange={handlePageChange}
+                                        color={"primary"}
+                                        style={{marginTop: '1rem'}}
                                     />
                                 </Stack>
-                                <OwnTable data={data} handleSorting={handleSorting}/>
-                                <Pagination
-                                    count={Math.ceil(count / 10)}
-                                    page={currentPage}
-                                    onChange={handlePageChange}
-                                    color={"primary"}
-                                    style={{marginTop: '1rem'}}
-                                />
-                            </Stack>
+                            </Grid>
                         </Grid>
-                    </Grid>
-                </Box>) : (<MuiLoadingSpinner/>)}
+                    </Box>) : (<MuiLoadingSpinner/>)}
             </div>
         </>)
 };

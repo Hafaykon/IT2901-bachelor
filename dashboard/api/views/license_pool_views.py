@@ -46,7 +46,7 @@ class CreatePoolObject(generics.CreateAPIView):
 
 class GetLicensePool(generics.ListAPIView):
     """
-    Returns a list of all licenses in the license pool.
+    Returns a list of all licenses in the license pool formatted.
     """
     authentication_classes = [JWTAuthentication]
     serializer_class = PoolSerializer
@@ -105,6 +105,9 @@ class GetLicensePool(generics.ListAPIView):
 
 
 class BuyLicense(generics.GenericAPIView):
+    """
+    "Buy" a license from the license pool by modifying the SoftwarePerComputer instance.
+    """
     queryset = LicensePool.objects.all()
     serializer_class = PoolSerializer
     permission_classes = [IsUnitHead]

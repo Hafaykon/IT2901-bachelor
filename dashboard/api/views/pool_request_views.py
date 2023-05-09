@@ -43,6 +43,7 @@ class UpdatePoolRequest(generics.RetrieveUpdateAPIView):
                         family=pool_request.family,
                         family_version=pool_request.family_version,
                         family_edition=pool_request.family_edition,
+                        price=pool_request.price,
                         spc_id=pool_request.spc_id,
                     )
                     license_pool.save()
@@ -72,17 +73,20 @@ class UpdatePoolRequest(generics.RetrieveUpdateAPIView):
 
 
 class CreatePoolRequest(generics.CreateAPIView):
+    """
+    Create a new pool request.
+    """
     queryset = PoolRequest.objects.all()
     serializer_class = PoolRequestSerializer
 
 
 @api_view(['GET'])
 def get_pool_request(request):
+    """
+    Check if the user already has an active request for this license.
+    """
     spc_id = request.GET.get('spc_id')
     user = request.user
-    print(user)
-    print(spc_id)
-    # Check if the user already has a request for this license
     if PoolRequest.objects.filter(spc_id=spc_id, requested_by=user.primary_user_email, completed=False).exists():
         return Response({'error': 'Du har allerede en aktiv forespørsel for denne lisensen.'},
                         status=status.HTTP_400_BAD_REQUEST)
@@ -91,6 +95,9 @@ def get_pool_request(request):
 
 
 class GetPoolRequests(generics.ListCreateAPIView):
+    """
+    Get all pool requests for the current user.
+    """
     serializer_class = PoolRequestSerializer
 
     def list(self, request, *args, **kwargs):

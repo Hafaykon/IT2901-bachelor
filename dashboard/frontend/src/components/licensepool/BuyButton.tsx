@@ -16,9 +16,10 @@ import {checkIfOrgHasSoftware} from '../../api/calls';
 type ReserveButtonProps = {
     id: number;
     application_name: string;
+    price: number;
 };
 
-const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
+const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name, price}) => {
     const accessToken = localStorage.getItem('access');
     const userInfo = useRecoilValue(userAtom);
     const isUnitHead = userInfo.is_unit_head;
@@ -53,8 +54,9 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
         const data = await action();
 
         if (data) {
-/*             const message = isUnitHead ? 'Lisens frigjort!' : 'Forespørsel sendt sendt til lisensansvarlig!';
- */            setBought(true);
+            /*             const message = isUnitHead ? 'Lisens frigjort!' : 'Forespørsel sendt sendt til lisensansvarlig!';
+             */
+            setBought(true);
         }
     };
 
@@ -71,6 +73,7 @@ const BuyButton: React.FC<ReserveButtonProps> = ({id, application_name}) => {
                 'application_name': application_name,
                 'request': 'remove',
                 'requested_by': userInfo.primary_user_email,
+                'price': price,
                 'spc_id': id,
             }),
         });

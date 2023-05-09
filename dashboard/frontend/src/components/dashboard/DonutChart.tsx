@@ -6,19 +6,19 @@ import {Chart, ReactGoogleChartEvent} from 'react-google-charts';
 
 
 type Props = {
-    total_licenses: number, // Number of licenses owend in the unit
-    active_licenses: number, // Number of licenses actively in use in the unit
-    never_used: number, // Number of unused licenses in the unit
-    unused_licenses: number, // Number of available licenses in the unit
-    width?: number; // Sets the width of the DonutChart card
-    height?: number; // Sets the height of the DonutChart card
-    title?: string, // Sets the title displayed in the DonutChart card
-    showInformation?: boolean,  // Boolean for showing a HelpIcon in the card or not
+    total_licenses: number,
+    active_licenses: number,
+    never_used: number,
+    unused_licenses: number,
+    width?: number;
+    height?: number;
+    title?: string,
+    showInformation?: boolean,
 }
 
 
 function DonutChart(infoBoxData: Props) {
-    
+
     // Get the function for navigating to different routes
     const navigate = useNavigate();
 
