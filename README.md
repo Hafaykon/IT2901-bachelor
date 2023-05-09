@@ -1,4 +1,4 @@
-# IT2901-bachelor project - Group  TRDK3
+# IT2901: Group  TRDK3
 ## Information
 This bachelor project is made as part of the subject _IT2901 - 
 Informatikk Prosjektarbeid II_ at the Norwegian University of Science and Technology. 
@@ -10,8 +10,11 @@ The project authors are:
 - Ida Waage Høyland
 - Solveig Myren
 - Sarmi Ponnuthurai
-- Alvaro W.
+- Alvaro Worren.
 - Håkon Hargott Wullum
+
+## Video Demonstration
+A video demonstration of the product can be found here: https://www.youtube.com/watch?v=j6zfSeAYlaw 
 
 ## Documentation
 This README provides general information about the project, and a guide on how to install and run it. 
