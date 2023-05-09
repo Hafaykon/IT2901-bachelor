@@ -126,7 +126,8 @@ function LicensePool() {
                                         inputProps={{'aria-label': 'controlled'}}
                                     />
                                 }
-                                label={<Typography style={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '13pt'}}>Vis bare lisenser fra min enhet</Typography>}
+                                label={<Typography style={{fontFamily: 'Source Sans Pro,sans-serif', fontSize: '13pt'}}>Vis
+                                    bare lisenser fra min enhet</Typography>}
                             />
                             {errorMessage && <h3 style={{color: 'red'}}>{errorMessage}</h3>}
 

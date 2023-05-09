@@ -12,7 +12,7 @@ export function SavingsBox() {
     const [potentialSavings, setpotentialSavings] = useState<number | undefined>(undefined);
     const organization = useRecoilValue(orgAtom)
 
-      // Fetch data from API when component mounts or access token/organization changes
+    // Fetch data from API when component mounts or access token/organization changes
     useEffect(() => {
         const fetchData = async () => {
             if (organization) {
