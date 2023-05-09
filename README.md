@@ -14,7 +14,7 @@ The project authors are:
 - Håkon Hargott Wullum
 
 ## Video Demonstration
-A video demonstration of the product can be found here: https://www.youtube.com/watch?v=j6zfSeAYlaw 
+A video demonstration of the product can be found here: https://www.youtube.com/watch?v=aS1Ls_RM_FY
 
 ## Documentation
 This README provides general information about the project, and a guide on how to install and run it. 
