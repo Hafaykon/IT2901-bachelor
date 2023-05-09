@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {Box, Button, Container, TextField} from '@mui/material';
 import Typography from '@mui/joy/Typography';
-import '../Login.css'
+import './Login.css'
 import {useSetRecoilState} from "recoil";
 import {isAuthAtom} from "../../globalVariables/variables";
 import {useNavigate} from "react-router-dom";

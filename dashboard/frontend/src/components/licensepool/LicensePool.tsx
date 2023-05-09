@@ -34,9 +34,8 @@ function LicensePool() {
     };
 
     const handleSorting = async (sortBy: string) => {
-        //setLoaded(false)
         setSortBy(sortBy);
-        fetchData()
+        await fetchData()
     };
 
     // Function that gets input from the searchBar component.
@@ -117,8 +116,10 @@ function LicensePool() {
                         </Stack>
                         <Stack direction={'row'} spacing={5} width={"95%"} marginBottom={"30px"} alignItems="center"
                                marginTop={"10px"}>
-                            <SoftwareSearchBar setSelectedSoftware={updateSearchTerm}
-                                               data={orgSoftware}/>
+                            <SoftwareSearchBar
+                                data-testid={'software_search_bar'}
+                                setSelectedSoftware={updateSearchTerm}
+                                data={orgSoftware}/>
                             <FormControlLabel
                                 control={
                                     <Checkbox
@@ -134,7 +135,7 @@ function LicensePool() {
 
                         </Stack>
                         <Stack direction={'column'} width={"100%"} marginLeft={3}>
-                            <PoolTable  data={data} handleSorting={handleSorting}/>
+                            <PoolTable data={data} handleSorting={handleSorting}/>
                             <Pagination
                                 count={Math.ceil(count / ITEMS_PER_PAGE)}
                                 page={currentPage}

@@ -2,19 +2,19 @@ import * as React from 'react';
 import {Grid} from '@mui/joy';
 import {DataGrid} from '@mui/x-data-grid';
 
-// Define the Data interface
+
 interface Data {
     application_name: string;
     computer_name: string;
     status: string;
 }
 
-// Define the MyPageTableProps interface
+
 interface MyPageTableProps {
     data: Data[];
 }
 
-// Define the NorwegianStatuses interface
+
 interface NorwegianStatuses {
     [key: string]: string;
 }
@@ -65,6 +65,7 @@ function MyPageTable({data}: MyPageTableProps) {
                     rows={norwegianData}
                     columns={columns}
                     pageSize={5}
+                    rowsPerPageOptions={[5]}
                     autoHeight
                     disableSelectionOnClick
                 />

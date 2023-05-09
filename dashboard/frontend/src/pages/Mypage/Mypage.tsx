@@ -14,7 +14,6 @@ import Info from '../../components/mypage/Info';
 import {IUser} from '../../components/mypage/types';
 import './MyPage.css';
 
-// Define necessary interfaces
 interface RequestObject {
     own_requests: OrgRequest[];
     org_requests: OrgRequest[];
@@ -55,7 +54,6 @@ function MyPage() {
     useEffect(() => {
         const fetchOwnLicenses = async () => {
             try {
-                console.log(accessToken);
                 const response = await fetch(
                     'http://127.0.0.1:8000/api/licenses/userlicenses/',
                     {
@@ -68,7 +66,6 @@ function MyPage() {
                 const data = await response.json();
                 if (response.ok) {
                     setLicenseData(data);
-                    console.log(data);
                 }
             } catch (error) {
                 console.log(error);
@@ -78,17 +75,14 @@ function MyPage() {
         fetchOwnLicenses();
     }, [username]);
 
-    // Fetch licenses for the user
     useEffect(() => {
         const fetchData = async () => {
             try {
-                // Fetch box data
                 const boxDataResponse: Count[] | undefined = await fetchInfoBoxData(
                     userInfo.organization,
                     userInfo.primary_user_email
                 );
                 if (boxDataResponse !== undefined) {
-                    console.log(boxDataResponse);
                     setBoxData(boxDataResponse);
                 }
                 setIsBoxDataFetched(true);
@@ -121,9 +115,6 @@ function MyPage() {
                 const data = await response.json();
                 if (response.ok) {
                     setPoolRequests(data);
-                    console.log(data);
-                } else {
-                    console.log(response);
                 }
             } catch (error) {
                 console.log(error);
